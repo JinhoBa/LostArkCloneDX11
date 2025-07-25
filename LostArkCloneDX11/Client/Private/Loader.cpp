@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Loader.h"
 
 #include "GameInstance.h"
@@ -65,6 +66,8 @@ void CLoader::Output()
 
 HRESULT CLoader::Loading_For_Logo()
 {
+	m_isFinished = true;
+
 	return S_OK;
 }
 

@@ -49,6 +49,14 @@ public:
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr);
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+	void Play_Sound(const TCHAR* pSoundKey, CHANNELID eID, float fVolume);
+	void PlayBGM(const TCHAR* pSoundKey, float fVolume);
+	void StopSound(CHANNELID eID);
+	void StopAll();
+	void SetChannelVolume(CHANNELID eID, float fVolume);
+#pragma endregion
+
 
 #pragma region RENDERER
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
@@ -64,8 +72,10 @@ private:
 	class CLevel_Manager*			m_pLevel_Manager = { nullptr };
 	class CPrototype_Manager*		m_pPrototype_Manager = { nullptr };
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
+	class CSound_Manager*			m_pSound_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
+	
 
 public:
 	void Release_Engine();

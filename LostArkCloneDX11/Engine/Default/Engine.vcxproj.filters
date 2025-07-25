@@ -49,6 +49,15 @@
     <Filter Include="01.Utility\99.Base">
       <UniqueIdentifier>{0c30be04-8716-413b-97f7-d0a1e6bb90d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\06.Sound">
+      <UniqueIdentifier>{834bbf1b-237f-4555-a295-4e20d50ace90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06.Sound\Manager">
+      <UniqueIdentifier>{9ef5c310-f95a-43af-b56e-74f2f22fd4bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06.Sound\FMOD">
+      <UniqueIdentifier>{8ba7c830-32d8-449f-95f5-41ea90068780}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -108,6 +117,33 @@
     <ClInclude Include="..\Public\Base.h">
       <Filter>01.Utility\99.Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Sound_Manager.h">
+      <Filter>01.Utility\06.Sound\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod.hpp">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_codec.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_common.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_dsp.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_dsp_effects.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_errors.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FMOD\fmod_output.h">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -149,5 +185,27 @@
     <ClCompile Include="..\Private\Base.cpp">
       <Filter>01.Utility\99.Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Sound_Manager.cpp">
+      <Filter>01.Utility\06.Sound\Manager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Public\FMOD\fmod.cs">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </None>
+    <None Include="..\Public\FMOD\fmod_dsp.cs">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </None>
+    <None Include="..\Public\FMOD\fmod_errors.cs">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Public\FMOD\fmod_vc.lib">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </Library>
+    <Library Include="..\Public\FMOD\fmodL_vc.lib">
+      <Filter>01.Utility\06.Sound\FMOD</Filter>
+    </Library>
   </ItemGroup>
 </Project>

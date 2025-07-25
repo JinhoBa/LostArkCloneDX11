@@ -1,4 +1,7 @@
+#include "pch.h"
 #include "Level_Logo.h"
+
+#include "GameInstance.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{ pDevice, pContext, ENUM_TO_INT(eLevelID) }
@@ -9,6 +12,10 @@ HRESULT CLevel_Logo::Initialize()
 {
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
+
+#pragma region TEST_CODE
+    m_pGameInstance->PlayBGM(L"vol3_05_Bern Castle.mp3", 0.5f);
+#pragma endregion
 
     return S_OK;
 }

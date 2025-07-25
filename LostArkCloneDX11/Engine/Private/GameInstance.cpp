@@ -5,6 +5,7 @@
 #include "Graphic_Device.h"
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
+#include "Sound_Manager.h"
 #include "Renderer.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -33,6 +34,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pLevel_Manager = CLevel_Manager::Create();
 	if (nullptr == m_pLevel_Manager)
+		return E_FAIL;
+	
+	m_pSound_Manager = CSound_Manager::Create();
+	if (nullptr == m_pSound_Manager)
 		return E_FAIL;
 	
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
@@ -156,6 +161,34 @@ HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const 
 
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+void CGameInstance::Play_Sound(const TCHAR* pSoundKey, CHANNELID eID, float fVolume)
+{
+	m_pSound_Manager->Play_Sound(pSoundKey, eID, fVolume);
+}
+
+void CGameInstance::PlayBGM(const TCHAR* pSoundKey, float fVolume)
+{
+	m_pSound_Manager->PlayBGM(pSoundKey, fVolume);
+}
+
+void CGameInstance::StopSound(CHANNELID eID)
+{
+	m_pSound_Manager->StopSound(eID);
+}
+
+void CGameInstance::StopAll()
+{
+	m_pSound_Manager->StopAll();
+}
+
+void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
+{
+	m_pSound_Manager->SetChannelVolume(eID, fVolume);
+}
+
+#pragma endregion
+
 #pragma region RENDERER
 
 HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRenderObject)
@@ -176,6 +209,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pPrototype_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pGraphic_Device);
 }
 

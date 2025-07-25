@@ -5,6 +5,10 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+#include "fmod.hpp"
+#include "fmod_errors.h"
+#pragma comment(lib, "fmod_vc.lib")
+
 #include <vector>
 #include <list>
 #include <map>

@@ -9,5 +9,6 @@ namespace Engine
 	enum class RENDER { PRIORITY, NONBLEND, BLEND, UI, END};
 	enum class TEXTURE { PLANE, CUBE, END };
 	enum class RAY { LOCAL, WORLD, END };
+	enum class CHANNELID { BGM, EFFECT, END };
 }
 #endif // Engine_Enum_h__

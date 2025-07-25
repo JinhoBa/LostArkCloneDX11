@@ -11,7 +11,6 @@
 #define			NS_END						}
 
 #define			USING(NAMESPACE)	using namespace NAMESPACE;
- 
 
 #ifdef	ENGINE_EXPORTS
 #define ENGINE_DLL		_declspec(dllexport)
