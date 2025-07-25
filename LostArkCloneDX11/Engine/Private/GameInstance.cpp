@@ -6,6 +6,7 @@
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
 #include "Sound_Manager.h"
+#include "Key_Manager.h"
 #include "Renderer.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -40,6 +41,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pSound_Manager)
 		return E_FAIL;
 	
+	m_pKey_Manager = CKey_Manager::Create();
+	if (nullptr == m_pKey_Manager)
+		return E_FAIL;
+	
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pRenderer)
 		return E_FAIL;
@@ -49,11 +54,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-	
+	m_pKey_Manager->Update_KeyInput();
 
 	m_pObject_Manager->Priority_Update(fTimeDelta);
-
-	
 
 	m_pObject_Manager->Update(fTimeDelta);
 
@@ -62,6 +65,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pObject_Manager->Clear_DeadObj();
 
 	m_pLevel_Manager->Update(fTimeDelta);
+
+	m_pKey_Manager->End_KeyInput();
 }
 
 HRESULT CGameInstance::Draw()
@@ -189,6 +194,25 @@ void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
 
 #pragma endregion
 
+#pragma region KEY_MANAGER
+
+_bool CGameInstance::KeyDown(_uint iKey)
+{
+	return m_pKey_Manager->KeyDown(iKey);
+}
+
+_bool CGameInstance::KeyPressing(_uint iKey)
+{
+	return m_pKey_Manager->KeyPressing(iKey);
+}
+
+_bool CGameInstance::KeyUp(_uint iKey)
+{
+	return m_pKey_Manager->KeyUp(iKey);
+}
+
+#pragma endregion
+
 #pragma region RENDERER
 
 HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRenderObject)
@@ -210,6 +234,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pSound_Manager);
+	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pGraphic_Device);
 }
 

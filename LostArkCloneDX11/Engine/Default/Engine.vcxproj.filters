@@ -58,6 +58,12 @@
     <Filter Include="01.Utility\06.Sound\FMOD">
       <UniqueIdentifier>{8ba7c830-32d8-449f-95f5-41ea90068780}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Transform">
+      <UniqueIdentifier>{837950d2-7069-4372-b2b0-8c211c261835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06.KeyManager">
+      <UniqueIdentifier>{a6a83f4c-84f5-425f-bdd2-9f86ba13ea08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -144,6 +150,12 @@
     <ClInclude Include="..\Public\FMOD\fmod_output.h">
       <Filter>01.Utility\06.Sound\FMOD</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Transform.h">
+      <Filter>01.Utility\03.Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Key_Manager.h">
+      <Filter>01.Utility\06.KeyManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -187,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Sound_Manager.cpp">
       <Filter>01.Utility\06.Sound\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Transform.cpp">
+      <Filter>01.Utility\03.Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Key_Manager.cpp">
+      <Filter>01.Utility\06.KeyManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,7 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 
 void CLevel_Loading::Update(_float fTimeDelta)
 {
-    if (true == m_pLoader->isFinished() && GetKeyState(VK_RETURN))
+    if (true == m_pLoader->isFinished() && m_pGameInstance->KeyDown(VK_RETURN))
     {
         CLevel* pNextLevel = { nullptr };
 
