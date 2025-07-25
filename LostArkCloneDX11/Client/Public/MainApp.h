@@ -21,6 +21,9 @@ public:
 	HRESULT		Render();
 
 private:
+	_int					m_iFrame = {};
+	_int					m_iFps = {};
+	_float					m_fTimeAcc = {};
 	CGameInstance*			m_pGameInstance = { nullptr };
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };

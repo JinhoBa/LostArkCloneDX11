@@ -6,13 +6,16 @@
 #include "Level_Loading.h"
 
 CMainApp::CMainApp()
-    : m_pGameInstance{CGameInstance::GetInstance()}
+    : m_pGameInstance{ CGameInstance::GetInstance() }, 
+    m_iFps{ 0 }, m_fTimeAcc{ 0.f }, m_iFrame{0}
 {
     Safe_AddRef(m_pGameInstance);
 }
 
 HRESULT CMainApp::Initialize()
 {
+
+
     ENGINE_DESC				EngineDesc{};
     EngineDesc.hInstance = g_hInstance;
     EngineDesc.hWnd = g_hWnd;
@@ -54,6 +57,16 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Update(_float fTimeDelta)
 {
     m_pGameInstance->Update_Engine(fTimeDelta);
+
+    m_fTimeAcc += fTimeDelta;
+    ++m_iFrame;
+    if (1.f <= m_fTimeAcc)
+    {
+        m_iFps = m_iFrame;
+        m_iFrame = 0;
+        m_fTimeAcc = 0.f;
+    }
+    
 }
 
 HRESULT CMainApp::Render()
@@ -63,6 +76,16 @@ HRESULT CMainApp::Render()
     m_pGameInstance->Render_Begin(&vClearColor);
 
     m_pGameInstance->Draw();
+
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("FPS");
+    ImGui::Text("%d", m_iFps);
+    ImGui::End();
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
     m_pGameInstance->Render_End();
 

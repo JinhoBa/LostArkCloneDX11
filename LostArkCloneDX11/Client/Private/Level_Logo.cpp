@@ -31,14 +31,14 @@ HRESULT CLevel_Logo::Render()
 {
     SetWindowText(g_hWnd, TEXT("Logo"));
 
-    ImGui_ImplDX11_NewFrame();
+    /*ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
     Update_GUI();
 
     ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());*/
 
     return S_OK;
 }
