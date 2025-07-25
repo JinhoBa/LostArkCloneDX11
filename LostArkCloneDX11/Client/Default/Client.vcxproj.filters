@@ -28,6 +28,18 @@
     <Filter Include="01.Level\Loading\Loader">
       <UniqueIdentifier>{29fe1fb8-8cc9-4d89-82aa-1afa63521a85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IMGUI">
+      <UniqueIdentifier>{00a0265f-15d3-4b9c-839d-a58c05e6ea43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.pch">
+      <UniqueIdentifier>{8749b960-2ac5-45a4-8bbb-17048ed53832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUI\private">
+      <UniqueIdentifier>{6a8bcf2f-5877-4992-bbdb-aa2698f9aa16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUI\public">
+      <UniqueIdentifier>{669eaac8-87e9-4a41-99c5-768c441aae53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -56,6 +68,33 @@
     </ClInclude>
     <ClInclude Include="..\public\Loader.h">
       <Filter>01.Level\Loading\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\pch.h">
+      <Filter>97.pch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imconfig.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_win32.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_internal.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_textedit.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
+      <Filter>IMGUI\public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +125,30 @@
     </ClCompile>
     <ClCompile Include="..\private\Loader.cpp">
       <Filter>01.Level\Loading\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\pch.cpp">
+      <Filter>97.pch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_demo.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_draw.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_dx11.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_win32.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp">
+      <Filter>IMGUI\private</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
