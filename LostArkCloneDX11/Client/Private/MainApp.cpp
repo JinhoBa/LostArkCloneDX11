@@ -27,6 +27,27 @@ HRESULT CMainApp::Initialize()
     if (FAILED(Start_Level(LEVEL::LOGO)))
         return E_FAIL;
 
+#pragma region IMGUI INIT
+    ImGui_ImplWin32_EnableDpiAwareness();
+    float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    ImGui::StyleColorsDark();
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.ScaleAllSizes(main_scale);
+    style.FontScaleDpi = main_scale;
+
+    ImGui_ImplWin32_Init(g_hWnd);
+    ImGui_ImplDX11_Init(m_pDevice, m_pContext);
+#pragma endregion
+
     return S_OK;
 }
 
@@ -73,6 +94,12 @@ CMainApp* CMainApp::Create()
 void CMainApp::Free()
 {
     __super::Free();
+
+#pragma region IMGUI_RELEASE
+    ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+#pragma endregion
 
     Safe_Release(m_pDevice);
     Safe_Release(m_pContext);
