@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 #include "GameObject.h"
+#include "UIObject.h"
 
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -62,13 +63,8 @@ void CRenderer::Render_NonBlend()
 	m_RenderObjects[ENUM_TO_INT(RENDER::NONBLEND)].clear();
 }
 
-
-
-
 void CRenderer::Render_Blend()
 {
-
-
 	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::BLEND)])
 	{
 		if (nullptr != pRenderObject)
@@ -91,6 +87,19 @@ void CRenderer::Render_UI()
 	}
 
 	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].clear();
+}
+
+
+void CRenderer::Sort_AlphaObject()
+{
+	
+}
+
+void CRenderer::Sort_UI()
+{
+	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].sort(
+		[](CGameObject* pSrc, CGameObject* pDst)->_bool {
+			return dynamic_cast<CUIObject*>(pSrc)->Get_ZValue() < dynamic_cast<CUIObject*>(pDst)->Get_ZValue();});
 }
 
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -119,6 +128,5 @@ void CRenderer::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-
 
 }

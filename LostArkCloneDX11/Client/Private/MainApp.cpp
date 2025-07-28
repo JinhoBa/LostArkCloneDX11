@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Level_Loading.h"
+#include <fstream>
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -40,6 +41,7 @@ HRESULT CMainApp::Initialize()
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    ImFont* font = nullptr;
 
     ImGui::StyleColorsDark();
 
@@ -47,6 +49,17 @@ HRESULT CMainApp::Initialize()
     style.ScaleAllSizes(main_scale);
     style.FontScaleDpi = main_scale;
 
+    string strFontTag = "../Bin/Resources/Fonts/NanumMyeongjo.TTF";
+
+    ifstream ifile;
+
+    ifile.open(strFontTag);
+    if (ifile)
+    {
+        font = io.Fonts->AddFontFromFileTTF(strFontTag.c_str(), 16.f, NULL, io.Fonts->GetGlyphRangesKorean());
+    }
+    IM_ASSERT(font != NULL);
+    ifile.close();
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 #pragma endregion
