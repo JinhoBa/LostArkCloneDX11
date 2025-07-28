@@ -29,6 +29,23 @@ HRESULT CGameObject::Initialize_Prototype()
 
 HRESULT CGameObject::Initialize(void* pArg)
 {
+	m_pTransformCom = CTransform::Create(m_pDevice, m_pContext);
+
+	if (nullptr == m_pTransformCom)
+		return E_FAIL;
+
+	m_Components.emplace(strTransformTag, m_pTransformCom);
+
+	Safe_AddRef(m_pTransformCom);
+
+	if (FAILED(m_pTransformCom->Initialize(pArg)))
+		return E_FAIL;
+
+	if (nullptr != pArg)
+	{
+		GAMEOBJECT_DESC* pDesc = static_cast<GAMEOBJECT_DESC*>(pArg);
+	}
+
 	return S_OK;
 }
 
@@ -85,6 +102,8 @@ void CGameObject::Free()
 		Safe_Release(Pair.second);
 
 	m_Components.clear();
+
+	Safe_Release(m_pTransformCom);
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
