@@ -4,7 +4,7 @@
 
 NS_BEGIN(Engine)
 
-class CUIObject abstract : public CGameObject
+class ENGINE_DLL CUIObject abstract : public CGameObject
 {
 public:
 	typedef struct UIObject_Desc : public CGameObject::GAMEOBJECT_DESC
@@ -39,7 +39,7 @@ protected:
 	CTransform* m_pParent_TransformCom = { nullptr };	
 
 public:
-	virtual CUIObject* Clone(void* pArg) = 0;
+	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
 };
 

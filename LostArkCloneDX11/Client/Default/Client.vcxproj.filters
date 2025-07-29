@@ -40,6 +40,15 @@
     <Filter Include="IMGUI\public">
       <UniqueIdentifier>{669eaac8-87e9-4a41-99c5-768c441aae53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject">
+      <UniqueIdentifier>{b88c625d-2e40-45db-bcf0-b8889fcbf2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject">
+      <UniqueIdentifier>{cddebb47-5c6a-4fde-aae3-893ba388ad74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Canvars">
+      <UniqueIdentifier>{b7781cf4-50a7-4027-b440-3869cf6160d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -96,6 +105,9 @@
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
       <Filter>IMGUI\public</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Canvars.h">
+      <Filter>03.UIObject\Canvars</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -149,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp">
       <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Canvars.cpp">
+      <Filter>03.UIObject\Canvars</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

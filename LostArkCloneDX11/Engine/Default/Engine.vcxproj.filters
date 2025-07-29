@@ -64,6 +64,21 @@
     <Filter Include="01.Utility\06.KeyManager">
       <UniqueIdentifier>{a6a83f4c-84f5-425f-bdd2-9f86ba13ea08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer">
+      <UniqueIdentifier>{6eaba048-2723-4e5a-a24e-5c2da90179ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Texture">
+      <UniqueIdentifier>{48ead73b-2ce1-4748-89bd-75aca471e7b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObject\UIObject">
+      <UniqueIdentifier>{2cd6cbcf-7244-4a26-b159-d0c7205ee486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObject\UIObject\Button">
+      <UniqueIdentifier>{8f00cd94-2199-4178-86d1-e26b6e1cab8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObject\UIObject\Panel">
+      <UniqueIdentifier>{f36afb33-eb8c-4c07-837a-013bc5a6b406}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -156,6 +171,18 @@
     <ClInclude Include="..\public\Key_Manager.h">
       <Filter>01.Utility\06.KeyManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Texture.h">
+      <Filter>01.Utility\03.Components\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIObject.h">
+      <Filter>01.Utility\02.GameObject\UIObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIButton.h">
+      <Filter>01.Utility\02.GameObject\UIObject\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPanel.h">
+      <Filter>01.Utility\02.GameObject\UIObject\Panel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -205,6 +232,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Key_Manager.cpp">
       <Filter>01.Utility\06.KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Texture.cpp">
+      <Filter>01.Utility\03.Components\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIObject.cpp">
+      <Filter>01.Utility\02.GameObject\UIObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIButton.cpp">
+      <Filter>01.Utility\02.GameObject\UIObject\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPanel.cpp">
+      <Filter>01.Utility\02.GameObject\UIObject\Panel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

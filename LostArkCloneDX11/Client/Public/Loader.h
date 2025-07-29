@@ -33,7 +33,7 @@ private:
 	
 	HANDLE					m_hThread = {};
 
-	_wstring				m_stringMessage = {};
+	_wstring				m_strMessage = {};
 	CRITICAL_SECTION		m_Critical_Section = {};
 
 private:

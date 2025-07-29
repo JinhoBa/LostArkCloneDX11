@@ -3,10 +3,15 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
+#include "DirectXTM/DDSTextureLoader.h"
+#include "DirectXTM/WICTextureLoader.h"
+
 using namespace DirectX;
 
-#include "fmod.hpp"
-#include "fmod_errors.h"
+#include "FMOD/fmod.hpp"
+#include "FMOD/fmod_errors.h"
+
 #pragma comment(lib, "fmod_vc.lib")
 
 #include <vector>
@@ -19,6 +24,10 @@ using namespace DirectX;
 #include <ctime>
 using namespace std;
 
+namespace Engine
+{
+	const static wstring strTransformTag = { TEXT("Com_Transform") };
+}
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"
 #include "Engine_Struct.h"

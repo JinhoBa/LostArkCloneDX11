@@ -3,10 +3,15 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
+#include "DirectXTM/DDSTextureLoader.h"
+#include "DirectXTM/WICTextureLoader.h"
+
 using namespace DirectX;
 
-#include "fmod.hpp"
-#include "fmod_errors.h"
+#include "FMOD/fmod.hpp"
+#include "FMOD/fmod_errors.h"
+
 #pragma comment(lib, "fmod_vc.lib")
 
 #include <vector>

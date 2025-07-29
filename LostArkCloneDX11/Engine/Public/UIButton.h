@@ -3,7 +3,7 @@
 
 NS_BEGIN(Engine)
 
-class CUIButton : public CUIObject
+class ENGINE_DLL CUIButton : public CUIObject
 {
 protected:
 	CUIButton(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -27,7 +27,7 @@ protected:
 
 public:
 	static CUIButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CUIObject* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };
 

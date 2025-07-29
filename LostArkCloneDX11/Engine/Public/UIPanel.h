@@ -3,9 +3,9 @@
 
 NS_BEGIN(Engine)
 
-class CUIPanel : public CUIObject
+class ENGINE_DLL CUIPanel : public CUIObject
 {
-private:
+protected:
 	CUIPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIPanel(const CUIPanel& Prototype);
 	virtual ~CUIPanel() = default;
@@ -20,7 +20,7 @@ public:
 
 public:
 	static CUIPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CUIObject* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };
 
