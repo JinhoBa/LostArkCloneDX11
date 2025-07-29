@@ -67,9 +67,9 @@ CUIButton* CUIButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 	return pInstance;
 }
 
-CUIObject* CUIButton::Clone(void* pArg)
+CGameObject* CUIButton::Clone(void* pArg)
 {
-	CUIButton* pInstance = new CUIButton(*this);
+	CGameObject* pInstance = new CUIButton(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{

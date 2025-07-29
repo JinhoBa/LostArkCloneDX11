@@ -57,9 +57,9 @@ CUIPanel* CUIPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     return pInstance;
 }
 
-CUIObject* CUIPanel::Clone(void* pArg)
+CGameObject* CUIPanel::Clone(void* pArg)
 {
-    CUIPanel* pInstance = new CUIPanel(*this);
+    CGameObject* pInstance = new CUIPanel(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {

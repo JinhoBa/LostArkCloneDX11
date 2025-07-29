@@ -19,6 +19,8 @@ HRESULT CLevel_Logo::Initialize()
     m_pGameInstance->PlayBGM(L"vol3_05_Bern Castle.mp3", m_fBGM_Volume);
 #pragma endregion
 
+    SetWindowText(g_hWnd,TEXT("LEVEL_LOGO"));
+
     return S_OK;
 }
 
@@ -45,6 +47,11 @@ HRESULT CLevel_Logo::Render()
 
 HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLagerTag)
 {
+    /*Add Canvars*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Canvars"),
+        ENUM_TO_INT(LEVEL::LOGO), strLagerTag)))
+        return E_FAIL;
+
     return S_OK;
 }
 

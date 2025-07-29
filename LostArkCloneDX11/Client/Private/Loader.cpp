@@ -3,6 +3,11 @@
 
 #include "GameInstance.h"
 
+#pragma region UI_HEADER
+#include "Canvars.h"
+#pragma endregion
+
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }, m_pContext{pContext},
 	m_pGameInstance{CGameInstance::GetInstance()}
@@ -38,6 +43,10 @@ HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 
 HRESULT CLoader::Loading()
 {
+	// 서브 스레드에서 사용할 COM 객체 초기화 작업
+	if (FAILED(CoInitializeEx(nullptr, 0)))
+		return E_FAIL;
+
 	EnterCriticalSection(&m_Critical_Section);
 
 	HRESULT		hr = {};
@@ -62,10 +71,41 @@ HRESULT CLoader::Loading()
 
 void CLoader::Output()
 {
+	SetWindowText(g_hWnd, m_strMessage.c_str());
 }
 
 HRESULT CLoader::Loading_For_Logo()
 {
+	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
+#pragma region GAEMOBJCET_TEXTURE
+
+#pragma endregion
+
+#pragma region UI_TEXTURE
+	/* For.Prototype_Component_Texture_BackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Canvars"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default.jpg"), 1))))
+		return E_FAIL;
+#pragma endregion
+	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+
+	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
+
+
+	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+#pragma region GAEMOBJCET_PROTOTYPE
+
+#pragma endregion
+
+#pragma region UI_PROTOTYPE
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Canvars"),
+		CCanvars::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
+	
+	m_strMessage = TEXT("로딩이 완료되었습니다..");
+
 	m_isFinished = true;
 
 	return S_OK;

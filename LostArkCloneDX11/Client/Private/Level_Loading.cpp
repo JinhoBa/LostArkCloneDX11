@@ -48,6 +48,8 @@ void CLevel_Loading::Update(_float fTimeDelta)
 
 HRESULT CLevel_Loading::Render()
 {
+    m_pLoader->Output();
+
     return S_OK;
 }
 

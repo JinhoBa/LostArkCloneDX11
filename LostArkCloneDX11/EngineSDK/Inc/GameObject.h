@@ -1,11 +1,16 @@
 #pragma once
 
-#include "Base.h"
+#include "Transform.h"
 
 NS_BEGIN(Engine)
 
 class ENGINE_DLL CGameObject abstract : public CBase
 {
+public:
+	typedef struct GameObject_Desc : public CTransform::TRANSFORM_DESC
+	{
+		
+	}GAMEOBJECT_DESC;
 protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CGameObject(const CGameObject& Prototype);
@@ -23,20 +28,20 @@ public:
 	_bool isDead() const {
 		return m_isDead;
 	}
-
-	class CComponent* Find_Component(const _wstring& strComponentTag);
+	CTransform*			Get_Transform() { return m_pTransformCom; }
+	class CComponent*	Find_Component(const _wstring& strComponentTag);
 
 protected:
-	int							m_iData;
-	ID3D11Device* m_pDevice = { nullptr };
-	ID3D11DeviceContext* m_pContext = { nullptr };
-	class CGameInstance*		m_pGameInstance = { nullptr };
 	_bool						m_isDead = { false };
 
-	map<const _wstring, class CComponent*>		m_Components;
+	ID3D11Device*				m_pDevice = { nullptr };
+	ID3D11DeviceContext*		m_pContext = { nullptr };
+	class CGameInstance*		m_pGameInstance = { nullptr };
+	CTransform*					m_pTransformCom = { nullptr };
+
+	map<const _wstring, class CComponent*>	m_Components;
 
 protected:
-
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, 
 		const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 
