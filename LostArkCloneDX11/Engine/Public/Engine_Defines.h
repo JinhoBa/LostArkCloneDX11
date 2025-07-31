@@ -6,6 +6,7 @@
 #include <DirectXCollision.h>
 #include "DirectXTM/DDSTextureLoader.h"
 #include "DirectXTM/WICTextureLoader.h"
+#include "FX11/d3dx11effect.h"
 
 using namespace DirectX;
 

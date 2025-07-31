@@ -16,7 +16,6 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 
 protected:
-
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 	class CGameInstance*	m_pGameInstance = { nullptr };
