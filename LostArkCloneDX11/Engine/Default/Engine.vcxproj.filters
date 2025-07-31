@@ -79,6 +79,9 @@
     <Filter Include="01.Utility\02.GameObject\UIObject\Panel">
       <UniqueIdentifier>{f36afb33-eb8c-4c07-837a-013bc5a6b406}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Rect">
+      <UniqueIdentifier>{42156336-546a-4f39-8771-9101a474a3bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -183,6 +186,12 @@
     <ClInclude Include="..\Public\UIPanel.h">
       <Filter>01.Utility\02.GameObject\UIObject\Panel</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer.h">
+      <Filter>01.Utility\03.Components\VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Rect.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Rect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -244,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPanel.cpp">
       <Filter>01.Utility\02.GameObject\UIObject\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Rect.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Rect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
