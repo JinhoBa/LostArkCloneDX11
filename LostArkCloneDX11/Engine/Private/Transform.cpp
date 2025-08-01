@@ -24,6 +24,16 @@ void CTransform::Set_Scale(_float3 vScale)
     _vector vRight = XMVector3Normalize(Get_State(STATE::RIGHT)) * vScale.x;
     _vector vUp = XMVector3Normalize(Get_State(STATE::UP)) * vScale.y;
     _vector vLook = XMVector3Normalize(Get_State(STATE::LOOK)) * vScale.z;
+
+    Set_State(STATE::RIGHT, vRight);
+    Set_State(STATE::UP, vUp);
+    Set_State(STATE::LOOK, vLook);
+}
+
+_float4x4& CTransform::Get_WorldMatrixInv()
+{
+    XMStoreFloat4x4(&m_WorldMatrixInv, (XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix))));
+    return m_WorldMatrixInv;
 }
 
 HRESULT CTransform::Initialize_Prototype()
@@ -33,6 +43,8 @@ HRESULT CTransform::Initialize_Prototype()
 
 HRESULT CTransform::Initialize(void* pArg)
 {
+    XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+
     if (nullptr == pArg)
     {
         m_fSpeedPersec = 1.f;

@@ -53,6 +53,14 @@ HRESULT CTexture::Initialize(void* pArg)
     return S_OK;
 }
 
+ID3D11ShaderResourceView* CTexture::Get_SRV(_uint iIndex)
+{
+    if (m_iNumSRV <= iIndex)
+        return nullptr;
+
+    return m_pSRVs[iIndex];
+}
+
 CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFilePath, _uint iNumTexture)
 {
     CTexture* pInstance = new CTexture(pDevice, pContext);

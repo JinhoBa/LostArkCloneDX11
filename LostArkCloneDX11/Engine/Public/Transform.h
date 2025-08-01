@@ -32,6 +32,9 @@ public:
 
 	void Set_Scale(_float3 vScale);
 
+	_float4x4& Get_WorldMatrix() { return m_WorldMatrix; }
+	_float4x4& Get_WorldMatrixInv();
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -51,6 +54,7 @@ private:
 	_float		m_fSpeedPersec = {};
 	_float		m_fRotatePersec = {};
 	_float4x4	m_WorldMatrix = {};
+	_float4x4	m_WorldMatrixInv = {};
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -14,6 +14,8 @@ public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pTextureFilePath, _uint iNumTexture);
 	virtual HRESULT Initialize(void* pArg) override;
 
+	ID3D11ShaderResourceView* Get_SRV(_uint iIndex);
+
 private:
 	_uint								m_iNumSRV = {};
 	vector<ID3D11ShaderResourceView*>	m_pSRVs = {};
