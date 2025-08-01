@@ -30,6 +30,7 @@ private:
 
 private:
 	HRESULT Start_Level(LEVEL eLevelID);
+	HRESULT Ready_Prototype();
 
 public:
 	static CMainApp* Create();

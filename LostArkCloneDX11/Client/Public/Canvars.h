@@ -4,6 +4,8 @@
 
 NS_BEGIN(Engine)
 class CTexture;
+class CVIBuffer_Rect;
+class CShader;
 NS_END
 
 NS_BEGIN(Client)
@@ -23,7 +25,13 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	CTexture* m_pTextureCom = { nullptr };
+#pragma region TEST_CODE
+	_uint			m_iTextureID = {};
+	_float			m_fTimeAcc = {};
+#pragma endregion
+	CTexture*		m_pTextureCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CShader*		m_pShaderCom = { nullptr };
 
 private:
 	HRESULT Add_Components();

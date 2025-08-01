@@ -15,8 +15,6 @@ CMainApp::CMainApp()
 
 HRESULT CMainApp::Initialize()
 {
-
-
     ENGINE_DESC				EngineDesc{};
     EngineDesc.hInstance = g_hInstance;
     EngineDesc.hWnd = g_hWnd;
@@ -26,6 +24,9 @@ HRESULT CMainApp::Initialize()
     EngineDesc.iNumLevels = ENUM_TO_INT(LEVEL::END);
 
     if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
+        return E_FAIL;
+
+    if (FAILED(Ready_Prototype()))
         return E_FAIL;
 
     if (FAILED(Start_Level(LEVEL::LOGO)))
@@ -90,7 +91,7 @@ HRESULT CMainApp::Render()
 
     m_pGameInstance->Draw();
 
-    ImGui_ImplDX11_NewFrame();
+    /*ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
@@ -98,7 +99,7 @@ HRESULT CMainApp::Render()
     ImGui::Text("%d", m_iFps);
     ImGui::End();
     ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());*/
 
     m_pGameInstance->Render_End();
 
@@ -108,6 +109,31 @@ HRESULT CMainApp::Render()
 HRESULT CMainApp::Start_Level(LEVEL eLevelID)
 {
     if (FAILED(m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, eLevelID))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CMainApp::Ready_Prototype()
+{
+    /*For Prototype_Component_Transform*/
+    if(FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
+        CTransform::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_Component_VIBuffer_Rect*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
+        CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    D3D11_INPUT_ELEMENT_DESC		Elements[] = {
+        	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}		
+        };
+
+    /*For Prototype_Component_Transform*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
+        CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXPosTex.hlsl"), Elements, 2))))
         return E_FAIL;
 
     return S_OK;

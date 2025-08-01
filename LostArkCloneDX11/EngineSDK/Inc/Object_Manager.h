@@ -17,13 +17,12 @@ public:
 
 public:
 	HRESULT Initialize(_uint iNumLevels);
-
-	/* 원형을 찾고 복제하여 레이어에 추가한다. */
-	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg);
-
 	void Priority_Update(_float fTimeDelta);
 	void Update(_float fTimeDelta);
 	void Late_Update(_float fTimeDelta);	
+
+public:
+	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg);
 	void Clear(_uint iLevelIndex);
 	void Clear_DeadObj();
 

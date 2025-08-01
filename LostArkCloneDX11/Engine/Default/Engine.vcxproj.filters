@@ -82,6 +82,15 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Rect">
       <UniqueIdentifier>{42156336-546a-4f39-8771-9101a474a3bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Shader">
+      <UniqueIdentifier>{44bedf70-5fd3-4c32-932d-524a2f2db50c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Animation">
+      <UniqueIdentifier>{08d13f8e-03b6-439a-a94f-d49e342e4424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Animation\UIAnimation">
+      <UniqueIdentifier>{f7bd3814-2307-4606-97ae-b1e765f6349f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -192,6 +201,12 @@
     <ClInclude Include="..\public\VIBuffer_Rect.h">
       <Filter>01.Utility\03.Components\VIBuffer\Rect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Shader.h">
+      <Filter>01.Utility\03.Components\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UIAnimation.h">
+      <Filter>01.Utility\03.Components\Animation\UIAnimation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -259,6 +274,12 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Rect.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Shader.cpp">
+      <Filter>01.Utility\03.Components\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UIAnimation.cpp">
+      <Filter>01.Utility\03.Components\Animation\UIAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

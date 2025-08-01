@@ -49,6 +49,9 @@
     <Filter Include="03.UIObject\Canvars">
       <UniqueIdentifier>{b7781cf4-50a7-4027-b440-3869cf6160d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96. ShaderFiles">
+      <UniqueIdentifier>{5458caa2-26f0-4c5a-9cce-4986ecbd6948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,5 +168,10 @@
     <ClCompile Include="..\Private\Canvars.cpp">
       <Filter>03.UIObject\Canvars</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
