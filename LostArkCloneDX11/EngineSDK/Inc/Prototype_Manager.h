@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Texture.h"
-//#include "Transform.h"
+#include "Transform.h"
 //#include "VIBuffer_Cube.h"
-//#include "VIBuffer_Rect.h"
+#include "VIBuffer_Rect.h"
 //#include "VIBuffer_Terrain.h"
+#include "Shader.h"
 
 /* 객체들의 원형을 레벨별로 보관 */
 /* 컴포넌트들의 원형을 레벨별로 보관 */

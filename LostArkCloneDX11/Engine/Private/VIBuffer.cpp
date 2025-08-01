@@ -15,8 +15,7 @@ CVIBuffer::CVIBuffer(CVIBuffer& Prototype)
     m_iIndexStride{Prototype.m_iIndexStride},
     m_eIndexFormat{Prototype.m_eIndexFormat},
     m_iNumVertexBuffers{Prototype.m_iNumVertexBuffers},
-    m_ePrimitive{Prototype.m_ePrimitive},
-    m_pVertexPosition{Prototype.m_pVertexPosition}
+    m_ePrimitive{Prototype.m_ePrimitive}
 {
     Safe_AddRef(m_pVB);
     Safe_AddRef(m_pIB);
@@ -33,8 +32,11 @@ HRESULT CVIBuffer::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CVIBuffer::Bind_Resources()
+HRESULT CVIBuffer::Bind_Resources(ID3D11InputLayout* pLayout)
 {
+    if (nullptr == pLayout)
+        return E_FAIL;
+
     ID3D11Buffer* VertexBuffers[] = {
         m_pVB,
     };
@@ -51,6 +53,8 @@ HRESULT CVIBuffer::Bind_Resources()
     m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);
     m_pContext->IASetPrimitiveTopology(m_ePrimitive);
 
+    m_pContext->IASetInputLayout(pLayout);
+
     return S_OK;
 }
 
@@ -65,7 +69,9 @@ void CVIBuffer::Free()
 {
     __super::Free();
 
+    if (false == m_isCloned)
+        Safe_Delete_Array(m_pVertexPositions);
+
     Safe_Release(m_pVB);
     Safe_Release(m_pIB);
-    Safe_Delete_Array(m_pVertexPosition);
 }

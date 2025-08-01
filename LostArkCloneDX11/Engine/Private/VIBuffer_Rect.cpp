@@ -1,5 +1,7 @@
 #include "VIBuffer_Rect.h"
 
+#include "GameInstance.h"
+
 CVIBuffer_Rect::CVIBuffer_Rect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer{pDevice, pContext}
 {
@@ -34,19 +36,19 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 	VTXPOSTEX* pVertices = new VTXPOSTEX[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXPOSTEX) * m_iNumVertices);
 
-	m_pVertexPosition = new _float3[m_iNumVertices];
-	ZeroMemory(m_pVertexPosition, sizeof(_float3) * m_iNumVertices);
+	m_pVertexPositions = new _float3[m_iNumVertices];
+	ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
 
-	m_pVertexPosition[0] = pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.f);
+	m_pVertexPositions[0] = pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.f);
 	pVertices[0].vTexcoord = _float2(0.f, 0.f);
 
-	m_pVertexPosition[1] = pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.f);
+	m_pVertexPositions[1] = pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.f);
 	pVertices[1].vTexcoord = _float2(1.f, 0.f);
 
-	m_pVertexPosition[2] = pVertices[2].vPosition = _float3(0.5f, -0.5f, 0.f);
+	m_pVertexPositions[2] = pVertices[2].vPosition = _float3(0.5f, -0.5f, 0.f);
 	pVertices[2].vTexcoord = _float2(1.f, 1.f);
 
-	m_pVertexPosition[3] = pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.f);
+	m_pVertexPositions[3] = pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.f);
 	pVertices[3].vTexcoord = _float2(0.f, 1.f);
 
 	D3D11_SUBRESOURCE_DATA InitVBData = {};
@@ -82,12 +84,16 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 	D3D11_SUBRESOURCE_DATA InitIBData = {};
 	InitIBData.pSysMem = pIndices;
 
-	if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitIBData, &m_pVB)))
+	if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitIBData, &m_pIB)))
 		return E_FAIL;
 
 	Safe_Delete_Array(pIndices);
 #pragma endregion
 
+	D3D11_INPUT_ELEMENT_DESC Elements[] = {
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
 
 	return S_OK;
 }

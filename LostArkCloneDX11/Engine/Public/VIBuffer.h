@@ -15,14 +15,14 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	HRESULT Bind_Resources();
+	HRESULT Bind_Resources(ID3D11InputLayout* pLayout);
 	HRESULT Render();
 
 protected:
 	ID3D11Buffer*				m_pVB = { nullptr };
 	ID3D11Buffer*				m_pIB = { nullptr };
 
-	_float3*					m_pVertexPosition = { nullptr };
+	_float3*					m_pVertexPositions = { nullptr };
 
 	_uint						m_iNumVertices = {};
 	_uint						m_iVertexStride = {};
