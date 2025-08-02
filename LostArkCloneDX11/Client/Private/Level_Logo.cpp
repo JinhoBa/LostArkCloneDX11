@@ -36,12 +36,23 @@ HRESULT CLevel_Logo::Render()
     return S_OK;
 }
 
-HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLagerTag)
+HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-    /*Add Canvars*/
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Canvars"),
-        ENUM_TO_INT(LEVEL::LOGO), strLagerTag)))
+    /* Background */
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Background_Logo"), 
+        ENUM_TO_INT(LEVEL::LOGO), strLayerTag)))
         return E_FAIL;
+
+    /*ServerListPanel*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_LogoPanel"),
+        ENUM_TO_INT(LEVEL::LOGO), strLayerTag)))
+        return E_FAIL;
+
+    /*ServerListPanel*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_ServerListPanel"), 
+        ENUM_TO_INT(LEVEL::LOGO), strLayerTag)))
+        return E_FAIL;
+  
 
     return S_OK;
 }

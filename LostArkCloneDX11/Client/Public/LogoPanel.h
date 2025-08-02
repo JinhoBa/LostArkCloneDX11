@@ -1,14 +1,16 @@
 #pragma once
 #include "Client_Defines.h"
+
 #include "UIPanel.h"
 
 NS_BEGIN(Client)
 
-class CCanvars final : public CUIPanel
+class CLogoPanel : public CUIPanel
 {
 private:
-	CCanvars(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCanvars(CCanvars& Prototype);
+	CLogoPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CLogoPanel(const CLogoPanel& Prototype);
+	virtual ~CLogoPanel() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -18,9 +20,11 @@ public:
 	virtual void	Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
+private:
+	HRESULT Add_Components();
 public:
-	static CCanvars* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CLogoPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };
 

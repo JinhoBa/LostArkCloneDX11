@@ -3,8 +3,10 @@
 
 #include "GameInstance.h"
 
-#include "Level_Loading.h"
 #include <fstream>
+
+#include "Level_Loading.h"
+#include "Canvars.h"
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -136,6 +138,21 @@ HRESULT CMainApp::Ready_Prototype()
     /*For Prototype_Component_Transform*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXPosTex.hlsl"), Elements, 2))))
+        return E_FAIL;
+    
+    /*For Prototype_Component_Transform*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_UIAnimation"),
+        CUIAnimation::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_GameObject_Canvars*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),
+        CCanvars::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*Add Canvars*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),
+        ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"))))
         return E_FAIL;
 
     return S_OK;

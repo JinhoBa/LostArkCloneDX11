@@ -25,6 +25,8 @@ private:
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	list<class CGameObject*>	m_RenderObjects[ENUM_TO_INT(RENDER::END)];
 
+	_float4x4					m_OrthographicViewMatrix = {};
+	_float4x4					m_OrthographicMatrix = {};
 
 private:
 	void Render_Priority();

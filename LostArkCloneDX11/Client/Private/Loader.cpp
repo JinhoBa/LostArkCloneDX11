@@ -3,8 +3,11 @@
 
 #include "GameInstance.h"
 
-#pragma region UI_HEADER
+#pragma region UI
 #include "Canvars.h"
+#include "Background_Logo.h"
+#include "LogoPanel.h"
+#include "ServerListPanel.h"
 #pragma endregion
 
 
@@ -82,9 +85,19 @@ HRESULT CLoader::Loading_For_Logo()
 #pragma endregion
 
 #pragma region UI_TEXTURE
-	/* For.Prototype_Component_Texture_BackGround */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Canvars"),
+	/* For.Prototype_Component_Texture_LogoBackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_LogoBackGround"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Logo_frames/Logo%03d.png"), 301))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Logo*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Logo"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Logo.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_ServerListBack */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_ServerListBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SelectServer.png"), 1))))
 		return E_FAIL;
 #pragma endregion
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -98,8 +111,19 @@ HRESULT CLoader::Loading_For_Logo()
 #pragma endregion
 
 #pragma region UI_PROTOTYPE
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Canvars"),
-		CCanvars::Create(m_pDevice, m_pContext))))
+	/* For.Prototype_GameObject_Background_Logo */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Background_Logo"),
+		CBackground_Logo::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_LogoPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_LogoPanel"),
+		CLogoPanel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ServerListPanel */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_ServerListPanel"),
+		CServerListPanel::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

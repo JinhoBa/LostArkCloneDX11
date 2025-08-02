@@ -52,6 +52,24 @@
     <Filter Include="96. ShaderFiles">
       <UniqueIdentifier>{5458caa2-26f0-4c5a-9cce-4986ecbd6948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\Logo">
+      <UniqueIdentifier>{536a8ecb-e1ed-4831-80a1-dbfdfcb26522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel">
+      <UniqueIdentifier>{15e576f6-629b-49bf-a3f2-9f7177c4e280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Button">
+      <UniqueIdentifier>{ed6c6387-5c64-47fa-9443-236d15eb4064}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel\ServerListPanel">
+      <UniqueIdentifier>{2bafe1d6-127f-4efc-8e98-21a539431843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel\Background">
+      <UniqueIdentifier>{6a154a68-55e8-4446-ba23-0d7bc935ca6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel\LogoPanel">
+      <UniqueIdentifier>{6da2f62a-efc3-49ef-bfaf-97ddacbe2f29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -111,6 +129,15 @@
     <ClInclude Include="..\Public\Canvars.h">
       <Filter>03.UIObject\Canvars</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ServerListPanel.h">
+      <Filter>03.UIObject\Logo\Panel\ServerListPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Background_Logo.h">
+      <Filter>03.UIObject\Logo\Panel\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LogoPanel.h">
+      <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -167,6 +194,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Canvars.cpp">
       <Filter>03.UIObject\Canvars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ServerListPanel.cpp">
+      <Filter>03.UIObject\Logo\Panel\ServerListPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Background_Logo.cpp">
+      <Filter>03.UIObject\Logo\Panel\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LogoPanel.cpp">
+      <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
