@@ -24,10 +24,8 @@ HRESULT CCanvars::Initialize(void* pArg)
 
     Desc.fX = g_iWinSizeX >> 1;
     Desc.fY = g_iWinSizeY >> 1;
-
     Desc.fZ = 1.f;
     Desc.fSizeX = (_float)g_iWinSizeX;
-    
     Desc.fSizeY = (_float)g_iWinSizeY;
 
     if (FAILED(__super::Initialize(&Desc)))
@@ -61,19 +59,17 @@ void CCanvars::Priority_Update(_float fTimeDelta)
 void CCanvars::Update(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
-    if (m_fTimeAcc >= 0.08f)
+    if (m_fTimeAcc >= 0.016f)
     {
         ++m_iTextureID;
         m_fTimeAcc = 0.f;
 
-        if (m_iTextureID > 49)
+        if (m_iTextureID > 300)
             m_iTextureID = 0;
 
         m_pShaderCom->SetResource(m_pTextureCom->Get_SRV(m_iTextureID));
     }
 
-
-    
 }
 
 void CCanvars::Late_Update(_float fTimeDelta)
@@ -93,28 +89,6 @@ HRESULT CCanvars::Render()
     if (FAILED(m_pVIBufferCom->Render()))
         return E_FAIL;
     
-    _float fValue[2];
-    fValue[0] = m_fSizeX;
-    fValue[1] = m_fSizeY;
-
-#pragma region TEST_CODE
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
-    ImGui::Begin("UI Control");
-
-    ImGui::SliderFloat2("Size", fValue, 1.f, 1280.f);
-
-    m_fSizeX = fValue[0];
-    m_fSizeY = fValue[1];
-    ImGui::End();
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-#pragma endregion
-
-    
-
     return S_OK;
 }
 

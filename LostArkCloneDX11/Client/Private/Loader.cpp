@@ -84,7 +84,7 @@ HRESULT CLoader::Loading_For_Logo()
 #pragma region UI_TEXTURE
 	/* For.Prototype_Component_Texture_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_Canvars"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Logo_frames/Logo_frame_0%02d.png"), 50))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Logo_frames/Logo%03d.png"), 301))))
 		return E_FAIL;
 #pragma endregion
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");

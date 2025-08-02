@@ -7,6 +7,7 @@ CShader::CShader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CShader::CShader(CShader& Prototype)
 	:CComponent{ Prototype },
+	m_pEffects{ Prototype.m_pEffects },
 	m_pTect{ Prototype.m_pTect },
 	m_pInputLayout{ Prototype.m_pInputLayout },
 	m_pPass{ Prototype.m_pPass },
@@ -15,6 +16,14 @@ CShader::CShader(CShader& Prototype)
 	m_pProjMatrix{ Prototype.m_pProjMatrix },
 	m_pSRV{Prototype.m_pSRV}
 {
+	Safe_AddRef(m_pEffects);
+	Safe_AddRef(m_pTect);
+	Safe_AddRef(m_pInputLayout);
+	Safe_AddRef(m_pPass);
+	Safe_AddRef(m_pWorldMatrix);
+	Safe_AddRef(m_pViewMatrix);
+	Safe_AddRef(m_pProjMatrix);
+	Safe_AddRef(m_pSRV);
 }
 
 HRESULT CShader::Initialize_Prototype(const _tchar* pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElements, _uint iNumElement)
@@ -101,4 +110,15 @@ CComponent* CShader::Clone(void* pArg)
 void CShader::Free()
 {
     __super::Free();
+
+	
+	Safe_Release(m_pInputLayout);
+	
+	Safe_Release(m_pWorldMatrix);
+	Safe_Release(m_pViewMatrix);
+	Safe_Release(m_pProjMatrix);
+	Safe_Release(m_pSRV);
+	Safe_Release(m_pPass);
+	Safe_Release(m_pTect);
+	Safe_Release(m_pEffects);
 }
