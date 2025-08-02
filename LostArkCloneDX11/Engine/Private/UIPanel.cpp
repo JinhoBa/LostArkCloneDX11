@@ -1,5 +1,7 @@
 #include "UIPanel.h"
 
+#include "GameInstance.h"
+
 CUIPanel::CUIPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CUIObject{pDevice, pContext}
 {
@@ -19,8 +21,6 @@ HRESULT CUIPanel::Initialize(void* pArg)
 {
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
-
-    
 
     return S_OK;
 }
@@ -74,4 +74,8 @@ CGameObject* CUIPanel::Clone(void* pArg)
 void CUIPanel::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pTextureCom);
+    Safe_Release(m_pShaderCom);
 }

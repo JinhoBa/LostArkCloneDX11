@@ -3,6 +3,7 @@
 
 NS_BEGIN(Engine)
 class CTexture;
+class CShader;
 class ENGINE_DLL CUIAnimation final: public CComponent
 {
 public:
@@ -14,6 +15,7 @@ public:
 		_float	fAnimTime{}; // 애니메이션 재생 시간
 
 		CTexture* pTextureCom{};
+		CShader* pShaderCom{};
 	}UIANIM_DESC;
 
 private:
@@ -24,8 +26,8 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
-	void Update(_float fTimeDelta);
-	void Draw();
+	void			Update(_float fTimeDelta);
+	HRESULT			Set_Resource();
 
 public:
 	_bool	isEndFrame() const { return m_iCurFrame == m_iEndFrame; };
@@ -43,6 +45,7 @@ private:
 	_float		m_fTimeAcc = {};
 
 	CTexture*	m_pTextureCom = { nullptr };
+	CShader*	m_pShaderCom = { nullptr };
 
 public:
 	static CUIAnimation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

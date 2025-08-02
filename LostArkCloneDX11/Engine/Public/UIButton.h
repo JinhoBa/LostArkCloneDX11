@@ -2,7 +2,9 @@
 #include "UIObject.h"
 
 NS_BEGIN(Engine)
-
+class CTexture;
+class CVIBuffer_Rect;
+class CShader;
 class ENGINE_DLL CUIButton : public CUIObject
 {
 protected:
@@ -24,6 +26,9 @@ public:
 
 protected:
 	function<void()> m_OnClickEvent = {};
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
+	CShader* m_pShaderCom = { nullptr };
 
 public:
 	static CUIButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

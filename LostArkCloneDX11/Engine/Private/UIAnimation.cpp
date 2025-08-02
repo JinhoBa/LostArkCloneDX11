@@ -29,11 +29,13 @@ HRESULT CUIAnimation::Initialize(void* pArg)
     m_iEndFrame = pDesc->iEndFrame;
     m_fAnimTime = pDesc->fAnimTime;
     m_pTextureCom = pDesc->pTextureCom;
+    m_pShaderCom = pDesc->pShaderCom;
     
     Safe_AddRef(m_pTextureCom);
+    Safe_AddRef(m_pShaderCom);
 
     m_fTimeAcc = 0.f;
-    m_fFrameTime = m_fAnimTime / (m_iEndFrame - m_iStartFrame + 1);
+    m_fFrameTime = m_fAnimTime / (_float)(m_iEndFrame - m_iStartFrame + 1);
 
     return S_OK;
 }
@@ -56,19 +58,40 @@ void CUIAnimation::Update(_float fTimeDelta)
 
 }
 
-void CUIAnimation::Draw()
+HRESULT CUIAnimation::Set_Resource()
 {
-   
+    m_pShaderCom->SetResource(m_pTextureCom->Get_SRV(m_iCurFrame));
+
+    return S_OK;
 }
+
 
 CUIAnimation* CUIAnimation::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    return nullptr;
+    CUIAnimation* pInstance = new CUIAnimation(pDevice, pContext);
+
+    if (FAILED(pInstance->Initialize_Prototype()))
+    {
+        Safe_Release(pInstance);
+        MSG_BOX("Failed to Create : CUIAnimation");
+        return nullptr;
+    }
+
+    return pInstance;
 }
 
 CComponent* CUIAnimation::Clone(void* pArg)
 {
-    return nullptr;
+    CUIAnimation* pInstance = new CUIAnimation(*this);
+
+    if (FAILED(pInstance->Initialize(pArg)))
+    {
+        Safe_Release(pInstance);
+        MSG_BOX("Failed to Clone : CUIAnimation");
+        return nullptr;
+    }
+
+    return pInstance;
 }
 
 void CUIAnimation::Free()
@@ -76,4 +99,5 @@ void CUIAnimation::Free()
     __super::Free();
 
     Safe_Release(m_pTextureCom);
+    Safe_Release(m_pShaderCom);
 }

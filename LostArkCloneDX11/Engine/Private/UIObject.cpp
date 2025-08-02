@@ -74,10 +74,10 @@ void CUIObject::Update_Position()
     _float3 vParentPosition = {};
     XMStoreFloat3(&vParentPosition, m_pParent_TransformCom->Get_Position());
 
-    _float3 vPosition = { vParentPosition.x + m_fX, vParentPosition.y - m_fY , 0.f };
+    _float4 vPosition = { vParentPosition.x + m_fX, vParentPosition.y - m_fY , m_fZ, 1.f };
 
     m_pTransformCom->Set_Scale(_float3(m_fSizeX, m_fSizeY, 1.f));
-    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat3(&vPosition));
+    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&vPosition));
 }
 
 void CUIObject::Free()

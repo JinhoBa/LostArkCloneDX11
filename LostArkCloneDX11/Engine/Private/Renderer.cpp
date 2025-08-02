@@ -14,6 +14,13 @@ CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 HRESULT CRenderer::Initialize()
 {
+	D3D11_VIEWPORT Viewport = {};
+	_uint i = { 1 };
+	m_pContext->RSGetViewports(&i, &Viewport);
+
+	XMStoreFloat4x4(&m_OrthographicViewMatrix, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_OrthographicMatrix, (XMMatrixOrthographicLH(Viewport.Width, Viewport.Height, 0.1f, 10.f)));
+
     return S_OK;
 }
 

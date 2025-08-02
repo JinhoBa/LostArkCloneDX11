@@ -38,6 +38,10 @@ protected:
 	_float		m_fSizeY = {};
 	CTransform* m_pParent_TransformCom = { nullptr };	
 
+#pragma region TEST_CODE
+	_float		m_TestPos[2] = {};
+#pragma endregion
+
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
