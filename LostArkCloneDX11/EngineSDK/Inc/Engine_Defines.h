@@ -13,8 +13,6 @@ using namespace DirectX;
 #include "FMOD/fmod.hpp"
 #include "FMOD/fmod_errors.h"
 
-#pragma comment(lib, "fmod_vc.lib")
-
 #include <vector>
 #include <list>
 #include <map>
