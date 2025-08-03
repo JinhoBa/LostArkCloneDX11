@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{b81cb9b6-9d13-4d9c-ae26-53e9e3fc321e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Defualt">
+      <UniqueIdentifier>{554bf935-2e5b-4150-b2e0-26db9923df7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp">
+      <UniqueIdentifier>{f13deefa-47f2-46b7-bb82-87cd5134f2fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Defualt\Client">
+      <UniqueIdentifier>{a8bd9ad7-ae6d-4f49-bd75-f579d475104a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level">
+      <UniqueIdentifier>{4b282384-d898-4020-8198-d54ba01ddb98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level\Logo">
+      <UniqueIdentifier>{a0dba2e5-a4f7-4c67-a390-4f0bd5416acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level\Loading">
+      <UniqueIdentifier>{f672e1ed-459b-4367-a446-176e68b89f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level\GamePlay">
+      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level\Loading\Loader">
+      <UniqueIdentifier>{29fe1fb8-8cc9-4d89-82aa-1afa63521a85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUI">
+      <UniqueIdentifier>{00a0265f-15d3-4b9c-839d-a58c05e6ea43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.pch">
+      <UniqueIdentifier>{8749b960-2ac5-45a4-8bbb-17048ed53832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUI\private">
+      <UniqueIdentifier>{6a8bcf2f-5877-4992-bbdb-aa2698f9aa16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUI\public">
+      <UniqueIdentifier>{669eaac8-87e9-4a41-99c5-768c441aae53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject">
+      <UniqueIdentifier>{b88c625d-2e40-45db-bcf0-b8889fcbf2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject">
+      <UniqueIdentifier>{cddebb47-5c6a-4fde-aae3-893ba388ad74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Canvars">
+      <UniqueIdentifier>{b7781cf4-50a7-4027-b440-3869cf6160d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. ShaderFiles">
+      <UniqueIdentifier>{5458caa2-26f0-4c5a-9cce-4986ecbd6948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo">
+      <UniqueIdentifier>{536a8ecb-e1ed-4831-80a1-dbfdfcb26522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel">
+      <UniqueIdentifier>{15e576f6-629b-49bf-a3f2-9f7177c4e280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Button">
+      <UniqueIdentifier>{ed6c6387-5c64-47fa-9443-236d15eb4064}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel\ServerListPanel">
+      <UniqueIdentifier>{2bafe1d6-127f-4efc-8e98-21a539431843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel\Background">
+      <UniqueIdentifier>{6a154a68-55e8-4446-ba23-0d7bc935ca6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\Panel\LogoPanel">
+      <UniqueIdentifier>{6da2f62a-efc3-49ef-bfaf-97ddacbe2f29}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>98.Defualt</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>98.Defualt</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>98.Defualt</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>98.Defualt\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\MainApp.h">
+      <Filter>00.MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_Logo.h">
+      <Filter>01.Level\Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Client_Defines.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_Loading.h">
+      <Filter>01.Level\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loader.h">
+      <Filter>01.Level\Loading\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\pch.h">
+      <Filter>97.pch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imconfig.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_impl_win32.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imgui_internal.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_textedit.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IMGUI\imstb_truetype.h">
+      <Filter>IMGUI\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Canvars.h">
+      <Filter>03.UIObject\Canvars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ServerListPanel.h">
+      <Filter>03.UIObject\Logo\Panel\ServerListPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Background_Logo.h">
+      <Filter>03.UIObject\Logo\Panel\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LogoPanel.h">
+      <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>98.Defualt</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>98.Defualt</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>98.Defualt</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>98.Defualt\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\MainApp.cpp">
+      <Filter>00.MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Logo.cpp">
+      <Filter>01.Level\Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Loading.cpp">
+      <Filter>01.Level\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loader.cpp">
+      <Filter>01.Level\Loading\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\pch.cpp">
+      <Filter>97.pch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_widgets.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_demo.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_draw.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_dx11.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_impl_win32.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IMGUI\imgui_tables.cpp">
+      <Filter>IMGUI\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Canvars.cpp">
+      <Filter>03.UIObject\Canvars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ServerListPanel.cpp">
+      <Filter>03.UIObject\Logo\Panel\ServerListPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Background_Logo.cpp">
+      <Filter>03.UIObject\Logo\Panel\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LogoPanel.cpp">
+      <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
