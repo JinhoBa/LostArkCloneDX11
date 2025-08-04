@@ -23,6 +23,9 @@ public:
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
+	ID3D11DepthStencilState*	m_pDSState_Priority = { nullptr };
+	ID3D11DepthStencilState*	m_pDSState_UI = { nullptr };
+
 	list<class CGameObject*>	m_RenderObjects[ENUM_TO_INT(RENDER::END)];
 
 	_float4x4					m_OrthographicViewMatrix = {};

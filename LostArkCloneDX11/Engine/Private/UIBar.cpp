@@ -25,12 +25,16 @@ HRESULT CUIBar::Initialize(void* pArg)
     UIBAR_DESC* pDesc = static_cast<UIBAR_DESC*>(pArg);
 
     m_fMax = pDesc->fMax;
-
+    m_fSizeY_Fill = pDesc->fSizeY_Fill;
+   
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    m_fY_Fill = -m_fY;
-    m_fSizeY_Fill = m_fSizeY;
+    _float3 vPos = {};
+    XMStoreFloat3(&vPos, m_pParent_TransformCom->Get_Position());
+
+    m_fY_Fill = vPos.y -m_fY;
+   
 
     m_iSRVIndex_Back = 0;
     m_iSRVIndex_Fill = 1;
@@ -105,7 +109,7 @@ void CUIBar::Update_Bar(_float fValue)
 
     m_pTransfromCom_BarFill->Set_Scale(_float3(m_fSizeX_Fill, m_fSizeY_Fill, 1.f));
 
-    _float4 vPosition = { m_fX_Fill, m_fY_Fill , m_fZ - 0.01f, 1.f };
+    _float4 vPosition = { m_fX_Fill, m_fY_Fill , m_fZ, 1.f };
 
     m_pTransfromCom_BarFill->Set_State(STATE::POSITION, XMLoadFloat4(&vPosition));
 

@@ -82,9 +82,6 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Rect">
       <UniqueIdentifier>{42156336-546a-4f39-8771-9101a474a3bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Shader">
-      <UniqueIdentifier>{44bedf70-5fd3-4c32-932d-524a2f2db50c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Animation">
       <UniqueIdentifier>{08d13f8e-03b6-439a-a94f-d49e342e4424}</UniqueIdentifier>
     </Filter>
@@ -93,6 +90,12 @@
     </Filter>
     <Filter Include="01.Utility\02.GameObject\UIObject\Bar">
       <UniqueIdentifier>{7cec91e4-47f1-4487-ad1c-ebde81f88e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Blender">
+      <UniqueIdentifier>{22eb566a-726d-46aa-bb19-28fef9ebc956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Shader">
+      <UniqueIdentifier>{44bedf70-5fd3-4c32-932d-524a2f2db50c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

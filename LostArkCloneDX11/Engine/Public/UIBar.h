@@ -12,6 +12,8 @@ public:
 	{
 		_float fMax{};
 		_float fStartValue{};
+		_float fSizeY_Fill{};
+		_float fZ_Fill{};
 	}UIBAR_DESC;
 
 protected:
@@ -43,8 +45,10 @@ protected:
 
 	_float			m_fX_Fill= {};
 	_float			m_fY_Fill= {};
+	_float			m_fZ_Fill= {};
 	_float			m_fSizeX_Fill= {};
 	_float			m_fSizeY_Fill= {};
+	
 
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTexture*		m_pTextureCom = { nullptr };

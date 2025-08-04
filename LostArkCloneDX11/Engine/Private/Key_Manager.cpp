@@ -2,23 +2,23 @@
 
 CKey_Manager::CKey_Manager()
 {
-    ZeroMemory(m_CurKeyInput, sizeof(MAX_KEY));
+    ZeroMemory(m_CurKeyInput, MAX_KEY);
 }
 
 void CKey_Manager::Update_KeyInput()
 {
-    ZeroMemory(m_CurKeyInput, sizeof(MAX_KEY));
+    ZeroMemory(m_CurKeyInput, MAX_KEY);
 
     for (_uint i = 0; i < MAX_KEY; ++i)
     {
-        if (GetAsyncKeyState(i) & 0x8000)
+        if (GetKeyState(i) & 0x8000)
             m_CurKeyInput[i] = true;
     }
 }
 
 void CKey_Manager::End_KeyInput()
 {
-    memcpy(m_PreKeyInput, m_CurKeyInput, sizeof(MAX_KEY));
+    memcpy(m_PreKeyInput, m_CurKeyInput, MAX_KEY);
 }
 
 _bool CKey_Manager::KeyDown(_uint iKey)
