@@ -1,50 +1,41 @@
 #include "pch.h"
-#include "LoadingBar.h"
+#include "HpBar.h"
 
 #include "GameInstance.h"
-#include "Loader.h"
-#include "Level_Loading.h"
 
-CLoadingBar::CLoadingBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	:CUIBar{pDevice, pContext}
+CHpBar::CHpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	:CUIBar{ pDevice, pContext }
 {
 }
 
-CLoadingBar::CLoadingBar(const CLoadingBar& Prototype)
-	:CUIBar{Prototype}
+CHpBar::CHpBar(const CHpBar& Prototype)
+	:CUIBar{ Prototype }
 {
 }
 
-HRESULT CLoadingBar::Initialize_Prototype()
+HRESULT CHpBar::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CLoadingBar::Initialize(void* pArg)
+HRESULT CHpBar::Initialize(void* pArg)
 {
-	if (nullptr == pArg)
-		return E_FAIL;
-		
-	m_pLoading = static_cast<CLevel_Loading*>(pArg);
-
-	Safe_AddRef(m_pLoading);
-
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
 	UIBAR_DESC Desc = {};
 
-	Desc.fX = 0.f;
-	Desc.fY = 300.f;
+	Desc.fX = -194.f;
+	Desc.fY = -35.f;
 	Desc.fZ = 0.2f;
-	Desc.fSizeX = (_float)g_iWinSizeX;
-	Desc.fSizeY = 10.f;
+	Desc.fSizeX = 220.f;
+	Desc.fSizeY = 20.f;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
-		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
+		ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_HUD"), TEXT("Com_Transform"),0
 	));
 	Desc.fMax = 100.f;
+	Desc.fStartValue = 80.f;
 	Desc.fSizeY_Fill = Desc.fSizeY;
-	Desc.fStartValue = 0.1f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -52,33 +43,40 @@ HRESULT CLoadingBar::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CLoadingBar::Priority_Update(_float fTimeDelta)
+void CHpBar::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CLoadingBar::Update(_float fTimeDelta)
+void CHpBar::Update(_float fTimeDelta)
 {
-	Update_Bar(m_pLoading->Get_Progress());
+
 }
 
-void CLoadingBar::Late_Update(_float fTimeDelta)
+void CHpBar::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
-
+	Update_Position();
+	Update_Bar(100.f);
 	Set_Indices(0, 1);
 }
 
-HRESULT CLoadingBar::Render()
+HRESULT CHpBar::Render()
 {
-	__super::Render();
+	ImGui::SliderFloat("X", &m_fX, -1280.f, 1280.f, "%.0f");
+	ImGui::SliderFloat("Y", &m_fY, -1280.f, 1280.f, "%.0f");
+	ImGui::SliderFloat("SizeX", &m_fSizeX, 1.f, 1280.f, "%.0f");
+	ImGui::SliderFloat("SizeY", &m_fSizeY, 1.f, 1280.f, "%.0f");
+
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CLoadingBar::Add_Components()
+HRESULT CHpBar::Add_Components()
 {
 	/*Texture*/
-	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_LoadingBar"),
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_HpBar"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -91,7 +89,7 @@ HRESULT CLoadingBar::Add_Components()
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
-	
+
 	/*Transform_Fill*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform_Fill"), reinterpret_cast<CComponent**>(&m_pTransfromCom_BarFill))))
@@ -100,35 +98,33 @@ HRESULT CLoadingBar::Add_Components()
 	return S_OK;
 }
 
-CLoadingBar* CLoadingBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CHpBar* CHpBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CLoadingBar* pInstance = new CLoadingBar(pDevice, pContext);
+	CHpBar* pInstance = new CHpBar(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Create : CLoadingBar");
+		MSG_BOX("Failed to Create : CHpBar");
 		return nullptr;
 	}
 	return pInstance;
 }
 
-CGameObject* CLoadingBar::Clone(void* pArg)
+CGameObject* CHpBar::Clone(void* pArg)
 {
-	CGameObject* pInstance = new CLoadingBar(*this);
+	CGameObject* pInstance = new CHpBar(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Clone : CLoadingBar");
+		MSG_BOX("Failed to Clone : CHpBar");
 		return nullptr;
 	}
 	return pInstance;
 }
 
-void CLoadingBar::Free()
+void CHpBar::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pLoading);
 }

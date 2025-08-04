@@ -20,7 +20,7 @@ private:
 
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLagerTag);
-	void Update_GUI();
+	void	Update_GUI();
 
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);

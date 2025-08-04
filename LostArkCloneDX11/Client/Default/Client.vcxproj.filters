@@ -82,6 +82,21 @@
     <Filter Include="03.UIObject\Loading\Wallpaper">
       <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Level\Tutorial">
+      <UniqueIdentifier>{2a282cb0-7dce-414b-913a-33b00b94506e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay">
+      <UniqueIdentifier>{101c2c11-b160-412b-8de2-29dee46818a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\EPXbar">
+      <UniqueIdentifier>{7193d12a-b82c-4f5c-88b4-27f792aebed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD">
+      <UniqueIdentifier>{b467a4d6-af50-4540-a1e2-e26f8ffd2c46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HpBar">
+      <UniqueIdentifier>{65361930-8c85-4e2f-b8c4-f3ed1eee5961}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -159,6 +174,18 @@
     <ClInclude Include="..\public\Wallpaper.h">
       <Filter>03.UIObject\Loading\Wallpaper</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_Tutorial.h">
+      <Filter>01.Level\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpBar.h">
+      <Filter>03.UIObject\GamePlay\EPXbar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HUD.h">
+      <Filter>03.UIObject\GamePlay\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HpBar.h">
+      <Filter>03.UIObject\GamePlay\HpBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -233,6 +260,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Wallpaper.cpp">
       <Filter>03.UIObject\Loading\Wallpaper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Tutorial.cpp">
+      <Filter>01.Level\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpBar.cpp">
+      <Filter>03.UIObject\GamePlay\EPXbar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HUD.cpp">
+      <Filter>03.UIObject\GamePlay\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HpBar.cpp">
+      <Filter>03.UIObject\GamePlay\HpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

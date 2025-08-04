@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "Level_Loading.h"
+
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{ pDevice, pContext, ENUM_TO_INT(eLevelID) }
 {
@@ -27,6 +29,11 @@ HRESULT CLevel_Logo::Initialize()
 void CLevel_Logo::Update(_float fTimeDelta)
 {
     m_pGameInstance->SetChannelVolume(CHANNELID::BGM, m_fBGM_Volume);
+
+    if (m_pGameInstance->KeyDown('N'))
+    {
+        m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::TUTORIAL));
+    }
 }
 
 HRESULT CLevel_Logo::Render()

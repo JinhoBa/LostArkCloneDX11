@@ -1,32 +1,32 @@
 #include "pch.h"
-#include "Wallpaper.h"
+#include "HUD.h"
 
 #include "GameInstance.h"
 
-CWallpaper::CWallpaper(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CHUD::CHUD(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{ pDevice, pContext }
 {
 }
 
-CWallpaper::CWallpaper(const CWallpaper& Prototype)
+CHUD::CHUD(const CHUD& Prototype)
 	: CUIPanel{ Prototype }
 {
 }
 
-HRESULT CWallpaper::Initialize_Prototype()
+HRESULT CHUD::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CWallpaper::Initialize(void* pArg)
+HRESULT CHUD::Initialize(void* pArg)
 {
 	UIOBJECT_DESC Desc = {};
 
 	Desc.fX = 0.f;
-	Desc.fY = 50.f;
-	Desc.fZ = 0.9f;
-	Desc.fSizeX = (_float)g_iWinSizeX;
-	Desc.fSizeY = (_float)g_iWinSizeY;
+	Desc.fY = 285.f;
+	Desc.fZ = 0.5f;
+	Desc.fSizeX = 500.f;
+	Desc.fSizeY = 120.f;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
 		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
 	));
@@ -40,21 +40,21 @@ HRESULT CWallpaper::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CWallpaper::Priority_Update(_float fTimeDelta)
+void CHUD::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CWallpaper::Update(_float fTimeDelta)
+void CHUD::Update(_float fTimeDelta)
 {
+	Update_Position();
 }
 
-void CWallpaper::Late_Update(_float fTimeDelta)
+void CHUD::Late_Update(_float fTimeDelta)
 {
-
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
-HRESULT CWallpaper::Render()
+HRESULT CHUD::Render()
 {
 	if (FAILED(__super::Bind_ShaderResource(0)))
 		return E_FAIL;
@@ -71,7 +71,7 @@ HRESULT CWallpaper::Render()
 	return S_OK;
 }
 
-HRESULT CWallpaper::Add_Components()
+HRESULT CHUD::Add_Components()
 {
 	/*Texture*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Wallpaper"),
@@ -88,37 +88,36 @@ HRESULT CWallpaper::Add_Components()
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
-CWallpaper* CWallpaper::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CHUD* CHUD::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CWallpaper* pInstance = new CWallpaper(pDevice, pContext);
+	CHUD* pInstance = new CHUD(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Create : CWallpaper");
+		MSG_BOX("Failed to Create : CHUD");
 		return nullptr;
 	}
 	return pInstance;
 }
 
-CGameObject* CWallpaper::Clone(void* pArg)
+CGameObject* CHUD::Clone(void* pArg)
 {
-	CGameObject* pInstance = new CWallpaper(*this);
+	CGameObject* pInstance = new CHUD(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Clone : CWallpaper");
+		MSG_BOX("Failed to Clone : CHUD");
 		return nullptr;
 	}
 	return pInstance;
 }
 
-void CWallpaper::Free()
+void CHUD::Free()
 {
 	__super::Free();
 }

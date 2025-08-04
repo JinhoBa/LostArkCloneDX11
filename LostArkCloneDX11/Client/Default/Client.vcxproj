@@ -159,6 +159,9 @@
     <ClInclude Include="..\public\Background_Logo.h" />
     <ClInclude Include="..\Public\Canvars.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\public\ExpBar.h" />
+    <ClInclude Include="..\public\HpBar.h" />
+    <ClInclude Include="..\public\HUD.h" />
     <ClInclude Include="..\Public\IMGUI\imconfig.h" />
     <ClInclude Include="..\Public\IMGUI\imgui.h" />
     <ClInclude Include="..\Public\IMGUI\imgui_impl_dx11.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
+    <ClInclude Include="..\public\Level_Tutorial.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\public\LoadingBar.h" />
     <ClInclude Include="..\public\LogoPanel.h" />
@@ -192,6 +196,9 @@
     <ClCompile Include="..\private\Background_Loading.cpp" />
     <ClCompile Include="..\private\Background_Logo.cpp" />
     <ClCompile Include="..\Private\Canvars.cpp" />
+    <ClCompile Include="..\private\ExpBar.cpp" />
+    <ClCompile Include="..\private\HpBar.cpp" />
+    <ClCompile Include="..\private\HUD.cpp" />
     <ClCompile Include="..\Private\IMGUI\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -222,6 +229,7 @@
     </ClCompile>
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
+    <ClCompile Include="..\private\Level_Tutorial.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\LoadingBar.cpp" />
     <ClCompile Include="..\private\LogoPanel.cpp" />

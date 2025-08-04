@@ -37,7 +37,7 @@ HRESULT CMainApp::Initialize()
     if (FAILED(Ready_Layer_Canvars()))
         return E_FAIL;
 
-    if (FAILED(Start_Level(LEVEL::LOGO)))
+    if (FAILED(Start_Level(LEVEL::TUTORIAL)))
         return E_FAIL;
 
 #pragma region IMGUI INIT
