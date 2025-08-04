@@ -25,6 +25,9 @@ protected:
 	CTexture*			m_pTextureCom = { nullptr };
 	CShader*			m_pShaderCom = { nullptr };
 
+protected:
+	HRESULT Bind_ShaderResource(_uint iSVRIndex = 0);
+
 public:
 	static CUIPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

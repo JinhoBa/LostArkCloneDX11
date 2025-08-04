@@ -15,7 +15,7 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	HRESULT Bind_Resources(ID3D11InputLayout* pLayout);
+	HRESULT Bind_Resources();
 	HRESULT Render();
 
 protected:

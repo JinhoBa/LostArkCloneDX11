@@ -70,6 +70,18 @@
     <Filter Include="03.UIObject\Logo\Panel\LogoPanel">
       <UniqueIdentifier>{6da2f62a-efc3-49ef-bfaf-97ddacbe2f29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\Loading">
+      <UniqueIdentifier>{508eb125-a15f-4736-9da6-1dff92a53f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Loading\Background">
+      <UniqueIdentifier>{4355756c-34c2-4f84-b766-ad72a30d441d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Loading\LoadingBar">
+      <UniqueIdentifier>{9d02166a-4e84-478c-85a1-18aec5ed0a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Loading\Wallpaper">
+      <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -138,6 +150,15 @@
     <ClInclude Include="..\public\LogoPanel.h">
       <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Background_Loading.h">
+      <Filter>03.UIObject\Loading\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LoadingBar.h">
+      <Filter>03.UIObject\Loading\LoadingBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Wallpaper.h">
+      <Filter>03.UIObject\Loading\Wallpaper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -203,6 +224,15 @@
     </ClCompile>
     <ClCompile Include="..\private\LogoPanel.cpp">
       <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Background_Loading.cpp">
+      <Filter>03.UIObject\Loading\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LoadingBar.cpp">
+      <Filter>03.UIObject\Loading\LoadingBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Wallpaper.cpp">
+      <Filter>03.UIObject\Loading\Wallpaper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

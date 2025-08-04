@@ -33,6 +33,7 @@ unsigned int APIENTRY LoadingMain(void* pArg)
 HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 {
 	m_eNextLevelID = eNextLevelID;
+	m_fLoadProgress = 1.f;
 
 	InitializeCriticalSection(&m_Critical_Section);
 
@@ -72,13 +73,16 @@ HRESULT CLoader::Loading()
 	return S_OK;
 }
 
-void CLoader::Output()
+_float CLoader::Output()
 {
 	SetWindowText(g_hWnd, m_strMessage.c_str());
+
+	return m_fLoadProgress;
 }
 
 HRESULT CLoader::Loading_For_Logo()
 {
+	m_fLoadProgress = 10.f;
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
 
@@ -100,12 +104,17 @@ HRESULT CLoader::Loading_For_Logo()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/SelectServer.png"), 1))))
 		return E_FAIL;
 #pragma endregion
+	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
+	Sleep(1000);
+	m_fLoadProgress = 40.f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
-
-
+	Sleep(1000);
+	m_fLoadProgress = 60.f;
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+	Sleep(1000);
+	m_fLoadProgress = 80.f;
 #pragma region GAEMOBJCET_PROTOTYPE
 
 #pragma endregion
@@ -127,9 +136,11 @@ HRESULT CLoader::Loading_For_Logo()
 		return E_FAIL;
 
 #pragma endregion
-	
+	m_fLoadProgress = 100.f;
+
 	m_strMessage = TEXT("로딩이 완료되었습니다..");
 
+	
 	m_isFinished = true;
 
 	return S_OK;

@@ -31,6 +31,7 @@ private:
 private:
 	HRESULT Start_Level(LEVEL eLevelID);
 	HRESULT Ready_Prototype();
+	HRESULT Ready_Layer_Canvars();
 
 public:
 	static CMainApp* Create();

@@ -40,6 +40,14 @@ HRESULT CUIObject::Initialize(void* pArg)
 
     Safe_AddRef(m_pParent_TransformCom);
 
+    D3D11_VIEWPORT Viewport = {};
+    _uint iViewpotNum = { 1 };
+
+    m_pContext->RSGetViewports(&iViewpotNum, &Viewport);
+
+    XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
+    XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(Viewport.Width, Viewport.Height, 0.f, 1.f));
+
     Update_Position();
 
     return S_OK;

@@ -185,6 +185,7 @@
     <ClInclude Include="..\Public\Timer_Manager.h" />
     <ClInclude Include="..\public\Transform.h" />
     <ClInclude Include="..\public\UIAnimation.h" />
+    <ClInclude Include="..\public\UIBar.h" />
     <ClInclude Include="..\Public\UIButton.h" />
     <ClInclude Include="..\Public\UIObject.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="..\Private\Timer_Manager.cpp" />
     <ClCompile Include="..\private\Transform.cpp" />
     <ClCompile Include="..\private\UIAnimation.cpp" />
+    <ClCompile Include="..\private\UIBar.cpp" />
     <ClCompile Include="..\Private\UIButton.cpp" />
     <ClCompile Include="..\Private\UIObject.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />

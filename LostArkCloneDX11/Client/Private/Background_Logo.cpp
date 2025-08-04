@@ -24,7 +24,7 @@ HRESULT CBackground_Logo::Initialize(void* pArg)
 
 	Desc.fX = 0.f;
 	Desc.fY = 0.f;
-	Desc.fZ = 1.f;
+	Desc.fZ = 0.9f;
 	Desc.fSizeX = (_float)g_iWinSizeX;
 	Desc.fSizeY = (_float)g_iWinSizeY;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
@@ -36,18 +36,6 @@ HRESULT CBackground_Logo::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
-
-#pragma region TEST_CODE
-
-	_float4x4 CameraWorldInv = {};
-	_float4x4 OrthMatrix = {};
-
-	XMStoreFloat4x4(&CameraWorldInv, XMMatrixIdentity());
-	XMStoreFloat4x4(&OrthMatrix, (XMMatrixOrthographicLH(static_cast<_float>(g_iWinSizeX), static_cast<_float>(g_iWinSizeY), 0.1f, 10.f)));
-
-	m_pShaderCom->Set_Matrix(m_pTransformCom->Get_WorldMatrix(), CameraWorldInv, OrthMatrix);
-	m_pShaderCom->SetResource(m_pTextureCom->Get_SRV(0));
-#pragma endregion
 
 	return S_OK;
 }
@@ -63,20 +51,18 @@ void CBackground_Logo::Update(_float fTimeDelta)
 
 void CBackground_Logo::Late_Update(_float fTimeDelta)
 {
-
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
 HRESULT CBackground_Logo::Render()
 {
-	m_pShaderCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix());
-
-	m_pAnimCom->Set_Resource();
-
-	if (FAILED(m_pShaderCom->Apply()))
+	if (FAILED(__super::Bind_ShaderResource(m_pAnimCom->Get_Frame())))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_Resources(m_pShaderCom->Get_Layout())))
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
 	    return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render()))

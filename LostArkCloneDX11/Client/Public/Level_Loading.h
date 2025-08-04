@@ -16,12 +16,15 @@ public:
 	virtual void	Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	_float Get_Progress() { return m_fLoadingProgress; }
 private:
 	LEVEL			m_eNextLevelID = { LEVEL::END };
+	_float			m_fLoadingProgress = {};
+
 	class CLoader*	m_pLoader = { nullptr };
 
 private:
-	HRESULT Ready_Layer_BackGround(const _wstring& strLagerTag);
+	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 
 public:
 	static CLevel_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID, LEVEL eNextLevelID);

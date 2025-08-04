@@ -91,6 +91,9 @@
     <Filter Include="01.Utility\03.Components\Animation\UIAnimation">
       <UniqueIdentifier>{f7bd3814-2307-4606-97ae-b1e765f6349f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\02.GameObject\UIObject\Bar">
+      <UniqueIdentifier>{7cec91e4-47f1-4487-ad1c-ebde81f88e9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -207,6 +210,9 @@
     <ClInclude Include="..\public\UIAnimation.h">
       <Filter>01.Utility\03.Components\Animation\UIAnimation</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UIBar.h">
+      <Filter>01.Utility\02.GameObject\UIObject\Bar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -280,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UIAnimation.cpp">
       <Filter>01.Utility\03.Components\Animation\UIAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UIBar.cpp">
+      <Filter>01.Utility\02.GameObject\UIObject\Bar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

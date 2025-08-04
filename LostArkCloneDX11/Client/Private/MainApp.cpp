@@ -7,6 +7,9 @@
 
 #include "Level_Loading.h"
 #include "Canvars.h"
+#include "Background_Loading.h"
+#include "LoadingBar.h"
+#include "Wallpaper.h"
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -29,6 +32,9 @@ HRESULT CMainApp::Initialize()
         return E_FAIL;
 
     if (FAILED(Ready_Prototype()))
+        return E_FAIL; 
+
+    if (FAILED(Ready_Layer_Canvars()))
         return E_FAIL;
 
     if (FAILED(Start_Level(LEVEL::LOGO)))
@@ -97,8 +103,6 @@ HRESULT CMainApp::Render()
 
     m_pGameInstance->Draw();
 
-    
-
     ImGui::Begin("FPS");
     ImGui::Text("%d", m_iFps);
     ImGui::End();
@@ -120,8 +124,28 @@ HRESULT CMainApp::Start_Level(LEVEL eLevelID)
 
 HRESULT CMainApp::Ready_Prototype()
 {
+
+#pragma region TEXTURE
+    /* For.Prototype_Component_Texture_LogoBackGround */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_LoadingBackGround"),
+        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/LoadingFrame.dds"), 1))))
+        return E_FAIL;
+
+    /* For.Prototype_Component_Texture_LoadingBar */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_LoadingBar"),
+        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/LoadingBar%d.png"), 2))))
+        return E_FAIL;
+
+    /* For.Prototype_Component_Texture_LoadingBar */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Wallpaper"),
+        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Wallpaper/Wallpaper0.jpg"), 1))))
+        return E_FAIL;
+#pragma endregion
+
+#pragma region COMPONENTS
+
     /*For Prototype_Component_Transform*/
-    if(FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
         CTransform::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 
@@ -131,25 +155,49 @@ HRESULT CMainApp::Ready_Prototype()
         return E_FAIL;
 
     D3D11_INPUT_ELEMENT_DESC		Elements[] = {
-        	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}		
-        };
+            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+    };
 
     /*For Prototype_Component_Transform*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXPosTex.hlsl"), Elements, 2))))
         return E_FAIL;
-    
+
     /*For Prototype_Component_Transform*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_UIAnimation"),
         CUIAnimation::Create(m_pDevice, m_pContext))))
         return E_FAIL;
+#pragma endregion
 
+    
+#pragma region UIOBJECT
     /*For Prototype_GameObject_Canvars*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),
         CCanvars::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 
+    /*For Prototype_GameObject_Background_Loading*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Background_Loading"),
+        CBackground_Loading::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_GameObject_Background_Loading*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_LoadingBar"),
+        CLoadingBar::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_GameObject_Background_Loading*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Wallpaper"),
+        CWallpaper::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+#pragma endregion
+
+    return S_OK;
+}
+
+HRESULT CMainApp::Ready_Layer_Canvars()
+{
     /*Add Canvars*/
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),
         ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"))))

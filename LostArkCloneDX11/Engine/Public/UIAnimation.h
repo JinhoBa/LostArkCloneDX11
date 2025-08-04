@@ -24,14 +24,14 @@ private:
 	virtual ~CUIAnimation() = default;
 
 public:
+	_bool			isEndFrame() const { return m_iCurFrame == m_iEndFrame; }
+	_uint			Get_Frame() { return m_iCurFrame; }
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 	void			Update(_float fTimeDelta);
-	HRESULT			Set_Resource();
-
-public:
-	_bool	isEndFrame() const { return m_iCurFrame == m_iEndFrame; };
-
+	
 private:
 	_bool		m_bLoop = {};
 

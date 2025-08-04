@@ -58,14 +58,6 @@ void CUIAnimation::Update(_float fTimeDelta)
 
 }
 
-HRESULT CUIAnimation::Set_Resource()
-{
-    m_pShaderCom->SetResource(m_pTextureCom->Get_SRV(m_iCurFrame));
-
-    return S_OK;
-}
-
-
 CUIAnimation* CUIAnimation::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CUIAnimation* pInstance = new CUIAnimation(pDevice, pContext);

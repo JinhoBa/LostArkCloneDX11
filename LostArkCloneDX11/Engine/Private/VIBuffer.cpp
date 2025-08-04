@@ -32,11 +32,8 @@ HRESULT CVIBuffer::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CVIBuffer::Bind_Resources(ID3D11InputLayout* pLayout)
+HRESULT CVIBuffer::Bind_Resources()
 {
-    if (nullptr == pLayout)
-        return E_FAIL;
-
     ID3D11Buffer* VertexBuffers[] = {
         m_pVB,
     };
@@ -52,8 +49,6 @@ HRESULT CVIBuffer::Bind_Resources(ID3D11InputLayout* pLayout)
     m_pContext->IASetVertexBuffers(0, m_iNumVertexBuffers, VertexBuffers, VertexStrides, Offset);
     m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);
     m_pContext->IASetPrimitiveTopology(m_ePrimitive);
-
-    m_pContext->IASetInputLayout(pLayout);
 
     return S_OK;
 }

@@ -37,18 +37,6 @@ HRESULT CServerListPanel::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-#pragma region TEST_CODE
-
-	_float4x4 CameraWorldInv = {};
-	_float4x4 OrthMatrix = {};
-
-	XMStoreFloat4x4(&CameraWorldInv, XMMatrixIdentity());
-	XMStoreFloat4x4(&OrthMatrix, (XMMatrixOrthographicLH(static_cast<_float>(g_iWinSizeX), static_cast<_float>(g_iWinSizeY), 0.1f, 10.f)));
-
-	m_pShaderCom->Set_Matrix(m_pTransformCom->Get_WorldMatrix(), CameraWorldInv, OrthMatrix);
-	m_pShaderCom->SetResource(m_pTextureCom->Get_SRV(0));
-#pragma endregion
-
 	return S_OK;
 }
 
@@ -67,18 +55,13 @@ void CServerListPanel::Late_Update(_float fTimeDelta)
 
 HRESULT CServerListPanel::Render()
 {
-	
-
-	Update_Position();
-
-	m_pShaderCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix());
-
-	m_pShaderCom->SetResource(m_pTextureCom->Get_SRV(0));
-
-	if (FAILED(m_pShaderCom->Apply()))
+	if (FAILED(__super::Bind_ShaderResource(0)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_Resources(m_pShaderCom->Get_Layout())))
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render()))

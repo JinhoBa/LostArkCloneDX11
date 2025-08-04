@@ -15,12 +15,16 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 {
     m_eNextLevelID = eNextLevelID;
 
+    m_fLoadingProgress = 1.f;
+
     m_pLoader = CLoader::Create(m_pDevice, m_pContext, m_eNextLevelID);
     if (nullptr == m_pLoader)
         return E_FAIL;
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
+
+
 
     return S_OK;
 }
@@ -48,13 +52,29 @@ void CLevel_Loading::Update(_float fTimeDelta)
 
 HRESULT CLevel_Loading::Render()
 {
-    m_pLoader->Output();
+    m_fLoadingProgress = m_pLoader->Output();
 
     return S_OK;
 }
 
-HRESULT CLevel_Loading::Ready_Layer_BackGround(const _wstring& strLagerTag)
+HRESULT CLevel_Loading::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
+    /*Wallpaper*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Wallpaper"),
+        ENUM_TO_INT(LEVEL::LOADING), strLayerTag, this)))
+        return E_FAIL;
+
+    /*Background*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Background_Loading"),
+        ENUM_TO_INT(LEVEL::LOADING), strLayerTag)))
+        return E_FAIL;
+
+    /*Loading Bar*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_LoadingBar"),
+        ENUM_TO_INT(LEVEL::LOADING), strLayerTag, this)))
+        return E_FAIL;
+    
+
     return S_OK;
 }
 

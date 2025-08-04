@@ -43,6 +43,23 @@ HRESULT CUIPanel::Render()
     return S_OK;
 }
 
+HRESULT CUIPanel::Bind_ShaderResource(_uint iSVRIndex)
+{
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(iSVRIndex))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
 CUIPanel* CUIPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CUIPanel* pInstance = new CUIPanel(pDevice, pContext);

@@ -18,7 +18,7 @@ public:
 public:
 	HRESULT Initialize(LEVEL eNextLevelID);
 	HRESULT Loading();
-	void	Output();
+	_float	Output();
 
 public:
 	_bool isFinished() { return m_isFinished; }
@@ -27,6 +27,7 @@ private:
 	_bool					m_isFinished = { false };
 	LEVEL					m_eNextLevelID = { LEVEL::END };
 
+	_float					m_fLoadProgress = {};
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 	CGameInstance*			m_pGameInstance = { nullptr };
