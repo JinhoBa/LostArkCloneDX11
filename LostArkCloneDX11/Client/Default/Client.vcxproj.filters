@@ -103,6 +103,9 @@
     <Filter Include="03.UIObject\GamePlay\HUD\MpBar">
       <UniqueIdentifier>{58230eb6-ed69-4363-9ad4-77d19223c475}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\Identity">
+      <UniqueIdentifier>{ba69785f-f473-4fcc-acfa-c967e36173ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="..\Public\MpBar.h">
       <Filter>03.UIObject\GamePlay\HUD\MpBar</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Identity.h">
+      <Filter>03.UIObject\GamePlay\HUD\Identity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -290,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MpBar.cpp">
       <Filter>03.UIObject\GamePlay\HUD\MpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Identity.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\Identity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
