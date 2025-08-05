@@ -67,6 +67,11 @@ public:
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 #pragma endregion
 
+#pragma region PIPELINE
+	void Update_PipeLine(PIPELINE ePipLine, _float4x4& Matrix);
+	const _float4x4& Get_PipeLine(PIPELINE ePipLine);
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
@@ -77,6 +82,7 @@ private:
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
+	class CPipeLine*				m_pPipeLine = { nullptr };
 	
 public:
 	void Release_Engine();

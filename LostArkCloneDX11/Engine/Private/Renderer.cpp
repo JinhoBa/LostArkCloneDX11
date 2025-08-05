@@ -21,6 +21,8 @@ HRESULT CRenderer::Initialize()
 	XMStoreFloat4x4(&m_OrthographicViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_OrthographicMatrix, (XMMatrixOrthographicLH(Viewport.Width, Viewport.Height, 0.1f, 10.f)));
 
+
+#pragma region DEPTH_STENCIL_STATE
 	D3D11_DEPTH_STENCIL_DESC NoDepth_Desc = {};
 	NoDepth_Desc.DepthEnable = false;
 
@@ -33,6 +35,28 @@ HRESULT CRenderer::Initialize()
 
 	if (FAILED(m_pDevice->CreateDepthStencilState(&DS_Priority_Desc, &m_pDSState_Priority)))
 		return E_FAIL;
+#pragma endregion
+
+#pragma region BLEND_STATE
+	D3D11_BLEND_DESC Blend_Desc = {};
+
+	Blend_Desc.AlphaToCoverageEnable = false;
+	Blend_Desc.IndependentBlendEnable = false;
+	Blend_Desc.RenderTarget[0].BlendEnable = true;
+	Blend_Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	Blend_Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	Blend_Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	Blend_Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	Blend_Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	Blend_Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	Blend_Desc.RenderTarget[0].RenderTargetWriteMask = 0x0F;
+
+
+	if (FAILED(m_pDevice->CreateBlendState(&Blend_Desc, &m_pBlendState)))
+		return E_FAIL;
+
+	ZeroMemory(m_fFactor, sizeof(_float) * 4);
+#pragma endregion
 
     return S_OK;
 }
@@ -89,6 +113,8 @@ void CRenderer::Render_NonBlend()
 
 void CRenderer::Render_Blend()
 {
+	m_pContext->OMSetBlendState(m_pBlendState, m_fFactor, 0xffffffff);
+
 	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::BLEND)])
 	{
 		if (nullptr != pRenderObject)
@@ -98,6 +124,8 @@ void CRenderer::Render_Blend()
 	}
 
 	m_RenderObjects[ENUM_TO_INT(RENDER::BLEND)].clear();
+
+	m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
 }
 
 void CRenderer::Render_UI()
@@ -117,7 +145,6 @@ void CRenderer::Render_UI()
 
 	m_pContext->OMSetDepthStencilState(nullptr, 1);
 }
-
 
 void CRenderer::Sort_AlphaObject()
 {

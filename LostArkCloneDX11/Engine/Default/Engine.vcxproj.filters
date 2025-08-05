@@ -97,6 +97,15 @@
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{44bedf70-5fd3-4c32-932d-524a2f2db50c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Terrain">
+      <UniqueIdentifier>{238849af-deec-4fa6-8e12-11e330ec093d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObject\Camera">
+      <UniqueIdentifier>{5ce3ad2c-fc97-4a1d-aceb-474eeb70cbec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\07. PipLine">
+      <UniqueIdentifier>{feb712fe-cc3d-4a8e-8a8f-2981e600d12c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -216,6 +225,15 @@
     <ClInclude Include="..\public\UIBar.h">
       <Filter>01.Utility\02.GameObject\UIObject\Bar</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Terrain.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Camera.h">
+      <Filter>01.Utility\02.GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PipeLine.h">
+      <Filter>01.Utility\07. PipLine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -292,6 +310,15 @@
     </ClCompile>
     <ClCompile Include="..\private\UIBar.cpp">
       <Filter>01.Utility\02.GameObject\UIObject\Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Terrain.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera.cpp">
+      <Filter>01.Utility\02.GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PipeLine.cpp">
+      <Filter>01.Utility\07. PipLine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

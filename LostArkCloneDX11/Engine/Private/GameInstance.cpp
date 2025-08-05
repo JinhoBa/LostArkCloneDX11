@@ -8,6 +8,7 @@
 #include "Sound_Manager.h"
 #include "Key_Manager.h"
 #include "Renderer.h"
+#include "PipeLine.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -47,6 +48,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pRenderer)
+		return E_FAIL;
+
+	m_pPipeLine = CPipeLine::Create();
+	if (nullptr == m_pPipeLine)
 		return E_FAIL;
 
 	return S_OK;
@@ -222,12 +227,26 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 
 #pragma endregion
 
+#pragma region PIPELINE
+
+void CGameInstance::Update_PipeLine(PIPELINE ePipLine, _float4x4& Matrix)
+{
+	m_pPipeLine->Update_PipeLine(ePipLine, Matrix);
+}
+
+const _float4x4& CGameInstance::Get_PipeLine(PIPELINE ePipLine)
+{
+	return m_pPipeLine->Get_PipeLine(ePipLine);
+}
+
+#pragma endregion
+
 
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
-
+	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pPrototype_Manager);

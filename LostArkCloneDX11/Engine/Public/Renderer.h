@@ -25,12 +25,15 @@ private:
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	ID3D11DepthStencilState*	m_pDSState_Priority = { nullptr };
 	ID3D11DepthStencilState*	m_pDSState_UI = { nullptr };
+	ID3D11BlendState*			m_pBlendState = { nullptr };
+
+	_float						m_fFactor[4] = {};
 
 	list<class CGameObject*>	m_RenderObjects[ENUM_TO_INT(RENDER::END)];
 
 	_float4x4					m_OrthographicViewMatrix = {};
 	_float4x4					m_OrthographicMatrix = {};
-
+	
 private:
 	void Render_Priority();
 	void Render_NonBlend();

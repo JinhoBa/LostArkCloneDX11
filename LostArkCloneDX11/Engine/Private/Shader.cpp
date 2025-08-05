@@ -20,7 +20,7 @@ CShader::CShader(CShader& Prototype)
 }
 
 
-HRESULT CShader::Initialize_Prototype(const _tchar* pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElements, _uint iNumElement)
+HRESULT CShader::Initialize_Prototype(const _tchar* pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElements, _uint iNumElement)
 {
 	_uint iHlslFlag = {};
 
@@ -133,7 +133,7 @@ HRESULT CShader::Begin(_uint iPassIndex)
 	return m_pEffects->GetTechniqueByIndex(0)->GetPassByIndex(iPassIndex)->Apply(0, m_pContext);
 }
 
-CShader* CShader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElements, _uint iNumElement)
+CShader* CShader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath,const D3D11_INPUT_ELEMENT_DESC* pElements, _uint iNumElement)
 {
 	CShader* pInstance = new CShader(pDevice, pContext);
 
