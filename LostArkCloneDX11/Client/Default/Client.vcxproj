@@ -177,8 +177,10 @@
     <ClInclude Include="..\public\LoadingBar.h" />
     <ClInclude Include="..\public\LogoPanel.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\ServerListPanel.h" />
+    <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\Wallpaper.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -234,15 +236,18 @@
     <ClCompile Include="..\private\LoadingBar.cpp" />
     <ClCompile Include="..\private\LogoPanel.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\private\ServerListPanel.cpp" />
+    <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\Wallpaper.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

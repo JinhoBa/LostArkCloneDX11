@@ -1,15 +1,15 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIPanel.h"
+#include "UIBar.h"
 
 NS_BEGIN(Client)
 
-class CBackground_Loading final : public CUIPanel
+class CMpBar : public CUIBar
 {
 private:
-	CBackground_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CBackground_Loading(const CBackground_Loading& Prototype);
-	virtual ~CBackground_Loading() = default;
+	CMpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CMpBar(const CMpBar& Prototype);
+	virtual ~CMpBar() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -20,14 +20,10 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	ID3D11BlendState*		m_pBlendState = { nullptr };
-	_float					m_fFactor[4] = {};
-
-private:
-	HRESULT			Add_Components();
+	HRESULT		Add_Components();
 
 public:
-	static CBackground_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CMpBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

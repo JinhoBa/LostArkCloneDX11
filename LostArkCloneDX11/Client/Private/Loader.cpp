@@ -11,7 +11,13 @@
 #include "ExpBar.h"
 #include "HUD.h"
 #include "HpBar.h"
+#include "MpBar.h"
 #pragma endregion
+
+#pragma region GAMEOBJECT
+#include "Terrain.h"
+#pragma endregion
+
 
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -178,6 +184,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/MpBar/Mpbar%d.png"), 2))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Terrain"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
+		return E_FAIL;
+
 #pragma endregion
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -188,6 +199,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 
+
+	/*For Prototype_Component_VIBuffer_Terrain*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp")))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	
 #pragma region GAEMOBJCET_PROTOTYPE
 
@@ -204,9 +225,14 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CHUD::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_ExpBar */
+	/* For.Prototype_GameObject_HpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Hpbar"),
 		CHpBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_MpBar */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Mpbar"),
+		CMpBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

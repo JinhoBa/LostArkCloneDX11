@@ -37,6 +37,25 @@ HRESULT CBackground_Loading::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	D3D11_BLEND_DESC Blend_Desc = {};
+
+	Blend_Desc.AlphaToCoverageEnable = false;
+	Blend_Desc.IndependentBlendEnable = false;
+	Blend_Desc.RenderTarget[0].BlendEnable = true;
+	Blend_Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	Blend_Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	Blend_Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	Blend_Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	Blend_Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	Blend_Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	Blend_Desc.RenderTarget[0].RenderTargetWriteMask = 0x0F;
+
+
+	if (FAILED(m_pDevice->CreateBlendState(&Blend_Desc, &m_pBlendState)))
+		return E_FAIL;
+
+	ZeroMemory(m_fFactor, sizeof(_float) * 4);
+
 	return S_OK;
 }
 
@@ -56,11 +75,12 @@ void CBackground_Loading::Late_Update(_float fTimeDelta)
 
 HRESULT CBackground_Loading::Render()
 {
+	m_pContext->OMSetBlendState(m_pBlendState, m_fFactor, 0xffffffff);
 
 	if (FAILED(__super::Bind_ShaderResource(0)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(2)))
+	if (FAILED(m_pShaderCom->Begin(0)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -68,6 +88,8 @@ HRESULT CBackground_Loading::Render()
 
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
+
+	m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
 
 	return S_OK;
 }

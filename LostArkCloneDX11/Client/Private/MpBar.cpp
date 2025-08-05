@@ -1,31 +1,31 @@
 #include "pch.h"
-#include "HpBar.h"
+#include "MpBar.h"
 
 #include "GameInstance.h"
 
-CHpBar::CHpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CMpBar::CMpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CUIBar{ pDevice, pContext }
 {
 }
 
-CHpBar::CHpBar(const CHpBar& Prototype)
+CMpBar::CMpBar(const CMpBar& Prototype)
 	:CUIBar{ Prototype }
 {
 }
 
-HRESULT CHpBar::Initialize_Prototype()
+HRESULT CMpBar::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CHpBar::Initialize(void* pArg)
+HRESULT CMpBar::Initialize(void* pArg)
 {
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
 	UIBAR_DESC Desc = {};
 
-	Desc.fX = -194.f;
+	Desc.fX = 194.f;
 	Desc.fY = -35.f;
 	Desc.fZ = 0.2f;
 	Desc.fSizeX = 220.f;
@@ -43,23 +43,24 @@ HRESULT CHpBar::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CHpBar::Priority_Update(_float fTimeDelta)
+void CMpBar::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CHpBar::Update(_float fTimeDelta)
+void CMpBar::Update(_float fTimeDelta)
 {
 
 }
 
-void CHpBar::Late_Update(_float fTimeDelta)
+void CMpBar::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 	Update_Position();
 	Update_Bar(100.f);
+
 }
 
-HRESULT CHpBar::Render()
+HRESULT CMpBar::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -67,10 +68,10 @@ HRESULT CHpBar::Render()
 	return S_OK;
 }
 
-HRESULT CHpBar::Add_Components()
+HRESULT CMpBar::Add_Components()
 {
 	/*Texture*/
-	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_HpBar"),
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_MpBar"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -92,33 +93,33 @@ HRESULT CHpBar::Add_Components()
 	return S_OK;
 }
 
-CHpBar* CHpBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CMpBar* CMpBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CHpBar* pInstance = new CHpBar(pDevice, pContext);
+	CMpBar* pInstance = new CMpBar(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Create : CHpBar");
+		MSG_BOX("Failed to Create : CMpBar");
 		return nullptr;
 	}
 	return pInstance;
 }
 
-CGameObject* CHpBar::Clone(void* pArg)
+CGameObject* CMpBar::Clone(void* pArg)
 {
-	CGameObject* pInstance = new CHpBar(*this);
+	CGameObject* pInstance = new CMpBar(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Clone : CHpBar");
+		MSG_BOX("Failed to Clone : CMpBar");
 		return nullptr;
 	}
 	return pInstance;
 }
 
-void CHpBar::Free()
+void CMpBar::Free()
 {
 	__super::Free();
 }

@@ -33,9 +33,9 @@ HRESULT CLevel_Tutorial::Render()
 HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
     ///* Background */
-    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Background_Logo"),
-    //    ENUM_TO_INT(LEVEL::LOGO), strLayerTag)))
-    //    return E_FAIL;
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -57,6 +57,10 @@ HRESULT CLevel_Tutorial::Ready_Layer_HUD(const _wstring& strLayerTag)
         return E_FAIL;
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Hpbar"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Mpbar"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 

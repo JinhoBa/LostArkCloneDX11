@@ -94,8 +94,14 @@
     <Filter Include="03.UIObject\GamePlay\HUD">
       <UniqueIdentifier>{b467a4d6-af50-4540-a1e2-e26f8ffd2c46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.UIObject\GamePlay\HpBar">
+    <Filter Include="02.GameObject\Terrain">
+      <UniqueIdentifier>{b92eb64d-652c-457b-8e8f-28555ce33f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\HpBar">
       <UniqueIdentifier>{65361930-8c85-4e2f-b8c4-f3ed1eee5961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\MpBar">
+      <UniqueIdentifier>{58230eb6-ed69-4363-9ad4-77d19223c475}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +190,13 @@
       <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClInclude>
     <ClInclude Include="..\public\HpBar.h">
-      <Filter>03.UIObject\GamePlay\HpBar</Filter>
+      <Filter>03.UIObject\GamePlay\HUD\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Terrain.h">
+      <Filter>02.GameObject\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MpBar.h">
+      <Filter>03.UIObject\GamePlay\HUD\MpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -271,11 +283,20 @@
       <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClCompile>
     <ClCompile Include="..\private\HpBar.cpp">
-      <Filter>03.UIObject\GamePlay\HpBar</Filter>
+      <Filter>03.UIObject\GamePlay\HUD\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Terrain.cpp">
+      <Filter>02.GameObject\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MpBar.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\MpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXNorTex.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
