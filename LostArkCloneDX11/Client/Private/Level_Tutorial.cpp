@@ -12,10 +12,7 @@ HRESULT CLevel_Tutorial::Initialize()
         return E_FAIL;
 
 
-    if (FAILED(Ready_Layer_UI(TEXT("Layer_Background"))))
-        return E_FAIL;
-
-    if (FAILED(Ready_Layer_HUD(TEXT("Layer_HUD"))))
+    if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
 
     return S_OK;
@@ -40,27 +37,15 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
     return S_OK;
 }
 
-HRESULT CLevel_Tutorial::Ready_Layer_UI(const _wstring& strLayerTag)
+HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
 {
-    /* UI */
+    // 0 : EXPBar
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ExpBar"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
-    return S_OK;
-}
-
-HRESULT CLevel_Tutorial::Ready_Layer_HUD(const _wstring& strLayerTag)
-{
+    // 1 : HUD
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HUD"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-        return E_FAIL;
-
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Hpbar"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-        return E_FAIL;
-
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Mpbar"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 

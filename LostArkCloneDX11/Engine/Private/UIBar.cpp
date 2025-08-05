@@ -55,6 +55,7 @@ void CUIBar::Update(_float fTimeDelta)
 
 void CUIBar::Late_Update(_float fTimeDelta)
 {
+    __super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIBar::Render()
@@ -95,6 +96,9 @@ HRESULT CUIBar::Render()
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Render()))
+        return E_FAIL;
+
+    if (FAILED(__super::Render()))
         return E_FAIL;
 
     return S_OK;

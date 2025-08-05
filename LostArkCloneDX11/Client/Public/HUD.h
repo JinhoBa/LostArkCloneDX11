@@ -21,6 +21,7 @@ public:
 
 private:
 	HRESULT Add_Components();
+	HRESULT Ready_Layer(const _wstring& strLayerTag);
 
 public:
 	static CHUD* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

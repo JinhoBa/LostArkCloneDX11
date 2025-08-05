@@ -37,6 +37,10 @@ HRESULT CHUD::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer(TEXT("Layer_HUD"))))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -52,6 +56,8 @@ void CHUD::Update(_float fTimeDelta)
 void CHUD::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CHUD::Render()
@@ -66,6 +72,9 @@ HRESULT CHUD::Render()
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	return S_OK;
@@ -86,6 +95,26 @@ HRESULT CHUD::Add_Components()
 	/*Shader_VTXPosTex*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CHUD::Ready_Layer(const _wstring& strLayerTag)
+{
+	UIOBJECT_DESC Desc = {};
+
+	Desc.pParent_TransformCom = m_pTransformCom;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Hpbar"),
+		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Mpbar"),
+		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	if (FAILED(Add_ChildObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
 		return E_FAIL;
 
 	return S_OK;

@@ -36,10 +36,14 @@ void CUIPanel::Update(_float fTimeDelta)
 
 void CUIPanel::Late_Update(_float fTimeDelta)
 {
+    __super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIPanel::Render()
 {
+    if (FAILED(__super::Render()))
+        return E_FAIL;
+
     return S_OK;
 }
 

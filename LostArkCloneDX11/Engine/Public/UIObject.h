@@ -4,7 +4,7 @@
 
 NS_BEGIN(Engine)
 
-class ENGINE_DLL CUIObject abstract : public CGameObject
+class ENGINE_DLL CUIObject : public CGameObject
 {
 public:
 	typedef struct UIObject_Desc : public CGameObject::GAMEOBJECT_DESC
@@ -37,10 +37,15 @@ protected:
 	_float		m_fSizeX = {};
 	_float		m_fSizeY = {};
 
-	CTransform* m_pParent_TransformCom = { nullptr };	
+	CTransform*			m_pParent_TransformCom = { nullptr };	
+	list<CUIObject*>	m_ChildObjects = {};
 
 	_float4x4	m_ViewMatrix = {};
 	_float4x4	m_ProjMatrix = {};
+
+protected:
+	HRESULT Add_ChildObjects(_uint iLevelID, const _wstring& strLayerTag);
+
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

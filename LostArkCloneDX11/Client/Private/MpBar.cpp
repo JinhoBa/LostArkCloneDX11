@@ -20,6 +20,9 @@ HRESULT CMpBar::Initialize_Prototype()
 
 HRESULT CMpBar::Initialize(void* pArg)
 {
+	if (nullptr == pArg)
+		return E_FAIL;
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -30,9 +33,7 @@ HRESULT CMpBar::Initialize(void* pArg)
 	Desc.fZ = 0.2f;
 	Desc.fSizeX = 220.f;
 	Desc.fSizeY = 20.f;
-	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
-		ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_HUD"), TEXT("Com_Transform"),0
-	));
+	Desc.pParent_TransformCom = static_cast<UIBAR_DESC*>(pArg)->pParent_TransformCom;
 	Desc.fMax = 100.f;
 	Desc.fStartValue = 80.f;
 	Desc.fSizeY_Fill = Desc.fSizeY;
@@ -54,7 +55,6 @@ void CMpBar::Update(_float fTimeDelta)
 
 void CMpBar::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 	Update_Position();
 	Update_Bar(100.f);
 

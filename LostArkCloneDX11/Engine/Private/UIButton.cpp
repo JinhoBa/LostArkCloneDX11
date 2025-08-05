@@ -32,10 +32,14 @@ void CUIButton::Update(_float fTimeDelta)
 
 void CUIButton::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIButton::Render()
 {
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
