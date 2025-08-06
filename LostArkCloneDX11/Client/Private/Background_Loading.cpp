@@ -144,4 +144,6 @@ CGameObject* CBackground_Loading::Clone(void* pArg)
 void CBackground_Loading::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pBlendState);
 }

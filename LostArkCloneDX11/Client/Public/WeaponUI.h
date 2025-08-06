@@ -4,13 +4,13 @@
 
 NS_BEGIN(Client)
 
-class CIdentity : public CUIPanel
+class CWeaponUI : public CUIPanel
 {
-	enum class STATE { FLURRY, FOCUS, TO_FLURRY, TO_FOCUS, END};
+	enum class STATE { FLURRY, FOCUS, TO_FLURRY, TO_FOCUS, END };
 private:
-	CIdentity(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CIdentity(const CIdentity& Prototype);
-	virtual ~CIdentity() = default;
+	CWeaponUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CWeaponUI(const CWeaponUI& Prototype);
+	virtual ~CWeaponUI() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -25,13 +25,21 @@ private:
 	STATE			m_eCurState = {};
 
 	_uint			m_iTextureIndex = {};
+	_uint			m_iNumShake = {};
+
+	_float			m_fTimeAcc = {};
+
+	_float			m_fShakeSpeed = {};
+	_float			m_fTurnTime = {};
 
 private:
 	HRESULT Add_Components();
 	void	Change_State();
+	void	Shake(_float fTimeDelta);
+	void    UpAndDown(_float fTimeDelta);
 
 public:
-	static CIdentity* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CWeaponUI* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

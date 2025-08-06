@@ -62,17 +62,17 @@ void CHUD::Late_Update(_float fTimeDelta)
 
 HRESULT CHUD::Render()
 {
-	if (FAILED(__super::Bind_ShaderResource(0)))
-		return E_FAIL;
+	//if (FAILED(__super::Bind_ShaderResource(0)))
+	//	return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
+	//if (FAILED(m_pShaderCom->Begin(0)))
+	//	return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
+	//if (FAILED(m_pVIBufferCom->Bind_Resources()))
+	//	return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+	//if (FAILED(m_pVIBufferCom->Render()))
+	//	return E_FAIL;
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -113,6 +113,16 @@ HRESULT CHUD::Ready_Layer(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Mpbar"),
 		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WeaponUI"),
+		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Identity"),
+		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	
 
 	if (FAILED(Add_ChildObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
 		return E_FAIL;

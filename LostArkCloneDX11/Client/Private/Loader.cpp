@@ -12,6 +12,8 @@
 #include "HUD.h"
 #include "HpBar.h"
 #include "MpBar.h"
+#include "Identity.h"
+#include "WeaponUI.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -171,17 +173,28 @@ HRESULT CLoader::Loading_For_GamePlay()
 #pragma region UI_TEXTURE
 	/* For.Prototype_Component_Texture_ExpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_ExpBar"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/EXP/ExpBar%d.dds"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/EXP/ExpBar%d.dds"), 3))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_HpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_HpBar"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/HpBar/Hpbar%d.png"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/HpBar/Hpbar%d.dds"), 2))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_MpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_MpBar"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/MpBar/Mpbar%d.png"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/MpBar/Mpbar%d.dds"), 2))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Texture_Iden_Frame */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Frame"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Iden/identity_weaponFrame.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Iden_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Weapon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Iden/identity_weapon%d.dds"), 2))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Terrain */
@@ -234,6 +247,17 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Mpbar"),
 		CMpBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_Identity */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Identity"),
+		CIdentity::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_WeaponUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WeaponUI"),
+		CWeaponUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 

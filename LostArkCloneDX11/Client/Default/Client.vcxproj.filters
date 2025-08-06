@@ -106,6 +106,9 @@
     <Filter Include="03.UIObject\GamePlay\HUD\Identity">
       <UniqueIdentifier>{ba69785f-f473-4fcc-acfa-c967e36173ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\WeaponUI">
+      <UniqueIdentifier>{e699f7cd-ac65-47f9-b364-f5b82543a141}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="..\public\Identity.h">
       <Filter>03.UIObject\GamePlay\HUD\Identity</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\WeaponUI.h">
+      <Filter>03.UIObject\GamePlay\HUD\WeaponUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -299,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Identity.cpp">
       <Filter>03.UIObject\GamePlay\HUD\Identity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\WeaponUI.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\WeaponUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
