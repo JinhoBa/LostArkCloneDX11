@@ -21,6 +21,7 @@ public:
 
 private:
 	HRESULT		Add_Components();
+	HRESULT		Draw();
 
 public:
 	static CExpBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

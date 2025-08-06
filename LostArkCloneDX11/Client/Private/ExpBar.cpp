@@ -25,17 +25,17 @@ HRESULT CExpBar::Initialize(void* pArg)
 
 	UIBAR_DESC Desc = {};
 
-	Desc.fX = 41.f;
-	Desc.fY = 355.f;
-	Desc.fZ = 0.2f;
-	Desc.fSizeX = 1362.f;
-	Desc.fSizeY = 10.f;
+	Desc.fX = 43.f;
+	Desc.fY = 358.f;
+	Desc.fZ = 0.1f;
+	Desc.fSizeX = 1368.f;
+	Desc.fSizeY = 12.f;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
 		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
 	));
 	Desc.fMax = 100.f;
 	Desc.fStartValue = 0.1f;
-	Desc.fSizeY_Fill = 5.f;
+	Desc.fSizeY_Fill = 7.f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -63,28 +63,32 @@ void CExpBar::Late_Update(_float fTimeDelta)
 
 HRESULT CExpBar::Render()
 {
-	
-	//// Render Fill
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransfromCom_BarFill->Get_WorldMatrix())))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iSRVIndex_Fill))))
-		return E_FAIL;
-
+	// UI
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(2)))
+
+	// Background
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(2))))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Render()))
+	if (FAILED(Draw()))
+		return E_FAIL;
+
+	// Render Fill
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransfromCom_BarFill->Get_WorldMatrix())))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iSRVIndex_Fill))))
+		return E_FAIL;
+
+	if (FAILED(Draw()))
 		return E_FAIL;
 
 	/* Render Back */ 
@@ -94,13 +98,7 @@ HRESULT CExpBar::Render()
 	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iSRVIndex_Back))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(1)))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render()))
+	if (FAILED(Draw()))
 		return E_FAIL;
 
 	return S_OK;
@@ -129,6 +127,18 @@ HRESULT CExpBar::Add_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+HRESULT CExpBar::Draw()
+{
+	if (FAILED(m_pShaderCom->Begin(1)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
 }
 
 CExpBar* CExpBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

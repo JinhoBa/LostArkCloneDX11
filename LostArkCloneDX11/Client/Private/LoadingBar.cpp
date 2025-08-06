@@ -34,7 +34,7 @@ HRESULT CLoadingBar::Initialize(void* pArg)
 
 	UIBAR_DESC Desc = {};
 
-	Desc.fX = 0.f;
+	Desc.fX = -10.f;
 	Desc.fY = 300.f;
 	Desc.fZ = 0.2f;
 	Desc.fSizeX = (_float)g_iWinSizeX;

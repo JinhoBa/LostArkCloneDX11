@@ -34,11 +34,18 @@ protected:
 	_float		m_fX = {};
 	_float		m_fY = {};
 	_float		m_fZ = {};
+
+	_float		m_fRX = {};
+	_float		m_fRY = {};
+
 	_float		m_fSizeX = {};
 	_float		m_fSizeY = {};
 
 	CTransform*			m_pParent_TransformCom = { nullptr };	
 	list<CUIObject*>	m_ChildObjects = {};
+
+	_float		m_fWinCX = {};
+	_float		m_fWinCY = {};
 
 	_float4x4	m_ViewMatrix = {};
 	_float4x4	m_ProjMatrix = {};

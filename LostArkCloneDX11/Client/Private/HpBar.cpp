@@ -28,10 +28,10 @@ HRESULT CHpBar::Initialize(void* pArg)
 
 	UIBAR_DESC Desc = {};
 
-	Desc.fX = -194.f;
-	Desc.fY = -35.f;
+	Desc.fX = -168.f;
+	Desc.fY = -12.f;
 	Desc.fZ = 0.2f;
-	Desc.fSizeX = 220.f;
+	Desc.fSizeX = 176.f;
 	Desc.fSizeY = 20.f;
 	Desc.pParent_TransformCom = static_cast<UIBAR_DESC*>(pArg)->pParent_TransformCom;
 	Desc.fMax = 100.f;

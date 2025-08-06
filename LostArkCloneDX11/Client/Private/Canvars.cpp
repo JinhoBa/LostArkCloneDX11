@@ -22,16 +22,17 @@ HRESULT CCanvars::Initialize(void* pArg)
 {
     UIOBJECT_DESC Desc = {};
 
-    Desc.fX = g_iWinSizeX >> 1;
-    Desc.fY = g_iWinSizeY >> 1;
-    Desc.fZ = 10.f;
-    Desc.fSizeX = (_float)g_iWinSizeX;
-    Desc.fSizeY = (_float)g_iWinSizeY;
+    m_fX = g_iWinSizeX >> 1;
+    m_fY = g_iWinSizeY >> 1;
+    m_fZ = 10.f;
+    m_fSizeX = (_float)g_iWinSizeX;
+    m_fSizeY = (_float)g_iWinSizeY;
 
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(CGameObject::Initialize(pArg)))
         return E_FAIL;
 
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 1.f, 1.f));
+    m_pTransformCom->Set_Scale(_float3(m_fSizeX, m_fSizeY, 1.f));
 
     return S_OK;
 }

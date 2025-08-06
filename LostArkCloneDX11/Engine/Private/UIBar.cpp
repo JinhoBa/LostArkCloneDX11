@@ -107,6 +107,7 @@ HRESULT CUIBar::Render()
 void CUIBar::Update_Bar(_float fValue)
 {
     _float Value = fValue;
+
     m_fSizeX_Fill = Value / m_fMax * m_fSizeX;
 
     m_fX_Fill = m_fX + (m_fSizeX_Fill * 0.5f - m_fSizeX * 0.5f);

@@ -23,6 +23,7 @@ public:
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
+
 	ID3D11DepthStencilState*	m_pDSState_Priority = { nullptr };
 	ID3D11DepthStencilState*	m_pDSState_UI = { nullptr };
 	ID3D11BlendState*			m_pBlendState = { nullptr };

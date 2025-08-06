@@ -21,14 +21,25 @@ HRESULT CUIObject::Initialize(void* pArg)
 {
     if (nullptr == pArg)
         return E_FAIL;
+ 
+    _uint i = 1;
+    D3D11_VIEWPORT Viewport = {};
 
-    if (FAILED(__super::Initialize(pArg)))
+    m_pContext->RSGetViewports(&i, &Viewport);
+    m_fWinCX = Viewport.Width;
+    m_fWinCY = Viewport.Height;
+
+    CTransform::Transform_Desc Transform_Desc = {};
+    Transform_Desc.fRotatePersec = 1.f;
+    Transform_Desc.fSpeedPersec = 1.f;
+
+    if (FAILED(__super::Initialize(&Transform_Desc)))
         return E_FAIL;
 
     UIOBJECT_DESC* pDesc = static_cast<UIOBJECT_DESC*>(pArg);
 
-    m_fX = pDesc->fX;
-    m_fY = pDesc->fY;
+    m_fRX = pDesc->fX;
+    m_fRY = pDesc->fY;
     m_fZ = pDesc->fZ;
     m_fSizeX = pDesc->fSizeX;
     m_fSizeY = pDesc->fSizeY;
@@ -39,11 +50,6 @@ HRESULT CUIObject::Initialize(void* pArg)
         m_pParent_TransformCom = pDesc->pParent_TransformCom;
 
     Safe_AddRef(m_pParent_TransformCom);
-
-    D3D11_VIEWPORT Viewport = {};
-    _uint iViewpotNum = { 1 };
-
-    m_pContext->RSGetViewports(&iViewpotNum, &Viewport);
 
     XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
     XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(Viewport.Width, Viewport.Height, 0.f, 1.f));
@@ -80,17 +86,13 @@ HRESULT CUIObject::Render()
 
 void CUIObject::Update_Position()
 {
-    _uint i = 1;
-    D3D11_VIEWPORT Viewport = {};
-    
-    m_pContext->RSGetViewports(&i, &Viewport);
-    _float fWinCX = Viewport.Width;
-    _float fWinCY = Viewport.Height;
-
     _float3 vParentPosition = {};
     XMStoreFloat3(&vParentPosition, m_pParent_TransformCom->Get_Position());
 
-    _float4 vPosition = { vParentPosition.x + m_fX, vParentPosition.y - m_fY , m_fZ - 0.01f, 1.f };
+    m_fX = vParentPosition.x + (m_fWinCX * 0.5f) + m_fRX;
+    m_fY = -vParentPosition.y + (m_fWinCY * 0.5f) + m_fRY;
+
+    _float4 vPosition = { m_fX - (m_fWinCX * 0.5f) , -m_fY + (m_fWinCY * 0.5f), m_fZ - 0.01f, 1.f };
 
     m_pTransformCom->Set_Scale(_float3(m_fSizeX, m_fSizeY, 1.f));
     m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&vPosition));
@@ -122,4 +124,5 @@ void CUIObject::Free()
     {
         Safe_Release(pObject);
     }
+    m_ChildObjects.clear();
 }

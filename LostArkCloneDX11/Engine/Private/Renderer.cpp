@@ -130,6 +130,7 @@ void CRenderer::Render_Blend()
 
 void CRenderer::Render_UI()
 {
+	Sort_UI();
 	// ±íÀÌ Å×½ºÆ® ²ô±â
 	m_pContext->OMSetDepthStencilState(m_pDSState_UI, 1);
 
@@ -155,7 +156,7 @@ void CRenderer::Sort_UI()
 {
 	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].sort(
 		[](CGameObject* pSrc, CGameObject* pDst)->_bool {
-			return dynamic_cast<CUIObject*>(pSrc)->Get_ZValue() < dynamic_cast<CUIObject*>(pDst)->Get_ZValue();});
+			return dynamic_cast<CUIObject*>(pSrc)->Get_ZValue() > dynamic_cast<CUIObject*>(pDst)->Get_ZValue();});
 }
 
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -184,7 +185,9 @@ void CRenderer::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+
 	Safe_Release(m_pDSState_Priority);
 	Safe_Release(m_pDSState_UI);
+	Safe_Release(m_pBlendState);
 
 }
