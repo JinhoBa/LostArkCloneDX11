@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="..\public\Background_Loading.h" />
     <ClInclude Include="..\public\Background_Logo.h" />
+    <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Canvars.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\ExpBar.h" />
@@ -199,6 +200,7 @@
   <ItemGroup>
     <ClCompile Include="..\private\Background_Loading.cpp" />
     <ClCompile Include="..\private\Background_Logo.cpp" />
+    <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Canvars.cpp" />
     <ClCompile Include="..\private\ExpBar.cpp" />
     <ClCompile Include="..\private\HpBar.cpp" />

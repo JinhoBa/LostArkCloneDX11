@@ -139,6 +139,8 @@ HRESULT CExpBar::Draw()
 
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 CExpBar* CExpBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

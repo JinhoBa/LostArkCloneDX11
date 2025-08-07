@@ -109,6 +109,18 @@
     <Filter Include="03.UIObject\GamePlay\HUD\WeaponUI">
       <UniqueIdentifier>{e699f7cd-ac65-47f9-b364-f5b82543a141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Camera">
+      <UniqueIdentifier>{33535fac-8963-4535-8ee2-3132feafbbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Free">
+      <UniqueIdentifier>{7f2c039f-7088-49f0-9799-30bd0b8f1100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Main">
+      <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Skill">
+      <UniqueIdentifier>{6ccba7d0-5360-48fe-bb07-b8ed0dbc5397}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -210,6 +222,9 @@
     <ClInclude Include="..\public\WeaponUI.h">
       <Filter>03.UIObject\GamePlay\HUD\WeaponUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Camera_Free.h">
+      <Filter>02.GameObject\Camera\Camera_Free</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -308,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="..\private\WeaponUI.cpp">
       <Filter>03.UIObject\GamePlay\HUD\WeaponUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_Free.cpp">
+      <Filter>02.GameObject\Camera\Camera_Free</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

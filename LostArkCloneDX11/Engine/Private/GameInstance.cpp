@@ -18,6 +18,8 @@ CGameInstance::CGameInstance()
 
 HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
 {
+	m_vWinSize = { static_cast<_float>(EngineDesc.iWinSizeX) , static_cast<_float>(EngineDesc.iWinSizeY) };
+
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.eWindowMode, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -62,6 +64,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pKey_Manager->Update_KeyInput();
 
 	m_pObject_Manager->Priority_Update(fTimeDelta);
+
+	m_pPipeLine->Update();
 
 	m_pObject_Manager->Update(fTimeDelta);
 
@@ -232,14 +236,29 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 
 #pragma region PIPELINE
 
-void CGameInstance::Update_PipeLine(PIPELINE ePipLine, _float4x4& Matrix)
+void CGameInstance::Set_Transform(D3DTS eState, _fmatrix Matrix)
 {
-	m_pPipeLine->Update_PipeLine(ePipLine, Matrix);
+	m_pPipeLine->Set_Transform(eState, Matrix);
 }
 
-const _float4x4& CGameInstance::Get_PipeLine(PIPELINE ePipLine)
+const _float4x4* CGameInstance::Get_Transfrom_Float4x4(D3DTS eState) const
 {
-	return m_pPipeLine->Get_PipeLine(ePipLine);
+	return m_pPipeLine->Get_Transfrom_Float4x4(eState);
+}
+
+_matrix	CGameInstance::Get_Transfrom_Matrix(D3DTS eState)
+{
+	return m_pPipeLine->Get_Transfrom_Matrix(eState);
+}
+
+_matrix	CGameInstance::Get_Transfrom_MatrixInverse(D3DTS eState)
+{
+	return m_pPipeLine->Get_Transfrom_MatrixInverse(eState);
+}
+
+const _float4* CGameInstance::Get_Camera_Position() const
+{
+	return m_pPipeLine->Get_Camera_Position();
 }
 
 #pragma endregion

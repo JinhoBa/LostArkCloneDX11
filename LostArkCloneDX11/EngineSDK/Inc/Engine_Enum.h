@@ -10,6 +10,6 @@ namespace Engine
 	enum class TEXTURE { PLANE, CUBE, END };
 	enum class RAY { LOCAL, WORLD, END };
 	enum class CHANNELID { BGM, EFFECT, END };
-	enum class PIPELINE {VIEW, VIEWINV, PROJ, PROJINV, END};
+	enum class D3DTS {VIEW, PROJ, END};
 }
 #endif // Engine_Enum_h__

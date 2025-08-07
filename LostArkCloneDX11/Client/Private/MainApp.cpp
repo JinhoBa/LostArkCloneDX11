@@ -10,6 +10,7 @@
 #include "Background_Loading.h"
 #include "LoadingBar.h"
 #include "Wallpaper.h"
+#include "Camera_Free.h"
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -171,6 +172,12 @@ HRESULT CMainApp::Ready_Prototype()
 #pragma endregion
 
     
+   
+    /*For Prototype_GameObject_Camera_Free*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"),
+        CCamera_Free::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
 #pragma region UIOBJECT
     /*For Prototype_GameObject_Canvars*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),

@@ -18,6 +18,7 @@
 
 #pragma region GAMEOBJECT
 #include "Terrain.h"
+#include "Camera_Free.h"
 #pragma endregion
 
 

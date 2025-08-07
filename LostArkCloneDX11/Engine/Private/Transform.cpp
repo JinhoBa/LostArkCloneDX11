@@ -175,18 +175,12 @@ void CTransform::LookAt(_fvector vTarget)
     _float3 vScale = Get_Scale();
 
     _vector vLook = vTarget - Get_State(STATE::POSITION);
+    _vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+    _vector vUp = XMVector3Cross(vLook, vRight);
 
-    vLook = XMVector3Normalize(vLook);
-
-    _vector vUpDir= XMVectorSet(0.f, 1.f, 0.f, 0.f);
-
-    _vector vRight = XMVector3Normalize(XMVector3Cross(vUpDir, vLook));
-
-    _vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
-
-    Set_State(STATE::RIGHT, (vRight * vScale.x));
-    Set_State(STATE::UP, (vUp * vScale.y));
-    Set_State(STATE::LOOK, (vLook * vScale.z));
+    Set_State(STATE::RIGHT, XMVector3Normalize(vRight)* vScale.x);
+    Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
+    Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
 
 }
 

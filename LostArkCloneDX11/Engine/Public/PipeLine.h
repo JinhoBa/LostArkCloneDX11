@@ -10,13 +10,21 @@ private:
 	virtual ~CPipeLine() = default;
 
 public:
-	const _float4x4& Get_PipeLine(PIPELINE ePipLine) const { return m_PipLineMatrix[ENUM_TO_INT(ePipLine)]; }
+	void				Set_Transform(D3DTS eState, _fmatrix Matrix);
+
+	const _float4x4*	Get_Transfrom_Float4x4(D3DTS eState) const;
+	_matrix				Get_Transfrom_Matrix(D3DTS eState);
+	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
+	const _float4*		Get_Camera_Position() const;
 
 public:
-	void Update_PipeLine(PIPELINE ePipLine, _float4x4& Matrix);
+	void				Update();
 
 private:
-	_float4x4	m_PipLineMatrix[ENUM_TO_INT(PIPELINE::END)] = {};
+	_float4		m_CameraPosition = {};
+
+	_float4x4	m_TransfromStateMatrices[ENUM_TO_INT(D3DTS::END)] = {};
+	_float4x4	m_TransfromStateMatrixInverses[ENUM_TO_INT(D3DTS::END)] = {};
 
 public:
 	static CPipeLine* Create();

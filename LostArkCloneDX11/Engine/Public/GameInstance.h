@@ -20,6 +20,7 @@ public:
 
 	_float Random_Normal();
 	_float Random(_float fMin, _float fMax);
+	_float2& Get_WinSize() { return m_vWinSize; }
 
 #pragma region GRAPHIC_DEVICE
 public:
@@ -69,8 +70,11 @@ public:
 #pragma endregion
 
 #pragma region PIPELINE
-	void Update_PipeLine(PIPELINE ePipLine, _float4x4& Matrix);
-	const _float4x4& Get_PipeLine(PIPELINE ePipLine);
+	void				Set_Transform(D3DTS eState, _fmatrix Matrix);
+	const _float4x4*	Get_Transfrom_Float4x4(D3DTS eState) const;
+	_matrix				Get_Transfrom_Matrix(D3DTS eState);
+	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
+	const _float4*		Get_Camera_Position() const;
 #pragma endregion
 
 private:
@@ -84,6 +88,8 @@ private:
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
+
+	_float2							m_vWinSize = {};
 	
 public:
 	void Release_Engine();
