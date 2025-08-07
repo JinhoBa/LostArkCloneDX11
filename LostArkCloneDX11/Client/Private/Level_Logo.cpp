@@ -30,7 +30,7 @@ void CLevel_Logo::Update(_float fTimeDelta)
 {
     m_pGameInstance->SetChannelVolume(CHANNELID::BGM, m_fBGM_Volume);
 
-    if (m_pGameInstance->KeyDown('N'))
+    if (m_pGameInstance->Get_KeyDown(DIK_N))
     {
         m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::TUTORIAL));
     }

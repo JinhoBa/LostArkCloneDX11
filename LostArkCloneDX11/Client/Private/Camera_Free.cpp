@@ -31,13 +31,13 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 void CCamera_Free::Priority_Update(_float fTimeDelta)
 {
 #pragma region TESTCODE
-    if (m_pGameInstance->KeyPressing(VK_RIGHT))
+    if (m_pGameInstance->Get_KeyPressing(DIK_RIGHT))
         m_pTransformCom->Go_Right(fTimeDelta);
-    if (m_pGameInstance->KeyPressing(VK_LEFT))
+    if (m_pGameInstance->Get_KeyPressing(DIK_LEFT))
         m_pTransformCom->Go_Left(fTimeDelta);
-    if (m_pGameInstance->KeyPressing(VK_UP))
+    if (m_pGameInstance->Get_KeyPressing(DIK_UP))
         m_pTransformCom->Go_Straight(fTimeDelta);
-    if (m_pGameInstance->KeyPressing(VK_DOWN))
+    if (m_pGameInstance->Get_KeyPressing(DIK_DOWN))
         m_pTransformCom->Go_Backward(fTimeDelta);
 #pragma endregion
 
@@ -61,7 +61,6 @@ HRESULT CCamera_Free::Render()
 
     return S_OK;
 }
-
 
 CCamera_Free* CCamera_Free::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

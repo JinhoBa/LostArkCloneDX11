@@ -11,5 +11,7 @@ namespace Engine
 	enum class RAY { LOCAL, WORLD, END };
 	enum class CHANNELID { BGM, EFFECT, END };
 	enum class D3DTS {VIEW, PROJ, END};
+	enum class MOUSEKEYSTATE { LBUTTON, RBUTTON, WBUTTON, XBUTTON };
+	enum class MOUSEMOVESTATE { X, Y, W };
 }
 #endif // Engine_Enum_h__

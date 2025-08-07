@@ -56,7 +56,7 @@ void CWeaponUI::Priority_Update(_float fTimeDelta)
 void CWeaponUI::Update(_float fTimeDelta)
 {
 #pragma region MyRegion
-	if (m_pGameInstance->KeyDown('Z'))
+	if (m_pGameInstance->Get_KeyDown(DIK_Z))
 	{
 		if (0 == m_iTextureIndex)
 		{

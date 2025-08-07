@@ -26,13 +26,12 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
         return E_FAIL;
 
 
-
     return S_OK;
 }
 
 void CLevel_Loading::Update(_float fTimeDelta)
 {
-    if (true == m_pLoader->isFinished() && m_pGameInstance->KeyDown(VK_RETURN))
+    if (true == m_pLoader->isFinished() && m_pGameInstance->Get_KeyDown(DIK_RETURN))
     {
         CLevel* pNextLevel = { nullptr };
 

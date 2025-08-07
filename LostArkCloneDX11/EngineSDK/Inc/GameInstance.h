@@ -35,6 +35,18 @@ public:
 	void	Compute_TimeDelta(const _wstring& strTimerTag);
 #pragma endregion
 
+#pragma region INPUT
+	_byte	Get_DIKeyState(_ubyte byKeyID);
+	_bool	Get_KeyDown(_ubyte byKeyID);
+	_bool	Get_KeyUp(_ubyte byKeyID);
+	_bool	Get_KeyPressing(_ubyte byKeyID);
+	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse);
+	_bool	Get_DIMouseDown(MOUSEKEYSTATE eMouse);
+	_bool	Get_DIMouseUp(MOUSEKEYSTATE eMouse);
+	_bool	Get_DIMousePressing(MOUSEKEYSTATE eMouse);
+	_long	Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
+#pragma endregion
+
 #pragma region LEVEL_MANAGER
 public:
 	HRESULT Change_Level(class CLevel* pNewLevel);
@@ -59,12 +71,6 @@ public:
 	void SetChannelVolume(CHANNELID eID, float fVolume);
 #pragma endregion
 
-#pragma region KEY_MANAGER
-	_bool KeyDown(_uint iKey);
-	_bool KeyPressing(_uint iKey);
-	_bool KeyUp(_uint iKey);
-#pragma endregion
-
 #pragma region RENDERER
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 #pragma endregion
@@ -80,11 +86,11 @@ public:
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CTimer_Manager*			m_pTimer_Manager = { nullptr };
+	class CInput_Device*			m_pInput_Device = { nullptr };
 	class CLevel_Manager*			m_pLevel_Manager = { nullptr };
 	class CPrototype_Manager*		m_pPrototype_Manager = { nullptr };
 	class CObject_Manager*			m_pObject_Manager = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
-	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
