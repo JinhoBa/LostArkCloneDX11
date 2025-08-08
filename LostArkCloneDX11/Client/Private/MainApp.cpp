@@ -134,7 +134,7 @@ HRESULT CMainApp::Ready_Prototype()
 
     /* For.Prototype_Component_Texture_LoadingBar */
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_LoadingBar"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/LoadingBar%d.png"), 2))))
+        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Loading/LoadingBar%d.png"), 3))))
         return E_FAIL;
 
     /* For.Prototype_Component_Texture_LoadingBar */

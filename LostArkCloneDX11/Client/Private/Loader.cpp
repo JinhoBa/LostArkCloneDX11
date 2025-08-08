@@ -14,6 +14,10 @@
 #include "MpBar.h"
 #include "Identity.h"
 #include "WeaponUI.h"
+#include "ActiveSlot.h"
+#include "SkillSlot.h"
+#include "AwakeSlot.h"
+#include "TopMenu.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -187,6 +191,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/MpBar/Mpbar%d.dds"), 2))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_quickslot */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_quickslot"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/QuickSlot/quickslot_%d.dds"), 3))))
+		return E_FAIL;
+
 
 	/* For.Prototype_Component_Texture_Iden_Frame */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Frame"),
@@ -196,6 +205,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Texture_Iden_Weapon */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Weapon"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Iden/identity_weapon%d.dds"), 2))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TopMenu */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TopMenu"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/TopMenu/topmenu.dds"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Terrain */
@@ -257,6 +271,26 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_WeaponUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WeaponUI"),
 		CWeaponUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_AwakeSlot */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_AwakeSlot"),
+		CAwakeSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_ActiveSlot */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ActiveSlot"),
+		CActiveSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_SkillSlot */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlot"),
+		CSkillSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_TopMenu */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TopMenu"),
+		CTopMenu::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

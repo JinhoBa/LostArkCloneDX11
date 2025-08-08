@@ -125,7 +125,7 @@ void CRenderer::Render_Blend()
 
 	m_RenderObjects[ENUM_TO_INT(RENDER::BLEND)].clear();
 
-	m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
+	
 }
 
 void CRenderer::Render_UI()
@@ -145,6 +145,7 @@ void CRenderer::Render_UI()
 	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].clear();
 
 	m_pContext->OMSetDepthStencilState(nullptr, 1);
+	m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
 }
 
 void CRenderer::Sort_AlphaObject()

@@ -1,15 +1,18 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIBar.h"
+
+#include "QuickSlot.h"
 
 NS_BEGIN(Client)
 
-class CLoadingBar : public CUIBar
+class CActiveSlot : public CQuickSlot
 {
+public:
+	enum class SLOTTYPE {POSIONT, ACTIVE, EMOTICON, END};
 private:
-	CLoadingBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CLoadingBar(const CLoadingBar& Prototype);
-	virtual ~CLoadingBar() = default;
+	CActiveSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CActiveSlot(const CActiveSlot& Prototype);
+	virtual ~CActiveSlot() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -20,14 +23,15 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	class CLevel_Loading*	m_pLoading = { nullptr };
-	CTransform*				m_pTransformCom_Point = { nullptr };
+	SLOTTYPE	m_eType = {};
+	_uint		m_iItemID = {};
+	_uint		m_iNumItem = {};
 
 private:
-	HRESULT		Add_Components();
+	HRESULT Add_Components();
 
 public:
-	static CLoadingBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CActiveSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

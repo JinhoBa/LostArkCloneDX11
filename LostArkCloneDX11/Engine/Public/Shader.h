@@ -15,6 +15,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
+	HRESULT	Bind_Position(const _char* ConstantName, const _float4* pVector);
 	HRESULT	Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix);
 	HRESULT Bind_WorldMatrix(const _float4x4* pWorldMatrix);
 	HRESULT Bind_Resource(const _char* ConstantName, ID3D11ShaderResourceView* pSRV);

@@ -49,6 +49,7 @@ HRESULT CLoadingBar::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	m_pTransformCom_Point->Set_Scale(_float3(340.f, 30.f, 1.f));
 	return S_OK;
 }
 
@@ -58,7 +59,16 @@ void CLoadingBar::Priority_Update(_float fTimeDelta)
 
 void CLoadingBar::Update(_float fTimeDelta)
 {
-	Update_Bar(m_pLoading->Get_Progress());
+	_float fProgress = m_pLoading->Get_Progress();
+
+	Update_Bar(fProgress);
+
+	_vector vPoint = XMVectorSet(fProgress* 12.2f - 720.f, -300.f, 1.f, 1.f);
+
+	m_pTransformCom_Point->Set_State(STATE::POSITION, vPoint);
+
+	m_fValue = fProgress / 100.f;
+	
 }
 
 void CLoadingBar::Late_Update(_float fTimeDelta)
@@ -71,6 +81,21 @@ void CLoadingBar::Late_Update(_float fTimeDelta)
 HRESULT CLoadingBar::Render()
 {
 	__super::Render();
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom_Point->Get_WorldMatrix())))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(2))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -95,6 +120,11 @@ HRESULT CLoadingBar::Add_Components()
 	/*Transform_Fill*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform_Fill"), reinterpret_cast<CComponent**>(&m_pTransfromCom_BarFill))))
+		return E_FAIL;
+
+	/*Transform_Fill*/
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform_Point"), reinterpret_cast<CComponent**>(&m_pTransformCom_Point))))
 		return E_FAIL;
 
 	return S_OK;
@@ -131,4 +161,5 @@ void CLoadingBar::Free()
 	__super::Free();
 
 	Safe_Release(m_pLoading);
+	Safe_Release(m_pTransformCom_Point);
 }

@@ -44,7 +44,8 @@ HRESULT CWeaponUI::Initialize(void* pArg)
 
 	m_iTextureIndex = 0;
 	m_fShakeSpeed = 15.f;
-	
+
+	m_fPreY = m_fRY;
 
 	return S_OK;
 }
@@ -69,8 +70,6 @@ void CWeaponUI::Update(_float fTimeDelta)
 			m_iTextureIndex = 0;
 		}
 	}
-	
-	m_fRY += fTimeDelta;
 
 #pragma endregion
 
@@ -88,6 +87,7 @@ void CWeaponUI::Update(_float fTimeDelta)
 		break;
 
 	case Client::CWeaponUI::STATE::TO_FOCUS:
+		UpAndDown(fTimeDelta);
 		break;
 
 	default:
@@ -187,13 +187,24 @@ void CWeaponUI::Shake(_float fTimeDelta)
 	}
 	m_pTransformCom->Turn(XMVectorSet(0.f, 0.f, 1.f, 0.f), fTimeDelta * m_fShakeSpeed);
 
-	if (m_iNumShake > 6)
+	if (m_iNumShake > 4)
 		m_eCurState = STATE::FLURRY;
 }
 
 void CWeaponUI::UpAndDown(_float fTimeDelta)
 {
+	m_fTimeAcc += fTimeDelta;
 
+	if (m_fTimeAcc <= 0.1f)
+		m_fRY += -fTimeDelta * 350.f;
+	else
+		m_fRY += fTimeDelta * 70.f;
+
+	if (m_fTimeAcc >= 0.5f)
+	{
+		m_fRY = m_fPreY;
+		m_eCurState = STATE::FOCUS;
+	}
 }
 
 CWeaponUI* CWeaponUI::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

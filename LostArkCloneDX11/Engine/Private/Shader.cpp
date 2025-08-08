@@ -78,6 +78,23 @@ HRESULT CShader::Initialize(void* pArg)
     return S_OK;
 }
 
+HRESULT CShader::Bind_Position(const _char* ConstantName, const _float4* pVector)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);
+
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	ID3DX11EffectVectorVariable* pVectorVariable = pVariable->AsVector();
+
+	if (nullptr == pVectorVariable)
+		return E_FAIL;
+
+	return pVectorVariable->SetFloatVector(reinterpret_cast<const _float*>(pVector));
+
+	return S_OK;
+}
+
 HRESULT CShader::Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix )
 {
 	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);

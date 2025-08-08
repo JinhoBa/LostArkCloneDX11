@@ -32,6 +32,8 @@ private:
 	_float			m_fShakeSpeed = {};
 	_float			m_fTurnTime = {};
 
+	_float          m_fPreY = {};
+
 private:
 	HRESULT Add_Components();
 	void	Change_State();

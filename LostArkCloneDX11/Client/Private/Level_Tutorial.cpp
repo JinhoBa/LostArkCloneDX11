@@ -65,6 +65,11 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
+    // 2 : TopMenu
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TopMenu"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
     return S_OK;
 }
 

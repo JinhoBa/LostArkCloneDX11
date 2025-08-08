@@ -1,15 +1,16 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIBar.h"
+
+#include "UIPanel.h"
 
 NS_BEGIN(Client)
 
-class CLoadingBar : public CUIBar
+class CTopMenu : public CUIPanel
 {
 private:
-	CLoadingBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CLoadingBar(const CLoadingBar& Prototype);
-	virtual ~CLoadingBar() = default;
+	CTopMenu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CTopMenu(const CTopMenu& Prototype);
+	virtual ~CTopMenu() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -20,14 +21,11 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	class CLevel_Loading*	m_pLoading = { nullptr };
-	CTransform*				m_pTransformCom_Point = { nullptr };
-
-private:
-	HRESULT		Add_Components();
+	HRESULT Add_Components();
+	HRESULT Ready_Layer(const _wstring& strLayerTag);
 
 public:
-	static CLoadingBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CTopMenu* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

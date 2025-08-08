@@ -155,12 +155,17 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\public\ActiveSlot.h" />
+    <ClInclude Include="..\public\AwakeSlot.h" />
     <ClInclude Include="..\public\Background_Loading.h" />
     <ClInclude Include="..\public\Background_Logo.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Canvars.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\public\Client_Struct.h" />
+    <ClInclude Include="..\public\Data_Manager.h" />
     <ClInclude Include="..\public\ExpBar.h" />
+    <ClInclude Include="..\public\GameManager.h" />
     <ClInclude Include="..\public\HpBar.h" />
     <ClInclude Include="..\public\HUD.h" />
     <ClInclude Include="..\public\Identity.h" />
@@ -181,8 +186,12 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
+    <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\ServerListPanel.h" />
+    <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\public\TopMenu.h" />
     <ClInclude Include="..\public\Wallpaper.h" />
     <ClInclude Include="..\public\WeaponUI.h" />
     <ClInclude Include="Client.h" />
@@ -198,11 +207,15 @@
     <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\private\ActiveSlot.cpp" />
+    <ClCompile Include="..\private\AwakeSlot.cpp" />
     <ClCompile Include="..\private\Background_Loading.cpp" />
     <ClCompile Include="..\private\Background_Logo.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Canvars.cpp" />
+    <ClCompile Include="..\private\Data_Manager.cpp" />
     <ClCompile Include="..\private\ExpBar.cpp" />
+    <ClCompile Include="..\private\GameManager.cpp" />
     <ClCompile Include="..\private\HpBar.cpp" />
     <ClCompile Include="..\private\HUD.cpp" />
     <ClCompile Include="..\private\Identity.cpp" />
@@ -246,8 +259,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\ServerListPanel.cpp" />
+    <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\private\TopMenu.cpp" />
     <ClCompile Include="..\private\Wallpaper.cpp" />
     <ClCompile Include="..\private\WeaponUI.cpp" />
     <ClCompile Include="Client.cpp" />

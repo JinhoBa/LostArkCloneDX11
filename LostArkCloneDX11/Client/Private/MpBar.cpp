@@ -28,11 +28,11 @@ HRESULT CMpBar::Initialize(void* pArg)
 
 	UIBAR_DESC Desc = {};
 
-	Desc.fX = 168.f;
-	Desc.fY = -12.f;
+	Desc.fX = 183.f;
+	Desc.fY = -14.f;
 	Desc.fZ = 0.2f;
-	Desc.fSizeX = 176.f;
-	Desc.fSizeY = 20.f;
+	Desc.fSizeX = 224.f;
+	Desc.fSizeY = 25.f;
 	Desc.pParent_TransformCom = static_cast<UIBAR_DESC*>(pArg)->pParent_TransformCom;
 	Desc.fMax = 100.f;
 	Desc.fStartValue = 80.f;
@@ -56,7 +56,7 @@ void CMpBar::Update(_float fTimeDelta)
 void CMpBar::Late_Update(_float fTimeDelta)
 {
 	Update_Position();
-	Update_Bar(100.f);
+	m_fValue = 0.5f;
 
 }
 

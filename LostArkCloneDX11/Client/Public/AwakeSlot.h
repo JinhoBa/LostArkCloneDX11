@@ -1,15 +1,16 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIBar.h"
+
+#include "QuickSlot.h"
 
 NS_BEGIN(Client)
 
-class CLoadingBar : public CUIBar
+class CAwakeSlot : public CQuickSlot
 {
 private:
-	CLoadingBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CLoadingBar(const CLoadingBar& Prototype);
-	virtual ~CLoadingBar() = default;
+	CAwakeSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAwakeSlot(const CAwakeSlot& Prototype);
+	virtual ~CAwakeSlot() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -20,14 +21,13 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	class CLevel_Loading*	m_pLoading = { nullptr };
-	CTransform*				m_pTransformCom_Point = { nullptr };
+	CTexture*		m_pAwakeTextureCom = { nullptr };
 
 private:
-	HRESULT		Add_Components();
+	HRESULT Add_Components();
 
 public:
-	static CLoadingBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAwakeSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

@@ -1,15 +1,16 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIBar.h"
+
+#include "QuickSlot.h"
 
 NS_BEGIN(Client)
 
-class CLoadingBar : public CUIBar
+class CSkillSlot : public CQuickSlot
 {
 private:
-	CLoadingBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CLoadingBar(const CLoadingBar& Prototype);
-	virtual ~CLoadingBar() = default;
+	CSkillSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CSkillSlot(const CSkillSlot& Prototype);
+	virtual ~CSkillSlot() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -20,14 +21,14 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	class CLevel_Loading*	m_pLoading = { nullptr };
-	CTransform*				m_pTransformCom_Point = { nullptr };
+	_uint		m_iSkillID[IDENTITY::IDEN_END] = {};
+	_float		m_fCoolTime = {};
 
 private:
-	HRESULT		Add_Components();
+	HRESULT Add_Components();
 
 public:
-	static CLoadingBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CSkillSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

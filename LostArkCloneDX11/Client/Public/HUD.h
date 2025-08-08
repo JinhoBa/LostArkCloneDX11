@@ -1,3 +1,4 @@
+#pragma once
 #include "Client_Defines.h"
 
 #include "UIPanel.h"
@@ -22,6 +23,7 @@ public:
 private:
 	HRESULT Add_Components();
 	HRESULT Ready_Layer(const _wstring& strLayerTag);
+	HRESULT Add_QuickSlots(const _wstring& strLayerTag);
 
 public:
 	static CHUD* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

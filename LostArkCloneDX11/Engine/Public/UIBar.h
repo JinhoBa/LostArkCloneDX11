@@ -42,6 +42,7 @@ protected:
 	_uint			m_iSRVIndex_Fill = {};
 
 	_float			m_fMax = {};
+	_float			m_fValue = {};
 
 	_float			m_fX_Fill= {};
 	_float			m_fY_Fill= {};

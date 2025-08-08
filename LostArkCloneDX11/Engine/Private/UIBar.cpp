@@ -34,7 +34,7 @@ HRESULT CUIBar::Initialize(void* pArg)
     XMStoreFloat3(&vPos, m_pParent_TransformCom->Get_Position());
 
     m_fY_Fill = vPos.y -m_fY;
-   
+    m_fValue = 0.f;
 
     m_iSRVIndex_Back = 0;
     m_iSRVIndex_Fill = 1;
@@ -83,13 +83,18 @@ HRESULT CUIBar::Render()
         return E_FAIL;
 
     // Render Fill
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransfromCom_BarFill->Get_WorldMatrix())))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+        return E_FAIL;
+
+    _float4 vPos = { m_fValue, 1.f, 1.f ,1.f};
+
+    if (FAILED(m_pShaderCom->Bind_Position("g_Position", &vPos)))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iSRVIndex_Fill))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(1)))
+    if (FAILED(m_pShaderCom->Begin(3)))
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Bind_Resources()))
