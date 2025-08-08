@@ -88,9 +88,6 @@
     <Filter Include="01.Utility\02.GameObject\UIObject\Bar">
       <UniqueIdentifier>{7cec91e4-47f1-4487-ad1c-ebde81f88e9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Blender">
-      <UniqueIdentifier>{22eb566a-726d-46aa-bb19-28fef9ebc956}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Shader">
       <UniqueIdentifier>{44bedf70-5fd3-4c32-932d-524a2f2db50c}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,12 @@
     </Filter>
     <Filter Include="00.System\02.Input">
       <UniqueIdentifier>{23a81728-51c9-4812-bb53-4be83837ecb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model">
+      <UniqueIdentifier>{22eb566a-726d-46aa-bb19-28fef9ebc956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Mesh">
+      <UniqueIdentifier>{f59be5e1-50c9-4773-b363-bb83da4124e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +237,12 @@
     <ClInclude Include="..\public\Input_Device.h">
       <Filter>00.System\02.Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Model.h">
+      <Filter>01.Utility\03.Components\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mesh.h">
+      <Filter>01.Utility\03.Components\Model\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -319,6 +328,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Input_Device.cpp">
       <Filter>00.System\02.Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Model.cpp">
+      <Filter>01.Utility\03.Components\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mesh.cpp">
+      <Filter>01.Utility\03.Components\Model\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

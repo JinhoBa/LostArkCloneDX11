@@ -30,6 +30,8 @@ private:
 	CTexture*				m_pTextureCom = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
 
+	ID3D11RasterizerState* m_pRasterState = nullptr;
+
 private:
 	HRESULT Add_Components();
 

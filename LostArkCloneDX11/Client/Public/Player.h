@@ -2,6 +2,12 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 
+NS_BEGIN(Engine)
+class CTexture;
+class CShader;
+class CModel;
+NS_END
+
 NS_BEGIN(Client)
 
 class CPlayer final : public CGameObject
@@ -20,6 +26,12 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	CTexture*	m_pTextureCom = { nullptr };
+	CShader*	m_pShaderCom = { nullptr };
+	CModel*		m_pModelCom = { nullptr };
+
+private:
+	HRESULT Add_Components();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

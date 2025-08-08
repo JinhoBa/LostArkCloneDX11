@@ -18,7 +18,9 @@ public:
 
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Canvas(const _wstring& strLayerTag);
+	
 
 public:
 	static CLevel_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID);

@@ -26,6 +26,14 @@ HRESULT CTerrain::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    D3D11_RASTERIZER_DESC rasterDesc = {};
+    rasterDesc.CullMode = D3D11_CULL_BACK; // or D3D11_CULL_FRONT, D3D11_CULL_NONE
+    rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+    rasterDesc.FrontCounterClockwise = FALSE;
+
+
+    m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState);
+
     return S_OK;
 }
 
@@ -44,6 +52,9 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
+    
+    m_pContext->RSSetState(m_pRasterState);
+
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
@@ -64,6 +75,10 @@ HRESULT CTerrain::Render()
 
     if (FAILED(m_pVIBufferCom->Render()))
         return E_FAIL;
+
+    m_pContext->RSSetState(nullptr);
+
+    
 
     return S_OK;
 }
@@ -122,4 +137,6 @@ void CTerrain::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pVIBufferCom);
+
+    Safe_Release(m_pRasterState);
 }

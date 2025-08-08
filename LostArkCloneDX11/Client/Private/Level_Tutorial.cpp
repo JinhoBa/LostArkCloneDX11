@@ -13,6 +13,8 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
 
+    if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+        return E_FAIL;
 
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
@@ -48,6 +50,16 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Tutorial::Ready_Layer_Player(const _wstring& strLayerTag)
+{
+    // 0 : Player
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
     return S_OK;

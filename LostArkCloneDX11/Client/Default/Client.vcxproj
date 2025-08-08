@@ -270,6 +270,7 @@
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl" />
   </ItemGroup>

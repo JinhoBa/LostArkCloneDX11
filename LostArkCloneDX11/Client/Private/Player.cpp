@@ -20,30 +20,107 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
+    GAMEOBJECT_DESC Desc = {};
+    Desc.fRotatePersec = 5.f;
+    Desc.fSpeedPersec = 5.f;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
+    if (FAILED(Add_Components()))
+        return E_FAIL;
 
+    m_pTransformCom->Set_Scale(_float3(0.01f, 0.01f, 0.01f));
+    
     return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-
+    
 }
 
 void CPlayer::Update(_float fTimeDelta)
 {
+#pragma region TESTCODE
+    if (m_pGameInstance->Get_KeyPressing(DIK_W))
+    {
+        m_pTransformCom->Go_Straight(fTimeDelta);
+    }
+    if (m_pGameInstance->Get_KeyPressing(DIK_S))
+    {
+        m_pTransformCom->Go_Backward(fTimeDelta);
+    }
+    if (m_pGameInstance->Get_KeyPressing(DIK_A))
+    {
+        m_pTransformCom->Go_Left(fTimeDelta);
+    }
+    if (m_pGameInstance->Get_KeyPressing(DIK_D))
+    {
+        m_pTransformCom->Go_Right(fTimeDelta);
+    }
+    if (m_pGameInstance->Get_KeyPressing(DIK_SPACE))
+    {
+        m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::UP), fTimeDelta);
+    }
+#pragma endregion
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-
+    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CPlayer::Render()
 {
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(0))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Begin(0)))
+        return E_FAIL;
+
+    if (FAILED(m_pModelCom->Render_Mesh(0)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(1))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Begin(0)))
+        return E_FAIL;
+
+    if (FAILED(m_pModelCom->Render_Mesh(1)))
+        return E_FAIL;
+    
+
+    return S_OK;
+}
+
+HRESULT CPlayer::Add_Components()
+{
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Player"),
+        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+        return E_FAIL;
+
+    /*Shader_VTXPosTex*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
+        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
+
+    /*VIBuffer_Rect*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
+        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+        return E_FAIL;
 
 
     return S_OK;
@@ -80,4 +157,8 @@ CGameObject* CPlayer::Clone(void* pArg)
 void CPlayer::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pTextureCom);
+    Safe_Release(m_pShaderCom);
+    Safe_Release(m_pModelCom);
 }

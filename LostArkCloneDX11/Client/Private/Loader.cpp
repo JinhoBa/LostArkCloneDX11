@@ -23,6 +23,7 @@
 #pragma region GAMEOBJECT
 #include "Terrain.h"
 #include "Camera_Free.h"
+#include "Player.h"
 #pragma endregion
 
 
@@ -127,16 +128,19 @@ HRESULT CLoader::Loading_For_Logo()
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
-	Sleep(1000);
 	m_fLoadProgress = 40.f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
-	Sleep(1000);
+
 	m_fLoadProgress = 60.f;
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
-	Sleep(1000);
-	m_fLoadProgress = 80.f;
-#pragma region GAEMOBJCET_PROTOTYPE
 
+	m_fLoadProgress = 80.f;
+
+#pragma region GAEMOBJCET_PROTOTYPE
+	/* For.Prototype_GameObject_Background_Logo */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_GameObject_Background_Logo"),
+		CBackground_Logo::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region UI_PROTOTYPE
@@ -172,6 +176,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
+
+	/* For.Prototype_Component_Texture_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Player"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Player/Player_d%d.dds"), 2))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -221,24 +230,40 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
+	/* For.Prototype_Component_Model_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Player/Player.fbx"))))
+		return E_FAIL;
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_Component_Shader_VertexMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElement))))
+		return E_FAIL;
 
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 
+#pragma region COMPONENT
 
 	/*For Prototype_Component_VIBuffer_Terrain*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp")))))
 		return E_FAIL;
 
+#pragma endregion
+	
+#pragma region GAEMOBJCET_PROTOTYPE
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	
-#pragma region GAEMOBJCET_PROTOTYPE
+
+	/* For.Prototype_GameObject_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 

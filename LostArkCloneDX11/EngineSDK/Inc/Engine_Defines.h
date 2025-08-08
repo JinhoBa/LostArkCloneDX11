@@ -2,20 +2,22 @@
 #define Engine_Define_h__
 
 #define DIRECTINPUT_VERSION	0x0800
-#include <dinput.h>
 
 #include <d3d11.h>
+#include <dinput.h>
 #include <DirectXMath.h>
 #include <DirectXCollision.h>
 #include <d3dcompiler.h>
+
 #include "DirectXTM/DDSTextureLoader.h"
 #include "DirectXTM/WICTextureLoader.h"
 #include "FX11/d3dx11effect.h"
-
-using namespace DirectX;
-
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/Importer.hpp"
 #include "FMOD/fmod.hpp"
 #include "FMOD/fmod_errors.h"
+using namespace DirectX;
 
 #include <vector>
 #include <list>
@@ -37,9 +39,6 @@ namespace Engine
 #include "Engine_Struct.h"
 #include "Engine_Typedef.h"
 #include "Engine_Function.h"
-
-#define DIRECTINPUT_VERSION	0x0800
-#include <dinput.h>
 
 #pragma warning(disable : 4251)
 
