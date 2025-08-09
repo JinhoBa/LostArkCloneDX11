@@ -2,6 +2,7 @@
 #include "Loader.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #pragma region UI
 #include "Canvars.h"
@@ -173,9 +174,22 @@ HRESULT CLoader::Loading_For_Logo()
 HRESULT CLoader::Loading_For_GamePlay()
 {
 	m_fLoadProgress = 1.f;
+	m_strMessage = TEXT("데이터 파일을 로딩 중 입니다.");
+
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/BG_KAMEN_Data.xml")))
+		return E_FAIL;
+
+	/*if (FAILED(CGameManager::GetInstance()->Save_MapData("../Bin/Resources/Data/BG_KAMEN_Data_out.xml")))
+		return E_FAIL;
+	*/
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
+	/* For.Prototype_Component_Texture_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Test"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/TestModel.dds"), 1))))
+		return E_FAIL;
+
 
 	/* For.Prototype_Component_Texture_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Player"),

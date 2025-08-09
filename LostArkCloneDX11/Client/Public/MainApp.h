@@ -8,7 +8,7 @@ class CGameInstance;
 NS_END
 
 NS_BEGIN(Client)
-
+class CGameManager;
 class CMainApp final : public CBase
 {
 private:
@@ -27,6 +27,8 @@ private:
 	CGameInstance*			m_pGameInstance = { nullptr };
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
+	CGameManager*			m_pGameManager = { nullptr };
+	
 
 private:
 	HRESULT Start_Level(LEVEL eLevelID);

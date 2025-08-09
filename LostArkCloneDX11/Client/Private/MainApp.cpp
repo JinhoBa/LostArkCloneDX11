@@ -2,6 +2,7 @@
 #include "MainApp.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #include <fstream>
 
@@ -14,9 +15,11 @@
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
+    m_pGameManager{ CGameManager::GetInstance() },
     m_iFps{ 0 }, m_fTimeAcc{ 0.f }, m_iFrame{0}
 {
     Safe_AddRef(m_pGameInstance);
+    Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMainApp::Initialize()
@@ -32,6 +35,9 @@ HRESULT CMainApp::Initialize()
     if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
         return E_FAIL;
 
+    if (FAILED(m_pGameManager->Initialize_Manager()))
+        return E_FAIL;
+
     if (FAILED(Ready_Prototype()))
         return E_FAIL; 
 
@@ -40,6 +46,8 @@ HRESULT CMainApp::Initialize()
 
     if (FAILED(Start_Level(LEVEL::TUTORIAL)))
         return E_FAIL;
+       
+    
 
 #pragma region IMGUI INIT
     ImGui_ImplWin32_EnableDpiAwareness();
@@ -242,5 +250,8 @@ void CMainApp::Free()
 
     m_pGameInstance->Release_Engine();
 
+
+    Safe_Release(m_pGameManager);
     Safe_Release(m_pGameInstance);
+
 }

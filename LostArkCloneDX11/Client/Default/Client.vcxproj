@@ -184,6 +184,7 @@
     <ClInclude Include="..\public\LoadingBar.h" />
     <ClInclude Include="..\public\LogoPanel.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\public\MapObject.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\Player.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="..\public\ServerListPanel.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\Public\tinyxml2.h" />
     <ClInclude Include="..\public\TopMenu.h" />
     <ClInclude Include="..\public\Wallpaper.h" />
     <ClInclude Include="..\public\WeaponUI.h" />
@@ -254,6 +256,7 @@
     <ClCompile Include="..\private\LoadingBar.cpp" />
     <ClCompile Include="..\private\LogoPanel.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\private\MapObject.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -264,6 +267,10 @@
     <ClCompile Include="..\private\ServerListPanel.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\Private\tinyxml2.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\private\TopMenu.cpp" />
     <ClCompile Include="..\private\Wallpaper.cpp" />
     <ClCompile Include="..\private\WeaponUI.cpp" />

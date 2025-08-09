@@ -19,6 +19,7 @@ public:
 	void	Clear_Resources(_uint iLevelIndex);
 
 	_float Random_Normal();
+	_wstring Utf8ToWstring(const char* pStr);
 	_float Random(_float fMin, _float fMax);
 	_float2& Get_WinSize() { return m_vWinSize; }
 

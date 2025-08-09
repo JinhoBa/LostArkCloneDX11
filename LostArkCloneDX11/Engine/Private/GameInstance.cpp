@@ -97,6 +97,17 @@ _float CGameInstance::Random_Normal()
 	return static_cast<_float>(rand()) / RAND_MAX;	
 }
 
+_wstring CGameInstance::Utf8ToWstring(const char* pUtf8Str)
+{
+	int size = MultiByteToWideChar(CP_UTF8, 0, pUtf8Str, -1, nullptr, 0);
+
+	_wstring strTmp(size - 1, L'\0');
+
+	MultiByteToWideChar(CP_UTF8, 0, pUtf8Str, -1, &strTmp[0], size);
+
+	return strTmp;
+}
+
 _float CGameInstance::Random(_float fMin, _float fMax)
 {
 	return fMin + Random_Normal() * (fMax - fMin);	

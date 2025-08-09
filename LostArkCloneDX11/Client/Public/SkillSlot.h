@@ -21,7 +21,7 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	_uint		m_iSkillID[IDENTITY::IDEN_END] = {};
+	_uint		m_iSkillID[STANCE::IDEN_END] = {};
 	_float		m_fCoolTime = {};
 
 private:

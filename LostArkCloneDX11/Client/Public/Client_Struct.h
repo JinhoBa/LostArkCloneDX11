@@ -25,5 +25,13 @@ namespace Client
 		_uint iHp;
 		_uint iMp;
 		_float fAttack;
-	};
+	}PLAYER_INFO;
+
+	typedef struct tagMapData
+	{
+		_wstring  strProtypeTag;
+		_float3 vPosition;
+		_float3 vScale;
+		_float3 vRotation;
+	}MAP_DATA;
 }
