@@ -114,6 +114,24 @@ void CTransform::Go_Down(_float fTimeDelta)
     Set_State(STATE::POSITION, vPosition);
 }
 
+void CTransform::Go_Straight_World(_float fTimeDelta)
+{
+    _vector vPosition = Get_State(STATE::POSITION);
+
+    vPosition += XMVector3Normalize(XMVector3Cross(Get_State(STATE::RIGHT), XMVectorSet(0.f, 1.f, 0.f, 0.f))) * m_fSpeedPersec * fTimeDelta;
+
+    Set_State(STATE::POSITION, vPosition);
+}
+
+void CTransform::Go_Backward_World(_float fTimeDelta)
+{
+    _vector vPosition = Get_State(STATE::POSITION);
+
+    vPosition += XMVector3Normalize(XMVector3Cross(Get_State(STATE::RIGHT), XMVectorSet(0.f, 1.f, 0.f, 0.f))) * -m_fSpeedPersec * fTimeDelta;
+
+    Set_State(STATE::POSITION, vPosition);
+}
+
 void CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos)
 {
     _vector vPosition = Get_State(STATE::POSITION);

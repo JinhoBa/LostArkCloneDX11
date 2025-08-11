@@ -31,14 +31,35 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 void CCamera_Free::Priority_Update(_float fTimeDelta)
 {
 #pragma region TESTCODE
-    if (m_pGameInstance->Get_KeyPressing(DIK_RIGHT))
+    /*Move*/
+    if (m_pGameInstance->Get_KeyPressing(DIK_D))
         m_pTransformCom->Go_Right(fTimeDelta);
-    if (m_pGameInstance->Get_KeyPressing(DIK_LEFT))
+    if (m_pGameInstance->Get_KeyPressing(DIK_A))
         m_pTransformCom->Go_Left(fTimeDelta);
-    if (m_pGameInstance->Get_KeyPressing(DIK_UP))
-        m_pTransformCom->Go_Straight(fTimeDelta);
-    if (m_pGameInstance->Get_KeyPressing(DIK_DOWN))
-        m_pTransformCom->Go_Backward(fTimeDelta);
+    if (m_pGameInstance->Get_KeyPressing(DIK_W))
+        m_pTransformCom->Go_Straight_World(fTimeDelta);
+    if (m_pGameInstance->Get_KeyPressing(DIK_S))
+        m_pTransformCom->Go_Backward_World(fTimeDelta);
+
+    /*Zoom In/Out */
+    if (m_pGameInstance->Get_DIMouseMove(MOUSEMOVESTATE::W) > 0)
+        m_pTransformCom->Go_Straight(fTimeDelta * 10.f);
+    if (m_pGameInstance->Get_DIMouseMove(MOUSEMOVESTATE::W) < 0)
+        m_pTransformCom->Go_Backward(fTimeDelta * 10.f);
+
+    /* Rotation */
+    if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::WBUTTON))
+    {
+        long lValue = {};
+        if (lValue = m_pGameInstance->Get_DIMouseMove(MOUSEMOVESTATE::X))
+        {
+            m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * lValue * 0.1f);
+        }
+        if (lValue = m_pGameInstance->Get_DIMouseMove(MOUSEMOVESTATE::Y))
+        {
+            m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::RIGHT), fTimeDelta * lValue * 0.1f);
+        }
+    }
 #pragma endregion
 
 

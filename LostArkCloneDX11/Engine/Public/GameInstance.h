@@ -18,10 +18,12 @@ public:
 	HRESULT Draw();
 	void	Clear_Resources(_uint iLevelIndex);
 
-	_float Random_Normal();
-	_wstring Utf8ToWstring(const char* pStr);
-	_float Random(_float fMin, _float fMax);
-	_float2& Get_WinSize() { return m_vWinSize; }
+	_wstring	Utf8ToWstring(const char* pStr);
+	string		WstringToUtf8(_wstring& wStr);
+
+	_float		Random_Normal();
+	_float		Random(_float fMin, _float fMax);
+	_float2&	Get_WinSize() { return m_vWinSize; }
 
 #pragma region GRAPHIC_DEVICE
 public:
@@ -83,6 +85,13 @@ public:
 	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
 	const _float4*		Get_Camera_Position() const;
 #pragma endregion
+
+#pragma region PICKING
+	void Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse);
+	_bool Picking_InWorldSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
+	_bool Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
+#pragma endregion
+
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };

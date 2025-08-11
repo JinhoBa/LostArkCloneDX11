@@ -14,7 +14,6 @@ CPicking::CPicking(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 HRESULT CPicking::Initialize(HWND hWnd)
 {
     m_hWnd = hWnd;
-
   
     _float2 vWinSize = m_pGameInstance->Get_WinSize();
 

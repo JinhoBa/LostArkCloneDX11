@@ -15,7 +15,8 @@ CVIBuffer::CVIBuffer(CVIBuffer& Prototype)
     m_iIndexStride{Prototype.m_iIndexStride},
     m_eIndexFormat{Prototype.m_eIndexFormat},
     m_iNumVertexBuffers{Prototype.m_iNumVertexBuffers},
-    m_ePrimitive{Prototype.m_ePrimitive}
+    m_ePrimitive{Prototype.m_ePrimitive},
+    m_pVertexPositions{Prototype.m_pVertexPositions }
 {
     Safe_AddRef(m_pVB);
     Safe_AddRef(m_pIB);

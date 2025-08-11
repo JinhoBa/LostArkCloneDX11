@@ -184,6 +184,7 @@
     <ClInclude Include="..\public\LoadingBar.h" />
     <ClInclude Include="..\public\LogoPanel.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\public\Level_MapEditor.h" />
     <ClInclude Include="..\public\MapObject.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
@@ -256,6 +257,7 @@
     <ClCompile Include="..\private\LoadingBar.cpp" />
     <ClCompile Include="..\private\LogoPanel.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\private\Level_MapEditor.cpp" />
     <ClCompile Include="..\private\MapObject.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\pch.cpp">

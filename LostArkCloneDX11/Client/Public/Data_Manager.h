@@ -18,6 +18,8 @@ public:
 	HRESULT Load_File(const _char* pFilePath);
 	HRESULT Save_File(const _char* pFilePath);
 
+	vector<MAP_DATA>* Get_Data() { return &m_MapDatas; }
+
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 	vector<MAP_DATA> m_MapDatas;

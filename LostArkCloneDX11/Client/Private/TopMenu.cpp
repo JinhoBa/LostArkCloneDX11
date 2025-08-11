@@ -62,12 +62,7 @@ void CTopMenu::Late_Update(_float fTimeDelta)
 
 HRESULT CTopMenu::Render()
 {
-#pragma region TESTCODE
-	ImGui::InputFloat("X", &m_fRX, 1.f, 10.f, "%.0f");
-	ImGui::InputFloat("Y", &m_fRY, 1.f, 10.f, "%.0f");
-	ImGui::InputFloat("SizeX", &m_fSizeX, 1.f, 10.f, "%.0f");
-	ImGui::InputFloat("SizeY", &m_fSizeY, 1.f, 10.f, "%.0f");
-#pragma endregion
+
 
 	if (FAILED(__super::Bind_ShaderResource(0)))
 		return E_FAIL;

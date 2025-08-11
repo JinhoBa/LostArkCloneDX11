@@ -44,7 +44,7 @@ HRESULT CMainApp::Initialize()
     if (FAILED(Ready_Layer_Canvars()))
         return E_FAIL;
 
-    if (FAILED(Start_Level(LEVEL::TUTORIAL)))
+    if (FAILED(Start_Level(LEVEL::MAP_EDITOR)))
         return E_FAIL;
        
     
@@ -250,8 +250,8 @@ void CMainApp::Free()
 
     m_pGameInstance->Release_Engine();
 
-
     Safe_Release(m_pGameManager);
+    m_pGameManager->DestroyInstance();
     Safe_Release(m_pGameInstance);
 
 }

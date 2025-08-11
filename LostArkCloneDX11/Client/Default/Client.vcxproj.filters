@@ -151,6 +151,9 @@
     <Filter Include="tinyxml2">
       <UniqueIdentifier>{7ed9b398-637a-42d5-9540-0f19d4828884}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Level\MapEdit">
+      <UniqueIdentifier>{a059223b-f1e2-49f6-851d-a60d99a531aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -288,6 +291,9 @@
     <ClInclude Include="..\Public\tinyxml2.h">
       <Filter>tinyxml2</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_MapEditor.h">
+      <Filter>01.Level\MapEdit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -419,6 +425,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\tinyxml2.cpp">
       <Filter>tinyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_MapEditor.cpp">
+      <Filter>01.Level\MapEdit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

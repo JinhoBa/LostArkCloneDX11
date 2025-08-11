@@ -24,10 +24,19 @@ HRESULT CLevel_Tutorial::Initialize()
 
 void CLevel_Tutorial::Update(_float fTimeDelta)
 {
+    
+
 }
 
 HRESULT CLevel_Tutorial::Render()
 {
+    
+
+    
+
+   
+    
+
     return S_OK;
 }
 
@@ -35,7 +44,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
     ///* Background */
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Terrain"))))
         return E_FAIL;
 
     CCamera::CAMERA_DESC Desc = {};

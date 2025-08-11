@@ -30,7 +30,9 @@ private:
 	CTexture*				m_pTextureCom = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
 
-	ID3D11RasterizerState* m_pRasterState = nullptr;
+	ID3D11RasterizerState*	m_pRasterState = nullptr;
+
+	_float3					m_pPickingPos = {};
 
 private:
 	HRESULT Add_Components();

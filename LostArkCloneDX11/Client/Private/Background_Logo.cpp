@@ -92,7 +92,7 @@ HRESULT CBackground_Logo::Add_Components()
 	Anim_Desc.bLoop = true;
 	Anim_Desc.fAnimTime = 5.f;
 	Anim_Desc.iStartFrame = 0;
-	Anim_Desc.iEndFrame = 300;
+	Anim_Desc.iEndFrame = 149;
 	Anim_Desc.pShaderCom = m_pShaderCom;
 	Anim_Desc.pTextureCom = m_pTextureCom;
 

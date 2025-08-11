@@ -2,6 +2,7 @@
 #include "Player.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CGameObject{ pDevice, pContext }
@@ -43,26 +44,33 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 void CPlayer::Update(_float fTimeDelta)
 {
 #pragma region TESTCODE
-    if (m_pGameInstance->Get_KeyPressing(DIK_W))
-    {
-        m_pTransformCom->Go_Straight(fTimeDelta);
-    }
-    if (m_pGameInstance->Get_KeyPressing(DIK_S))
-    {
-        m_pTransformCom->Go_Backward(fTimeDelta);
-    }
-    if (m_pGameInstance->Get_KeyPressing(DIK_A))
-    {
-        m_pTransformCom->Go_Left(fTimeDelta);
-    }
-    if (m_pGameInstance->Get_KeyPressing(DIK_D))
-    {
-        m_pTransformCom->Go_Right(fTimeDelta);
-    }
-    if (m_pGameInstance->Get_KeyPressing(DIK_SPACE))
-    {
-        m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::UP), fTimeDelta);
-    }
+    //if (m_pGameInstance->Get_KeyPressing(DIK_W))
+    //{
+    //    m_pTransformCom->Go_Straight(fTimeDelta);
+    //}
+    //if (m_pGameInstance->Get_KeyPressing(DIK_S))
+    //{
+    //    m_pTransformCom->Go_Backward(fTimeDelta);
+    //}
+    //if (m_pGameInstance->Get_KeyPressing(DIK_A))
+    //{
+    //    m_pTransformCom->Go_Left(fTimeDelta);
+    //}
+    //if (m_pGameInstance->Get_KeyPressing(DIK_D))
+    //{
+    //    m_pTransformCom->Go_Right(fTimeDelta);
+    //}
+    //if (m_pGameInstance->Get_KeyPressing(DIK_SPACE))
+    //{
+    //    m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::UP), fTimeDelta);
+    //}
+
+    //if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
+    //{
+    //   
+    //    //m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
+    //}
+    //m_pTransformCom->MoveTo(fTimeDelta* 2.f, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
 #pragma endregion
 
 }

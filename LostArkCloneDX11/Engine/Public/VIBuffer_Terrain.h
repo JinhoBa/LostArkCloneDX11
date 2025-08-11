@@ -14,6 +14,8 @@ public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pFilePath);
 	virtual HRESULT Initialize(void* pArg);
 
+	_bool Picking(class CTransform* pTransform, _float3* pOut);
+
 private:
 	_uint m_iNumVerticesX = {};
 	_uint m_iNumVerticesZ = {};

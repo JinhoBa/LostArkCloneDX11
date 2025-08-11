@@ -27,8 +27,8 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 	ReadFile(hFile, &ih, sizeof ih, &dwByte, nullptr);
 	
 	
-	m_iNumVerticesX = ih.biWidth;
-	m_iNumVerticesZ = ih.biHeight;
+	m_iNumVerticesX = 256;
+	m_iNumVerticesZ = 256;
 
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = m_iNumVerticesX * m_iNumVerticesZ;
@@ -69,7 +69,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 
 			m_pVertexPositions[iIndex] = pVertices[iIndex].vPosition = _float3((_float)j, (pPixels[iIndex] & 0x000000ff) / 10.f, (_float)i);
 			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
-			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f) * 4.f, i / (m_iNumVerticesZ - 1.f) * 4.f);
+			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f), i / (m_iNumVerticesZ - 1.f));
 		}
 	}
 	D3D11_SUBRESOURCE_DATA InitVBData = {};
@@ -164,6 +164,42 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 HRESULT CVIBuffer_Terrain::Initialize(void* pArg)
 {
 	return S_OK;
+}
+
+_bool CVIBuffer_Terrain::Picking(CTransform* pTransform, _float3* pOut)
+{
+	m_pGameInstance->Transform_ToLocalSpace(XMLoadFloat4x4(&pTransform->Get_WorldMatrixInv()));
+
+	_uint iNumIndices = {};
+
+	for (size_t i = 0; i < m_iNumVerticesZ - 1; i++)
+	{
+		for (size_t j = 0; j < m_iNumVerticesX - 1; j++)
+		{
+			_uint	iIndex = i * m_iNumVerticesX + j;
+
+			_uint	iIndices[4] = {
+				iIndex + m_iNumVerticesX,
+				iIndex + m_iNumVerticesX + 1,
+				iIndex + 1,
+				iIndex
+			};
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[1]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+				return true;
+			}
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), XMLoadFloat3(&m_pVertexPositions[iIndices[3]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 CVIBuffer_Terrain* CVIBuffer_Terrain::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFilePath)

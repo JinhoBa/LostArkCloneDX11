@@ -2,6 +2,7 @@
 #include "Terrain.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CTerrain::CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CGameObject{pDevice, pContext}
@@ -33,16 +34,27 @@ HRESULT CTerrain::Initialize(void* pArg)
 
 
     m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState);
+    m_pPickingPos = {};
+
+    CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
 
     return S_OK;
 }
 
 void CTerrain::Priority_Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
+    {
+        if (m_pVIBufferCom->Picking(m_pTransformCom, &m_pPickingPos))
+            int i = 0;
+    }
 }
 
 void CTerrain::Update(_float fTimeDelta)
 {
+    
+
+
 }
 
 void CTerrain::Late_Update(_float fTimeDelta)
@@ -52,7 +64,13 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
-    
+#pragma region TESTCODE
+    ImGui::Begin("Picking Position");
+    ImGui::Text("Position : ");
+    ImGui::SameLine();
+    ImGui::InputFloat3("", &m_pPickingPos.x);
+    ImGui::End();
+#pragma endregion
     m_pContext->RSSetState(m_pRasterState);
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))

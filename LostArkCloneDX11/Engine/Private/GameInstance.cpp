@@ -9,6 +9,7 @@
 #include "Sound_Manager.h"
 #include "Renderer.h"
 #include "PipeLine.h"
+#include "Picking.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -57,16 +58,24 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pPipeLine)
 		return E_FAIL;
 
+	m_pPicking = CPicking::Create(*ppDevice, *ppContext, EngineDesc.hWnd);
+	if (nullptr == m_pPicking)
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
+	
+
 	m_pInput_Device->Update();
 
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
 	m_pPipeLine->Update();
+
+	m_pPicking->Update();
 
 	m_pObject_Manager->Update(fTimeDelta);
 
@@ -106,6 +115,20 @@ _wstring CGameInstance::Utf8ToWstring(const char* pUtf8Str)
 	MultiByteToWideChar(CP_UTF8, 0, pUtf8Str, -1, &strTmp[0], size);
 
 	return strTmp;
+}
+
+string CGameInstance::WstringToUtf8(_wstring& wStr)
+{
+	if (wStr.empty()) 
+		return nullptr;
+
+	int iSize = WideCharToMultiByte(CP_UTF8, 0, wStr.data(), (int)wStr.size(), nullptr, 0, nullptr, nullptr);
+
+	string str(iSize, 0);
+
+	WideCharToMultiByte(CP_UTF8, 0, wStr.data(), (int)wStr.size(), &str[0], iSize, nullptr, nullptr);
+
+	return str;
 }
 
 _float CGameInstance::Random(_float fMin, _float fMax)
@@ -302,11 +325,31 @@ const _float4* CGameInstance::Get_Camera_Position() const
 
 #pragma endregion
 
+#pragma region PICKING
+
+void CGameInstance::Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse)
+{
+	m_pPicking->Transform_ToLocalSpace(pWorldMatrixInverse);
+}
+
+_bool CGameInstance::Picking_InWorldSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut)
+{
+	return m_pPicking->Picking_InWorldSpace(vPointA, vPointB, vPointC, pQut);
+}
+
+_bool CGameInstance::Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut)
+{
+	return m_pPicking->Picking_InLocalSpace(vPointA, vPointB, vPointC, pQut);
+}
+
+#pragma endregion
+
 
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pPicking);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pPrototype_Manager);

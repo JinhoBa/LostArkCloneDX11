@@ -67,10 +67,10 @@ HRESULT CModel::Render_Mesh(_uint iIndex)
 HRESULT CModel::Ready_Meshes()
 {
     m_iNumMeshes = m_pAiScene->mNumMeshes;
-
+ 
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
-        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_pAiScene->mMeshes[i]);
+        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_pAiScene->mMeshes[i], m_pAiScene->mMaterials[i]);
         if (nullptr == pMesh)
         {
             MSG_BOX("Failed to Ready Mesh");
