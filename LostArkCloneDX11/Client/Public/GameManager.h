@@ -18,11 +18,15 @@ public:
 	HRESULT Initialize_Manager();
 
 #pragma region MAPDATA
-	vector<MAP_DATA>* Get_MapData();
+	vector<MAP_DATA>* Get_MapDataPtr();
 	HRESULT Load_MapData(const _char* pMapDataFilePaht);
-	HRESULT Save_MapData(const _char* pMapDataFilePaht);
+	HRESULT Save_MapData(const _char* pFileName);
 #pragma endregion
 
+#pragma region MAP_PREVIEW
+	vector<_wstring>* Get_PreviewTexturesPtr();
+	HRESULT Load_PreviewTextures(const _char* pFilePath);
+#pragma endregion
 	
 
 	void Bind_PickingPos(_float3* pPickingPos);

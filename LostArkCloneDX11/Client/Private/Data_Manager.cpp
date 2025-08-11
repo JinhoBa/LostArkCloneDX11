@@ -9,9 +9,10 @@ CData_Manager::CData_Manager()
 {
     Safe_AddRef(m_pGameInstance);
     m_MapDatas.reserve(100);
+    m_MapPreviewFileNames.reserve(50);
 }
 
-HRESULT CData_Manager::Load_File(const _char* pFilePath)
+HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
 {
     tinyxml2::XMLDocument xmlDoc;
 
@@ -70,17 +71,13 @@ HRESULT CData_Manager::Load_File(const _char* pFilePath)
     return S_OK;
 }
 
-HRESULT CData_Manager::Save_File(const _char* pFilePath)
+HRESULT CData_Manager::Save_MapData(const _char* pFileName)
 {
-    list<CGameObject*>* pObjectList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_MapObject"));
+    list<CGameObject*>* pObjectList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
 
-    list<CMapObject*> pMapObjectList = {};
-
-    for (auto pObjcet : *pObjectList)
-    {
-        pMapObjectList.push_back(dynamic_cast<CMapObject*>(pObjcet));
-    }
-
+    if (nullptr == pObjectList)
+        return E_FAIL;
+  
 
     tinyxml2::XMLDocument doc;
 
@@ -90,37 +87,89 @@ HRESULT CData_Manager::Save_File(const _char* pFilePath)
     tinyxml2::XMLElement* land = doc.NewElement("Land");
     doc.InsertEndChild(land);
 
-
-    for (auto pObject : pMapObjectList)
+    for (auto pObjcet : *pObjectList)
     {
+        CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObjcet);
+
+        if (nullptr == pMapObject)
+            continue;
+
         // <Model>
         tinyxml2::XMLElement* model = doc.NewElement("Model");
         land->InsertEndChild(model);
 
         // <PrototypeTag>텍스트</PrototypeTag>
         tinyxml2::XMLElement* proto = doc.NewElement("PrototypeTag");
-        proto->SetText("Prototype_GameObject_Test");
+        proto->SetText(m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()).c_str());
         model->InsertEndChild(proto);
 
         // <Position x="0.0" y="0.0" z="0.0"/>
-        tinyxml2::XMLElement* pos = doc.NewElement("Position");
-        pos->SetAttribute("x", 0.1f);
-        pos->SetAttribute("y", 0.1f);
-        pos->SetAttribute("z", 0.1f);
-        model->InsertEndChild(pos);
-    }
-    
+        tinyxml2::XMLElement* PositionElem = doc.NewElement("Position");
 
-    
+        _float3* pPosition = pMapObject->Get_Positon();
+        PositionElem->SetAttribute("x", pPosition->x);
+        PositionElem->SetAttribute("y", pPosition->y);
+        PositionElem->SetAttribute("z", pPosition->z);
+        model->InsertEndChild(PositionElem);
+
+        // <Scale x="0.0" y="0.0" z="0.0"/>
+        tinyxml2::XMLElement* ScaleElem = doc.NewElement("Scale");
+
+        _float3* pScale = pMapObject->Get_Scale();
+        ScaleElem->SetAttribute("x", pScale->x);
+        ScaleElem->SetAttribute("y", pScale->y);
+        ScaleElem->SetAttribute("z", pScale->z);
+        model->InsertEndChild(ScaleElem);
+
+
+        tinyxml2::XMLElement* RotationElem = doc.NewElement("Rotation");
+
+        _float3* pRotation = pMapObject->Get_Rotation();
+        RotationElem->SetAttribute("x", pRotation->x);
+        RotationElem->SetAttribute("y", pRotation->y);
+        RotationElem->SetAttribute("z", pRotation->z);
+        model->InsertEndChild(RotationElem);
+
+    }
+    string strPath = "../Bin/Resources/Data/" + string(pFileName) + ".xml";
 
     // 저장
-    if (doc.SaveFile(pFilePath) != tinyxml2::XML_SUCCESS) {
+    if (doc.SaveFile(strPath.c_str()) != tinyxml2::XML_SUCCESS) {
       
         return E_FAIL;
     }
 
 
 
+    return S_OK;
+}
+
+HRESULT CData_Manager::Load_PreviewTextures(const _char* pFilePath)
+{
+
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("MapObjectPreview_FileName");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+
+    for (auto* png = root->FirstChildElement("Name"); png; png = png->NextSiblingElement("Name"))
+    {
+        const _char* txt = png->GetText();
+
+        if (nullptr != txt)
+        {
+            m_MapPreviewFileNames.push_back(CGameInstance::GetInstance()->Utf8ToWstring(txt));
+        }
+    }
     return S_OK;
 }
 

@@ -120,7 +120,7 @@ _wstring CGameInstance::Utf8ToWstring(const char* pUtf8Str)
 string CGameInstance::WstringToUtf8(_wstring& wStr)
 {
 	if (wStr.empty()) 
-		return nullptr;
+		return "";
 
 	int iSize = WideCharToMultiByte(CP_UTF8, 0, wStr.data(), (int)wStr.size(), nullptr, 0, nullptr, nullptr);
 

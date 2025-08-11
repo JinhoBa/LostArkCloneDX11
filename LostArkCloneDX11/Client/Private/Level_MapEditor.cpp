@@ -28,6 +28,18 @@ HRESULT CLevel_MapEditor::Initialize()
     m_pBackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
 
     m_iComboIndex = 0;
+    m_strSaveFileName;
+
+    /*Texture*/
+    m_pTextureCom = static_cast<CTextureMap*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Prototype_Component_TextureMap_MeshPreview")));
+
+    if (nullptr == m_pTextureCom)
+        return E_FAIL;
+       
+    m_pImagesNames = m_pGameManager->Get_PreviewTexturesPtr();
+    if (nullptr == m_pImagesNames)
+        return E_FAIL;
+
 
     m_PrototypeTags = { 
         "Prototype_Component_Model_Kamen_chair",
@@ -54,7 +66,6 @@ HRESULT CLevel_MapEditor::Initialize()
 void CLevel_MapEditor::Update(_float fTimeDelta)
 {
 
-
 }
 
 HRESULT CLevel_MapEditor::Render()
@@ -63,18 +74,16 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::Begin("Map Edit");
 
     ImGui::Text("Prototype : ");
-    ImGui::SameLine(100.f, 0.f);
     ImGui::Combo("1", &m_iComboIndex, m_PrototypeTags.data(), (int)m_PrototypeTags.size());
 
+    const _tchar* pFilePath = (*m_pImagesNames)[m_iComboIndex].c_str();
+    ImGui::Image(ImTextureID(m_pTextureCom->Get_SRV(pFilePath)), ImVec2(128, 128));
+    
     if (ImGui::Button("Add MapObject"))
     {
         Add_MapObject();
     }
-    if (ImGui::Button("Save"))
-    {
-        SetWindowText(g_hWnd, TEXT("Save MapData"));
-        
-    }
+   
     if (ImGui::Button("Load"))
     {
         if (FAILED(Load_MapData()))
@@ -82,14 +91,20 @@ HRESULT CLevel_MapEditor::Render()
             ImGui::End();
             return E_FAIL;
         }
-        
-        
         SetWindowText(g_hWnd, TEXT("Load MapData"));
     }
-    static char buf[128] = ""; // 버퍼 크기만큼 입력 가능
-    ImGui::InputText("inupt", buf, IM_ARRAYSIZE(buf));
-    ImGui::End();
+    ImGui::Text("-------------------");
+    ImGui::Text("Save File Name : ");
+    ImGui::InputText("##name", &m_strSaveFileName[0], MAX_PATH);
+    if (ImGui::Button("Save"))
+    {
+        m_pGameManager->Save_MapData(m_strSaveFileName.c_str());
+        SetWindowText(g_hWnd, TEXT("Save MapData"));
+    }
 
+    ImGui::End();
+    
+    
 
     ImGui::Begin("Object List");
     for (auto pObject : *m_pBackGroundObject)
@@ -195,7 +210,7 @@ HRESULT CLevel_MapEditor::Load_MapData()
         pMapObject->Set_Dead();
     }
 
-    vector<MAP_DATA>* pData = m_pGameManager->Get_MapData();
+    vector<MAP_DATA>* pData = m_pGameManager->Get_MapDataPtr();
 
     for (auto MapData : *pData)
     {
@@ -236,4 +251,5 @@ void CLevel_MapEditor::Free()
     __super::Free();
 
     Safe_Release(m_pGameManager);
+    Safe_Release(m_pTextureCom);
 }

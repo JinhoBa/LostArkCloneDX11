@@ -43,7 +43,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 
 void CTerrain::Priority_Update(_float fTimeDelta)
 {
-    if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
+    if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
     {
         if (m_pVIBufferCom->Picking(m_pTransformCom, &m_pPickingPos))
             int i = 0;

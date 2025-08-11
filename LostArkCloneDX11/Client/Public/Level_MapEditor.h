@@ -5,6 +5,7 @@
 
 NS_BEGIN(Engine)
 class CGameObject;
+class CTextureMap;
 NS_END
 
 NS_BEGIN(Client)
@@ -22,12 +23,16 @@ public:
 
 private:
 	class CGameManager*		m_pGameManager = {};
+	CTextureMap*			m_pTextureCom = { nullptr };
 
 	_int					m_iComboIndex = {};
 	vector<const _char*>	m_PrototypeTags = {};
+	vector<_wstring>*		m_pImagesNames = {};
 
 	list<CGameObject*>*		m_pBackGroundObject = { nullptr };
 	class CMapObject*		m_pMapObject = { nullptr };
+
+	string m_strSaveFileName = {};
 
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);

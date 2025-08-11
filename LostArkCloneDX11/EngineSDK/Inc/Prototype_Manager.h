@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Texture.h"
+#include "TextureMap.h"
 #include "Transform.h"
 //#include "VIBuffer_Cube.h"
 #include "VIBuffer_Rect.h"

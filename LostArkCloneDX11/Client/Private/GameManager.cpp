@@ -19,23 +19,33 @@ HRESULT CGameManager::Initialize_Manager()
 	return S_OK;
 }
 
-vector<MAP_DATA>* CGameManager::Get_MapData()
+vector<MAP_DATA>* CGameManager::Get_MapDataPtr()
 {
-	return m_pData_Manager->Get_Data();
+	return m_pData_Manager->Get_MapDataPtr();
 }
 
 HRESULT CGameManager::Load_MapData(const _char* pMapDataFilePaht)
 {
-	m_pData_Manager->Load_File(pMapDataFilePaht);
+	m_pData_Manager->Load_MapData(pMapDataFilePaht);
 
 	return S_OK;
 }
 
-HRESULT CGameManager::Save_MapData(const _char* pMapDataFilePaht)
+HRESULT CGameManager::Save_MapData(const _char* pFileName)
 {
-	m_pData_Manager->Save_File(pMapDataFilePaht);
+	m_pData_Manager->Save_MapData(pFileName);
 
 	return S_OK;
+}
+
+vector<_wstring>* CGameManager::Get_PreviewTexturesPtr()
+{
+	return m_pData_Manager->Get_PreviewTexturesPtr();
+}
+
+HRESULT CGameManager::Load_PreviewTextures(const _char* pFilePath)
+{
+	return m_pData_Manager->Load_PreviewTextures(pFilePath);
 }
 
 void CGameManager::Bind_PickingPos(_float3* pPickingPos)

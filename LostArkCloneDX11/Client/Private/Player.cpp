@@ -67,10 +67,10 @@ void CPlayer::Update(_float fTimeDelta)
 
     //if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
     //{
-    //   
-    //    //m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
+    //  
+    //   //m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
     //}
-    //m_pTransformCom->MoveTo(fTimeDelta* 2.f, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
+    m_pTransformCom->MoveTo(fTimeDelta* 2.f, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
 #pragma endregion
 
 }

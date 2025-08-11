@@ -386,13 +386,22 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/BG_KAMEN_Data.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/TestMap.xml")))
+		return E_FAIL;
+
+	if (FAILED(CGameManager::GetInstance()->Load_PreviewTextures("../Bin/Resources/Data/MeshPreview.xml")))
 		return E_FAIL;
 
 	if (FAILED(Loading_For_GamePlay()))
 		return E_FAIL;
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
+
+	/* For.Prototype_Component_Texture_LogoBackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Prototype_Component_TextureMap_MeshPreview"),
+		CTextureMap::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Map/Kamen/"), CGameManager::GetInstance()->Get_PreviewTexturesPtr()))))
+		return E_FAIL;
+
 #pragma region GAEMOBJCET_TEXTURE
 
 #pragma endregion
