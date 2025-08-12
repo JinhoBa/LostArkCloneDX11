@@ -7,6 +7,14 @@ class CVIBuffer_Rect;
 class CShader;
 class ENGINE_DLL CUIButton : public CUIObject
 {
+public:	typedef struct Button_Desc : public CUIObject::UIOBJECT_DESC
+	{
+		CTexture*	pTextureCom = { nullptr };
+		CShader*	pShaderCom = { nullptr };
+		function<void()>	OnHoverEvent = {};
+		function<void()>	OnClickEvent = {};
+	}BUTTON_DESC;
+
 protected:
 	CUIButton(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIButton(const CUIButton& Prototype);
@@ -20,15 +28,21 @@ public:
 	virtual void	Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
-	virtual void onButtonClick();
-	virtual void onButtonHover();
-	void Set_OnClickEvent(function<void()> Event);
+public:
+	void	Set_OnHoverEvent(function<void()> Event);
+	void	Set_OnClickEvent(function<void()> Event);
+
+	_bool	isInRect();
+	_bool	isInCircle();
 
 protected:
-	function<void()> m_OnClickEvent = {};
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
+	_uint				m_iTextIndex = {};
+	RECT				m_rcButton = {};
+	function<void()>	m_OnHoverEvent = {};
+	function<void()>	m_OnClickEvent = {};
+	CVIBuffer_Rect*		m_pVIBufferCom = { nullptr };
+	CTexture*			m_pTextureCom = { nullptr };
+	CShader*			m_pShaderCom = { nullptr };
 
 public:
 	static CUIButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

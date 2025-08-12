@@ -12,6 +12,7 @@
 #include "LoadingBar.h"
 #include "Wallpaper.h"
 #include "Camera_Free.h"
+#include "UIButton.h"
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -44,7 +45,7 @@ HRESULT CMainApp::Initialize()
     if (FAILED(Ready_Layer_Canvars()))
         return E_FAIL;
 
-    if (FAILED(Start_Level(LEVEL::MAP_EDITOR)))
+    if (FAILED(Start_Level(LEVEL::LOGO)))
         return E_FAIL;
        
     
@@ -206,6 +207,12 @@ HRESULT CMainApp::Ready_Prototype()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Wallpaper"),
         CWallpaper::Create(m_pDevice, m_pContext))))
         return E_FAIL;
+
+    /*For Prototype_GameObject_Background_Loading*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Button"),
+        CUIButton::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
 #pragma endregion
 
     return S_OK;

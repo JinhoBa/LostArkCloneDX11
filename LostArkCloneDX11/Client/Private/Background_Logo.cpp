@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "UIButton.h"
+
 CBackground_Logo::CBackground_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{pDevice, pContext}
 {
@@ -37,6 +39,11 @@ HRESULT CBackground_Logo::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	if (FAILED(Add_Buttons()))
+		return E_FAIL;
+
+	
+
 	return S_OK;
 }
 
@@ -67,6 +74,9 @@ HRESULT CBackground_Logo::Render()
 
 	if (FAILED(m_pVIBufferCom->Render()))
 	    return E_FAIL;
+
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -102,8 +112,44 @@ HRESULT CBackground_Logo::Add_Components()
 		return E_FAIL;
 
 
+	/*Texture*/
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_ExitButton"),
+		TEXT("Com_Texture_ExitBtn"), reinterpret_cast<CComponent**>(&m_pTextureCom_ExitBtn))))
+		return E_FAIL;
+	
+
 	return S_OK;
 }
+
+HRESULT CBackground_Logo::Add_Buttons()
+{
+
+	/* Exit Button */
+	CUIButton::BUTTON_DESC Desc = {};
+
+	Desc.fRotatePersec = 1.f;
+	Desc.fSpeedPersec = 1.f;
+	Desc.fX = -520.f;
+	Desc.fY = 300.f;
+	Desc.fZ = m_fZ;
+	Desc.fSizeX = 50.f;
+	Desc.fSizeY = 50.f;
+	Desc.pParent_TransformCom = m_pParent_TransformCom;
+	Desc.pShaderCom = m_pShaderCom;
+	Desc.pTextureCom = m_pTextureCom_ExitBtn;
+	Desc.OnClickEvent = []() {PostQuitMessage(0); };
+
+	m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(PROTOTYPE::GAMEOBJECT), TEXT("Prototype_GameObject_Button"),
+		ENUM_TO_INT(LEVEL::LOGO), TEXT("Layer_Button"), &Desc);
+
+
+
+	if (FAILED(Add_ChildObjects(ENUM_TO_INT(LEVEL::LOGO), TEXT("Layer_Button"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 
 CBackground_Logo* CBackground_Logo::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -136,4 +182,5 @@ void CBackground_Logo::Free()
 	__super::Free();
 
 	Safe_Release(m_pAnimCom);
+	Safe_Release(m_pTextureCom_ExitBtn);
 }

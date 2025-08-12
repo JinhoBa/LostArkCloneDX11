@@ -55,21 +55,6 @@
     <Filter Include="03.UIObject\Logo">
       <UniqueIdentifier>{536a8ecb-e1ed-4831-80a1-dbfdfcb26522}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.UIObject\Logo\Panel">
-      <UniqueIdentifier>{15e576f6-629b-49bf-a3f2-9f7177c4e280}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Logo\Button">
-      <UniqueIdentifier>{ed6c6387-5c64-47fa-9443-236d15eb4064}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Logo\Panel\ServerListPanel">
-      <UniqueIdentifier>{2bafe1d6-127f-4efc-8e98-21a539431843}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Logo\Panel\Background">
-      <UniqueIdentifier>{6a154a68-55e8-4446-ba23-0d7bc935ca6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Logo\Panel\LogoPanel">
-      <UniqueIdentifier>{6da2f62a-efc3-49ef-bfaf-97ddacbe2f29}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.UIObject\Loading">
       <UniqueIdentifier>{508eb125-a15f-4736-9da6-1dff92a53f09}</UniqueIdentifier>
     </Filter>
@@ -154,6 +139,15 @@
     <Filter Include="01.Level\MapEdit">
       <UniqueIdentifier>{a059223b-f1e2-49f6-851d-a60d99a531aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\Logo\Background">
+      <UniqueIdentifier>{6a154a68-55e8-4446-ba23-0d7bc935ca6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\LogoPanel">
+      <UniqueIdentifier>{6da2f62a-efc3-49ef-bfaf-97ddacbe2f29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Logo\ServerListPanel">
+      <UniqueIdentifier>{2bafe1d6-127f-4efc-8e98-21a539431843}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -214,13 +208,13 @@
       <Filter>03.UIObject\Canvars</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ServerListPanel.h">
-      <Filter>03.UIObject\Logo\Panel\ServerListPanel</Filter>
+      <Filter>03.UIObject\Logo\ServerListPanel</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Background_Logo.h">
-      <Filter>03.UIObject\Logo\Panel\Background</Filter>
+      <Filter>03.UIObject\Logo\Background</Filter>
     </ClInclude>
     <ClInclude Include="..\public\LogoPanel.h">
-      <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
+      <Filter>03.UIObject\Logo\LogoPanel</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Background_Loading.h">
       <Filter>03.UIObject\Loading\Background</Filter>
@@ -352,13 +346,13 @@
       <Filter>03.UIObject\Canvars</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ServerListPanel.cpp">
-      <Filter>03.UIObject\Logo\Panel\ServerListPanel</Filter>
+      <Filter>03.UIObject\Logo\ServerListPanel</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Background_Logo.cpp">
-      <Filter>03.UIObject\Logo\Panel\Background</Filter>
+      <Filter>03.UIObject\Logo\Background</Filter>
     </ClCompile>
     <ClCompile Include="..\private\LogoPanel.cpp">
-      <Filter>03.UIObject\Logo\Panel\LogoPanel</Filter>
+      <Filter>03.UIObject\Logo\LogoPanel</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Background_Loading.cpp">
       <Filter>03.UIObject\Loading\Background</Filter>

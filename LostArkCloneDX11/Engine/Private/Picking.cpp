@@ -20,20 +20,20 @@ HRESULT CPicking::Initialize(HWND hWnd)
     m_fWinSizeX = vWinSize.x;
     m_fWinSizeY = vWinSize.y;
 
+    ZeroMemory(&m_ptMouse, sizeof(POINT));
+
     return S_OK;
 }
 
 void CPicking::Update()
 {
-    POINT ptMouse = {};
-
-    GetCursorPos(&ptMouse);
-    ScreenToClient(m_hWnd, &ptMouse);
+    GetCursorPos(&m_ptMouse);
+    ScreenToClient(m_hWnd, &m_ptMouse);
 
     _float4 vMousePosition = {};
 
-    vMousePosition.x = ptMouse.x / (m_fWinSizeX * 0.5f) - 1.f;
-    vMousePosition.y = ptMouse.y / -(m_fWinSizeY * 0.5f) + 1.f;
+    vMousePosition.x = m_ptMouse.x / (m_fWinSizeX * 0.5f) - 1.f;
+    vMousePosition.y = m_ptMouse.y / -(m_fWinSizeY * 0.5f) + 1.f;
     vMousePosition.z = 0.f;
     vMousePosition.w = 1.f;
 
@@ -49,6 +49,17 @@ void CPicking::Update()
      XMStoreFloat3(&m_vRayPos[ENUM_TO_INT(RAY::WORLD)], XMVector3TransformCoord(vRayPos, ViewMatrixInv));
      XMStoreFloat3(&m_vRayDir[ENUM_TO_INT(RAY::WORLD)], XMVector3Normalize(XMVector3TransformNormal(vRayDir, ViewMatrixInv)));
 }
+
+POINT& CPicking::Get_MousePoint()
+{
+    return m_ptMouse;
+}
+
+_float3& CPicking::Get_MousePosition(RAY eSpace)
+{
+    return m_vRayPos[ENUM_TO_INT(eSpace)];
+}
+
 
 void CPicking::Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse)
 {

@@ -327,6 +327,15 @@ const _float4* CGameInstance::Get_Camera_Position() const
 
 #pragma region PICKING
 
+POINT& CGameInstance::Get_MousePoint() 
+{
+	return m_pPicking->Get_MousePoint();
+}
+_float3& CGameInstance::Get_MousePosition(RAY eSpace)
+{
+	return m_pPicking->Get_MousePosition(eSpace);
+}
+
 void CGameInstance::Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse)
 {
 	m_pPicking->Transform_ToLocalSpace(pWorldMatrixInverse);

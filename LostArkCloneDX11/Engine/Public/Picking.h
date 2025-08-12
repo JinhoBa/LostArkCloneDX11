@@ -14,6 +14,9 @@ public:
 	HRESULT Initialize(HWND hWnd);
 	void Update();
 	
+	POINT& Get_MousePoint();
+	_float3& Get_MousePosition(RAY eSpace);
+
 	void Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse);
 
 	_bool Picking_InWorldSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
@@ -27,6 +30,7 @@ private:
 	HWND					m_hWnd = {};
 	_float					m_fWinSizeX{}, m_fWinSizeY{};
 
+	POINT					m_ptMouse = {};
 	_float3					m_vRayDir[ENUM_TO_INT(RAY::END)];
 	_float3					m_vRayPos[ENUM_TO_INT(RAY::END)];
 

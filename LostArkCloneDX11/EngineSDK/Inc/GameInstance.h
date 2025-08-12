@@ -87,9 +87,12 @@ public:
 #pragma endregion
 
 #pragma region PICKING
-	void Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse);
-	_bool Picking_InWorldSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
-	_bool Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
+	POINT&		Get_MousePoint();
+	_float3&	Get_MousePosition(RAY eSpace);
+
+	void		Transform_ToLocalSpace(const FXMMATRIX pWorldMatrixInverse);
+	_bool		Picking_InWorldSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
+	_bool		Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
 #pragma endregion
 
 

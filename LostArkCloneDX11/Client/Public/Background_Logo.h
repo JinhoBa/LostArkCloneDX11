@@ -25,9 +25,14 @@ public:
 
 private:
 	CUIAnimation*	m_pAnimCom = { nullptr };
+	CTexture*		m_pTextureCom_ExitBtn = { nullptr };
+
 
 private:
+	void ExitGame();
 	HRESULT			Add_Components();
+	HRESULT			Add_Buttons();
+
 
 public:
 	static CBackground_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
