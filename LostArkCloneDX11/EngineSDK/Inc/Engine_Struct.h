@@ -12,6 +12,14 @@ namespace Engine
 		WINMODE				eWindowMode;
 	}ENGINE_DESC;
 
+	typedef struct tagFontDesc
+	{
+		wstring strWord;
+		XMFLOAT4 vPositon;
+		XMFLOAT4 vColor;
+		float fScale;
+	}FONT_DESC;
+
 	typedef struct tagVertexPositionTexcoord
 	{
 		XMFLOAT3						vPosition;

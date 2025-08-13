@@ -2,6 +2,10 @@
 #include "Client_Defines.h"
 #include "UIPanel.h"
 
+NS_BEGIN(Engine)
+class CFont;
+NS_END
+
 NS_BEGIN(Client)
 
 class CBackground_Loading final : public CUIPanel
@@ -20,11 +24,13 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	ID3D11BlendState*		m_pBlendState = { nullptr };
-	_float					m_fFactor[4] = {};
+	FONT_DESC				m_Font_Tip = {};
+	FONT_DESC				m_Font_TipDetail = {};
+	FONT_DESC				m_Font_Mococo = {};
 
 private:
 	HRESULT			Add_Components();
+	void			Reay_FontDesc();
 
 public:
 	static CBackground_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

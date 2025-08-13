@@ -95,6 +95,13 @@ public:
 	_bool		Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECTOR vPointB, const FXMVECTOR vPointC, _float3* pQut);
 #pragma endregion
 
+#pragma region FONT_MANAGER
+	void		Add_Font(const _wstring& strFontTag, class CFont* pFont);
+	void		Add_FontDesc(const _wstring& strFontTag, FONT_DESC* pFontDesc);
+	void        Clear_Fonts();
+#pragma endregion
+
+
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
@@ -107,6 +114,7 @@ private:
 	class CRenderer*				m_pRenderer = { nullptr };
 	class CPicking*					m_pPicking = { nullptr };
 	class CPipeLine*				m_pPipeLine = { nullptr };
+	class CFont_Manager*			m_pFont_Manager = { nullptr };
 
 	_float2							m_vWinSize = {};
 	

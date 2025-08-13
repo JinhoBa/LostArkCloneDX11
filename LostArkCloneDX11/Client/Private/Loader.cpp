@@ -86,9 +86,11 @@ HRESULT CLoader::Loading()
 
 	case LEVEL::TUTORIAL:
 		hr = Loading_For_Tutorial();
+		break;
 
 	case LEVEL::MAP_EDITOR:
 		hr = Loading_For_MapEditor();
+		break;
 	}
 
 	LeaveCriticalSection(&m_Critical_Section);
@@ -359,11 +361,6 @@ HRESULT CLoader::Loading_For_Tutorial()
 #pragma endregion
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
-
-	/* For.Prototype_Component_Model_Player */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Player/Player.fbx"))))
-		return E_FAIL;
 
 	m_fLoadProgress = 40.f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");

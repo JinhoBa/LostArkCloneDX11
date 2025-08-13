@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "PipeLine.h"
 #include "Picking.h"
+#include "Font_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -62,6 +63,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pPicking)
 		return E_FAIL;
 
+	m_pFont_Manager = CFont_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pFont_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -89,6 +94,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 HRESULT CGameInstance::Draw()
 {
 	m_pRenderer->Render();
+
+	m_pFont_Manager->Draw_Fonts();
 
 	m_pLevel_Manager->Render();
 
@@ -354,10 +361,30 @@ _bool CGameInstance::Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECT
 #pragma endregion
 
 
+#pragma region FONT_MANAGER
+
+void		CGameInstance::Add_Font(const _wstring& strFontTag, class CFont* pFont)
+{
+	m_pFont_Manager->Add_Font(strFontTag, pFont);
+}
+
+void		CGameInstance::Add_FontDesc(const _wstring& strFontTag, FONT_DESC* pFontDesc)
+{
+	m_pFont_Manager->Add_FontDesc(strFontTag, pFontDesc);
+}
+
+void CGameInstance::Clear_Fonts()
+{
+	m_pFont_Manager->Clear();
+}
+
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pRenderer);

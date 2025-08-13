@@ -23,10 +23,10 @@ HRESULT CLogoPanel::Initialize(void* pArg)
 	UIOBJECT_DESC Desc = {};
 
 	Desc.fX = 0.f;
-	Desc.fY = -200.f;
+	Desc.fY = -340.f;
 	Desc.fZ = 0.5f;
-	Desc.fSizeX = 590.f;
-	Desc.fSizeY = 340.f;
+	Desc.fSizeX = 610.f;
+	Desc.fSizeY = 320.f;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
 		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
 	));

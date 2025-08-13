@@ -13,6 +13,7 @@
 #include "Wallpaper.h"
 #include "Camera_Free.h"
 #include "UIButton.h"
+#include "Font.h"
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -43,6 +44,9 @@ HRESULT CMainApp::Initialize()
         return E_FAIL; 
 
     if (FAILED(Ready_Layer_Canvars()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Font()))
         return E_FAIL;
 
     if (FAILED(Start_Level(LEVEL::LOGO)))
@@ -112,7 +116,6 @@ HRESULT CMainApp::Render()
     ImGui::NewFrame();
 
     m_pGameInstance->Draw();
-
     ImGui::Begin("FPS");
     ImGui::Text("%d", m_iFps);
     ImGui::End();
@@ -224,6 +227,14 @@ HRESULT CMainApp::Ready_Layer_Canvars()
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),
         ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"))))
         return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CMainApp::Ready_Font()
+{
+    m_pGameInstance->Add_Font(TEXT("Defualt_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/Eco.spritefont")));
+    m_pGameInstance->Add_Font(TEXT("Bold_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/EcoBold.spritefont")));
 
     return S_OK;
 }

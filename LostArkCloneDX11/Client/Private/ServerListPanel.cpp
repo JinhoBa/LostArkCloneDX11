@@ -22,11 +22,11 @@ HRESULT CServerListPanel::Initialize(void* pArg)
 {
 	UIOBJECT_DESC Desc = {};
 
-	Desc.fX = 0.f;
-	Desc.fY = 100.f;
+	Desc.fX = 182.f;
+	Desc.fY = 210.f;
 	Desc.fZ = 0.5f;
-	Desc.fSizeX = 340;
-	Desc.fSizeY = 340;
+	Desc.fSizeX = 1180.f;
+	Desc.fSizeY = 535;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
 		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
 	));
@@ -46,6 +46,7 @@ void CServerListPanel::Priority_Update(_float fTimeDelta)
 
 void CServerListPanel::Update(_float fTimeDelta)
 {
+	Update_Position();
 }
 
 void CServerListPanel::Late_Update(_float fTimeDelta)

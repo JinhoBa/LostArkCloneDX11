@@ -169,6 +169,8 @@
     <ClInclude Include="..\Public\FMOD\fmod_dsp_effects.h" />
     <ClInclude Include="..\Public\FMOD\fmod_errors.h" />
     <ClInclude Include="..\Public\FMOD\fmod_output.h" />
+    <ClInclude Include="..\public\Font.h" />
+    <ClInclude Include="..\public\Font_Manager.h" />
     <ClInclude Include="..\Public\GameInstance.h" />
     <ClInclude Include="..\Public\GameObject.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
@@ -203,6 +205,8 @@
     <ClCompile Include="..\Private\Base.cpp" />
     <ClCompile Include="..\private\Camera.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
+    <ClCompile Include="..\private\Font.cpp" />
+    <ClCompile Include="..\private\Font_Manager.cpp" />
     <ClCompile Include="..\Private\GameInstance.cpp" />
     <ClCompile Include="..\Private\GameObject.cpp" />
     <ClCompile Include="..\Private\Graphic_Device.cpp" />

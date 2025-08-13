@@ -42,7 +42,7 @@ HRESULT CBackground_Logo::Initialize(void* pArg)
 	if (FAILED(Add_Buttons()))
 		return E_FAIL;
 
-	
+	Add_Fonts();
 
 	return S_OK;
 }
@@ -59,10 +59,25 @@ void CBackground_Logo::Update(_float fTimeDelta)
 void CBackground_Logo::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_Font_Exit);
+	m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_Font_SelectServer);
 }
 
 HRESULT CBackground_Logo::Render()
 {
+#pragma region TEST_CODE
+	ImGui::InputFloat("X", &m_Font_SelectServer.vPositon.x, 1.f, 10.f);
+	ImGui::InputFloat("Y", &m_Font_SelectServer.vPositon.y, 1.f, 10.f);
+	ImGui::InputFloat("Size", &m_Font_SelectServer.fScale, 0.01f, 0.1f);
+	ImGui::ColorEdit4(
+		"Color", (float*)&m_Font_SelectServer.vColor,
+		ImGuiColorEditFlags_AlphaBar
+		| ImGuiColorEditFlags_AlphaPreviewHalf
+		| ImGuiColorEditFlags_DisplayRGB
+		| ImGuiColorEditFlags_PickerHueWheel);
+
+#pragma endregion
+
 	if (FAILED(__super::Bind_ShaderResource(m_pAnimCom->Get_Frame())))
 		return E_FAIL;
 
@@ -77,6 +92,8 @@ HRESULT CBackground_Logo::Render()
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+
+
 
 	return S_OK;
 }
@@ -129,8 +146,8 @@ HRESULT CBackground_Logo::Add_Buttons()
 
 	Desc.fRotatePersec = 1.f;
 	Desc.fSpeedPersec = 1.f;
-	Desc.fX = -520.f;
-	Desc.fY = 300.f;
+	Desc.fX = -880.f;
+	Desc.fY = 480.f;
 	Desc.fZ = m_fZ;
 	Desc.fSizeX = 50.f;
 	Desc.fSizeY = 50.f;
@@ -148,6 +165,19 @@ HRESULT CBackground_Logo::Add_Buttons()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CBackground_Logo::Add_Fonts()
+{
+	m_Font_Exit.strWord = wstring(L"게임종료");
+	m_Font_Exit.vPositon = _float4(49.f, 1044.f, 1.f, 1.f);
+	m_Font_Exit.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
+	m_Font_Exit.fScale = 0.4f;
+
+	m_Font_SelectServer.strWord = wstring(L"서버 선택");
+	m_Font_SelectServer.vPositon = _float4(905.f, 495.f, 1.f, 1.f);
+	m_Font_SelectServer.vColor = _float4(0.85f, 0.85f, 0.85f, 1.f);
+	m_Font_SelectServer.fScale = 0.56f;
 }
 
 

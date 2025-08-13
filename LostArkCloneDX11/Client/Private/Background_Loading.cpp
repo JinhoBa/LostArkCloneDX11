@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "Font.h"
+
 CBackground_Loading::CBackground_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{ pDevice, pContext }
 {
@@ -37,24 +39,7 @@ HRESULT CBackground_Loading::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	D3D11_BLEND_DESC Blend_Desc = {};
-
-	Blend_Desc.AlphaToCoverageEnable = false;
-	Blend_Desc.IndependentBlendEnable = false;
-	Blend_Desc.RenderTarget[0].BlendEnable = true;
-	Blend_Desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	Blend_Desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	Blend_Desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	Blend_Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	Blend_Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	Blend_Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	Blend_Desc.RenderTarget[0].RenderTargetWriteMask = 0x0F;
-
-
-	if (FAILED(m_pDevice->CreateBlendState(&Blend_Desc, &m_pBlendState)))
-		return E_FAIL;
-
-	ZeroMemory(m_fFactor, sizeof(_float) * 4);
+	Reay_FontDesc();
 
 	return S_OK;
 }
@@ -69,14 +54,14 @@ void CBackground_Loading::Update(_float fTimeDelta)
 
 void CBackground_Loading::Late_Update(_float fTimeDelta)
 {
-
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_Font_Tip);
+	m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_Font_TipDetail);
+	m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_Font_Mococo);
 }
 
 HRESULT CBackground_Loading::Render()
 {
-	//m_pContext->OMSetBlendState(m_pBlendState, m_fFactor, 0xffffffff);
-
 	if (FAILED(__super::Bind_ShaderResource(0)))
 		return E_FAIL;
 
@@ -89,7 +74,6 @@ HRESULT CBackground_Loading::Render()
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
 
-	//m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
 
 	return S_OK;
 }
@@ -113,6 +97,24 @@ HRESULT CBackground_Loading::Add_Components()
 
 
 	return S_OK;
+}
+
+void CBackground_Loading::Reay_FontDesc()
+{
+	m_Font_Tip.strWord = wstring(L"팁");
+	m_Font_Tip.vPositon = _float4(966.f, 815.f, 1.f, 1.f);
+	m_Font_Tip.vColor = _float4(0.9f, 0.8f, 0.54f, 1.f);
+	m_Font_Tip.fScale = 0.57f;
+
+	m_Font_TipDetail.strWord = wstring(L"부위 파괴 스킬로 적을 약화 시킬 수 있습니다.");
+	m_Font_TipDetail.vPositon = _float4(765.f, 875.f, 1.f, 1.f);
+	m_Font_TipDetail.vColor = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	m_Font_TipDetail.fScale = 0.59f;
+
+	m_Font_Mococo.strWord = wstring(L"154               99");
+	m_Font_Mococo.vPositon = _float4(888.f, 109.f, 1.f, 1.f);
+	m_Font_Mococo.vColor = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	m_Font_Mococo.fScale = 0.47f;
 }
 
 CBackground_Loading* CBackground_Loading::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -145,5 +147,4 @@ void CBackground_Loading::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pBlendState);
 }

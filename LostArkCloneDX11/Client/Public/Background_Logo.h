@@ -27,11 +27,14 @@ private:
 	CUIAnimation*	m_pAnimCom = { nullptr };
 	CTexture*		m_pTextureCom_ExitBtn = { nullptr };
 
+	FONT_DESC		m_Font_Exit = {};
+	FONT_DESC		m_Font_SelectServer = {};
 
 private:
 	void ExitGame();
 	HRESULT			Add_Components();
 	HRESULT			Add_Buttons();
+	void			Add_Fonts();
 
 
 public:

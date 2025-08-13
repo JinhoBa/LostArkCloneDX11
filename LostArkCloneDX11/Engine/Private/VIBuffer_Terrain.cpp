@@ -172,9 +172,9 @@ _bool CVIBuffer_Terrain::Picking(CTransform* pTransform, _float3* pOut)
 
 	_uint iNumIndices = {};
 
-	for (size_t i = 0; i < m_iNumVerticesZ - 1; i++)
+	for (_uint i = 0; i < m_iNumVerticesZ - 1; i++)
 	{
-		for (size_t j = 0; j < m_iNumVerticesX - 1; j++)
+		for (_uint j = 0; j < m_iNumVerticesX - 1; j++)
 		{
 			_uint	iIndex = i * m_iNumVerticesX + j;
 

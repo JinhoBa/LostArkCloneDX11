@@ -11,6 +11,8 @@
 
 #include "DirectXTM/DDSTextureLoader.h"
 #include "DirectXTM/WICTextureLoader.h"
+#include "DirectXTM/SpriteBatch.h"
+#include "DirectXTM/SpriteFont.h"
 #include "FX11/d3dx11effect.h"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
