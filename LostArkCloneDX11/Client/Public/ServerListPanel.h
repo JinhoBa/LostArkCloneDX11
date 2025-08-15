@@ -21,7 +21,16 @@ public:
 	virtual HRESULT Render()override;
 
 private:
+	CTexture* m_pTextureCom_Btn = { nullptr };
+
+	FONT_DESC		m_Font_Title = {};
+	FONT_DESC		m_Font_SubTitle = {};
+
+private:
 	HRESULT Add_Components();
+	HRESULT Add_Buttons();
+	void	Add_Fonts();
+
 public:
 	static CServerListPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

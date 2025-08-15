@@ -173,6 +173,138 @@ HRESULT CData_Manager::Load_PreviewTextures(const _char* pFilePath)
     return S_OK;
 }
 
+HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
+{
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("Data");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+    for (auto* skill = root->FirstChildElement("Skill"); skill; skill = skill->NextSiblingElement("Skill"))
+    {
+        /*Skill 기본 정보 */
+        SKILL_INFO Skill_Info = {};
+        skill->QueryUnsignedAttribute("id", &Skill_Info.iSkillID);
+
+        const char* pName;
+        skill->QueryStringAttribute("name", &pName);
+        Skill_Info.strSkillName = string(pName);
+
+        skill->QueryStringAttribute("name_KR", &pName);
+        Skill_Info.strSkillNameKR = CGameInstance::GetInstance()->Utf8ToWstring(pName);
+
+        _uint iStance = {};
+        skill->QueryUnsignedAttribute("stance", &iStance);
+        Skill_Info.eStance = static_cast<STANCE>(iStance);
+
+        /*Skill Stats */
+        tinyxml2::XMLElement* Stats = skill->FirstChildElement("Stats");
+
+        Stats->QueryFloatAttribute("coolTime", &Skill_Info.fCoolTime);
+
+        Stats->QueryUnsignedAttribute("needMp", &Skill_Info.iNeedMp);
+
+        Stats->QueryUnsignedAttribute("numAttack", &Skill_Info.iNumAttack);
+
+        Stats->QueryFloatAttribute("idenGauge", &Skill_Info.fIdenGauge);
+
+        /*Skill Flags */
+        tinyxml2::XMLElement* Flags = skill->FirstChildElement("Flags");
+
+        Flags->QueryBoolAttribute("countAttack", &Skill_Info.bCountAttack);
+
+        Flags->QueryBoolAttribute("invincible", &Skill_Info.bInvincible);
+
+        /*Skill Meta */
+        tinyxml2::XMLElement* Meta = skill->FirstChildElement("Meta");
+
+        const char* pSkillType;
+        Meta->QueryStringAttribute("skillType", &pSkillType);
+
+        if (!strcmp(pSkillType, "normal"))
+            Skill_Info.eSkilltype = SKILL_TYPE::SKILL_NORAML;
+        else if (!strcmp(pSkillType, "combo"))
+            Skill_Info.eSkilltype = SKILL_TYPE::SKILL_COMBO;
+        else if (!strcmp(pSkillType, "point"))
+            Skill_Info.eSkilltype = SKILL_TYPE::SKILL_POINT;
+        else
+            return E_FAIL;
+
+
+        _uint iPartbreaker;
+        Meta->QueryUnsignedAttribute("partbreaker", &iPartbreaker);
+
+        Skill_Info.ePartbreaker = static_cast<PART_BREAKER>(iPartbreaker);
+
+        const char* pStagger;
+        Meta->QueryStringAttribute("staggerLevel", &pStagger);
+        
+        if (!strcmp(pStagger, "none"))
+            Skill_Info.eStaggerLevel = STAGGER::STAGGER_NONE;
+        else if (!strcmp(pStagger, "low"))
+            Skill_Info.eStaggerLevel = STAGGER::STAGGER_LOW;
+        else if (!strcmp(pStagger, "middle"))
+            Skill_Info.eStaggerLevel = STAGGER::STAGGER_MIDDLE;
+        else if (!strcmp(pStagger, "high"))
+            Skill_Info.eStaggerLevel = STAGGER::STAGGER_HIGH;
+        else
+            return E_FAIL;
+
+        const char* pAttackType;
+        Meta->QueryStringAttribute("attackType", &pAttackType);
+
+        if (!strcmp(pAttackType, "none"))
+            Skill_Info.eAttackType = ATTACK_TYPE::NORMAL;
+        else if (!strcmp(pAttackType, "head"))
+            Skill_Info.eAttackType = ATTACK_TYPE::HEAD;
+        else if (!strcmp(pAttackType, "back"))
+            Skill_Info.eAttackType = ATTACK_TYPE::BACK;
+        else
+            return E_FAIL;
+
+        const char* pSuperArmour;
+        Meta->QueryStringAttribute("superArmour", &pSuperArmour);
+
+        if (!strcmp(pSuperArmour, "none"))
+            Skill_Info.eSuperArmour = SUPRE_ARMOUR_NONE;
+        else if (!strcmp(pSuperArmour, "paralysis"))
+            Skill_Info.eSuperArmour = SUPRE_ARMOUR_PARALYSIS;
+        else if (!strcmp(pSuperArmour, "push"))
+            Skill_Info.eSuperArmour = SUPRE_ARMOUR_PUSH;
+        else if (!strcmp(pSuperArmour, "all"))
+            Skill_Info.eSuperArmour = SUPRE_ARMOUR_ALL;
+        else
+            return E_FAIL;
+
+        /*Skill Damage */
+        tinyxml2::XMLElement* Hits = skill->FirstChildElement("Hit");
+
+        Skill_Info.Damages.reserve(Skill_Info.iNumAttack);
+
+        for (auto* Hits = skill->FirstChildElement("Hit"); Hits; Hits = Hits->NextSiblingElement("Hit"))
+        {
+            _float fDamage = {};
+            Hits->QueryFloatAttribute("damage", &fDamage);
+            Skill_Info.Damages.push_back(fDamage);
+        }
+         
+
+        m_SkillDatas.push_back(Skill_Info);
+    }
+
+    return S_OK;
+}
+
+
+
 CData_Manager* CData_Manager::Creat()
 {
     return new CData_Manager();

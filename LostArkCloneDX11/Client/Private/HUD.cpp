@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 
-#include "QuickSlot.h"
+#include "SkillSlot.h"
 
 CHUD::CHUD(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{ pDevice, pContext }
@@ -147,7 +147,7 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 		DIK_4, DIK_3, DIK_2, DIK_1,
 	};
 
-	CQuickSlot:: QUICKSLOT_DESC QuickSlot_Desc = {};
+	CSkillSlot::SKILLSLOT_DESC QuickSlot_Desc = {};
 	QuickSlot_Desc.fSizeX = 40.f;
 	QuickSlot_Desc.fSizeY = 40.f;
 	QuickSlot_Desc.fZ = 0.5f;
@@ -157,6 +157,7 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	for (size_t i = 0; i < 4; i++)
 	{
 		QuickSlot_Desc.fX = i * QuickSlot_Desc.fSizeX - offset;
+		QuickSlot_Desc.iSubSlotID = QuickSlot_Desc.iSlotID = iKeyIndex;
 		QuickSlot_Desc.byKey = SlotKeys[iKeyIndex++];
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlot"),
 			ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))
@@ -167,6 +168,7 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	for (size_t i = 0; i < 4; i++)
 	{
 		QuickSlot_Desc.fX = i * QuickSlot_Desc.fSizeX + QuickSlot_Desc.fSizeX* 0.5f - offset;
+		QuickSlot_Desc.iSubSlotID = QuickSlot_Desc.iSlotID =99;
 		QuickSlot_Desc.byKey = SlotKeys[iKeyIndex++];
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlot"),
 			ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))

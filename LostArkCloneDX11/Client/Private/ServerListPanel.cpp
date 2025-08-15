@@ -3,6 +3,9 @@
 
 #include "GameInstance.h"
 
+#include "UIButton.h"
+#include "Level_Loading.h"
+
 CServerListPanel::CServerListPanel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{pDevice, pContext}
 {
@@ -22,11 +25,11 @@ HRESULT CServerListPanel::Initialize(void* pArg)
 {
 	UIOBJECT_DESC Desc = {};
 
-	Desc.fX = 182.f;
-	Desc.fY = 210.f;
+	Desc.fX = 100.f;
+	Desc.fY = 130.f;
 	Desc.fZ = 0.5f;
-	Desc.fSizeX = 1180.f;
-	Desc.fSizeY = 535;
+	Desc.fSizeX = 680.f;
+	Desc.fSizeY = 345.f;
 	Desc.pParent_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
 		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
 	));
@@ -36,6 +39,12 @@ HRESULT CServerListPanel::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
+
+	if (FAILED(Add_Buttons()))
+		return E_FAIL;
+
+	Add_Fonts();
+	
 
 	return S_OK;
 }
@@ -47,11 +56,14 @@ void CServerListPanel::Priority_Update(_float fTimeDelta)
 void CServerListPanel::Update(_float fTimeDelta)
 {
 	Update_Position();
+
 }
 
 void CServerListPanel::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	m_pGameInstance->Add_FontDesc(TEXT("Title_Font"), &m_Font_Title);
+	m_pGameInstance->Add_FontDesc(TEXT("Title_Font"), &m_Font_SubTitle);
 }
 
 HRESULT CServerListPanel::Render()
@@ -68,6 +80,9 @@ HRESULT CServerListPanel::Render()
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
 
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -76,6 +91,11 @@ HRESULT CServerListPanel::Add_Components()
 	/*Texture*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_ServerListBack"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		return E_FAIL;
+
+	/*Texture*/
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_EmptyButton"),
+		TEXT("Com_Texture_Btn"), reinterpret_cast<CComponent**>(&m_pTextureCom_Btn))))
 		return E_FAIL;
 
 	/*VIBuffer_Rect*/
@@ -89,6 +109,47 @@ HRESULT CServerListPanel::Add_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+HRESULT CServerListPanel::Add_Buttons()
+{
+	/* Exit Button */
+	CUIButton::BUTTON_DESC Desc = {};
+
+	Desc.fRotatePersec = 1.f;
+	Desc.fSpeedPersec = 1.f;
+	Desc.fX = -100.f;
+	Desc.fY = -100.f;
+	Desc.fZ = m_fZ;
+	Desc.fSizeX = 490.f;
+	Desc.fSizeY = 32.f;
+	Desc.pParent_TransformCom = m_pTransformCom;
+	Desc.pShaderCom = m_pShaderCom;
+	Desc.pTextureCom = m_pTextureCom_Btn;
+
+	m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(PROTOTYPE::GAMEOBJECT), TEXT("Prototype_GameObject_Button"),
+		ENUM_TO_INT(LEVEL::LOGO), TEXT("Layer_ServerButton"), &Desc);
+
+	Desc.fY = -68.f;
+
+	m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(PROTOTYPE::GAMEOBJECT), TEXT("Prototype_GameObject_Button"),
+		ENUM_TO_INT(LEVEL::LOGO), TEXT("Layer_ServerButton"), &Desc);
+
+	if (FAILED(Add_ChildObjects(ENUM_TO_INT(LEVEL::LOGO), TEXT("Layer_ServerButton"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+void CServerListPanel::Add_Fonts()
+{
+	m_Font_Title.strWord = wstring(L"서버 선택");
+	m_Font_Title.vPositon = _float4(593.f, 325.f, 1.f, 1.f);
+	m_Font_Title.vColor = _float4(0.85f, 0.85f, 0.85f, 1.f);
+	m_Font_Title.fScale = 0.97f;
+
+	m_Font_SubTitle.strWord = wstring(L"서버                         상태                캐릭터");
+	m_Font_SubTitle.vPositon = _float4(525.f, 358.f, 1.f, 1.f);
+	m_Font_SubTitle.vColor = _float4(0.75f, 0.61f, 0.42f, 1.f);
+	m_Font_SubTitle.fScale = 0.78f;
 }
 
 CServerListPanel* CServerListPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -120,4 +181,6 @@ CGameObject* CServerListPanel::Clone(void* pArg)
 void CServerListPanel::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pTextureCom_Btn);
 }

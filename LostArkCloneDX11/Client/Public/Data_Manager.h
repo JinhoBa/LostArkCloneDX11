@@ -27,10 +27,16 @@ public:
 	HRESULT				Load_PreviewTextures(const _char* pFilePath);
 #pragma endregion
 
+#pragma region SKILL_DATA
+	HRESULT				Load_SkillData(const _char* pFilePath);
+#pragma endregion
+
+
 private:
 	CGameInstance*		m_pGameInstance = { nullptr };
 	vector<MAP_DATA>	m_MapDatas = {};
 	vector<_wstring>	m_MapPreviewFileNames = {};
+	vector<SKILL_INFO>	m_SkillDatas = {};
 	
 public:
 	static CData_Manager* Creat();

@@ -11,6 +11,7 @@ public:
 	typedef struct QuickSlot_Desc : public CUIObject::UIOBJECT_DESC
 	{
 		_byte byKey = {};
+		_uint iSlotID{};
 	}QUICKSLOT_DESC;
 protected:
 	CQuickSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

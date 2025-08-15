@@ -34,6 +34,10 @@ void CLevel_Logo::Update(_float fTimeDelta)
     {
         m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::TUTORIAL));
     }
+    else if (m_pGameInstance->Get_KeyDown(DIK_M))
+    {
+        m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::MAP_EDITOR));
+    }
 }
 
 HRESULT CLevel_Logo::Render()

@@ -102,19 +102,19 @@ HRESULT CBackground_Loading::Add_Components()
 void CBackground_Loading::Reay_FontDesc()
 {
 	m_Font_Tip.strWord = wstring(L"팁");
-	m_Font_Tip.vPositon = _float4(966.f, 815.f, 1.f, 1.f);
+	m_Font_Tip.vPositon = _float4(643.f, 544.f, 1.f, 1.f);
 	m_Font_Tip.vColor = _float4(0.9f, 0.8f, 0.54f, 1.f);
-	m_Font_Tip.fScale = 0.57f;
+	m_Font_Tip.fScale = 0.45f;
 
 	m_Font_TipDetail.strWord = wstring(L"부위 파괴 스킬로 적을 약화 시킬 수 있습니다.");
-	m_Font_TipDetail.vPositon = _float4(765.f, 875.f, 1.f, 1.f);
+	m_Font_TipDetail.vPositon = _float4(517.f, 581.f, 1.f, 1.f);
 	m_Font_TipDetail.vColor = _float4(0.7f, 0.7f, 0.7f, 1.f);
-	m_Font_TipDetail.fScale = 0.59f;
+	m_Font_TipDetail.fScale = 0.37f;
 
-	m_Font_Mococo.strWord = wstring(L"154               99");
-	m_Font_Mococo.vPositon = _float4(888.f, 109.f, 1.f, 1.f);
+	m_Font_Mococo.strWord = wstring(L"154              99");
+	m_Font_Mococo.vPositon = _float4(586.f, 71.f, 1.f, 1.f);
 	m_Font_Mococo.vColor = _float4(0.7f, 0.7f, 0.7f, 1.f);
-	m_Font_Mococo.fScale = 0.47f;
+	m_Font_Mococo.fScale = 0.34f;
 }
 
 CBackground_Loading* CBackground_Loading::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

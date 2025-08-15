@@ -235,6 +235,7 @@ HRESULT CMainApp::Ready_Font()
 {
     m_pGameInstance->Add_Font(TEXT("Defualt_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/Eco.spritefont")));
     m_pGameInstance->Add_Font(TEXT("Bold_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/EcoBold.spritefont")));
+    m_pGameInstance->Add_Font(TEXT("Title_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/NanumExtraBold12.spritefont")));
 
     return S_OK;
 }

@@ -23,6 +23,7 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 	QUICKSLOT_DESC* pDesc = static_cast<QUICKSLOT_DESC*>(pArg);
 
 	m_byKey = pDesc->byKey;
+	m_iSlotID = pDesc->iSlotID;
 
 	if (nullptr == pArg)
 		return E_FAIL;

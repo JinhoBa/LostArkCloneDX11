@@ -148,6 +148,9 @@
     <Filter Include="03.UIObject\Logo\ServerListPanel">
       <UniqueIdentifier>{2bafe1d6-127f-4efc-8e98-21a539431843}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\Logo\Button">
+      <UniqueIdentifier>{f083bb09-dbfb-48e7-a3ca-7aa7c77f8990}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">

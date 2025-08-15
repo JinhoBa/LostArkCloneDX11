@@ -35,7 +35,7 @@ HRESULT CLoadingBar::Initialize(void* pArg)
 	UIBAR_DESC Desc = {};
 
 	Desc.fX = 0.f;
-	Desc.fY = 400.f;
+	Desc.fY = 271.f;
 	Desc.fZ = 0.2f;
 	Desc.fSizeX = (_float)g_iWinSizeX;
 	Desc.fSizeY = 10.f;
@@ -63,7 +63,7 @@ void CLoadingBar::Update(_float fTimeDelta)
 
 	Update_Bar(fProgress);
 
-	_vector vPoint = XMVectorSet(fProgress* 19.2f - m_fSizeX * 0.5f - 150.f, -400.f, 1.f, 1.f);
+	_vector vPoint = XMVectorSet(fProgress* 12.8f - m_fSizeX * 0.5f - 155.f, -271.f, 1.f, 1.f);
 
 	m_pTransformCom_Point->Set_State(STATE::POSITION, vPoint);
 

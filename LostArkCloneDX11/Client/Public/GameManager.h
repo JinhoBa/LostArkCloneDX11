@@ -27,7 +27,12 @@ public:
 	vector<_wstring>* Get_PreviewTexturesPtr();
 	HRESULT Load_PreviewTextures(const _char* pFilePath);
 #pragma endregion
-	
+
+#pragma region SKILL_DATA
+	HRESULT	 Load_SkillData(const _char* pFilePath);
+#pragma endregion
+
+
 
 	void Bind_PickingPos(_float3* pPickingPos);
 	

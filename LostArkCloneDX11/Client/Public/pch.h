@@ -7,3 +7,6 @@
 #include "tinyxml2.h"
 
 #include "../Default/framework.h"
+
+#include "Client_Defines.h"
+#include "Client_Struct.h"

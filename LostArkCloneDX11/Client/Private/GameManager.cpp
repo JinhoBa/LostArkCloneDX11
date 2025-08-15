@@ -3,6 +3,8 @@
 
 #include "Data_Manager.h"
 
+#include "UIObject.h"
+
 IMPLEMENT_SINGLETON(CGameManager)
 
 CGameManager::CGameManager()
@@ -46,6 +48,11 @@ vector<_wstring>* CGameManager::Get_PreviewTexturesPtr()
 HRESULT CGameManager::Load_PreviewTextures(const _char* pFilePath)
 {
 	return m_pData_Manager->Load_PreviewTextures(pFilePath);
+}
+
+HRESULT	 CGameManager::Load_SkillData(const _char* pFilePath)
+{
+	return m_pData_Manager->Load_SkillData(pFilePath);
 }
 
 void CGameManager::Bind_PickingPos(_float3* pPickingPos)

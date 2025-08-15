@@ -7,6 +7,11 @@ NS_BEGIN(Client)
 
 class CSkillSlot : public CQuickSlot
 {
+public:
+	typedef struct SkillSlot_Desc : public CQuickSlot::QUICKSLOT_DESC
+	{
+		_uint iSubSlotID = {};
+	}SKILLSLOT_DESC;
 private:
 	CSkillSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CSkillSlot(const CSkillSlot& Prototype);
@@ -21,8 +26,11 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	_uint		m_iSkillID[STANCE::IDEN_END] = {};
+	STANCE		m_eStance = {};
+	_uint		m_iSkillID[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 	_float		m_fCoolTime = {};
+
+	CTexture*	m_pTextureCom_Skill = { nullptr };
 
 private:
 	HRESULT Add_Components();

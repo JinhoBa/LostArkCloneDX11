@@ -137,6 +137,13 @@ HRESULT CLoader::Loading_For_Logo()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Button/Exit_Button%d.dds"), 2))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_ExitButton */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::LOGO), TEXT("Prototype_Component_Texture_EmptyButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Button/EmptyButton%d.dds"), 2))))
+		return E_FAIL;
+
+	
+
 #pragma endregion
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -187,9 +194,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	
 
-	/*if (FAILED(CGameManager::GetInstance()->Save_MapData("../Bin/Resources/Data/BG_KAMEN_Data_out.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_SkillData("../Bin/Resources/Data/Skill_Data.xml")))
 		return E_FAIL;
-	*/
+	
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
@@ -246,6 +253,21 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Texture_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Terrain"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Tile0.jpg"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Skill */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Skill"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/skill_%d.dds"), 14))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_EpicSkill */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_EpicSkill"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/EpicSkill_%d.dds"), 3))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Iden_Buff */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Buff"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/buff.dds"), 1))))
 		return E_FAIL;
 
 #pragma endregion
