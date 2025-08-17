@@ -3,7 +3,6 @@
 #include "GameObject.h"
 
 NS_BEGIN(Engine)
-class CTexture;
 class CShader;
 class CModel;
 NS_END
@@ -26,7 +25,6 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	CTexture*	m_pTextureCom = { nullptr };
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 

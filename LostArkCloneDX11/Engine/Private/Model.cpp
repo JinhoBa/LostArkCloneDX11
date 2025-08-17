@@ -1,6 +1,8 @@
 #include "Model.h"
 
 #include "Mesh.h"
+#include "Texture.h"
+#include "GameInstance.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CComponent{ pDevice, pContext}
@@ -10,10 +12,14 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CModel::CModel(CModel& Prototype)
     :CComponent{ Prototype },
     m_iNumMeshes{Prototype.m_iNumMeshes},
-    m_Meshes{Prototype.m_Meshes}
+    m_Meshes{Prototype.m_Meshes},
+    m_Textures{Prototype.m_Textures }
 {
     for (auto& pMesh : m_Meshes)
         Safe_AddRef(pMesh);
+
+    for (auto& pTexture : m_Textures)
+        Safe_AddRef(pTexture);
 }
 
 HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
@@ -25,6 +31,12 @@ HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
 
     m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 
+    string strModelFilePath = string(pModelFilePath);
+   auto last = strModelFilePath.find_last_of('/');
+
+   strModelFilePath = strModelFilePath.substr(0, last + 1);
+   m_strFolderPath = m_pGameInstance->Utf8ToWstring(strModelFilePath.c_str());
+
     if (nullptr == m_pAiScene)
     {
         MSG_BOX("Failed to ReadFile...");
@@ -32,6 +44,9 @@ HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
     }
 
     if (FAILED(Ready_Meshes()))
+        return E_FAIL;
+
+ if (FAILED(Ready_Textures()))
         return E_FAIL;
 
     return S_OK;
@@ -42,12 +57,18 @@ HRESULT CModel::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CModel::Render()
+HRESULT CModel::Render(CShader* pShader)
 {
-    for (auto& pMesh : m_Meshes)
+    for (_uint i = 0; i< m_iNumMeshes; ++i)
     {
-        pMesh->Bind_Resources();
-        pMesh->Render();
+        if (FAILED(pShader->Bind_Resource("g_Texture2D", m_Textures[i]->Get_SRV(0))))
+            return E_FAIL;
+
+        if (FAILED(pShader->Begin(0)))
+            return E_FAIL;
+
+        m_Meshes[i]->Bind_Resources();
+        m_Meshes[i]->Render();
     }
     return S_OK;
 }
@@ -56,7 +77,6 @@ HRESULT CModel::Render_Mesh(_uint iIndex)
 {
     if (m_iNumMeshes <= iIndex)
         return E_FAIL;
-
 
     m_Meshes[iIndex]->Bind_Resources();
     m_Meshes[iIndex]->Render();
@@ -77,6 +97,36 @@ HRESULT CModel::Ready_Meshes()
             return E_FAIL;
         }
         m_Meshes.push_back(pMesh);
+    }
+
+    return S_OK;
+}
+
+HRESULT CModel::Ready_Textures()
+{
+    aiMaterial** ppMaterial = m_pAiScene->mMaterials;
+    for (_uint i = 0; i < m_iNumMeshes; ++i)
+    {
+        aiString strTexture = {};
+        aiMaterial* pMaterial = ppMaterial[i];
+        pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &strTexture);
+
+        _wstring strFilePath = CGameInstance::GetInstance()->Utf8ToWstring(strTexture.C_Str());
+
+        auto iIndex = strFilePath.find_last_of('\\');
+
+        _wstring strFileName = strFilePath.substr(iIndex + 1);
+
+        strFilePath = m_strFolderPath + strFileName;
+
+
+        CTexture* pTexture = CTexture::Create(m_pDevice, m_pContext, strFilePath.c_str(), 1);
+        if (nullptr == pTexture)
+        {
+            MSG_BOX("Failed to Ready Texture");
+            return E_FAIL;
+        }
+        m_Textures.push_back(pTexture);
     }
 
     return S_OK;
@@ -117,6 +167,10 @@ void CModel::Free()
     for (auto& pMesh : m_Meshes)
         Safe_Release(pMesh);
     m_Meshes.clear();
+
+    for (auto& pTexture : m_Textures)
+        Safe_Release(pTexture);
+    m_Textures.clear();
 
     m_Importer.FreeScene();
 }

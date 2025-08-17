@@ -121,10 +121,12 @@ HRESULT CHUD::Ready_Layer(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WeaponUI"),
 		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
-
-	
 	
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Identity"),
+		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Iden_Gauge"),
 		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
 
@@ -143,8 +145,22 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	_byte SlotKeys[] = {
 		DIK_Q, DIK_W, DIK_E, DIK_R,
 		DIK_A, DIK_S, DIK_D, DIK_F,
-		DIK_F4, DIK_F3, DIK_F2, DIK_F1,
+		DIK_7, DIK_6, DIK_5, DIK_F1,
 		DIK_4, DIK_3, DIK_2, DIK_1,
+	};
+	const _tchar* pKeys[] = {
+		L"Q", L"W", L"E", L"R",
+		L"A", L"S", L"D", L"F",
+		L"7", L"6", L"5", L"F1",
+		L"4", L"3", L"2", L"1",
+	};
+	_uint SlotIDs[] = {
+		0, 1, 2, 3,
+		4, 5, 6, 7
+	};
+	_uint SubSlotIDs[] = {
+		8, 9, 99, 10,
+		99, 11, 12, 13
 	};
 
 	CSkillSlot::SKILLSLOT_DESC QuickSlot_Desc = {};
@@ -153,11 +169,14 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	QuickSlot_Desc.fZ = 0.5f;
 	QuickSlot_Desc.pParent_TransformCom = m_pTransformCom;
 	QuickSlot_Desc.fY = 9.f;
+	
 	_float offset = 215.f;
 	for (size_t i = 0; i < 4; i++)
 	{
 		QuickSlot_Desc.fX = i * QuickSlot_Desc.fSizeX - offset;
-		QuickSlot_Desc.iSubSlotID = QuickSlot_Desc.iSlotID = iKeyIndex;
+		QuickSlot_Desc.pKey = pKeys[iKeyIndex];
+		QuickSlot_Desc.iSlotID = SlotIDs[iKeyIndex];
+		QuickSlot_Desc.iSubSlotID = SubSlotIDs[iKeyIndex];
 		QuickSlot_Desc.byKey = SlotKeys[iKeyIndex++];
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlot"),
 			ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))
@@ -168,7 +187,9 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	for (size_t i = 0; i < 4; i++)
 	{
 		QuickSlot_Desc.fX = i * QuickSlot_Desc.fSizeX + QuickSlot_Desc.fSizeX* 0.5f - offset;
-		QuickSlot_Desc.iSubSlotID = QuickSlot_Desc.iSlotID =99;
+		QuickSlot_Desc.pKey = pKeys[iKeyIndex];
+		QuickSlot_Desc.iSlotID = SlotIDs[iKeyIndex];
+		QuickSlot_Desc.iSubSlotID = SubSlotIDs[iKeyIndex];
 		QuickSlot_Desc.byKey = SlotKeys[iKeyIndex++];
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_SkillSlot"),
 			ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))
@@ -178,6 +199,7 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	for (size_t i = 0; i < 4; i++)
 	{
 		QuickSlot_Desc.fX = i * QuickSlot_Desc.fSizeX * -1.f+ offset;
+		QuickSlot_Desc.pKey = pKeys[iKeyIndex];
 		QuickSlot_Desc.byKey = SlotKeys[iKeyIndex++];
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ActiveSlot"),
 			ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))
@@ -188,12 +210,14 @@ HRESULT CHUD::Add_QuickSlots(const _wstring& strLayerTag)
 	for (size_t i = 0; i < 4; i++)
 	{
 		QuickSlot_Desc.fX = i * QuickSlot_Desc.fSizeX * -1.f + QuickSlot_Desc.fSizeX * -0.5f + offset;
+		QuickSlot_Desc.pKey = pKeys[iKeyIndex];
 		QuickSlot_Desc.byKey = SlotKeys[iKeyIndex++];
 		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ActiveSlot"),
 			ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))
 			return E_FAIL;
 	}
 
+	
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_AwakeSlot"),
 		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &QuickSlot_Desc)))
 		return E_FAIL;

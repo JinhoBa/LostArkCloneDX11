@@ -73,13 +73,10 @@ HRESULT CMapObject::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(0))))
-        return E_FAIL;
-
     if (FAILED(m_pShaderCom->Begin(m_iSeletPass)))
         return E_FAIL;
 
-    if (FAILED(m_pModelCom->Render()))
+    if (FAILED(m_pModelCom->Render(m_pShaderCom)))
         return E_FAIL;
 
    
@@ -122,10 +119,6 @@ _wstring& CMapObject::Get_PrototypeTag()
 
 HRESULT CMapObject::Add_Components()
 {
-    /*Texture*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Test"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-        return E_FAIL;
 
     /*Shader_VTXPosTex*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
@@ -171,7 +164,6 @@ void CMapObject::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pTextureCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

@@ -22,8 +22,9 @@ HRESULT CAwakeSlot::Initialize(void* pArg)
 {
 	m_byKey = DIK_V;
 
-	UIOBJECT_DESC Desc= {};
-
+	QUICKSLOT_DESC Desc= {};
+	Desc.pKey = L"V";
+	Desc.byKey = DIK_V;
 	Desc.fX = -330.f;
 	Desc.fY = 25.f;
 	Desc.fZ = 0.5f;

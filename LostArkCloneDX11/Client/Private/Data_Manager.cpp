@@ -32,17 +32,16 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
     {
         tinyxml2::XMLElement* protoElem = land->FirstChildElement("PrototypeTag");
 
-        const _char* txt = protoElem->GetText();
+        const _char* pPrototypeTag = protoElem->GetText();
 
-        if (nullptr != txt)
+        if (nullptr != pPrototypeTag)
         {
-            Map_Data.strProtypeTag = CGameInstance::GetInstance()->Utf8ToWstring(txt);
+            Map_Data.strProtypeTag = CGameInstance::GetInstance()->Utf8ToWstring(pPrototypeTag);
         }
         else
         {
             Map_Data.strProtypeTag = L"";
         }
-        
         
         protoElem = land->FirstChildElement("Position");
         if (nullptr == protoElem)

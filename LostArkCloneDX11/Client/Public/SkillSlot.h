@@ -32,8 +32,10 @@ private:
 
 	CTexture*	m_pTextureCom_Skill = { nullptr };
 
+
 private:
 	HRESULT Add_Components();
+	
 
 public:
 	static CSkillSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

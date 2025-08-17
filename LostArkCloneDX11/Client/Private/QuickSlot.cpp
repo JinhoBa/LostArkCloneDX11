@@ -24,6 +24,7 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 
 	m_byKey = pDesc->byKey;
 	m_iSlotID = pDesc->iSlotID;
+	m_pKey = pDesc->pKey;
 
 	if (nullptr == pArg)
 		return E_FAIL;
@@ -32,6 +33,9 @@ HRESULT CQuickSlot::Initialize(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Font()))
 		return E_FAIL;
 
 	return S_OK;
@@ -48,6 +52,7 @@ void CQuickSlot::Update(_float fTimeDelta)
 
 void CQuickSlot::Late_Update(_float fTimeDelta)
 {
+	m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_Font_Key);
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -56,23 +61,9 @@ HRESULT CQuickSlot::Render()
 	if (FAILED(Bind_Resource()))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFrameTextureCom->Get_SRV(0))))
+	if (FAILED(Render_SlotBack()))
 		return E_FAIL;
 
-	if (FAILED(Draw()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iTextureIndex))))
-		return E_FAIL;
-
-	if (FAILED(Draw()))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFrameTextureCom->Get_SRV(0))))
-		return E_FAIL;
-
-	if (FAILED(Draw()))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -121,6 +112,38 @@ HRESULT CQuickSlot::Draw()
 
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CQuickSlot::Render_SlotBack()
+{
+	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFrameTextureCom->Get_SRV(0))))
+		return E_FAIL;
+
+	if (FAILED(Draw()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CQuickSlot::Render_SlotFront()
+{
+	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFrameTextureCom->Get_SRV(1))))
+		return E_FAIL;
+
+	if (FAILED(Draw()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CQuickSlot::Ready_Font()
+{
+	m_Font_Key.strWord = wstring(m_pKey);
+	m_Font_Key.vPositon = _float4(m_fX - 5.f, m_fY + 8.f, 1.f, 1.f);
+	m_Font_Key.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
+	m_Font_Key.fScale = 0.25f;
 
 	return S_OK;
 }

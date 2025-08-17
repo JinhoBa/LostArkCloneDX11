@@ -16,6 +16,7 @@ public:
 	typedef struct MapObject_Desc : public CGameObject::GAMEOBJECT_DESC
 	{
 		_wstring	strPrototypeTag = {};
+		_wstring    strTextureTag = {};
 		_float3		vPosition{};
 		_float3		vScale{};
 		_float3		vRotation{};
@@ -31,6 +32,7 @@ public:
 	_float3*	Get_Scale() { return &m_vScale; }
 	_float3*	Get_Rotation() { return &m_vRotation; }
 	_wstring&	Get_PrototypeTag();
+	_wstring&	Get_TextureTag();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -47,7 +49,6 @@ protected:
 	_uint		m_iSeletPass = {};
 
 	_wstring	m_strPrototypeTag = {};
-	CTexture*	m_pTextureCom = { nullptr };
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 

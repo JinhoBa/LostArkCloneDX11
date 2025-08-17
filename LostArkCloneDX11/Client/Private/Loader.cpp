@@ -14,6 +14,7 @@
 #include "HpBar.h"
 #include "MpBar.h"
 #include "Identity.h"
+#include "Iden_Gauge.h"
 #include "WeaponUI.h"
 #include "ActiveSlot.h"
 #include "SkillSlot.h"
@@ -270,6 +271,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/buff.dds"), 1))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_Iden_Gauge */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Gauge"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/iden/identity_Gauge_%d.dds"), 3))))
+		return E_FAIL;
+
 #pragma endregion
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
@@ -362,6 +368,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTopMenu::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Iden_Gauge */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Iden_Gauge"),
+		CIden_Gauge::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 
@@ -440,93 +451,136 @@ HRESULT CLoader::Loading_For_MapEditor()
 #pragma region MAP_MODEL
 
 #pragma region KAMEN
-	/* For.Prototype_Component_Model_Kamen_chair */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_chair"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_chair.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_chair */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_chair"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_chair.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_chair01 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_chair01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_chair01.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_chair01 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_chair01"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_chair01.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_chair02 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_chair02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_chair02.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_chair02 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_chair02"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_chair02.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar01 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar01"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor01.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar01 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar01"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor01.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar02 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar02"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor02.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar02 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar02"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor02.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar03 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar03"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor03.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar03 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar03"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor03.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar04 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar04"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor04.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar04 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar04"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor04.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05a */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05a"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05a.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05a */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05a"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05a.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05b */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05b"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05b.fbx"))))
-		return E_FAIL;
-	
-	/* For.Prototype_Component_Model_Kamen_floar05c */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05c"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05c.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05b */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05b"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05b.fbx"))))
+	//	return E_FAIL;
+	//
+	///* For.Prototype_Component_Model_Kamen_floar05c */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05c"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05c.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05d */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05d"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05d.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05d */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05d"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05d.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05e */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05e"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05e.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05e */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05e"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05e.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05f */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05f"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05f.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05f */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05f"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05f.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05g */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05g"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05g.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05g */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05g"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05g.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar05h */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05h"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05h.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar05h */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar05h"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor05h.fbx"))))
+	//	return E_FAIL;
 
-	/* For.Prototype_Component_Model_Kamen_floar06 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar06"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor06.fbx"))))
-		return E_FAIL;
+	///* For.Prototype_Component_Model_Kamen_floar06 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_floar06"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Kamen/keman_floor06.fbx"))))
+	//	return E_FAIL;
 #pragma endregion
 
 	
+#pragma region TRISION
+	/* For.Prototype_Component_Model_Trision */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision2 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision2"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision2/Trision2.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_circle01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_circle01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Cricle/trision_circle01.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_circle01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_circle02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Cricle/trision_circle02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Object01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Object01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Object/trision_stair.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stone01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stone01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stone/trision_stone01.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stone02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stone02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stone/trision_stone02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stone03 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stone03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stone/trision_stone03.fbx"))))
+		return E_FAIL;
+
+#pragma endregion
+
 #pragma endregion
 
 

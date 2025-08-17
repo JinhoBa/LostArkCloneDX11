@@ -13,7 +13,7 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT Render();
+	virtual HRESULT Render(class CShader* pShader);
 	HRESULT Render_Mesh(_uint iIndex);
 
 private:
@@ -21,10 +21,13 @@ private:
 	Assimp::Importer		m_Importer = {};
 
 	_uint					m_iNumMeshes = {};
+	_wstring				m_strFolderPath = {};
 	vector<class CMesh*>	m_Meshes;
+	vector<class CTexture*>	m_Textures;
 
 private:
 	HRESULT Ready_Meshes();
+	HRESULT Ready_Textures();
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath);

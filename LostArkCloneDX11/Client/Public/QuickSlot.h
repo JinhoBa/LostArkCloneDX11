@@ -12,6 +12,7 @@ public:
 	{
 		_byte byKey = {};
 		_uint iSlotID{};
+		const _tchar* pKey = {};
 	}QUICKSLOT_DESC;
 protected:
 	CQuickSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -28,13 +29,18 @@ public:
 
 protected:
 	_byte			m_byKey = {};
+	const _tchar*	m_pKey = {};
 	_uint			m_iSlotID = {};
 	_uint			m_iTextureIndex = {};
 	CTexture*		m_pFrameTextureCom = { nullptr };
+	FONT_DESC		m_Font_Key = {};
 
 protected:
 	HRESULT Bind_Resource();
 	HRESULT Draw();
+	HRESULT Render_SlotBack();
+	HRESULT Render_SlotFront();
+	HRESULT Ready_Font();
 
 private:
 	HRESULT Add_Components();

@@ -34,6 +34,9 @@ HRESULT CSkillSlot::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+
+
+
 	m_eStance = STANCE::FLURRY;
 
 	return S_OK;
@@ -45,6 +48,13 @@ void CSkillSlot::Priority_Update(_float fTimeDelta)
 
 void CSkillSlot::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_KeyDown(DIK_Z))
+	{
+		if (STANCE::FLURRY == m_eStance)
+			m_eStance = STANCE::FOCUS;
+		else
+			m_eStance = STANCE::FLURRY;
+	}
 }
 
 void CSkillSlot::Late_Update(_float fTimeDelta)
@@ -54,7 +64,10 @@ void CSkillSlot::Late_Update(_float fTimeDelta)
 
 HRESULT CSkillSlot::Render()
 {
-	if (FAILED(__super::Render()))
+	if (FAILED(__super::Bind_Resource()))
+		return E_FAIL;
+
+	if (FAILED(Render_SlotBack()))
 		return E_FAIL;
 
 	if(99 != m_iSkillID[ENUM_TO_INT(m_eStance)])
@@ -65,6 +78,9 @@ HRESULT CSkillSlot::Render()
 		if (FAILED(Draw()))
 			return E_FAIL;
 	}
+
+	if (FAILED(Render_SlotFront()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -83,6 +99,7 @@ HRESULT CSkillSlot::Add_Components()
 
 	return S_OK;
 }
+
 
 CSkillSlot* CSkillSlot::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

@@ -31,8 +31,9 @@ HRESULT CPlayer::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_pTransformCom->Set_Scale(_float3(0.01f, 0.01f, 0.01f));
-    
+    m_pTransformCom->Set_Scale(_float3(1.f, 1.f, 1.f));
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(STATE::UP), XMConvertToRadians(180.f));
+
     return S_OK;
 }
 
@@ -91,35 +92,14 @@ HRESULT CPlayer::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(0))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Begin(0)))
-        return E_FAIL;
-
-    if (FAILED(m_pModelCom->Render_Mesh(0)))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(1))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Begin(0)))
-        return E_FAIL;
-
-    if (FAILED(m_pModelCom->Render_Mesh(1)))
-        return E_FAIL;
-    
+    if (FAILED(m_pModelCom->Render(m_pShaderCom)))
+        return E_FAIL; 
 
     return S_OK;
 }
 
 HRESULT CPlayer::Add_Components()
 {
-    /*Texture*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Player"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-        return E_FAIL;
-
     /*Shader_VTXPosTex*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
@@ -166,7 +146,6 @@ void CPlayer::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pTextureCom);
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

@@ -151,6 +151,9 @@
     <Filter Include="03.UIObject\Logo\Button">
       <UniqueIdentifier>{f083bb09-dbfb-48e7-a3ca-7aa7c77f8990}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\Iden_Gauge">
+      <UniqueIdentifier>{44b53257-d913-4728-a930-874cb4fd6b22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -291,6 +294,9 @@
     <ClInclude Include="..\public\Level_MapEditor.h">
       <Filter>01.Level\MapEdit</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Iden_Gauge.h">
+      <Filter>03.UIObject\GamePlay\HUD\Iden_Gauge</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -425,6 +431,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Level_MapEditor.cpp">
       <Filter>01.Level\MapEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Iden_Gauge.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\Iden_Gauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

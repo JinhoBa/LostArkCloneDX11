@@ -42,7 +42,7 @@ HRESULT CLevel_MapEditor::Initialize()
 
 
     m_PrototypeTags = { 
-        "Prototype_Component_Model_Kamen_chair",
+      /*  "Prototype_Component_Model_Kamen_chair",
         "Prototype_Component_Model_Kamen_chair01",
         "Prototype_Component_Model_Kamen_chair02",
         "Prototype_Component_Model_Kamen_floar01",
@@ -57,7 +57,15 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Kamen_floar05e",
         "Prototype_Component_Model_Kamen_floar05f",
         "Prototype_Component_Model_Kamen_floar05g",
-        "Prototype_Component_Model_Kamen_floar06"
+        "Prototype_Component_Model_Kamen_floar06",*/
+        "Prototype_Component_Model_Trision",
+        "Prototype_Component_Model_Trision2",
+        "Prototype_Component_Model_Trision_Bottom",
+        "Prototype_Component_Model_Trision_circle01",
+        "Prototype_Component_Model_Trision_Object01",
+        "Prototype_Component_Model_Trision_Stone01",
+        "Prototype_Component_Model_Trision_Stone02",
+        "Prototype_Component_Model_Trision_Stone03"
     };
 
     return S_OK;
@@ -76,8 +84,8 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::Text("Prototype : ");
     ImGui::Combo("1", &m_iComboIndex, m_PrototypeTags.data(), (int)m_PrototypeTags.size());
 
-    const _tchar* pFilePath = (*m_pImagesNames)[m_iComboIndex].c_str();
-    ImGui::Image(ImTextureID(m_pTextureCom->Get_SRV(pFilePath)), ImVec2(128, 128));
+  /*  const _tchar* pFilePath = (*m_pImagesNames)[m_iComboIndex].c_str();
+    ImGui::Image(ImTextureID(m_pTextureCom->Get_SRV(pFilePath)), ImVec2(128, 128));*/
     
     if (ImGui::Button("Add MapObject"))
     {
@@ -190,7 +198,7 @@ HRESULT CLevel_MapEditor::Add_MapObject()
     Desc.strPrototypeTag = m_pGameInstance->Utf8ToWstring(m_PrototypeTags[m_iComboIndex]);
     Desc.vPosition = _float3(0.f, 0.f, 0.f);
     Desc.vRotation = _float3(0.f, 0.f, 0.f);
-    Desc.vScale = _float3(0.01f, 0.01f, 0.01f);
+    Desc.vScale = _float3(1.f, 1.f, 1.f);
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
         ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"), &Desc)))
