@@ -6,7 +6,7 @@ namespace Engine
 	enum class WINMODE { FULL, WIN, END };	
 	enum class PROTOTYPE { GAMEOBJECT, COMPONENT };
 	enum class STATE { RIGHT, UP, LOOK, POSITION, END };
-	enum class RENDER { PRIORITY, NONBLEND, BLEND, UI, END};
+	enum class RENDER { PRIORITY, NONBLEND, BLEND, UI, CURSOR, END};
 	enum class TEXTURE { PLANE, CUBE, END };
 	enum class RAY { LOCAL, WORLD, END };
 	enum class CHANNELID { BGM, EFFECT, END };

@@ -14,21 +14,10 @@ CVIBuffer_Terrain::CVIBuffer_Terrain(CVIBuffer_Terrain& Prototype)
 {
 }
 
-HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
+HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath, _uint iSizeX, _uint iSizeZ)
 {
-	_ulong dwByte = {};
-	HANDLE hFile = CreateFile(pFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-
-	BITMAPFILEHEADER fh = {};
-	BITMAPINFOHEADER ih = {};
-
-	ReadFile(hFile, &fh, sizeof fh, &dwByte, nullptr);
-
-	ReadFile(hFile, &ih, sizeof ih, &dwByte, nullptr);
-	
-	
-	m_iNumVerticesX = 256;
-	m_iNumVerticesZ = 256;
+	m_iNumVerticesX = iSizeX;
+	m_iNumVerticesZ = iSizeZ;
 
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = m_iNumVerticesX * m_iNumVerticesZ;
@@ -36,8 +25,6 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 
 	_uint* pPixels = new _uint[m_iNumVertices];
 	ZeroMemory(pPixels, sizeof(_uint) * m_iNumVertices);
-
-	ReadFile(hFile, &pPixels, sizeof(_uint) * m_iNumVertices, &dwByte, nullptr);
 
 	m_iNumIndices = (m_iNumVerticesX - 1) * (m_iNumVerticesZ - 1) * 2 * 3;
 	m_iIndexStride = 4;
@@ -67,7 +54,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 		{
 			_uint iIndex = j + i * m_iNumVerticesX;
 
-			m_pVertexPositions[iIndex] = pVertices[iIndex].vPosition = _float3((_float)j, (pPixels[iIndex] & 0x000000ff) / 10.f, (_float)i);
+			m_pVertexPositions[iIndex] = pVertices[iIndex].vPosition = _float3((_float)j, 0.f, (_float)i);
 			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
 			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f), i / (m_iNumVerticesZ - 1.f));
 		}
@@ -139,8 +126,6 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 		XMStoreFloat3(&pVertices[i].vNormal, XMVector3Normalize(XMLoadFloat3(&pVertices[i].vNormal)));
 	}
 
-
-	
 	D3D11_SUBRESOURCE_DATA InitIBData = {};
 	InitIBData.pSysMem = pIndices;
 
@@ -154,7 +139,6 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath)
 	Safe_Delete_Array(pIndices);
 
 	Safe_Delete_Array(pPixels);
-	CloseHandle(hFile);
 
 #pragma endregion
 
@@ -202,11 +186,11 @@ _bool CVIBuffer_Terrain::Picking(CTransform* pTransform, _float3* pOut)
 	return false;
 }
 
-CVIBuffer_Terrain* CVIBuffer_Terrain::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFilePath)
+CVIBuffer_Terrain* CVIBuffer_Terrain::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFilePath, _uint iSizeX, _uint iSizeZ)
 {
 	CVIBuffer_Terrain* pInstance = new CVIBuffer_Terrain(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pFilePath)))
+	if (FAILED(pInstance->Initialize_Prototype(pFilePath, iSizeX, iSizeZ)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CVIBuffer_Terrain");

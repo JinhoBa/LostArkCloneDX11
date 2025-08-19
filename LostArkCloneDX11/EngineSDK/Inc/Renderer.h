@@ -19,7 +19,7 @@ public:
 	HRESULT Initialize();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	void	Render();
-
+	void	Render_Cursor();
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
@@ -40,6 +40,7 @@ private:
 	void Render_NonBlend();
 	void Render_Blend();
 	void Render_UI();
+
 
 	void Sort_AlphaObject();
 	void Sort_UI();

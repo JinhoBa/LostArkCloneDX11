@@ -72,8 +72,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-	
-
 	m_pInput_Device->Update();
 
 	m_pObject_Manager->Priority_Update(fTimeDelta);
@@ -96,6 +94,8 @@ HRESULT CGameInstance::Draw()
 	m_pRenderer->Render();
 
 	m_pFont_Manager->Draw_Fonts();
+
+	m_pRenderer->Render_Cursor();
 
 	m_pLevel_Manager->Render();
 

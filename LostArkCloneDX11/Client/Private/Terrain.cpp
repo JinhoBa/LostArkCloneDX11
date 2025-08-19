@@ -38,6 +38,8 @@ HRESULT CTerrain::Initialize(void* pArg)
 
     CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
 
+    m_bVisible = true;
+    m_vPosition = _float4(0.f, 0.f, 0.f, 1.f);
     return S_OK;
 }
 
@@ -53,13 +55,17 @@ void CTerrain::Priority_Update(_float fTimeDelta)
 void CTerrain::Update(_float fTimeDelta)
 {
     
+    if (m_pGameInstance->Get_KeyDown(DIK_P))
+        m_bVisible = !m_bVisible;
 
+    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
 
 }
 
 void CTerrain::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    if(m_bVisible)
+        m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CTerrain::Render()
@@ -68,7 +74,10 @@ HRESULT CTerrain::Render()
     ImGui::Begin("Picking Position");
     ImGui::Text("Position : ");
     ImGui::SameLine();
-    ImGui::InputFloat3("", &m_pPickingPos.x);
+    ImGui::InputFloat3("pick", &m_pPickingPos.x);
+    ImGui::InputFloat("X", &m_vPosition.x,1.f, 10.f);
+    ImGui::InputFloat("Y", &m_vPosition.y,1.f, 10.f);
+    ImGui::InputFloat("Z", &m_vPosition.z,1.f, 10.f);
     ImGui::End();
 #pragma endregion
     m_pContext->RSSetState(m_pRasterState);

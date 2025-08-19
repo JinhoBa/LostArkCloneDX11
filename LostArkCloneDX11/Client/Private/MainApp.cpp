@@ -14,6 +14,7 @@
 #include "Camera_Free.h"
 #include "UIButton.h"
 #include "Font.h"
+#include "Mouse.h"
 
 CMainApp::CMainApp()
     : m_pGameInstance{ CGameInstance::GetInstance() }, 
@@ -44,6 +45,9 @@ HRESULT CMainApp::Initialize()
         return E_FAIL; 
 
     if (FAILED(Ready_Layer_Canvars()))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Mouse()))
         return E_FAIL;
 
     if (FAILED(Ready_Font()))
@@ -153,6 +157,11 @@ HRESULT CMainApp::Ready_Prototype()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Wallpaper"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Wallpaper/Wallpaper0.jpg"), 1))))
         return E_FAIL;
+
+    /* For.Prototype_Component_Texture_Cursor */
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Texture_Cursor"),
+        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Cursor/Cursor.dds"), 1))))
+        return E_FAIL;
 #pragma endregion
 
 #pragma region COMPONENTS
@@ -216,6 +225,11 @@ HRESULT CMainApp::Ready_Prototype()
         CUIButton::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 
+    /*For Prototype_GameObject_Mouse*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Mouse"),
+        CMouse::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
 #pragma endregion
 
     return S_OK;
@@ -226,6 +240,16 @@ HRESULT CMainApp::Ready_Layer_Canvars()
     /*Add Canvars*/
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Canvars"),
         ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CMainApp::Ready_Layer_Mouse()
+{
+    /*Add Mouse*/
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Mouse"),
+        ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Mouse"))))
         return E_FAIL;
 
     return S_OK;

@@ -34,6 +34,7 @@ private:
 	HRESULT Start_Level(LEVEL eLevelID);
 	HRESULT Ready_Prototype();
 	HRESULT Ready_Layer_Canvars();
+	HRESULT Ready_Layer_Mouse();
 	HRESULT Ready_Font();
 
 public:

@@ -75,10 +75,13 @@ HRESULT CRenderer::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRenderObje
 
 void CRenderer::Render()
 {
+	Sort_UI();
+
 	Render_Priority();
 	Render_NonBlend();
 	Render_Blend();
 	Render_UI();
+
 }
 
 void CRenderer::Render_Priority()
@@ -145,6 +148,24 @@ void CRenderer::Render_UI()
 	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].clear();
 
 	m_pContext->OMSetDepthStencilState(nullptr, 1);
+	m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
+}
+
+void CRenderer::Render_Cursor()
+{
+	m_pContext->OMSetBlendState(m_pBlendState, m_fFactor, 0xffffffff);
+	m_pContext->OMSetDepthStencilState(m_pDSState_UI, 1);
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::CURSOR)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_TO_INT(RENDER::CURSOR)].clear();
+
 	m_pContext->OMSetBlendState(nullptr, m_fFactor, 0xffffffff);
 }
 
