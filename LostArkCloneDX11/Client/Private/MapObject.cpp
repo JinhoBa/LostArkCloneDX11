@@ -59,7 +59,7 @@ void CMapObject::Update(_float fTimeDelta)
 
 void CMapObject::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CMapObject::Render()
@@ -101,9 +101,9 @@ void CMapObject::Update_ImGui()
     ImGui::InputFloat("Z##Rotation", &m_vRotation.z, 1.f, 10.f);
 
     ImGui::Text("----- Scale ----");
-    ImGui::InputFloat("X##Scale", &m_vScale.x, 0.001f, 10.f);
-    ImGui::InputFloat("Y##Scale", &m_vScale.y, 0.001f, 10.f);
-    ImGui::InputFloat("Z##Scale", &m_vScale.z, 0.001f, 10.f);
+    ImGui::InputFloat("X##Scale", &m_vScale.x, 0.1f, 1.f);
+    ImGui::InputFloat("Y##Scale", &m_vScale.y, 0.1f, 1.f);
+    ImGui::InputFloat("Z##Scale", &m_vScale.z, 0.1f, 1.f);
 
 
     if (ImGui::Button("Delete"))

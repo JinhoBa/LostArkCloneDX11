@@ -154,6 +154,12 @@
     <Filter Include="03.UIObject\GamePlay\HUD\Iden_Gauge">
       <UniqueIdentifier>{44b53257-d913-4728-a930-874cb4fd6b22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Sky">
+      <UniqueIdentifier>{e9ba7668-c9e7-4b9e-a9e8-0dd2e5513849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Mouse">
+      <UniqueIdentifier>{b25a4856-904f-4c7b-a669-dffaeeaafefc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -297,6 +303,12 @@
     <ClInclude Include="..\public\Iden_Gauge.h">
       <Filter>03.UIObject\GamePlay\HUD\Iden_Gauge</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\SkySphere.h">
+      <Filter>02.GameObject\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mouse.h">
+      <Filter>03.UIObject\Mouse</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -434,6 +446,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Iden_Gauge.cpp">
       <Filter>03.UIObject\GamePlay\HUD\Iden_Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkySphere.cpp">
+      <Filter>02.GameObject\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mouse.cpp">
+      <Filter>03.UIObject\Mouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

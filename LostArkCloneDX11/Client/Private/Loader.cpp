@@ -27,6 +27,7 @@
 #include "Camera_Free.h"
 #include "Player.h"
 #include "MapObject.h"
+#include "SkySphere.h"
 #pragma endregion
 
 
@@ -299,7 +300,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/*For Prototype_Component_VIBuffer_Terrain*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp")))))
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp"), 64, 64))))
 		return E_FAIL;
 
 #pragma endregion
@@ -422,7 +423,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/TestMap.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision.xml")))
 		return E_FAIL;
 
 	if (FAILED(CGameManager::GetInstance()->Load_PreviewTextures("../Bin/Resources/Data/MeshPreview.xml")))
@@ -447,6 +448,12 @@ HRESULT CLoader::Loading_For_MapEditor()
 #pragma endregion
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+	/* For.Prototype_Component_Model_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Sky"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Sky/Trision_Sky.fbx"))))
+		return E_FAIL;
+
+
 
 #pragma region MAP_MODEL
 
@@ -546,8 +553,47 @@ HRESULT CLoader::Loading_For_MapEditor()
 
 	/* For.Prototype_Component_Model_Trision2 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision2"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision2/Trision2.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision02.fbx"))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision01b */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision01b"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_01b.fbx"))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Trision_Botton01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton01"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_bottom01.fbx"))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Trision_Botton01a */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton01a"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_bottom01a.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Botton02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton02"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_bottom02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Botton03 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton03"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_bottom03.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Wall */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Wall"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_wall.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_arkprop */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_arkprop"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision_arkprop.fbx"))))
+		return E_FAIL;
+
+
 
 	/* For.Prototype_Component_Model_Trision_circle01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_circle01"),
@@ -579,6 +625,42 @@ HRESULT CLoader::Loading_For_MapEditor()
 		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stone/trision_stone03.fbx"))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Trision_2c */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_2c"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Trision/Trision01_c.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01a */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01a"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stair/trision_stair01a.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01b */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01b"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stair/trision_stair01b.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01c */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01c"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stair/trision_stair01c.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01d */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01d"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stair/trision_stair01d.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01e */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01e"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stair/trision_stair01e.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01f */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01f"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Map/Trision/Stair/trision_stair01f.fbx"))))
+		return E_FAIL;
+	
+
 #pragma endregion
 
 #pragma endregion
@@ -597,6 +679,13 @@ HRESULT CLoader::Loading_For_MapEditor()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
 		CMapObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_SkySphere */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Prototype_GameObject_SkySphere"),
+		CSkySphere::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 
 
 

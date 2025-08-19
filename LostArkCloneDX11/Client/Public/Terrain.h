@@ -26,6 +26,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	_bool					m_bVisible = {};
 	CVIBuffer_Terrain*		m_pVIBufferCom = { nullptr };
 	CTexture*				m_pTextureCom = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
@@ -33,6 +34,7 @@ private:
 	ID3D11RasterizerState*	m_pRasterState = nullptr;
 
 	_float3					m_pPickingPos = {};
+	_float4					m_vPosition = {};
 
 private:
 	HRESULT Add_Components();

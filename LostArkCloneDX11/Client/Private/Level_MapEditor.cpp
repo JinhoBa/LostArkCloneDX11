@@ -60,12 +60,28 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Kamen_floar06",*/
         "Prototype_Component_Model_Trision",
         "Prototype_Component_Model_Trision2",
-        "Prototype_Component_Model_Trision_Bottom",
+        "Prototype_Component_Model_Trision01b",
+
+        "Prototype_Component_Model_Trision_Botton01",
+        "Prototype_Component_Model_Trision_Botton01a",
+        "Prototype_Component_Model_Trision_Botton02",
+        "Prototype_Component_Model_Trision_Botton03",
+
         "Prototype_Component_Model_Trision_circle01",
         "Prototype_Component_Model_Trision_Object01",
         "Prototype_Component_Model_Trision_Stone01",
         "Prototype_Component_Model_Trision_Stone02",
-        "Prototype_Component_Model_Trision_Stone03"
+        "Prototype_Component_Model_Trision_Stone03",
+        "Prototype_Component_Model_Trision_2c",
+        "Prototype_Component_Model_Trision_Stair01a",
+        "Prototype_Component_Model_Trision_Stair01b",
+        "Prototype_Component_Model_Trision_Stair01c",
+        "Prototype_Component_Model_Trision_Stair01d",
+        "Prototype_Component_Model_Trision_Stair01e",
+        "Prototype_Component_Model_Trision_Stair01f",
+        "Prototype_Component_Model_Trision_Wall",
+        "Prototype_Component_Model_Trision_arkprop"
+
     };
 
     return S_OK;
@@ -115,13 +131,18 @@ HRESULT CLevel_MapEditor::Render()
     
 
     ImGui::Begin("Object List");
+    _uint i = {};
+    string strTmp;
     for (auto pObject : *m_pBackGroundObject)
     {
         CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObject);
-
+        
         if (nullptr == pMapObject)
             continue;
-        if(ImGui::Button(m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()).c_str()))
+
+        strTmp = m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()) + "##" + to_string(i++);
+
+        if(ImGui::Button(strTmp.c_str()))
         {
             m_pMapObject = pMapObject;
         }
@@ -156,6 +177,10 @@ HRESULT CLevel_MapEditor::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"),
         ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag, &Desc)))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Prototype_GameObject_SkySphere"),
+        ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Sky"), &Desc)))
         return E_FAIL;
 
     return S_OK;
