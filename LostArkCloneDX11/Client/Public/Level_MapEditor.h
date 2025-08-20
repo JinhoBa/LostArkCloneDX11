@@ -26,11 +26,15 @@ private:
 	CTextureMap*			m_pTextureCom = { nullptr };
 
 	_int					m_iComboIndex = {};
+
+
 	vector<const _char*>	m_PrototypeTags = {};
 	vector<_wstring>*		m_pImagesNames = {};
 
 	list<CGameObject*>*		m_pBackGroundObject = { nullptr };
+	list<CGameObject*>*		m_pTerrains = { nullptr };
 	class CMapObject*		m_pMapObject = { nullptr };
+	class CTerrain*			m_pTerrain = { nullptr };
 
 	string m_strSaveFileName = {};
 

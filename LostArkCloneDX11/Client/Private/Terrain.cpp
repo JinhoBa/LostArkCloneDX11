@@ -21,6 +21,22 @@ HRESULT CTerrain::Initialize_Prototype()
 
 HRESULT CTerrain::Initialize(void* pArg)
 {
+    if (nullptr != pArg)
+    {
+        TERRAIN_DESC* pDesc = static_cast<TERRAIN_DESC*>(pArg);
+        m_iSizeX = pDesc->vSize.x;
+        m_iSizeZ = pDesc->vSize.y;
+        m_vPosition = _float4(pDesc->vPosition.x, pDesc->vPosition.y, pDesc->vPosition.z, 1.f);
+        m_vRotation = pDesc->vRotation;
+    }
+    else
+    {
+        m_iSizeX = 2;
+        m_iSizeZ = 2;
+        m_vPosition = _float4(0.f, 0.f, 0.f, 1.f);
+        m_vRotation = _float3(0.f, 0.f, 0.f);
+    }
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -39,7 +55,8 @@ HRESULT CTerrain::Initialize(void* pArg)
     CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
 
     m_bVisible = true;
-    m_vPosition = _float4(0.f, 0.f, 0.f, 1.f);
+
+
     return S_OK;
 }
 
@@ -47,8 +64,9 @@ void CTerrain::Priority_Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
     {
+        
         if (m_pVIBufferCom->Picking(m_pTransformCom, &m_pPickingPos))
-            int i = 0;
+            CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
     }
 }
 
@@ -58,8 +76,10 @@ void CTerrain::Update(_float fTimeDelta)
     if (m_pGameInstance->Get_KeyDown(DIK_P))
         m_bVisible = !m_bVisible;
 
-    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
+    m_pVIBufferCom->Change_Verices(m_iSizeX, m_iSizeZ);
 
+    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
+    m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 }
 
 void CTerrain::Late_Update(_float fTimeDelta)
@@ -70,16 +90,6 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
-#pragma region TESTCODE
-    ImGui::Begin("Picking Position");
-    ImGui::Text("Position : ");
-    ImGui::SameLine();
-    ImGui::InputFloat3("pick", &m_pPickingPos.x);
-    ImGui::InputFloat("X", &m_vPosition.x,1.f, 10.f);
-    ImGui::InputFloat("Y", &m_vPosition.y,1.f, 10.f);
-    ImGui::InputFloat("Z", &m_vPosition.z,1.f, 10.f);
-    ImGui::End();
-#pragma endregion
     m_pContext->RSSetState(m_pRasterState);
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
@@ -109,6 +119,28 @@ HRESULT CTerrain::Render()
 
     return S_OK;
 }
+
+void CTerrain::Update_ImGui()
+{
+#pragma region TESTCODE
+    if (isDead())
+        return;
+    ImGui::Text("Position : ");
+    ImGui::SameLine();
+    ImGui::InputFloat3("pick", &m_pPickingPos.x);
+    ImGui::InputFloat("PosX", &m_vPosition.x, 1.f, 10.f);
+    ImGui::InputFloat("PosY", &m_vPosition.y, 1.f, 10.f);
+    ImGui::InputFloat("PosZ", &m_vPosition.z, 1.f, 10.f);
+    ImGui::InputFloat("RotX", &m_vRotation.x, 1.f, 10.f);
+    ImGui::InputFloat("RotY", &m_vRotation.y, 1.f, 10.f);
+    ImGui::InputFloat("RotZ", &m_vRotation.z, 1.f, 10.f);
+    ImGui::InputInt("SizeX", &m_iSizeX, 1.f, 10.f);
+    ImGui::InputInt("SizeZ", &m_iSizeZ, 1.f, 10.f);
+    if (ImGui::Button("Delete"))
+        m_isDead = true;
+#pragma endregion
+}
+
 HRESULT CTerrain::Add_Components()
 {
     /*Texture*/

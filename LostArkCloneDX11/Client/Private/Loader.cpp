@@ -202,10 +202,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
-	/* For.Prototype_Component_Texture_Player */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Test"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Test.dds"), 1))))
-		return E_FAIL;
+	///* For.Prototype_Component_Texture_Player */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Test"),
+	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Test.dds"), 1))))
+	//	return E_FAIL;
 
 
 	/* For.Prototype_Component_Texture_Player */
@@ -423,7 +423,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Test.xml")))
 		return E_FAIL;
 
 	if (FAILED(CGameManager::GetInstance()->Load_PreviewTextures("../Bin/Resources/Data/MeshPreview.xml")))

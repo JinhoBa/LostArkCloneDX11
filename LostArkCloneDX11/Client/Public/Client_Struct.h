@@ -49,4 +49,11 @@ namespace Client
 		_float3 vScale;
 		_float3 vRotation;
 	}MAP_DATA;
+
+	typedef struct tagTerrainData
+	{
+		_float2  vSize;
+		_float3 vPosition;
+		_float3 vRotation;
+	}TERRAIN_DATA;
 }

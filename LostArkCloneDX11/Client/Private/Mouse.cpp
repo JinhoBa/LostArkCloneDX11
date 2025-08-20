@@ -15,7 +15,7 @@ CMouse::CMouse(const CMouse& Prototype)
 
 HRESULT CMouse::Initialize_Prototype()
 {
-	ShowCursor(FALSE);
+	//ShowCursor(FALSE);
 
 	return S_OK;
 }
@@ -59,7 +59,7 @@ void CMouse::Update(_float fTimeDelta)
 
 void CMouse::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::CURSOR, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::CURSOR, this);
 }
 
 HRESULT CMouse::Render()

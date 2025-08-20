@@ -18,9 +18,10 @@ public:
 	HRESULT Initialize_Manager();
 
 #pragma region MAPDATA
-	vector<MAP_DATA>* Get_MapDataPtr();
-	HRESULT Load_MapData(const _char* pMapDataFilePaht);
-	HRESULT Save_MapData(const _char* pFileName);
+	vector<MAP_DATA>*		Get_MapDataPtr();
+	vector<TERRAIN_DATA>*	Get_TerrainDataPtr();
+	HRESULT					Load_MapData(const _char* pMapDataFilePaht);
+	HRESULT					Save_MapData(const _char* pFileName);
 #pragma endregion
 
 #pragma region MAP_PREVIEW

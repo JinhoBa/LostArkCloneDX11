@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "MapObject.h"
+#include "Terrain.h"
 
 CData_Manager::CData_Manager()
     : m_pGameInstance{ CGameInstance::GetInstance() }
@@ -26,6 +27,36 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
         MSG_BOX("Failed to Find root");
         return E_FAIL;
     }
+
+    /* Terrain */
+    TERRAIN_DATA Terrain_Data = {};
+
+    for (auto* land = root->FirstChildElement("Terrain"); land; land = land->NextSiblingElement("Terrain"))
+    {
+        tinyxml2::XMLElement* protoElem = land->FirstChildElement("Size");
+
+        protoElem->QueryFloatAttribute("x", &Terrain_Data.vSize.x);
+        protoElem->QueryFloatAttribute("z", &Terrain_Data.vSize.y);
+
+        protoElem = land->FirstChildElement("Position");
+        if (nullptr == protoElem)
+            return E_FAIL;
+        protoElem->QueryFloatAttribute("x", &Terrain_Data.vPosition.x);
+        protoElem->QueryFloatAttribute("y", &Terrain_Data.vPosition.y);
+        protoElem->QueryFloatAttribute("z", &Terrain_Data.vPosition.z);
+
+        protoElem = land->FirstChildElement("Rotation");
+        if (nullptr == protoElem)
+            return E_FAIL;
+        protoElem->QueryFloatAttribute("x", &Terrain_Data.vRotation.x);
+        protoElem->QueryFloatAttribute("y", &Terrain_Data.vRotation.y);
+        protoElem->QueryFloatAttribute("z", &Terrain_Data.vRotation.z);
+
+        m_TerrainDatas.push_back(Terrain_Data);
+    }
+
+
+    /* Map */
     MAP_DATA Map_Data = {};
 
     for (auto* land = root->FirstChildElement("Model"); land; land = land->NextSiblingElement("Model"))
@@ -72,9 +103,13 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
 
 HRESULT CData_Manager::Save_MapData(const _char* pFileName)
 {
+    list<CGameObject*>* pTerrainList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
     list<CGameObject*>* pObjectList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
 
     if (nullptr == pObjectList)
+        return E_FAIL;
+
+    if (nullptr == pTerrainList)
         return E_FAIL;
   
 
@@ -82,9 +117,47 @@ HRESULT CData_Manager::Save_MapData(const _char* pFileName)
 
     doc.InsertFirstChild(doc.NewDeclaration());
 
-    // <Land name="BG_KEMAN">
+
     tinyxml2::XMLElement* land = doc.NewElement("Land");
     doc.InsertEndChild(land);
+
+    for (auto pObjcet : *pTerrainList)
+    {
+        CTerrain* pTerrain= dynamic_cast<CTerrain*>(pObjcet);
+
+        if (nullptr == pTerrain)
+            continue;
+
+        // <Model>
+        tinyxml2::XMLElement* Terrain = doc.NewElement("Terrain");
+        land->InsertEndChild(Terrain);
+
+        tinyxml2::XMLElement* SizeElem = doc.NewElement("Size");
+
+        _float2 vSize = pTerrain->Get_Size();
+        SizeElem->SetAttribute("x", vSize.x);
+        SizeElem->SetAttribute("z", vSize.y);
+        Terrain->InsertEndChild(SizeElem);
+
+        // <Position x="0.0" y="0.0" z="0.0"/>
+        tinyxml2::XMLElement* PositionElem = doc.NewElement("Position");
+
+        _float4* pPosition = pTerrain->Get_Positon();
+        PositionElem->SetAttribute("x", pPosition->x);
+        PositionElem->SetAttribute("y", pPosition->y);
+        PositionElem->SetAttribute("z", pPosition->z);
+        Terrain->InsertEndChild(PositionElem);
+
+
+        tinyxml2::XMLElement* RotationElem = doc.NewElement("Rotation");
+
+        _float3* pRotation = pTerrain->Get_Rotation();
+        RotationElem->SetAttribute("x", pRotation->x);
+        RotationElem->SetAttribute("y", pRotation->y);
+        RotationElem->SetAttribute("z", pRotation->z);
+        Terrain->InsertEndChild(RotationElem);
+
+    }
 
     for (auto pObjcet : *pObjectList)
     {

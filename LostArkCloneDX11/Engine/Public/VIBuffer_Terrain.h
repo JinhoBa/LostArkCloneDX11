@@ -10,13 +10,17 @@ private:
 	CVIBuffer_Terrain(CVIBuffer_Terrain& Prototype);
 	virtual ~CVIBuffer_Terrain() = default;
 
+	_float2 Get_Size() { return _float2((_float)m_iNumVerticesX, (_float)m_iNumVerticesZ); }
+
 public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pFilePath, _uint iSizeX, _uint iSizeZ);
 	virtual HRESULT Initialize(void* pArg);
 
-	_bool Picking(class CTransform* pTransform, _float3* pOut);
+	_bool	Picking(class CTransform* pTransform, _float3* pOut);
+	HRESULT	Change_Verices(_uint iSizeX, _uint iSizeZ);
 
 private:
+	_bool m_bChange = {};
 	_uint m_iNumVerticesX = {};
 	_uint m_iNumVerticesZ = {};
 

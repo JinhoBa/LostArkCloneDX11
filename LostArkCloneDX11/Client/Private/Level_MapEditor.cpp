@@ -6,6 +6,7 @@
 
 #include "Camera_Free.h"
 #include "MapObject.h"
+#include "Terrain.h"
 
 CLevel_MapEditor::CLevel_MapEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{ pDevice, pContext, ENUM_TO_INT(eLevelID) },
@@ -26,6 +27,7 @@ HRESULT CLevel_MapEditor::Initialize()
         return E_FAIL;
 
     m_pBackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
+    m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
 
     m_iComboIndex = 0;
     m_strSaveFileName;
@@ -107,6 +109,12 @@ HRESULT CLevel_MapEditor::Render()
     {
         Add_MapObject();
     }
+    if (ImGui::Button("Add Terrain"))
+    {
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+            ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"))))
+            return E_FAIL;
+    }
    
     if (ImGui::Button("Load"))
     {
@@ -127,12 +135,31 @@ HRESULT CLevel_MapEditor::Render()
     }
 
     ImGui::End();
-    
+
+
+    ImGui::Begin("Terrain List");
+    _uint iTerrainIndex = {};
+    string strTmp;
+    for (auto pObject : *m_pTerrains)
+    {
+        CTerrain* pTerrain = dynamic_cast<CTerrain*>(pObject);
+
+        if (nullptr == pTerrain)
+            continue;
+
+        strTmp = "Terrain##" + to_string(iTerrainIndex++);
+
+        if (ImGui::Button(strTmp.c_str()))
+        {
+            m_pTerrain = pTerrain;
+        }
+    }
+    ImGui::End();
     
 
     ImGui::Begin("Object List");
-    _uint i = {};
-    string strTmp;
+    _uint iObjectIndex = {};
+    string strSrc;
     for (auto pObject : *m_pBackGroundObject)
     {
         CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObject);
@@ -140,9 +167,9 @@ HRESULT CLevel_MapEditor::Render()
         if (nullptr == pMapObject)
             continue;
 
-        strTmp = m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()) + "##" + to_string(i++);
+        strSrc = m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()) + "##" + to_string(iObjectIndex++);
 
-        if(ImGui::Button(strTmp.c_str()))
+        if(ImGui::Button(strSrc.c_str()))
         {
             m_pMapObject = pMapObject;
         }
@@ -150,8 +177,16 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::End();
 
     ImGui::Begin("EDIT");
-    if (nullptr != m_pMapObject)
-        m_pMapObject->Update_ImGui();
+    if(ImGui::CollapsingHeader("Terrain"))
+    {
+        if (nullptr != m_pTerrain)
+            m_pTerrain->Update_ImGui();
+    }
+    if (ImGui::CollapsingHeader("Object"))
+    {
+        if (nullptr != m_pMapObject)
+            m_pMapObject->Update_ImGui();
+    }
     ImGui::End();
    
 
@@ -243,9 +278,31 @@ HRESULT CLevel_MapEditor::Load_MapData()
         pMapObject->Set_Dead();
     }
 
+    vector<TERRAIN_DATA>* pTerrainData = m_pGameManager->Get_TerrainDataPtr();
+
+    if (nullptr == pTerrainData)
+        return E_FAIL;
+
+    for (auto& TerrainData : *pTerrainData)
+    {
+        CTerrain::TERRAIN_DESC Desc = {};
+
+        Desc.vSize = TerrainData.vSize;
+        Desc.vPosition = TerrainData.vPosition;
+        Desc.vRotation = TerrainData.vRotation;
+ 
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+            ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"), &Desc)))
+            return E_FAIL;
+    }
+
     vector<MAP_DATA>* pData = m_pGameManager->Get_MapDataPtr();
 
-    for (auto MapData : *pData)
+    if (nullptr == pData)
+        return E_FAIL;
+
+    for (auto& MapData : *pData)
     {
         CMapObject::MAPOBJECT_DESC Desc = {};
 

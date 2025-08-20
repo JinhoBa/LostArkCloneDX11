@@ -17,9 +17,10 @@ private:
 
 public:
 #pragma region MAP_DATA
-	vector<MAP_DATA>*	Get_MapDataPtr() { return &m_MapDatas; }
-	HRESULT				Load_MapData(const _char* pFilePath);
-	HRESULT				Save_MapData(const _char* pFileName);
+	vector<MAP_DATA>*		Get_MapDataPtr() { return &m_MapDatas; }
+	vector<TERRAIN_DATA>*	Get_TerrainDataPtr() { return &m_TerrainDatas; }
+	HRESULT					Load_MapData(const _char* pFilePath);
+	HRESULT					Save_MapData(const _char* pFileName);
 #pragma endregion
 
 #pragma region MAP_PREVIEW
@@ -33,10 +34,11 @@ public:
 
 
 private:
-	CGameInstance*		m_pGameInstance = { nullptr };
-	vector<MAP_DATA>	m_MapDatas = {};
-	vector<_wstring>	m_MapPreviewFileNames = {};
-	vector<SKILL_INFO>	m_SkillDatas = {};
+	CGameInstance*			m_pGameInstance = { nullptr };
+	vector<TERRAIN_DATA>	m_TerrainDatas = {};
+	vector<MAP_DATA>		m_MapDatas = {};
+	vector<_wstring>		m_MapPreviewFileNames = {};
+	vector<SKILL_INFO>		m_SkillDatas = {};
 	
 public:
 	static CData_Manager* Creat();

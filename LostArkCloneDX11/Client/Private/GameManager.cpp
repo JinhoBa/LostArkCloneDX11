@@ -26,6 +26,11 @@ vector<MAP_DATA>* CGameManager::Get_MapDataPtr()
 	return m_pData_Manager->Get_MapDataPtr();
 }
 
+vector<TERRAIN_DATA>* CGameManager::Get_TerrainDataPtr()
+{
+	return m_pData_Manager->Get_TerrainDataPtr();
+}
+
 HRESULT CGameManager::Load_MapData(const _char* pMapDataFilePaht)
 {
 	m_pData_Manager->Load_MapData(pMapDataFilePaht);
