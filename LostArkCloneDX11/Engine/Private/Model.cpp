@@ -26,8 +26,10 @@ HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
 {
     _uint iFlag = {};
 
+    m_Importer.SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f);
+
     iFlag = aiProcess_PreTransformVertices | aiProcess_ConvertToLeftHanded |
-        aiProcessPreset_TargetRealtime_Fast;
+        aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
 
     m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 

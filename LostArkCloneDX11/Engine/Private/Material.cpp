@@ -102,8 +102,8 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 
 					strcpy_s(szTextureFilePath, pTextureFolderPath);
 					strcat_s(szTextureFilePath, TextureName.c_str());
-					/*strcat_s(szTextureFilePath, ".dds");*/
-					strcat_s(szTextureFilePath, ".png");
+					strcat_s(szTextureFilePath, ".dds");
+
 
 					// name
 					getline(file, strText);
@@ -161,10 +161,8 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 	MultiByteToWideChar(CP_ACP, 0, pTextureFolderPath, (_int)strlen(pTextureFolderPath), szTextureFilePath, MAX_PATH);
 
 	if (FAILED(CreateDDSTextureFromFile(m_pDevice, szTextureFilePath, nullptr, &pSRV)))
-	{
-		if (FAILED(CreateWICTextureFromFile(m_pDevice, szTextureFilePath, nullptr, &pSRV)))
 			return E_FAIL;
-	}
+	
 
 	m_SRVs[ENUM_TO_INT(eTexture)].push_back(pSRV);
 

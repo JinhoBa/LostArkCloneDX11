@@ -31,7 +31,7 @@ HRESULT CPlayer::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_pTransformCom->Set_Scale(_float3(0.01f, 0.01f, 0.01f));
+    m_pTransformCom->Set_Scale(_float3(1.f, 1.f, 1.f));
     m_pTransformCom->Rotation(m_pTransformCom->Get_State(STATE::UP), XMConvertToRadians(180.f));
 
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
