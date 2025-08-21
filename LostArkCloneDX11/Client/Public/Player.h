@@ -25,6 +25,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	_uint		m_iNumMesh = {};
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 

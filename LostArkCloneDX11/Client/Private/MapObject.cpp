@@ -76,8 +76,8 @@ HRESULT CMapObject::Render()
     if (FAILED(m_pShaderCom->Begin(m_iSeletPass)))
         return E_FAIL;
 
-    if (FAILED(m_pModelCom->Render(m_pShaderCom)))
-        return E_FAIL;
+   /* if (FAILED(m_pModelCom->Render(m_pShaderCom)))
+        return E_FAIL;*/
 
    
     m_iSeletPass = 0;

@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "Material.h"
 
 CTexture::CTexture(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CComponent{pDevice, pContext}

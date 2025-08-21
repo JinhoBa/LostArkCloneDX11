@@ -10,8 +10,9 @@ CMesh::CMesh(CMesh& Prototype)
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh, const aiMaterial* pMaterials)
+HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh)
 {
+	m_iMaterialIndex = pAIMesh->mMaterialIndex;
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = pAIMesh->mNumVertices;
 	m_iVertexStride = sizeof(VTXMESH);
@@ -21,9 +22,6 @@ HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh, const aiMaterial* pMa
 
 	m_eIndexFormat = DXGI_FORMAT_R32_UINT;
 	m_ePrimitive = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-
-	/*aiString s = pMaterials->GetName();
-	const _char* name = s.C_Str();*/
 
 #pragma region VETEX_BUFFER
 	D3D11_BUFFER_DESC VBDesc = {};
@@ -97,11 +95,11 @@ HRESULT CMesh::Initialize(void* pArg)
 	return S_OK;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const aiMesh* pAIMesh, const aiMaterial* pMaterials)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const aiMesh* pAIMesh)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pAIMesh, pMaterials)))
+	if (FAILED(pInstance->Initialize_Prototype(pAIMesh)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CMesh");

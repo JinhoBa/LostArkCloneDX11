@@ -74,8 +74,8 @@ HRESULT CSkySphere::Render()
     if (FAILED(m_pShaderCom->Begin(0)))
         return E_FAIL;
 
-    if (FAILED(m_pModelCom->Render(m_pShaderCom)))
-        return E_FAIL;
+    //if (FAILED(m_pModelCom->Render(m_pShaderCom)))
+    //    return E_FAIL;
 
     m_pContext->RSSetState(nullptr);
 

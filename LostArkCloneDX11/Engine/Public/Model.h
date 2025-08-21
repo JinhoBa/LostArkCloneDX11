@@ -11,23 +11,30 @@ private:
 	virtual ~CModel() = default;
 
 public:
+	_uint Get_NumMeshes() { return m_iNumMeshes; }
+
+public:
 	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT Render(class CShader* pShader);
-	HRESULT Render_Mesh(_uint iIndex);
+	virtual HRESULT Render(_uint iMeshIndex);
+	
+	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0);
 
 private:
-	const aiScene*			m_pAiScene = {};
-	Assimp::Importer		m_Importer = {};
+	const aiScene*				m_pAiScene = {};
+	Assimp::Importer			m_Importer = {};
 
-	_uint					m_iNumMeshes = {};
-	_wstring				m_strFolderPath = {};
-	vector<class CMesh*>	m_Meshes;
-	vector<class CTexture*>	m_Textures;
+	_uint						m_iNumMeshes = {};
+	_uint						m_iNumMaterials = {};
+
+	vector<class CMesh*>		m_Meshes;
+	vector<class CMaterials*>	m_Materials;
+
+	_wstring					m_strFolderPath = {};
 
 private:
 	HRESULT Ready_Meshes();
-	HRESULT Ready_Textures();
+	HRESULT Ready_Materials(const _char* pModelFilePath);
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath);
