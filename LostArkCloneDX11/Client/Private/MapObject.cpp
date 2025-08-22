@@ -39,6 +39,8 @@ HRESULT CMapObject::Initialize(void* pArg)
 
     m_iSeletPass = 0;
 
+    m_iNumMesh = m_pModelCom->Get_NumMeshes();
+
     return S_OK;
 }
 
@@ -59,7 +61,7 @@ void CMapObject::Update(_float fTimeDelta)
 
 void CMapObject::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CMapObject::Render()
@@ -73,11 +75,19 @@ HRESULT CMapObject::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(m_iSeletPass)))
-        return E_FAIL;
+ 
 
-   /* if (FAILED(m_pModelCom->Render(m_pShaderCom)))
-        return E_FAIL;*/
+    for (_uint i = 0; i < m_iNumMesh; i++)
+    {
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE)))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Begin(m_iSeletPass)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelCom->Render(i)))
+            return E_FAIL;
+    }
 
    
     m_iSeletPass = 0;

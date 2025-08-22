@@ -37,6 +37,7 @@ HRESULT CSkySphere::Initialize(void* pArg)
 
     
     m_pTransformCom->Set_Scale(_float3(0.01f, 0.01f, 0.01f));
+    m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
     return S_OK;
 }
@@ -71,11 +72,17 @@ HRESULT CSkySphere::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(0)))
-        return E_FAIL;
+    for (_uint i = 0; i < m_iNumMesh; i++)
+    {
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::EMISSIVE)))
+            return E_FAIL;
 
-    //if (FAILED(m_pModelCom->Render(m_pShaderCom)))
-    //    return E_FAIL;
+        if (FAILED(m_pShaderCom->Begin(0)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelCom->Render(i)))
+            return E_FAIL;
+    }
 
     m_pContext->RSSetState(nullptr);
 

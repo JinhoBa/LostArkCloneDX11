@@ -19,6 +19,7 @@ public:
 	HRESULT	Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix);
 	HRESULT Bind_WorldMatrix(const _float4x4* pWorldMatrix);
 	HRESULT Bind_Resource(const _char* ConstantName, ID3D11ShaderResourceView* pSRV);
+	HRESULT Bind_Value(const _char* ConstantName, _float4* pValue);
 	HRESULT Begin(_uint iPassIndex);
 
 private:

@@ -140,6 +140,21 @@ HRESULT CShader::Bind_Resource(const _char* ConstantName, ID3D11ShaderResourceVi
 	return pSRVVariable->SetResource(pSRV);
 }
 
+HRESULT CShader::Bind_Value(const _char* ConstantName, _float4* pValue)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);
+
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	ID3DX11EffectVectorVariable* pVectorVariable = pVariable->AsVector();
+
+	if (nullptr == pVectorVariable)
+		return E_FAIL;
+
+	return pVectorVariable->SetFloatVector(reinterpret_cast<_float*>(pValue));
+}
+
 HRESULT CShader::Begin(_uint iPassIndex)
 {
 	if (m_iNumPasses <= iPassIndex)

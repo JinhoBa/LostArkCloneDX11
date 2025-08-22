@@ -14,15 +14,18 @@ public:
 	_uint Get_NumMeshes() { return m_iNumMeshes; }
 
 public:
-	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath);
+	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 	
-	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0);
+	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0, const _char* pValueConstanceName = nullptr);
 
 private:
+
 	const aiScene*				m_pAiScene = {};
 	Assimp::Importer			m_Importer = {};
+
+	MODEL						m_eModel = {};
 
 	_uint						m_iNumMeshes = {};
 	_uint						m_iNumMaterials = {};
@@ -32,12 +35,14 @@ private:
 
 	_wstring					m_strFolderPath = {};
 
+	_float4x4					m_PreTransformMatrix = {};
+
 private:
 	HRESULT Ready_Meshes();
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

@@ -37,6 +37,8 @@ HRESULT CTerrain::Initialize(void* pArg)
         m_vRotation = _float3(0.f, 0.f, 0.f);
     }
 
+    
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -52,7 +54,8 @@ HRESULT CTerrain::Initialize(void* pArg)
     m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState);
     m_pPickingPos = {};
 
-    CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
+    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
+    m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 
     m_bVisible = true;
 

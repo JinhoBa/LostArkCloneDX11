@@ -73,7 +73,11 @@ void CPlayer::Update(_float fTimeDelta)
     //  
     //   //m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
     //}
-    m_pTransformCom->MoveTo(fTimeDelta* 2.f, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
+    _float3* pPickingPos = CGameManager::GetInstance()->Get_PickingPos();
+    if(nullptr != pPickingPos)
+        m_pTransformCom->MoveTo(fTimeDelta* 2.f, XMVectorSetW(XMLoadFloat3(pPickingPos), 1.f));
+
+
 #pragma endregion
 
 }
@@ -96,7 +100,7 @@ HRESULT CPlayer::Render()
 
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
-        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE)))
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
             return E_FAIL;
 
         if (FAILED(m_pShaderCom->Begin(0)))

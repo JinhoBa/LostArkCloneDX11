@@ -47,6 +47,7 @@ public:
 
 protected:
 	_uint		m_iSeletPass = {};
+	_uint		m_iNumMesh = {};
 
 	_wstring	m_strPrototypeTag = {};
 	CShader*	m_pShaderCom = { nullptr };

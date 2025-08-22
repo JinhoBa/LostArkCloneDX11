@@ -190,11 +190,19 @@ _bool CVIBuffer_Terrain::Picking(CTransform* pTransform, _float3* pOut)
 
 HRESULT CVIBuffer_Terrain::Change_Verices(_uint iSizeX, _uint iSizeZ)
 {
+
 	if (2 > iSizeX || 2 > iSizeZ)
 		return S_OK;
 
-	if (m_iNumVerticesX == iSizeX && m_iNumVerticesZ == iSizeZ)
-		return S_OK;
+	if(true == m_bChange)
+	{
+		if (m_iNumVerticesX == iSizeX && m_iNumVerticesZ == iSizeZ)
+			return S_OK;
+	}else
+		m_bChange = true;
+
+
+
 
 	/*if(!m_bChange)
 	{

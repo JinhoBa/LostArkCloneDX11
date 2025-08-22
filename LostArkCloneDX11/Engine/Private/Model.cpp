@@ -22,22 +22,20 @@ CModel::CModel(CModel& Prototype)
         Safe_AddRef(pTexture);
 }
 
-HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
+HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     _uint iFlag = {};
 
-    m_Importer.SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f);
+    iFlag =  aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
 
-    iFlag = aiProcess_PreTransformVertices | aiProcess_ConvertToLeftHanded |
-        aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
+    if (MODEL::NONANIM == eModel)
+        iFlag |= aiProcess_PreTransformVertices;
 
     m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 
-    //string strModelFilePath = string(pModelFilePath);
-    //auto last = strModelFilePath.find_last_of('/');
+    XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
 
-    //strModelFilePath = strModelFilePath.substr(0, last + 1);
-    //m_strFolderPath = m_pGameInstance->Utf8ToWstring(strModelFilePath.c_str());
+
 
     if (nullptr == m_pAiScene)
     {
@@ -50,6 +48,7 @@ HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
 
     if (FAILED(Ready_Materials(pModelFilePath)))
         return E_FAIL;
+
 
     return S_OK;
 }
@@ -67,15 +66,26 @@ HRESULT CModel::Render(_uint iMeshIndex)
     return S_OK;
 }
 
-HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex)
+HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex, const _char* pValueConstanceName)
 {
     if (m_iNumMeshes <= iMeshIndex)
         return E_FAIL;
 
     _uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();
 
-    return m_Materials[iMaterialIndex]->Bind_SRV(pShader, pConstantName, eTextureType, iTextureIndex);
+    if (FAILED(m_Materials[iMaterialIndex]->Bind_SRV(pShader, pConstantName, eTextureType, iTextureIndex)))
+        return E_FAIL;
+   
+
+    if(nullptr != pValueConstanceName)
+    {
+        if (FAILED(m_Materials[iMaterialIndex]->Bind_Value(pShader, pValueConstanceName, eTextureType, iTextureIndex)))
+            return E_FAIL;
+    }
+
+    return S_OK;
 }
+
 
 HRESULT CModel::Ready_Meshes()
 {
@@ -114,11 +124,11 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
     return S_OK;
 }
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     CModel* pInstance = new CModel(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(pModelFilePath)))
+    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, PreTransformMatrix)))
     {
         Safe_Release(pInstance);
         MSG_BOX("Failed to Create : CModel");

@@ -29,6 +29,7 @@ public:
 	void				Update_ImGui();
 
 private:
+	_uint		m_iNumMesh = {};
 	_wstring	m_strPrototypeTag = {};
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
