@@ -24,15 +24,13 @@ HRESULT CTerrain::Initialize(void* pArg)
     if (nullptr != pArg)
     {
         TERRAIN_DESC* pDesc = static_cast<TERRAIN_DESC*>(pArg);
-        m_iSizeX = pDesc->vSize.x;
-        m_iSizeZ = pDesc->vSize.y;
+        m_strPrototypeTag = pDesc->strPrototypeTag;
         m_vPosition = _float4(pDesc->vPosition.x, pDesc->vPosition.y, pDesc->vPosition.z, 1.f);
         m_vRotation = pDesc->vRotation;
     }
     else
     {
-        m_iSizeX = 2;
-        m_iSizeZ = 2;
+        m_strPrototypeTag = L"";
         m_vPosition = _float4(0.f, 0.f, 0.f, 1.f);
         m_vRotation = _float3(0.f, 0.f, 0.f);
     }
@@ -58,19 +56,39 @@ HRESULT CTerrain::Initialize(void* pArg)
     m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 
     m_bVisible = true;
-
+    m_PosYValue = 0.f;
 
     return S_OK;
 }
 
 void CTerrain::Priority_Update(_float fTimeDelta)
 {
-    if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+    if (m_pGameInstance->Get_DIMousePressing(MOUSEKEYSTATE::RBUTTON))
     {
         
         if (m_pVIBufferCom->Picking(m_pTransformCom, &m_pPickingPos))
             CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
+
+        if (m_pGameInstance->Get_KeyPressing(DIK_9))
+        {
+            if (m_pVIBufferCom->Picking_Edit(m_pTransformCom, &m_pPickingPos, 0.1f))
+                CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
+        }
+
+        if (m_pGameInstance->Get_KeyPressing(DIK_8))
+        {
+            if (m_pVIBufferCom->Picking_Edit(m_pTransformCom, &m_pPickingPos, -0.1f))
+                CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
+        }
+
+        if (m_pGameInstance->Get_KeyPressing(DIK_LCONTROL))
+        {
+            if (m_pVIBufferCom->Picking_Smooth(m_pTransformCom, &m_pPickingPos, m_PosYValue))
+                CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
+        }
+        
     }
+
 }
 
 void CTerrain::Update(_float fTimeDelta)
@@ -79,7 +97,7 @@ void CTerrain::Update(_float fTimeDelta)
     if (m_pGameInstance->Get_KeyDown(DIK_P))
         m_bVisible = !m_bVisible;
 
-    m_pVIBufferCom->Change_Verices(m_iSizeX, m_iSizeZ);
+    /*m_pVIBufferCom->Change_Verices(m_iSizeX, m_iSizeZ);*/
 
     m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
     m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
@@ -128,17 +146,33 @@ void CTerrain::Update_ImGui()
 #pragma region TESTCODE
     if (isDead())
         return;
-    ImGui::Text("Position : ");
+    ImGui::Text("Position : "); 
     ImGui::SameLine();
     ImGui::InputFloat3("pick", &m_pPickingPos.x);
+    ImGui::InputFloat("PickingY", &m_PosYValue, 0.01f, 0.1f);
     ImGui::InputFloat("PosX", &m_vPosition.x, 1.f, 10.f);
     ImGui::InputFloat("PosY", &m_vPosition.y, 1.f, 10.f);
     ImGui::InputFloat("PosZ", &m_vPosition.z, 1.f, 10.f);
     ImGui::InputFloat("RotX", &m_vRotation.x, 1.f, 10.f);
     ImGui::InputFloat("RotY", &m_vRotation.y, 1.f, 10.f);
     ImGui::InputFloat("RotZ", &m_vRotation.z, 1.f, 10.f);
-    ImGui::InputInt("SizeX", &m_iSizeX, 1.f, 10.f);
-    ImGui::InputInt("SizeZ", &m_iSizeZ, 1.f, 10.f);
+   /* ImGui::InputInt("SizeX", &m_iSizeX, 1.f, 10.f);
+    ImGui::InputInt("SizeZ", &m_iSizeZ, 1.f, 10.f);*/
+   
+    ImGui::Text("Save File Name : ");
+    ImGui::InputText("##name", m_szHeightMapFileName, MAX_PATH);
+
+    if (ImGui::Button("Save HeightMap"))
+    {
+        char szSaveFilePath[MAX_PATH] = {};
+
+        strcpy_s(szSaveFilePath, "../Bin/Resources/HeightMap/");
+        strcat_s(szSaveFilePath, m_szHeightMapFileName);
+        strcat_s(szSaveFilePath, ".bin");
+
+        m_pVIBufferCom->Save_HeightFile(szSaveFilePath);
+    }
+   
     if (ImGui::Button("Delete"))
         m_isDead = true;
 #pragma endregion
@@ -152,7 +186,7 @@ HRESULT CTerrain::Add_Components()
         return E_FAIL;
 
     /*VIBuffer_Rect*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), m_strPrototypeTag,
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
 

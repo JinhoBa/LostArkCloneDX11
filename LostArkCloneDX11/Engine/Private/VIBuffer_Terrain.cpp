@@ -14,15 +14,21 @@ CVIBuffer_Terrain::CVIBuffer_Terrain(CVIBuffer_Terrain& Prototype)
 {
 }
 
-HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath, _uint iSizeX, _uint iSizeZ)
+HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _char* pFilePath, _uint iSizeX, _uint iSizeZ)
 {
 	m_bChange = { false };
 
 	m_iNumVerticesX = iSizeX;
 	m_iNumVerticesZ = iSizeZ;
+	m_iNumVertices = m_iNumVerticesX * m_iNumVerticesZ;
+
+	m_pVertexPositions = new _float3[m_iNumVertices];
+	ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
+
+	if (FAILED(Load_HeightFile(pFilePath)))
+		return E_FAIL;
 
 	m_iNumVertexBuffers = 1;
-	m_iNumVertices = m_iNumVerticesX * m_iNumVerticesZ;
 	m_iVertexStride = sizeof(VTXNORTEX);
 
 	_uint* pPixels = new _uint[m_iNumVertices];
@@ -45,18 +51,14 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pFilePath, _uint i
 
 	VTXNORTEX* pVertices = new VTXNORTEX[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXNORTEX) * m_iNumVertices);
-
-	m_pVertexPositions = new _float3[m_iNumVertices];
-	ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
-
-
+	
 	for (_uint i = 0; i < m_iNumVerticesZ; ++i)
 	{
 		for (_uint j = 0; j < m_iNumVerticesX; ++j)
 		{
 			_uint iIndex = j + i * m_iNumVerticesX;
 
-			m_pVertexPositions[iIndex] = pVertices[iIndex].vPosition = _float3((_float)j, 0.f, (_float)i);
+			m_pVertexPositions[iIndex] = pVertices[iIndex].vPosition = _float3((_float)j, m_pVertexPositions[iIndex].y, (_float)i);
 			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
 			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f), i / (m_iNumVerticesZ - 1.f));
 		}
@@ -152,6 +154,165 @@ HRESULT CVIBuffer_Terrain::Initialize(void* pArg)
 	return S_OK;
 }
 
+HRESULT CVIBuffer_Terrain::Save_HeightFile(const _char* pFilePath)
+{
+	ofstream out(pFilePath, ios::binary);
+
+	if (false == out.is_open())
+	{
+		MSG_BOX("Failed to Save HeightMap File");
+		return E_FAIL;
+	}
+	char szValues[32] = {};
+	
+	auto result = to_chars(szValues, szValues + 32, m_iNumVerticesX);
+
+	if (result.ec != std::errc{})
+	{
+		return E_FAIL;
+	}
+	else
+		out.write(szValues, sizeof(szValues));
+
+	result = to_chars(szValues, szValues + 32, m_iNumVerticesZ);
+
+	if (result.ec != std::errc{})
+	{
+		return E_FAIL;
+	}
+	else
+		out.write(szValues, sizeof(szValues));
+
+	for (_uint i = 0; i < m_iNumVerticesZ; ++i)
+	{
+		for (_uint j = 0; j < m_iNumVerticesX; ++j)
+		{
+			_uint iIndex = j + i * m_iNumVerticesX;
+
+
+			result = to_chars(szValues, szValues + 32, m_pVertexPositions[iIndex].y);
+
+			if (result.ec != std::errc{})
+			{
+				return E_FAIL;
+			}
+	
+			out.write(szValues, sizeof(szValues));
+		}
+	}
+	
+	out.close();
+
+
+	return S_OK;
+}
+
+HRESULT CVIBuffer_Terrain::Load_HeightFile(const _char* pFilePath)
+{
+	if (nullptr == pFilePath)
+		return S_OK;
+
+	ifstream in(pFilePath, ios::binary);
+
+	if (false == in.is_open())
+	{
+		MSG_BOX("Failed to Load HeightMap File");
+		return E_FAIL;
+	}
+
+
+	char szValues[32] = {};
+
+	in.read(szValues, 32);
+
+	const char* begin = szValues;
+	const char* end = szValues + 32;
+
+	auto result = from_chars(begin, end, m_iNumVerticesX);
+
+	if (result.ec != std::errc{})
+	{
+		return E_FAIL;
+	}
+
+
+	in.read(szValues, 32);
+
+	begin = szValues;
+	end = szValues + 32;
+
+	result = from_chars(begin, end, m_iNumVerticesZ);
+
+	if (result.ec != std::errc{})
+	{
+		return E_FAIL;
+	}
+
+	m_HeigthValues.reserve(m_iNumVerticesX * m_iNumVerticesZ);
+
+	for (_uint i = 0; i < m_iNumVerticesZ; ++i)
+	{
+		for (_uint j = 0; j < m_iNumVerticesX; ++j)
+		{
+			_uint iIndex = j + i * m_iNumVerticesX;
+
+			in.read(szValues, 32);
+
+			if (result.ec != std::errc{})
+			{
+				return E_FAIL;
+			}
+			_float fY = {};
+
+			result = from_chars(begin, end, fY);
+
+			m_pVertexPositions[iIndex].y = fY;
+		}
+	}
+
+	in.close();
+
+	return S_OK;
+}
+
+HRESULT CVIBuffer_Terrain::Update_Vertex()
+{
+	Safe_Release(m_pVB);
+
+	D3D11_BUFFER_DESC VBDesc = {};
+	VBDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
+	VBDesc.Usage = D3D11_USAGE_DEFAULT;
+	VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	VBDesc.StructureByteStride = m_iVertexStride;
+	VBDesc.CPUAccessFlags = 0;
+	VBDesc.MiscFlags = 0;
+
+	VTXNORTEX* pVertices = new VTXNORTEX[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTXNORTEX) * m_iNumVertices);
+
+	for (_uint i = 0; i < m_iNumVerticesZ; ++i)
+	{
+		for (_uint j = 0; j < m_iNumVerticesX; ++j)
+		{
+			_uint iIndex = j + i * m_iNumVerticesX;
+
+			pVertices[iIndex].vPosition = m_pVertexPositions[iIndex];
+			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
+			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f), i / (m_iNumVerticesZ - 1.f));
+		}
+	}
+	D3D11_SUBRESOURCE_DATA InitVBData = {};
+	InitVBData.pSysMem = pVertices;
+
+
+	if (FAILED(m_pDevice->CreateBuffer(&VBDesc, &InitVBData, &m_pVB)))
+		return E_FAIL;
+
+
+
+	Safe_Delete_Array(pVertices);
+}
+
 _bool CVIBuffer_Terrain::Picking(CTransform* pTransform, _float3* pOut)
 {
 	m_pGameInstance->Transform_ToLocalSpace(XMLoadFloat4x4(&pTransform->Get_WorldMatrixInv()));
@@ -188,6 +349,110 @@ _bool CVIBuffer_Terrain::Picking(CTransform* pTransform, _float3* pOut)
 	return false;
 }
 
+_bool CVIBuffer_Terrain::Picking_Edit(CTransform* pTransform, _float3* pOut, _float fY)
+{
+	m_pGameInstance->Transform_ToLocalSpace(XMLoadFloat4x4(&pTransform->Get_WorldMatrixInv()));
+
+	_uint iNumIndices = {};
+
+	for (_uint i = 0; i < m_iNumVerticesZ - 1; i++)
+	{
+		for (_uint j = 0; j < m_iNumVerticesX - 1; j++)
+		{
+			_uint	iIndex = i * m_iNumVerticesX + j;
+
+			_uint	iIndices[4] = {
+				iIndex + m_iNumVerticesX,
+				iIndex + m_iNumVerticesX + 1,
+				iIndex + 1,
+				iIndex
+			};
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[1]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+				m_pVertexPositions[iIndices[0]].y += fY;
+				m_pVertexPositions[iIndices[1]].y += fY;
+				m_pVertexPositions[iIndices[2]].y += fY;
+				
+				if (FAILED(Update_Vertex()))
+					return false;
+
+				return true;
+			}
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), XMLoadFloat3(&m_pVertexPositions[iIndices[3]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+				m_pVertexPositions[iIndices[0]].y += fY;
+				m_pVertexPositions[iIndices[2]].y += fY;
+				m_pVertexPositions[iIndices[3]].y += fY;
+
+				if (FAILED(Update_Vertex()))
+					return false;
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+_bool CVIBuffer_Terrain::Picking_Smooth(CTransform* pTransform, _float3* pOut, _float fY)
+{
+	m_pGameInstance->Transform_ToLocalSpace(XMLoadFloat4x4(&pTransform->Get_WorldMatrixInv()));
+
+	_uint iNumIndices = {};
+
+	for (_uint i = 0; i < m_iNumVerticesZ - 1; i++)
+	{
+		for (_uint j = 0; j < m_iNumVerticesX - 1; j++)
+		{
+			_uint	iIndex = i * m_iNumVerticesX + j;
+
+			_uint	iIndices[4] = {
+				iIndex + m_iNumVerticesX,
+				iIndex + m_iNumVerticesX + 1,
+				iIndex + 1,
+				iIndex
+			};
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[1]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+		
+				m_pVertexPositions[iIndices[0]].y = fY;
+				m_pVertexPositions[iIndices[1]].y = fY;
+				m_pVertexPositions[iIndices[2]].y = fY;
+				m_pVertexPositions[iIndices[3]].y = fY;
+
+				if (FAILED(Update_Vertex()))
+					return false;
+
+				return true;
+			}
+
+			if (true == m_pGameInstance->Picking_InLocalSpace(XMLoadFloat3(&m_pVertexPositions[iIndices[0]]), XMLoadFloat3(&m_pVertexPositions[iIndices[2]]), XMLoadFloat3(&m_pVertexPositions[iIndices[3]]), pOut))
+			{
+				XMStoreFloat3(pOut, XMVector3TransformCoord(XMLoadFloat3(pOut), XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+
+				m_pVertexPositions[iIndices[0]].y = fY;
+				m_pVertexPositions[iIndices[1]].y = fY;
+				m_pVertexPositions[iIndices[2]].y = fY;
+				m_pVertexPositions[iIndices[3]].y = fY;
+
+				if (FAILED(Update_Vertex()))
+					return false;
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 HRESULT CVIBuffer_Terrain::Change_Verices(_uint iSizeX, _uint iSizeZ)
 {
 
@@ -201,15 +466,6 @@ HRESULT CVIBuffer_Terrain::Change_Verices(_uint iSizeX, _uint iSizeZ)
 	}else
 		m_bChange = true;
 
-
-
-
-	/*if(!m_bChange)
-	{
-		Safe_Release(m_pVB);
-		Safe_Release(m_pIB);
-		m_bChange = true;
-	}*/
 	Safe_Release(m_pVB);
 	Safe_Release(m_pIB);
 
@@ -337,7 +593,7 @@ HRESULT CVIBuffer_Terrain::Change_Verices(_uint iSizeX, _uint iSizeZ)
 	Safe_Delete_Array(pPixels);
 }
 
-CVIBuffer_Terrain* CVIBuffer_Terrain::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFilePath, _uint iSizeX, _uint iSizeZ)
+CVIBuffer_Terrain* CVIBuffer_Terrain::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pFilePath, _uint iSizeX, _uint iSizeZ)
 {
 	CVIBuffer_Terrain* pInstance = new CVIBuffer_Terrain(pDevice, pContext);
 

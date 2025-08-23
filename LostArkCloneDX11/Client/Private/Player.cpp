@@ -85,6 +85,8 @@ void CPlayer::Update(_float fTimeDelta)
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+
+
 }
 
 HRESULT CPlayer::Render()

@@ -30,6 +30,8 @@ using namespace DirectX;
 #include <unordered_map>
 #include <ctime>
 #include <fstream>
+#include <sstream>
+#include <charconv>
 
 using namespace std;
 

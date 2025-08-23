@@ -121,12 +121,15 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 
 				switch (iDataIndex)
 				{
-				case 0:
+				/* Scala */
+				case 0: 
 					// value
 					getline(file, strText);
 					// name
 					break;
-				case 1:
+
+				/* Texture */
+				case 1: 
 					// value
 					iBeginIndex = (_uint)strText.find_first_of('.');
 					iEndIndex = (_uint)strText.rfind('\'');
@@ -152,9 +155,10 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 						return E_FAIL;
 
 					break;
+
+				/* Vector Value */
 				case 2:
 					// value
-						// value
 					iBeginIndex = (_uint)strText.find_first_of('{');
 					iEndIndex = (_uint)strText.rfind('}');
 					

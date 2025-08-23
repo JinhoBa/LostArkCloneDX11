@@ -25,10 +25,14 @@ private:
 	class CGameManager*		m_pGameManager = {};
 	CTextureMap*			m_pTextureCom = { nullptr };
 
-	_int					m_iComboIndex = {};
+	_int					m_iMapObject_ComboIndex = {};
+	_int					m_iTerrain_ComboIndex = {};
 
 
-	vector<const _char*>	m_PrototypeTags = {};
+	vector<const _char*>	m_MapObject_PrototypeTags = {};
+	vector<const _char*>	m_Terrain_PrototypeTags = {};
+
+
 	vector<_wstring>*		m_pImagesNames = {};
 
 	list<CGameObject*>*		m_pBackGroundObject = { nullptr };
@@ -36,7 +40,7 @@ private:
 	class CMapObject*		m_pMapObject = { nullptr };
 	class CTerrain*			m_pTerrain = { nullptr };
 
-	string m_strSaveFileName = {};
+	string					m_strSaveFileName = {};
 
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
@@ -44,6 +48,7 @@ private:
 	HRESULT Ready_Layer_Canvas(const _wstring& strLayerTag);
 
 	HRESULT Add_MapObject();
+	HRESULT Add_Terrain();
 	HRESULT Load_MapData();
 	HRESULT Save_MapData();
 

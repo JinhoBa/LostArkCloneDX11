@@ -1,8 +1,13 @@
 #include "pch.h"
 #include "Level_Tutorial.h"
+
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #include "Camera_Free.h"
+#include "Terrain.h"
+#include "MapObject.h"
+
 CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{pDevice, pContext, ENUM_TO_INT(eLevelID)}
 {
@@ -24,18 +29,11 @@ HRESULT CLevel_Tutorial::Initialize()
 
 void CLevel_Tutorial::Update(_float fTimeDelta)
 {
-    
 
 }
 
 HRESULT CLevel_Tutorial::Render()
 {
-    
-
-    
-
-   
-    
 
     return S_OK;
 }
@@ -43,8 +41,7 @@ HRESULT CLevel_Tutorial::Render()
 HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
     ///* Background */
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Terrain"))))
+    if (FAILED(Load_MapData()))
         return E_FAIL;
 
     CCamera::CAMERA_DESC Desc = {};
@@ -93,6 +90,48 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
 
     return S_OK;
 }
+HRESULT CLevel_Tutorial::Load_MapData()
+{
+    vector<TERRAIN_DATA>* pTerrainData = CGameManager::GetInstance()->Get_TerrainDataPtr();
+
+    if (nullptr == pTerrainData)
+        return E_FAIL;
+
+    for (auto& TerrainData : *pTerrainData)
+    {
+        CTerrain::TERRAIN_DESC Desc = {};
+
+        Desc.strPrototypeTag = TerrainData.strPrototypeTag;
+        Desc.vPosition = TerrainData.vPosition;
+        Desc.vRotation = TerrainData.vRotation;
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+            ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Terrain"), &Desc)))
+            return E_FAIL;
+    }
+
+    vector<MAP_DATA>* pData = CGameManager::GetInstance()->Get_MapDataPtr();
+
+    if (nullptr == pData)
+        return E_FAIL;
+
+    for (auto& MapData : *pData)
+    {
+        CMapObject::MAPOBJECT_DESC Desc = {};
+
+        Desc.strPrototypeTag = MapData.strPrototypeTag;
+        Desc.vPosition = MapData.vPosition;
+        Desc.vRotation = MapData.vRotation;
+        Desc.vScale = MapData.vScale;
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
+            ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Background"), &Desc)))
+            return E_FAIL;
+    }
+
+    return S_OK;
+}
+
 
 CLevel_Tutorial* CLevel_Tutorial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
 {

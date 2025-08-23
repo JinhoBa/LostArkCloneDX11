@@ -44,7 +44,7 @@ namespace Client
 
 	typedef struct tagMapData
 	{
-		_wstring  strProtypeTag;
+		_wstring strPrototypeTag;
 		_float3 vPosition;
 		_float3 vScale;
 		_float3 vRotation;
@@ -52,7 +52,7 @@ namespace Client
 
 	typedef struct tagTerrainData
 	{
-		_float2  vSize;
+		_wstring strPrototypeTag;
 		_float3 vPosition;
 		_float3 vRotation;
 	}TERRAIN_DATA;

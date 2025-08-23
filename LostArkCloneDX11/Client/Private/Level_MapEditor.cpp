@@ -29,7 +29,8 @@ HRESULT CLevel_MapEditor::Initialize()
     m_pBackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
     m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
 
-    m_iComboIndex = 0;
+    m_iMapObject_ComboIndex = 0;
+    m_iTerrain_ComboIndex = 0;
     m_strSaveFileName;
 
     /*Texture*/
@@ -43,7 +44,7 @@ HRESULT CLevel_MapEditor::Initialize()
         return E_FAIL;
 
 
-    m_PrototypeTags = { 
+    m_MapObject_PrototypeTags = { 
       /*  "Prototype_Component_Model_Kamen_chair",
         "Prototype_Component_Model_Kamen_chair01",
         "Prototype_Component_Model_Kamen_chair02",
@@ -63,12 +64,10 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Trision",
         "Prototype_Component_Model_Trision2",
         "Prototype_Component_Model_Trision01b",
-
         "Prototype_Component_Model_Trision_Botton01",
         "Prototype_Component_Model_Trision_Botton01a",
         "Prototype_Component_Model_Trision_Botton02",
         "Prototype_Component_Model_Trision_Botton03",
-
         "Prototype_Component_Model_Trision_circle01",
         "Prototype_Component_Model_Trision_Object01",
         "Prototype_Component_Model_Trision_Stone01",
@@ -86,6 +85,11 @@ HRESULT CLevel_MapEditor::Initialize()
 
     };
 
+    m_Terrain_PrototypeTags = {
+        "Prototype_Component_VIBuffer_Terrain_Trision_Floor",
+        "Prototype_Component_VIBuffer_Terrain_Trision_Stair"
+    };
+
     return S_OK;
 }
 
@@ -99,8 +103,8 @@ HRESULT CLevel_MapEditor::Render()
 
     ImGui::Begin("Map Edit");
 
-    ImGui::Text("Prototype : ");
-    ImGui::Combo("1", &m_iComboIndex, m_PrototypeTags.data(), (int)m_PrototypeTags.size());
+    ImGui::Text("Prototype MapObject : ");
+    ImGui::Combo("MapObject", &m_iMapObject_ComboIndex, m_MapObject_PrototypeTags.data(), (int)m_MapObject_PrototypeTags.size());
 
   /*  const _tchar* pFilePath = (*m_pImagesNames)[m_iComboIndex].c_str();
     ImGui::Image(ImTextureID(m_pTextureCom->Get_SRV(pFilePath)), ImVec2(128, 128));*/
@@ -109,11 +113,16 @@ HRESULT CLevel_MapEditor::Render()
     {
         Add_MapObject();
     }
+
+    ImGui::Text("Prototype Terrain : ");
+    ImGui::Combo("Terrain", &m_iTerrain_ComboIndex, m_Terrain_PrototypeTags.data(), (int)m_Terrain_PrototypeTags.size());
     if (ImGui::Button("Add Terrain"))
     {
-        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
-            ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"))))
+        if (FAILED(Add_Terrain()))
+        {
+            ImGui::End();
             return E_FAIL;
+        }
     }
    
     if (ImGui::Button("Load"))
@@ -124,6 +133,7 @@ HRESULT CLevel_MapEditor::Render()
             return E_FAIL;
         }
         SetWindowText(g_hWnd, TEXT("Load MapData"));
+        m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
     }
     ImGui::Text("-------------------");
     ImGui::Text("Save File Name : ");
@@ -140,18 +150,22 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::Begin("Terrain List");
     _uint iTerrainIndex = {};
     string strTmp;
-    for (auto pObject : *m_pTerrains)
+    if(nullptr != m_pTerrains)
     {
-        CTerrain* pTerrain = dynamic_cast<CTerrain*>(pObject);
 
-        if (nullptr == pTerrain)
-            continue;
-
-        strTmp = "Terrain##" + to_string(iTerrainIndex++);
-
-        if (ImGui::Button(strTmp.c_str()))
+        for (auto pObject : *m_pTerrains)
         {
-            m_pTerrain = pTerrain;
+            CTerrain* pTerrain = dynamic_cast<CTerrain*>(pObject);
+
+            if (nullptr == pTerrain)
+                continue;
+
+            strTmp = "Terrain##" + to_string(iTerrainIndex++);
+
+            if (ImGui::Button(strTmp.c_str()))
+            {
+                m_pTerrain = pTerrain;
+            }
         }
     }
     ImGui::End();
@@ -195,11 +209,6 @@ HRESULT CLevel_MapEditor::Render()
 
 HRESULT CLevel_MapEditor::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-    ///* Background */
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
-        ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"))))
-        return E_FAIL;
-
     CCamera::CAMERA_DESC Desc = {};
 
     Desc.fNear = 0.1f;
@@ -255,13 +264,30 @@ HRESULT CLevel_MapEditor::Add_MapObject()
 {
     CMapObject::MAPOBJECT_DESC Desc = {};
 
-    Desc.strPrototypeTag = m_pGameInstance->Utf8ToWstring(m_PrototypeTags[m_iComboIndex]);
+    Desc.strPrototypeTag = m_pGameInstance->Utf8ToWstring(m_MapObject_PrototypeTags[m_iMapObject_ComboIndex]);
     Desc.vPosition = _float3(0.f, 0.f, 0.f);
     Desc.vRotation = _float3(0.f, 0.f, 0.f);
     Desc.vScale = _float3(1.f, 1.f, 1.f);
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
         ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"), &Desc)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_MapEditor::Add_Terrain()
+{
+    CTerrain::TERRAIN_DESC Desc = {};
+
+    Desc.fRotatePersec = 0.f;
+    Desc.fSpeedPersec = 0.f;
+    Desc.strPrototypeTag = m_pGameInstance->Utf8ToWstring(m_Terrain_PrototypeTags[m_iTerrain_ComboIndex]);
+    Desc.vPosition = _float3(0.f, 0.f, 0.f);
+    Desc.vRotation = _float3(0.f, 0.f, 0.f);
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+        ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"), &Desc)))
         return E_FAIL;
 
     return S_OK;
@@ -287,7 +313,7 @@ HRESULT CLevel_MapEditor::Load_MapData()
     {
         CTerrain::TERRAIN_DESC Desc = {};
 
-        Desc.vSize = TerrainData.vSize;
+        Desc.strPrototypeTag = TerrainData.strPrototypeTag;
         Desc.vPosition = TerrainData.vPosition;
         Desc.vRotation = TerrainData.vRotation;
  
@@ -306,7 +332,7 @@ HRESULT CLevel_MapEditor::Load_MapData()
     {
         CMapObject::MAPOBJECT_DESC Desc = {};
 
-        Desc.strPrototypeTag = MapData.strProtypeTag;
+        Desc.strPrototypeTag = MapData.strPrototypeTag;
         Desc.vPosition = MapData.vPosition;
         Desc.vRotation = MapData.vRotation;
         Desc.vScale = MapData.vScale;
@@ -315,6 +341,8 @@ HRESULT CLevel_MapEditor::Load_MapData()
             ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"), &Desc)))
             return E_FAIL;
     }
+
+    return S_OK;
 }
 
 HRESULT CLevel_MapEditor::Save_MapData()

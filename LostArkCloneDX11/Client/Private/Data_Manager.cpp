@@ -33,10 +33,18 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
 
     for (auto* land = root->FirstChildElement("Terrain"); land; land = land->NextSiblingElement("Terrain"))
     {
-        tinyxml2::XMLElement* protoElem = land->FirstChildElement("Size");
+        tinyxml2::XMLElement* protoElem = land->FirstChildElement("PrototypeTag");
 
-        protoElem->QueryFloatAttribute("x", &Terrain_Data.vSize.x);
-        protoElem->QueryFloatAttribute("z", &Terrain_Data.vSize.y);
+        const _char* pPrototypeTag = protoElem->GetText();
+
+        if (nullptr != pPrototypeTag)
+        {
+            Terrain_Data.strPrototypeTag = CGameInstance::GetInstance()->Utf8ToWstring(pPrototypeTag);
+        }
+        else
+        {
+            Terrain_Data.strPrototypeTag = L"";
+        }
 
         protoElem = land->FirstChildElement("Position");
         if (nullptr == protoElem)
@@ -67,11 +75,11 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
 
         if (nullptr != pPrototypeTag)
         {
-            Map_Data.strProtypeTag = CGameInstance::GetInstance()->Utf8ToWstring(pPrototypeTag);
+            Map_Data.strPrototypeTag = CGameInstance::GetInstance()->Utf8ToWstring(pPrototypeTag);
         }
         else
         {
-            Map_Data.strProtypeTag = L"";
+            Map_Data.strPrototypeTag = L"";
         }
         
         protoElem = land->FirstChildElement("Position");
@@ -132,12 +140,11 @@ HRESULT CData_Manager::Save_MapData(const _char* pFileName)
         tinyxml2::XMLElement* Terrain = doc.NewElement("Terrain");
         land->InsertEndChild(Terrain);
 
-        tinyxml2::XMLElement* SizeElem = doc.NewElement("Size");
+        tinyxml2::XMLElement* PrototypeElem = doc.NewElement("PrototypeTag");
 
-        _float2 vSize = pTerrain->Get_Size();
-        SizeElem->SetAttribute("x", vSize.x);
-        SizeElem->SetAttribute("z", vSize.y);
-        Terrain->InsertEndChild(SizeElem);
+
+        PrototypeElem->SetText(m_pGameInstance->WstringToUtf8(pTerrain->Get_PrototypeTag()).c_str());
+        Terrain->InsertEndChild(PrototypeElem);
 
         // <Position x="0.0" y="0.0" z="0.0"/>
         tinyxml2::XMLElement* PositionElem = doc.NewElement("Position");

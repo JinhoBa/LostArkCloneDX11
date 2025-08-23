@@ -281,14 +281,14 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
-	///* For.Prototype_Component_Model_Player */
+	///* TEST CODE */
 	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Player/Player.fbx"))))
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
 	//	return E_FAIL;
 
 	/* TEST CODE */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
+		CModel::Create_BinaryFile(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx", nullptr))))
 		return E_FAIL;
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
@@ -303,10 +303,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 #pragma region COMPONENT
 
-	/*For Prototype_Component_VIBuffer_Terrain*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height1.bmp"), 64, 64))))
+	/*For Prototype_Component_VIBuffer_Terrain_Trision_Floor*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_Trision_Floor"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, "../Bin/Resources/HeightMap/Terrision_Floor.bin", 50, 50))))
 		return E_FAIL;
+
+	/*For Prototype_Component_VIBuffer_Terrain_Trision_Stair*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_Trision_Stair"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, nullptr, 4, 6))))
+		return E_FAIL;
+
 
 #pragma endregion
 	
@@ -388,6 +394,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 HRESULT CLoader::Loading_For_Tutorial()
 {
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision0823.xml")))
+		return E_FAIL;
+
 	if (FAILED(Loading_For_GamePlay()))
 		return E_FAIL;
 	
@@ -402,12 +411,134 @@ HRESULT CLoader::Loading_For_Tutorial()
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
+#pragma region TRISION
+	/* For.Prototype_Component_Model_Trision */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision2 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision2"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision01b */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision01b"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_01b.fbx"))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Trision_Botton01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton01"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom01.fbx"))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Trision_Botton01a */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton01a"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom01a.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Botton02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton02"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Botton03 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Botton03"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom03.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Wall */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Wall"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_wall.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_arkprop */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_arkprop"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_arkprop.fbx"))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_Trision_circle01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_circle01"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_circle01.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_circle01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_circle02"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_circle02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Object01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Object01"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stone01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stone01"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone01.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stone02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stone02"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone02.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stone03 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stone03"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone03.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_2c */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_2c"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision01_c.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01a */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01a"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01a.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01b */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01b"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01b.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01c */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01c"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01c.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01d */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01d"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01d.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01e */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01e"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01e.fbx"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Trision_Stair01f */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trision_Stair01f"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01f.fbx"))))
+		return E_FAIL;
+
+
+#pragma endregion
+
 	m_fLoadProgress = 40.f;
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
 	m_fLoadProgress = 60.f;
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 	
+	/* For.Prototype_GameObject_MapObjcet */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
+		CMapObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	m_fLoadProgress = 80.f;
 #pragma region GAEMOBJCET_PROTOTYPE
 
@@ -429,7 +560,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Test0822.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/HeightMapTest.xml")))
 		return E_FAIL;
 
 	if (FAILED(CGameManager::GetInstance()->Load_PreviewTextures("../Bin/Resources/Data/MeshPreview.xml")))
