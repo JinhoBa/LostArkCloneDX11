@@ -9,6 +9,44 @@ CMaterials::CMaterials(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	Safe_AddRef(m_pContext);
 }
 
+HRESULT CMaterials::Initialize(const _char* pMaterialFileName, const _char* pModelFilePath)
+{
+	_char szDrive[MAX_PATH] = {};
+	_char szDir[MAX_PATH] = {};
+	_char szFileName[MAX_PATH] = {};
+
+	_char szMaterialFilePath[MAX_PATH] = {};
+	_char szTextureFilePath[MAX_PATH] = {};
+
+	_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDir, MAX_PATH, szFileName, MAX_PATH, nullptr, 0);
+
+	strcpy_s(szMaterialFilePath, szDrive);
+	strcat_s(szMaterialFilePath, szDir);
+	strcat_s(szMaterialFilePath, "MaterialInstance/");
+	strcat_s(szMaterialFilePath, pMaterialFileName);
+
+	string strTmp = string(szMaterialFilePath);
+
+	auto size = strTmp.rfind('.');
+
+	if (3 < size)
+	{
+		strTmp = strTmp.substr(0, size);
+	}
+	strcpy_s(szMaterialFilePath, strTmp.c_str());
+
+	strcat_s(szMaterialFilePath, ".props.txt");
+
+	strcpy_s(szTextureFilePath, szDrive);
+	strcat_s(szTextureFilePath, szDir);
+	strcat_s(szTextureFilePath, "Texture2D/");
+
+	if (FAILED(Read_MaterialFile(szMaterialFilePath, szTextureFilePath)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CMaterials::Initialize(aiMaterial* pAiMaterial, const _char* pModelFilePath)
 {
 	_char szDrive[MAX_PATH] = {};
@@ -213,10 +251,9 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 		eTexture = TEXTURE::COLOR_FX;
 	else if (!strcmp(FileType.c_str(), "cutting_mask"))
 		eTexture = TEXTURE::MASK;
-	else if (!strcmp(FileType.c_str(), "none"))
+	else if (!strcmp(FileType.c_str(), "null"))
 	{
 		eTexture = TEXTURE::NONE;
-		return S_OK;
 	}
 	else
 	{
@@ -226,6 +263,8 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 			eTexture = TEXTURE::DIFFUSE;
 		else if (!strcmp(FileType.c_str(), "tdspecular"))
 			eTexture = TEXTURE::SPECULAR;
+		else if (!strcmp(FileType.c_str(), "detail_normal"))
+			eTexture = TEXTURE::NORMAL;
 		else
 		{
 			MSG_BOX("Failed to Path Material Texture Type");
@@ -292,11 +331,25 @@ HRESULT CMaterials::Add_VectorValue(string& strValue, string& strName)
 	return S_OK;
 }
 
-CMaterials* CMaterials::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, aiMaterial* pAiMaterial, const _char* pFilePath)
+CMaterials* CMaterials::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pMaterialFileName, const _char* pModelFilePath)
 {
 	CMaterials* pInstance = new CMaterials(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize(pAiMaterial, pFilePath)))
+	if (FAILED(pInstance->Initialize(pMaterialFileName, pModelFilePath)))
+	{
+		Safe_Release(pInstance);
+		MSG_BOX("Failed to Create CMaterial");
+		return nullptr;
+	}
+
+	return pInstance;
+}
+
+CMaterials* CMaterials::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, aiMaterial* pAiMaterial, const _char* pModelFilePath)
+{
+	CMaterials* pInstance = new CMaterials(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize(pAiMaterial, pModelFilePath)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create CMaterial");

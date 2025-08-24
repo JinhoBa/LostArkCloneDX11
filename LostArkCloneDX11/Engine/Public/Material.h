@@ -10,7 +10,9 @@ private:
 	virtual ~CMaterials() = default;
 
 public:
+	HRESULT Initialize(const _char* pMaterialFileName, const _char* pModelFilePath);
 	HRESULT Initialize(aiMaterial* pAiMaterial, const _char* pModelFilePath);
+	
 
 	HRESULT Bind_SRV(class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex);
 	HRESULT Bind_Value(class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex);
@@ -28,7 +30,8 @@ private:
 	HRESULT Add_VectorValue(string& strValue, string& strName);
 
 public:
-	static CMaterials* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, aiMaterial* pAiMaterial, const _char* pFilePath);
+	static CMaterials* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pMaterialFileName, const _char* pModelFilePath);
+	static CMaterials* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, aiMaterial* pAiMaterial, const _char* pModelFilePath);
 	virtual void Free() override;
 };
 

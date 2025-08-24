@@ -32,12 +32,6 @@ HRESULT CLevel_MapEditor::Initialize()
     m_iMapObject_ComboIndex = 0;
     m_iTerrain_ComboIndex = 0;
     m_strSaveFileName;
-
-    /*Texture*/
-    m_pTextureCom = static_cast<CTextureMap*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Prototype_Component_TextureMap_MeshPreview")));
-
-    if (nullptr == m_pTextureCom)
-        return E_FAIL;
        
     m_pImagesNames = m_pGameManager->Get_PreviewTexturesPtr();
     if (nullptr == m_pImagesNames)
@@ -45,9 +39,10 @@ HRESULT CLevel_MapEditor::Initialize()
 
 
     m_MapObject_PrototypeTags = { 
-      /*  "Prototype_Component_Model_Kamen_chair",
-        "Prototype_Component_Model_Kamen_chair01",
-        "Prototype_Component_Model_Kamen_chair02",
+        // Kamen
+       "Prototype_Component_Model_Kamen_chair01",
+        "Prototype_Component_Model_Kamen_chair01a",
+        "Prototype_Component_Model_Kamen_chair01b",
         "Prototype_Component_Model_Kamen_floar01",
         "Prototype_Component_Model_Kamen_floar02",
         "Prototype_Component_Model_Kamen_floar03",
@@ -60,8 +55,45 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Kamen_floar05e",
         "Prototype_Component_Model_Kamen_floar05f",
         "Prototype_Component_Model_Kamen_floar05g",
-        "Prototype_Component_Model_Kamen_floar06",*/
-        "Prototype_Component_Model_Trision",
+        "Prototype_Component_Model_Kamen_floar05h",
+        "Prototype_Component_Model_Kamen_floar06",
+        "Prototype_Component_Model_Kamen_floar07",
+        "Prototype_Component_Model_Kamen_floar08",
+        "Prototype_Component_Model_Kamen_floar08b",
+        "Prototype_Component_Model_Kamen_floar08e",
+        "Prototype_Component_Model_Kamen_floar09",
+        "Prototype_Component_Model_Kamen_floar10",
+        "Prototype_Component_Model_Kamen_floar11",
+        "Prototype_Component_Model_Kamen_floar11a",
+        "Prototype_Component_Model_Kamen_floar12",
+        "Prototype_Component_Model_Kamen_floar12a",
+        "Prototype_Component_Model_Kamen_deco01",
+        "Prototype_Component_Model_Kamen_deco02",
+        "Prototype_Component_Model_Kamen_deco02c",
+        "Prototype_Component_Model_Kamen_deco02a",
+        "Prototype_Component_Model_Kamen_deco02b",
+        "Prototype_Component_Model_Kamen_deco03",
+        "Prototype_Component_Model_Kamen_deco04",
+        "Prototype_Component_Model_Kamen_deco05",
+        "Prototype_Component_Model_Kamen_deco06",
+        "Prototype_Component_Model_Kamen_pillar01",
+        "Prototype_Component_Model_Kamen_pillar01a",
+        "Prototype_Component_Model_Kamen_pillar02",
+        "Prototype_Component_Model_Kamen_pillar02a",
+        "Prototype_Component_Model_Kamen_pillar02low",
+        "Prototype_Component_Model_Kamen_pillar03",
+        "Prototype_Component_Model_Kamen_pillar04",
+        "Prototype_Component_Model_Kamen_pillar05",
+        "Prototype_Component_Model_Kamen_pillar06",
+        "Prototype_Component_Model_Kamen_pillar07",
+        "Prototype_Component_Model_Kamen_pillar08",
+        "Prototype_Component_Model_Kamen_pillar09",
+        "Prototype_Component_Model_Kamen_pillar09a",
+        "Prototype_Component_Model_Kamen_pillar09low",
+        "Prototype_Component_Model_Kamen_gate01",
+
+        // Trision
+     /*   "Prototype_Component_Model_Trision",
         "Prototype_Component_Model_Trision2",
         "Prototype_Component_Model_Trision01b",
         "Prototype_Component_Model_Trision_Botton01",
@@ -81,14 +113,20 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Trision_Stair01e",
         "Prototype_Component_Model_Trision_Stair01f",
         "Prototype_Component_Model_Trision_Wall",
-        "Prototype_Component_Model_Trision_arkprop"
+        "Prototype_Component_Model_Trision_arkprop"*/
 
     };
 
     m_Terrain_PrototypeTags = {
         "Prototype_Component_VIBuffer_Terrain_Trision_Floor",
-        "Prototype_Component_VIBuffer_Terrain_Trision_Stair"
+        "Prototype_Component_VIBuffer_Terrain_Trision_Stair",
+        "Prototype_Component_VIBuffer_Terrain_64",
+        "Prototype_Component_VIBuffer_Terrain_32",
+        "Prototype_Component_VIBuffer_Terrain_16"
     };
+
+   
+ 
 
     return S_OK;
 }
@@ -106,9 +144,7 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::Text("Prototype MapObject : ");
     ImGui::Combo("MapObject", &m_iMapObject_ComboIndex, m_MapObject_PrototypeTags.data(), (int)m_MapObject_PrototypeTags.size());
 
-  /*  const _tchar* pFilePath = (*m_pImagesNames)[m_iComboIndex].c_str();
-    ImGui::Image(ImTextureID(m_pTextureCom->Get_SRV(pFilePath)), ImVec2(128, 128));*/
-    
+
     if (ImGui::Button("Add MapObject"))
     {
         Add_MapObject();
@@ -123,6 +159,8 @@ HRESULT CLevel_MapEditor::Render()
             ImGui::End();
             return E_FAIL;
         }
+        m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+
     }
    
     if (ImGui::Button("Load"))
@@ -369,5 +407,4 @@ void CLevel_MapEditor::Free()
     __super::Free();
 
     Safe_Release(m_pGameManager);
-    Safe_Release(m_pTextureCom);
 }

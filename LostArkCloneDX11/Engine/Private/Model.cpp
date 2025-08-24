@@ -22,37 +22,46 @@ CModel::CModel(CModel& Prototype)
         Safe_AddRef(pTexture);
 }
 
-HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, MODELFILE eModeFile, _fmatrix PreTransformMatrix)
 {
-    _uint iFlag = {};
-
-    iFlag =  aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
-
-    if (MODEL::NONANIM == eModel)
-        iFlag |= aiProcess_PreTransformVertices;
-
-    m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
-
-    XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
-
-
-
-    if (nullptr == m_pAiScene)
+    if (MODELFILE::FBX == eModeFile)
     {
-        MSG_BOX("Failed to ReadFile...");
-        return E_FAIL;
+        _uint iFlag = {};
+
+        iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
+
+        if (MODEL::NONANIM == eModel)
+            iFlag |= aiProcess_PreTransformVertices;
+
+        m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
+
+        XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
+
+
+        if (nullptr == m_pAiScene)
+        {
+            MSG_BOX("Failed to ReadFile...");
+            return E_FAIL;
+        }
+
+        if (FAILED(Ready_Meshes()))
+            return E_FAIL;
+
+        if (FAILED(Ready_Materials(pModelFilePath)))
+            return E_FAIL;
     }
+    else
+    {
+        if (FAILED(Load_Binary_Model(pModelFilePath)))
+            return E_FAIL;
+    }
+    
 
-    if (FAILED(Ready_Meshes()))
-        return E_FAIL;
-
-    if (FAILED(Ready_Materials(pModelFilePath)))
-        return E_FAIL;
 
     return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix, const _char* pBinaryFilePath)
+HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     _uint iFlag = {};
 
@@ -77,7 +86,21 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
     if (FAILED(Ready_Materials(pModelFilePath)))
         return E_FAIL;
 
-    if (FAILED(Save_Binary_Model(pBinaryFilePath)))
+    _char szDrive[MAX_PATH] = {};
+    _char szDir[MAX_PATH] = {};
+    _char szFileName[MAX_PATH] = {};
+    _char szExt[MAX_PATH] = {};
+    
+    _splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDir, MAX_PATH, szFileName, MAX_PATH, nullptr, 0);
+
+    _char szBinaryFilePath[MAX_PATH] = {};
+
+    strcpy_s(szBinaryFilePath, szDrive);
+    strcat_s(szBinaryFilePath, szDir);
+    strcat_s(szBinaryFilePath, szFileName);
+    strcat_s(szBinaryFilePath, ".bin");
+
+    if (FAILED(Save_Binary_Model(szBinaryFilePath)))
         return E_FAIL;
 
     return S_OK;
@@ -118,13 +141,16 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
 
 HRESULT CModel::Save_Binary_Model(const _char* pModelFielPath)
 {
-    ofstream out("TestBin.bin", ios::binary);
+    ofstream out(pModelFielPath, ios::binary);
 
     if (false == out.is_open())
     {
         MSG_BOX("Failed to Save Model Binanry File");
         return E_FAIL;
     }
+
+    out.write(reinterpret_cast<const _char*>(&m_pAiScene->mNumMeshes), sizeof(_uint));
+
     /* Mesh */
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
@@ -138,32 +164,81 @@ HRESULT CModel::Save_Binary_Model(const _char* pModelFielPath)
       
         for (_uint j = 0; j < iNumVertices; ++j)
         {
-            out.write(reinterpret_cast<const _char*>(&Mesh->mVertices[i]), sizeof(_float3));
-            out.write(reinterpret_cast<const _char*>(&Mesh->mNormals[i]), sizeof(_float3));
-            out.write(reinterpret_cast<const _char*>(&Mesh->mTangents[i]), sizeof(_float3));
-            out.write(reinterpret_cast<const _char*>(&Mesh->mTextureCoords[i]), sizeof(_float3));
+            out.write(reinterpret_cast<const _char*>(&Mesh->mVertices[j]), sizeof(_float3));
+            out.write(reinterpret_cast<const _char*>(&Mesh->mNormals[j]), sizeof(_float3));
+            out.write(reinterpret_cast<const _char*>(&Mesh->mTangents[j]), sizeof(_float3));
+            out.write(reinterpret_cast<const _char*>(&Mesh->mTextureCoords[0][j]), sizeof(_float2));
         }
         
         _uint iNumFaces = Mesh->mNumFaces;
         
         for (_uint j = 0; j < iNumFaces; ++j)
         {
-            out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[i].mIndices), sizeof(_uint) * 3);
+            out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[j].mIndices[0]), sizeof(_uint));
+            out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[j].mIndices[1]), sizeof(_uint));
+            out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[j].mIndices[2]), sizeof(_uint));
         }
     }
 
     /* Material */
     aiMaterial** ppMaterial = m_pAiScene->mMaterials;
 
+    out.write(reinterpret_cast<const _char*>(&m_pAiScene->mNumMaterials), sizeof(_uint));
+
     for (_uint i = 0; i < m_iNumMaterials; ++i)
     {
         aiMaterial* Material = ppMaterial[i];
 
-        out.write(reinterpret_cast<const _char*>(Material->GetName().data), sizeof(1024));
+        out.write(reinterpret_cast<const _char*>(Material->GetName().data), MAX_PATH);
     }
 
-
     out.close();
+
+    return S_OK;
+}
+
+HRESULT CModel::Load_Binary_Model(const _char* pModelFielPath)
+{
+    ifstream in(pModelFielPath, ios::binary);
+
+    if (false == in.is_open())
+    {
+        MSG_BOX("Failed to Load Model Binanry File");
+        return E_FAIL;
+    }
+
+    /* Mesh */
+
+    in.read(reinterpret_cast<_char*>(&m_iNumMeshes), sizeof(_uint));
+    
+    for (_uint i = 0; i < m_iNumMeshes; ++i)
+    {
+        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, in);
+        if (nullptr == pMesh)
+        {
+            MSG_BOX("Failed to Ready Mesh from BinaryFile");
+            return E_FAIL;
+        }
+        m_Meshes.push_back(pMesh);
+    }
+
+    in.read(reinterpret_cast<_char*>(&m_iNumMaterials), sizeof(_uint));
+
+    for (_uint i = 0; i < m_iNumMaterials; ++i)
+    {
+        _char szMatrialFilePath[MAX_PATH] = {};
+        in.read(reinterpret_cast<_char*>(szMatrialFilePath), MAX_PATH);
+
+        CMaterials* pMaterial = CMaterials::Create(m_pDevice, m_pContext, szMatrialFilePath, pModelFielPath);
+
+        if (nullptr == pMaterial)
+            return E_FAIL;
+
+        m_Materials.push_back(pMaterial);
+    }
+   
+    in.close();
+
 
     return S_OK;
 }
@@ -206,11 +281,11 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
     return S_OK;
 }
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, MODELFILE eModeFile, _fmatrix PreTransformMatrix)
 {
     CModel* pInstance = new CModel(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, PreTransformMatrix)))
+    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, eModeFile, PreTransformMatrix)))
     {
         Safe_Release(pInstance);
         MSG_BOX("Failed to Create : CModel");
@@ -220,11 +295,11 @@ CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MOD
     return pInstance;
 }
 
-CModel* CModel::Create_BinaryFile(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, const _char* pBinaryFilePath, _fmatrix PreTransformMatrix)
+CModel* CModel::Create_BinaryFile(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     CModel* pInstance = new CModel(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, PreTransformMatrix, pBinaryFilePath)))
+    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, PreTransformMatrix)))
     {
         Safe_Release(pInstance);
         MSG_BOX("Failed to Create : CModel");

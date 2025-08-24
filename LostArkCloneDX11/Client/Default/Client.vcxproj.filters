@@ -160,6 +160,9 @@
     <Filter Include="03.UIObject\Mouse">
       <UniqueIdentifier>{b25a4856-904f-4c7b-a669-dffaeeaafefc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Skill">
+      <UniqueIdentifier>{1fecdd2a-3478-4a48-befe-4e014e168ee9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -309,6 +312,9 @@
     <ClInclude Include="..\public\Mouse.h">
       <Filter>03.UIObject\Mouse</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Skill.h">
+      <Filter>04.Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -452,6 +458,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Mouse.cpp">
       <Filter>03.UIObject\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Skill.cpp">
+      <Filter>04.Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,8 +14,8 @@ public:
 	_uint Get_NumMeshes() { return m_iNumMeshes; }
 
 public:
+	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, MODELFILE eModeFile, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
-	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix, const _char* pBinaryFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 	
@@ -46,8 +46,8 @@ private:
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
-	static CModel* Create_BinaryFile(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, const _char* pBinaryFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, MODELFILE eModeFile = MODELFILE::FBX,_fmatrix PreTransformMatrix = XMMatrixIdentity());
+	static CModel* Create_BinaryFile(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

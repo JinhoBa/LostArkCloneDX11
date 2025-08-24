@@ -58,6 +58,10 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
         return E_FAIL;
 
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkySphere"),
+        ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Sky"), &Desc)))
+        return E_FAIL;
+
     return S_OK;
 }
 

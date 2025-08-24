@@ -9,6 +9,7 @@ namespace Engine
 	enum class RENDER { PRIORITY, NONBLEND, BLEND, UI, CURSOR, END};
 	enum class TEXTURE { DIFFUSE, NORMAL, SPECULAR, EMISSIVE, REFLECTION, MASK, COLOR_FX, NONE, END };
 	enum class MODEL {NONANIM, ANIM};
+	enum class MODELFILE {FBX, BIN};
 	enum class RAY { LOCAL, WORLD, END };
 	enum class CHANNELID { BGM, EFFECT, END };
 	enum class D3DTS {VIEW, PROJ, END};
