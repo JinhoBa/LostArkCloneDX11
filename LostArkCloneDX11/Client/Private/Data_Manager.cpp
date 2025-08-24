@@ -382,6 +382,14 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
     return S_OK;
 }
 
+const SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
+{
+    if(m_SkillDatas.size() <= iSkillID)
+        return nullptr;
+
+    return &m_SkillDatas[iSkillID];
+}
+
 
 
 CData_Manager* CData_Manager::Creat()

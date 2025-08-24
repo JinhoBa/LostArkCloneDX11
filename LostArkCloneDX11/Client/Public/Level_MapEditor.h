@@ -5,7 +5,6 @@
 
 NS_BEGIN(Engine)
 class CGameObject;
-class CTextureMap;
 NS_END
 
 NS_BEGIN(Client)
@@ -23,7 +22,6 @@ public:
 
 private:
 	class CGameManager*		m_pGameManager = {};
-	CTextureMap*			m_pTextureCom = { nullptr };
 
 	_int					m_iMapObject_ComboIndex = {};
 	_int					m_iTerrain_ComboIndex = {};

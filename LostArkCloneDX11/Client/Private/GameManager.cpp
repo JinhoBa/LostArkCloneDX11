@@ -60,6 +60,11 @@ HRESULT	 CGameManager::Load_SkillData(const _char* pFilePath)
 	return m_pData_Manager->Load_SkillData(pFilePath);
 }
 
+const SKILL_INFO* CGameManager::Get_SkillInfo_Prt(_uint iSkillID)
+{
+	return m_pData_Manager->Get_SkillInfo_Prt(iSkillID);
+}
+
 void CGameManager::Bind_PickingPos(_float3* pPickingPos)
 {
 	if (nullptr == m_pPickingPos)

@@ -30,6 +30,7 @@ public:
 
 #pragma region SKILL_DATA
 	HRESULT				Load_SkillData(const _char* pFilePath);
+	const SKILL_INFO*	Get_SkillInfo_Prt(_uint iSkillID);
 #pragma endregion
 
 
