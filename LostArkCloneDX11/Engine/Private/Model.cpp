@@ -1,8 +1,10 @@
 #include "Model.h"
 
+#include "GameInstance.h"
+
 #include "Mesh.h"
 #include "Material.h"
-#include "GameInstance.h"
+#include "Bone.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CComponent{ pDevice, pContext}
@@ -12,6 +14,8 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CModel::CModel(CModel& Prototype)
     :CComponent{ Prototype },
     m_iNumMeshes{Prototype.m_iNumMeshes},
+    m_iNumMaterials{Prototype.m_iNumMaterials },
+    m_iNumBones{Prototype.m_iNumBones },
     m_Meshes{Prototype.m_Meshes},
     m_Materials{Prototype.m_Materials }
 {
@@ -22,9 +26,13 @@ CModel::CModel(CModel& Prototype)
         Safe_AddRef(pTexture);
 }
 
-HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, MODELFILE eModeFile, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
-    if (MODELFILE::FBX == eModeFile)
+    _char szExt[MAX_PATH] = {};
+
+    _splitpath_s(pModelFilePath, nullptr, 0, nullptr, 0, nullptr, 0, szExt, MAX_PATH);
+
+    if (!strcmp(szExt, ".fbx"))
     {
         _uint iFlag = {};
 
@@ -37,31 +45,35 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
 
         XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
 
-
         if (nullptr == m_pAiScene)
         {
             MSG_BOX("Failed to ReadFile...");
             return E_FAIL;
         }
 
-        if (FAILED(Ready_Meshes()))
+        if (FAILED(Ready_Meshes(eModel)))
             return E_FAIL;
 
         if (FAILED(Ready_Materials(pModelFilePath)))
             return E_FAIL;
+
+        m_Bones.reserve(200);
+
+        if (FAILED(Ready_Bones(m_pAiScene->mRootNode, -1)))
+            return E_FAIL;
+
     }
     else
     {
-        if (FAILED(Load_Binary_Model(pModelFilePath)))
+        if (FAILED(Load_Binary_Model(eModel, pModelFilePath)))
             return E_FAIL;
     }
-    
 
 
     return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     _uint iFlag = {};
 
@@ -80,7 +92,7 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
         return E_FAIL;
     }
 
-    if (FAILED(Ready_Meshes()))
+    if (FAILED(Ready_Meshes(eModel)))
         return E_FAIL;
 
     if (FAILED(Ready_Materials(pModelFilePath)))
@@ -100,7 +112,7 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
     strcat_s(szBinaryFilePath, szFileName);
     strcat_s(szBinaryFilePath, ".bin");
 
-    if (FAILED(Save_Binary_Model(szBinaryFilePath)))
+    if (FAILED(Save_Binary_Model(eModel, szBinaryFilePath)))
         return E_FAIL;
 
     return S_OK;
@@ -139,7 +151,7 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
     return S_OK;
 }
 
-HRESULT CModel::Save_Binary_Model(const _char* pModelFielPath)
+HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 {
     ofstream out(pModelFielPath, ios::binary);
 
@@ -160,16 +172,9 @@ HRESULT CModel::Save_Binary_Model(const _char* pModelFielPath)
         out.write(reinterpret_cast<const _char*>(&Mesh->mNumVertices), sizeof(_uint));
         out.write(reinterpret_cast<const _char*>(&Mesh->mNumFaces), sizeof(_uint));
 
-        _uint iNumVertices = Mesh->mNumVertices;
-      
-        for (_uint j = 0; j < iNumVertices; ++j)
-        {
-            out.write(reinterpret_cast<const _char*>(&Mesh->mVertices[j]), sizeof(_float3));
-            out.write(reinterpret_cast<const _char*>(&Mesh->mNormals[j]), sizeof(_float3));
-            out.write(reinterpret_cast<const _char*>(&Mesh->mTangents[j]), sizeof(_float3));
-            out.write(reinterpret_cast<const _char*>(&Mesh->mTextureCoords[0][j]), sizeof(_float2));
-        }
-        
+        if (FAILED(m_Meshes[i]->Save_To_Binary(eModel, Mesh, out)))
+            return E_FAIL;
+       
         _uint iNumFaces = Mesh->mNumFaces;
         
         for (_uint j = 0; j < iNumFaces; ++j)
@@ -197,7 +202,7 @@ HRESULT CModel::Save_Binary_Model(const _char* pModelFielPath)
     return S_OK;
 }
 
-HRESULT CModel::Load_Binary_Model(const _char* pModelFielPath)
+HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 {
     ifstream in(pModelFielPath, ios::binary);
 
@@ -213,7 +218,7 @@ HRESULT CModel::Load_Binary_Model(const _char* pModelFielPath)
     
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
-        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, in);
+        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, eModel, in);
         if (nullptr == pMesh)
         {
             MSG_BOX("Failed to Ready Mesh from BinaryFile");
@@ -244,13 +249,13 @@ HRESULT CModel::Load_Binary_Model(const _char* pModelFielPath)
 }
 
 
-HRESULT CModel::Ready_Meshes()
+HRESULT CModel::Ready_Meshes(MODEL eModel)
 {
     m_iNumMeshes = m_pAiScene->mNumMeshes;
  
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
-        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_pAiScene->mMeshes[i]);
+        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, eModel, m_pAiScene->mMeshes[i]);
         if (nullptr == pMesh)
         {
             MSG_BOX("Failed to Ready Mesh");
@@ -281,11 +286,34 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
     return S_OK;
 }
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, MODELFILE eModeFile, _fmatrix PreTransformMatrix)
+HRESULT CModel::Ready_Bones(aiNode* pNode, _int _iParentIndex)
+{
+    CBone* pBone = CBone::Create(pNode, _iParentIndex);
+
+    if (nullptr == pBone)
+    {
+        Safe_Release(pBone);
+        return E_FAIL;
+    }
+
+    m_Bones.push_back(pBone);
+
+    _int iParentIndex = (_uint)m_Bones.size() - 1;
+
+    for (_uint i = 0; i < pNode->mNumChildren; i++)
+    {
+        if (FAILED(Ready_Bones(pNode->mChildren[i], iParentIndex)))
+            return E_FAIL;
+    }
+
+    return S_OK;
+}
+
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     CModel* pInstance = new CModel(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, eModeFile, PreTransformMatrix)))
+    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, PreTransformMatrix)))
     {
         Safe_Release(pInstance);
         MSG_BOX("Failed to Create : CModel");
@@ -299,7 +327,7 @@ CModel* CModel::Create_BinaryFile(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 {
     CModel* pInstance = new CModel(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype(eModel, pModelFilePath, PreTransformMatrix)))
+    if (FAILED(pInstance->Initialize_Prototype_Binary(eModel, pModelFilePath, PreTransformMatrix)))
     {
         Safe_Release(pInstance);
         MSG_BOX("Failed to Create : CModel");
@@ -331,9 +359,13 @@ void CModel::Free()
         Safe_Release(pMesh);
     m_Meshes.clear();
 
-    for (auto& Material : m_Materials)
-        Safe_Release(Material);
+    for (auto& pMaterial : m_Materials)
+        Safe_Release(pMaterial);
     m_Materials.clear();
+
+    for (auto& pBone : m_Bones)
+        Safe_Release(pBone);
+    m_Bones.clear();
 
     m_Importer.FreeScene();
 }

@@ -2,6 +2,7 @@
 #include "MapObject.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CMapObject::CMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CGameObject{ pDevice, pContext }
@@ -99,6 +100,17 @@ void CMapObject::Update_ImGui()
 {
     if (m_isDead)
         return;
+    if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+    {
+        _float3* pPickingPos = CGameManager::GetInstance()->Get_PickingPos();
+        if(nullptr != pPickingPos)
+        {
+            m_vPosition.x = pPickingPos->x;
+            m_vPosition.y = pPickingPos->y;
+            m_vPosition.z = pPickingPos->z;
+        }
+    }
+
     ImGui::Text(m_pGameInstance->WstringToUtf8(m_strPrototypeTag).c_str());
     ImGui::Text("----- Transfrom ----");
     ImGui::InputFloat("X##Position", &m_vPosition.x, 1.f, 10.f);

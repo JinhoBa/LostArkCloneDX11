@@ -55,18 +55,6 @@
     <Filter Include="03.UIObject\Logo">
       <UniqueIdentifier>{536a8ecb-e1ed-4831-80a1-dbfdfcb26522}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.UIObject\Loading">
-      <UniqueIdentifier>{508eb125-a15f-4736-9da6-1dff92a53f09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Loading\Background">
-      <UniqueIdentifier>{4355756c-34c2-4f84-b766-ad72a30d441d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Loading\LoadingBar">
-      <UniqueIdentifier>{9d02166a-4e84-478c-85a1-18aec5ed0a32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Loading\Wallpaper">
-      <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Level\Tutorial">
       <UniqueIdentifier>{2a282cb0-7dce-414b-913a-33b00b94506e}</UniqueIdentifier>
     </Filter>
@@ -163,6 +151,21 @@
     <Filter Include="04.Skill">
       <UniqueIdentifier>{1fecdd2a-3478-4a48-befe-4e014e168ee9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\UIEffect">
+      <UniqueIdentifier>{eac812f1-3149-4f1f-8848-b4b3430bed6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\Loading">
+      <UniqueIdentifier>{508eb125-a15f-4736-9da6-1dff92a53f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\Loading\Background">
+      <UniqueIdentifier>{4355756c-34c2-4f84-b766-ad72a30d441d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\Loading\LoadingBar">
+      <UniqueIdentifier>{9d02166a-4e84-478c-85a1-18aec5ed0a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\Loading\Wallpaper">
+      <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -232,13 +235,13 @@
       <Filter>03.UIObject\Logo\LogoPanel</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Background_Loading.h">
-      <Filter>03.UIObject\Loading\Background</Filter>
+      <Filter>03.UIObject\GamePlay\Loading\Background</Filter>
     </ClInclude>
     <ClInclude Include="..\public\LoadingBar.h">
-      <Filter>03.UIObject\Loading\LoadingBar</Filter>
+      <Filter>03.UIObject\GamePlay\Loading\LoadingBar</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Wallpaper.h">
-      <Filter>03.UIObject\Loading\Wallpaper</Filter>
+      <Filter>03.UIObject\GamePlay\Loading\Wallpaper</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Tutorial.h">
       <Filter>01.Level\Tutorial</Filter>
@@ -315,6 +318,9 @@
     <ClInclude Include="..\public\Skill.h">
       <Filter>04.Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UIEffect.h">
+      <Filter>03.UIObject\UIEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -382,13 +388,13 @@
       <Filter>03.UIObject\Logo\LogoPanel</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Background_Loading.cpp">
-      <Filter>03.UIObject\Loading\Background</Filter>
+      <Filter>03.UIObject\GamePlay\Loading\Background</Filter>
     </ClCompile>
     <ClCompile Include="..\private\LoadingBar.cpp">
-      <Filter>03.UIObject\Loading\LoadingBar</Filter>
+      <Filter>03.UIObject\GamePlay\Loading\LoadingBar</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Wallpaper.cpp">
-      <Filter>03.UIObject\Loading\Wallpaper</Filter>
+      <Filter>03.UIObject\GamePlay\Loading\Wallpaper</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Tutorial.cpp">
       <Filter>01.Level\Tutorial</Filter>
@@ -462,6 +468,9 @@
     <ClCompile Include="..\private\Skill.cpp">
       <Filter>04.Skill</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\UIEffect.cpp">
+      <Filter>03.UIObject\UIEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
@@ -471,6 +480,9 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXAnimMesh.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

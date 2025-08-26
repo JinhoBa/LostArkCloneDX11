@@ -1,19 +1,20 @@
+#pragma once
 #include "Client_Defines.h"
-
 #include "UIPanel.h"
-
-NS_BEGIN(Engine)
-class CUIAnimation;
-NS_END
 
 NS_BEGIN(Client)
 
-class CIden_Gauge : public CUIPanel
+class CUIEffect abstract : public CUIPanel
 {
+public:
+	typedef struct UIEffect_Desc : CUIObject::UIOBJECT_DESC
+	{
+		_float fDuration{};
+	}UIEFFECT_DESC;
 private:
-	CIden_Gauge(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CIden_Gauge(const CIden_Gauge& Prototype);
-	virtual ~CIden_Gauge() = default;
+	CUIEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIEffect(const CUIEffect& Prototype);
+	virtual ~CUIEffect() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -24,18 +25,14 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	_uint			m_iTextureIndex = {};
-
-	CTexture*		m_pFireTextureCom = { nullptr };
-	CUIAnimation*	m_pAnimationCom = {nullptr};
-	
+	_float	m_fTimeAcc = {};
+	_float	m_fDuration = {};
 
 private:
 	HRESULT Add_Components();
 
 public:
-	static CIden_Gauge* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg) PURE;
 	virtual void Free() override;
 };
 

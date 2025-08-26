@@ -201,6 +201,7 @@
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\Public\tinyxml2.h" />
     <ClInclude Include="..\public\TopMenu.h" />
+    <ClInclude Include="..\public\UIEffect.h" />
     <ClInclude Include="..\public\Wallpaper.h" />
     <ClInclude Include="..\public\WeaponUI.h" />
     <ClInclude Include="Client.h" />
@@ -284,11 +285,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\private\TopMenu.cpp" />
+    <ClCompile Include="..\private\UIEffect.cpp" />
     <ClCompile Include="..\private\Wallpaper.cpp" />
     <ClCompile Include="..\private\WeaponUI.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl" />

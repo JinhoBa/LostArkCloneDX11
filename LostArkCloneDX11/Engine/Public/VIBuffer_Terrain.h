@@ -30,7 +30,6 @@ public:
 	_bool	Picking(class CTransform* pTransform, _float3* pOut);
 	_bool	Picking_Edit(class CTransform* pTransform, _float3* pOut, _float fY);
 	_bool	Picking_Smooth(class CTransform* pTransform, _float3* pOut, _float fY);
-	HRESULT	Change_Verices(_uint iSizeX, _uint iSizeZ);
 
 private:
 	_bool				m_bChange = {};

@@ -120,7 +120,9 @@ HRESULT CLevel_MapEditor::Initialize()
     m_Terrain_PrototypeTags = {
         "Prototype_Component_VIBuffer_Terrain_Trision_Floor",
         "Prototype_Component_VIBuffer_Terrain_Trision_Stair",
+        "Prototype_Component_VIBuffer_Terrain_80",
         "Prototype_Component_VIBuffer_Terrain_64",
+        "Prototype_Component_VIBuffer_Terrain_45",
         "Prototype_Component_VIBuffer_Terrain_32",
         "Prototype_Component_VIBuffer_Terrain_16"
     };

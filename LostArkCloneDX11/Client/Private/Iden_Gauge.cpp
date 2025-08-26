@@ -48,7 +48,7 @@ void CIden_Gauge::Priority_Update(_float fTimeDelta)
 
 void CIden_Gauge::Update(_float fTimeDelta)
 {
-
+	m_pAnimationCom->Update(fTimeDelta);
 }
 
 void CIden_Gauge::Late_Update(_float fTimeDelta)
@@ -58,17 +58,33 @@ void CIden_Gauge::Late_Update(_float fTimeDelta)
 
 HRESULT CIden_Gauge::Render()
 {
-#pragma region TEST_CODE
-	Update_Position();
-	ImGui::InputFloat("X", &m_fRX, 1.f, 10.f);
-	ImGui::InputFloat("Y", &m_fRY, 1.f, 10.f);
-	ImGui::InputFloat("SIZE X", &m_fSizeX, 1.f, 10.f);
-	ImGui::InputFloat("SIZE Y", &m_fSizeY, 1.f, 10.f);
-#pragma endregion
+	// Fire
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFireTextureCom->Get_SRV(m_pAnimationCom->Get_Frame()))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(4)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	// Gauge
 	if (FAILED(__super::Bind_ShaderResource(1)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(1)))
+	if (FAILED(m_pShaderCom->Begin(4)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -99,6 +115,25 @@ HRESULT CIden_Gauge::Add_Components()
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
+
+	/*Texture*/
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Gauge_Fire"),
+		TEXT("Com_FireTexture"), reinterpret_cast<CComponent**>(&m_pFireTextureCom))))
+		return E_FAIL;
+
+	CUIAnimation::UIANIM_DESC Anim_Desc = {};
+	Anim_Desc.bLoop = true;
+	Anim_Desc.fAnimTime = 0.8f;
+	Anim_Desc.iStartFrame = 0;
+	Anim_Desc.iEndFrame = 11;
+	Anim_Desc.pShaderCom = m_pShaderCom;
+	Anim_Desc.pTextureCom = m_pFireTextureCom;
+
+	/*Animation*/
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_UIAnimation"),
+		TEXT("Com_UIAnimation"), reinterpret_cast<CComponent**>(&m_pAnimationCom), &Anim_Desc)))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -132,4 +167,7 @@ CGameObject* CIden_Gauge::Clone(void* pArg)
 void CIden_Gauge::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pFireTextureCom);
+	Safe_Release(m_pAnimationCom);
 }

@@ -1,9 +1,10 @@
+#include "pch.h"
 #include "Skill.h"
 
 #include "GameManager.h"
 
 CSkill::CSkill()
-	: m_bUse{ true }, m_fCoolTime{0.f}
+	:m_bUse{ true }, m_fCoolTime{ 0.f }
 {
 }
 

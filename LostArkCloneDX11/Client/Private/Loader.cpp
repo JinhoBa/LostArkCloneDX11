@@ -271,18 +271,23 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/iden/identity_Gauge_%d.dds"), 3))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_Iden_Gauge_Fire */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Gauge_Fire"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/iden/Gauge/identity_Gauge_Fire_%d.dds"), 12))))
+		return E_FAIL;
+
 #pragma endregion
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
 	/* TEST CODE */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/TestBin.bin", MODELFILE::BIN))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
 		return E_FAIL;
 
 	/* TEST CODE */
 	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create_BinaryFile(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/Resources/Models/Player/TestBin.bin"))))
+		CModel::Create_BinaryFile(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
 		return E_FAIL;*/
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
@@ -307,9 +312,20 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, nullptr, 4, 6))))
 		return E_FAIL;
 
+
+	/*For Prototype_Component_VIBuffer_Terrain_80*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_80"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, nullptr, 80, 80))))
+		return E_FAIL;
+
 	/*For Prototype_Component_VIBuffer_Terrain_64*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_64"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, nullptr, 64, 64))))
+		return E_FAIL;
+
+	/*For Prototype_Component_VIBuffer_Terrain_45*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_45"),
+		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, nullptr, 45, 45))))
 		return E_FAIL;
 
 	/*For Prototype_Component_VIBuffer_Terrain_32*/
@@ -335,7 +351,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 
 #pragma endregion
 

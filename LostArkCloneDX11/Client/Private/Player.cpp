@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "Skill.h"
+
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CGameObject{ pDevice, pContext }
 {
@@ -74,11 +76,15 @@ void CPlayer::Update(_float fTimeDelta)
     //   //m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
     //}
     _float3* pPickingPos = CGameManager::GetInstance()->Get_PickingPos();
-    if(nullptr != pPickingPos)
-        m_pTransformCom->MoveTo(fTimeDelta* 2.f, XMVectorSetW(XMLoadFloat3(pPickingPos), 1.f));
-
-
+    if (nullptr != pPickingPos)
+        m_pTransformCom->MoveTo(fTimeDelta * 2.f, XMVectorSetW(XMLoadFloat3(pPickingPos), 1.f));
 #pragma endregion
+
+    for (auto& pSkill : m_Skills)
+        pSkill->Update(fTimeDelta);
+
+    Key_Input(fTimeDelta);
+
 
 }
 
@@ -117,6 +123,15 @@ HRESULT CPlayer::Render()
     return S_OK;
 }
 
+void CPlayer::Key_Input(_float fTimeDelta)
+{
+    if (m_pGameInstance->Get_KeyDown(DIK_Q))
+    {
+        m_Skills[0]->Use_Skill();
+    }
+
+}
+
 HRESULT CPlayer::Add_Components()
 {
     /*Shader_VTXPosTex*/
@@ -130,6 +145,20 @@ HRESULT CPlayer::Add_Components()
         return E_FAIL;
 
 
+    return S_OK;
+}
+
+HRESULT CPlayer::Ready_Skills()
+{
+    for (_uint i = 0; i < 14; ++i)
+    {
+        CSkill* pSkill = CSkill::Create(i);
+
+        if (nullptr == pSkill)
+            return E_FAIL;
+
+        m_Skills.push_back(pSkill);
+    }
     return S_OK;
 }
 
@@ -164,6 +193,10 @@ CGameObject* CPlayer::Clone(void* pArg)
 void CPlayer::Free()
 {
     __super::Free();
+
+    for (auto pSkill : m_Skills)
+        Safe_Release(pSkill);
+    m_Skills.clear();
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
