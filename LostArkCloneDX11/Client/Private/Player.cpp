@@ -48,6 +48,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
+    m_pModelCom->Play_Animation(fTimeDelta);
+
 #pragma region TESTCODE
     //if (m_pGameInstance->Get_KeyPressing(DIK_W))
     //{
@@ -86,13 +88,12 @@ void CPlayer::Update(_float fTimeDelta)
     Key_Input(fTimeDelta);
 
 
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
-
-
 }
 
 HRESULT CPlayer::Render()
@@ -108,6 +109,9 @@ HRESULT CPlayer::Render()
 
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
+       if (FAILED(m_pModelCom->Bind_BoneMatirces(i, m_pShaderCom, "g_BoneMatrices")))
+            return E_FAIL;
+
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
             return E_FAIL;
 
@@ -127,23 +131,22 @@ void CPlayer::Key_Input(_float fTimeDelta)
 {
     if (m_pGameInstance->Get_KeyDown(DIK_Q))
     {
-        m_Skills[0]->Use_Skill();
+        //m_Skills[0]->Use_Skill();
     }
 
 }
 
 HRESULT CPlayer::Add_Components()
 {
-    /*Shader_VTXPosTex*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
-        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
-
     /*VIBuffer_Rect*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
+    /*Shader_VTXPosTex*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexAnimMesh"),
+        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
 
     return S_OK;
 }

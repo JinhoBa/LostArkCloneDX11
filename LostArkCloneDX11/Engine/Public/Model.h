@@ -11,7 +11,8 @@ private:
 	virtual ~CModel() = default;
 
 public:
-	_uint Get_NumMeshes() { return m_iNumMeshes; }
+	_uint Get_NumMeshes() const { return m_iNumMeshes; }
+	_int Get_BoneIndex(const _char* pBoneName) const;
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
@@ -20,9 +21,9 @@ public:
 	virtual HRESULT Render(_uint iMeshIndex);
 	
 	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0, const _char* pValueConstanceName = nullptr);
+	HRESULT Bind_BoneMatirces(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
+	void	Play_Animation(_float fTimeDelta);
 
-	HRESULT Save_Binary_Model(MODEL eModel, const _char* pModelFielPath);
-	HRESULT Load_Binary_Model(MODEL eModel, const _char* pModelFielPath);
 
 private:
 	const aiScene*				m_pAiScene = {};
@@ -46,6 +47,9 @@ private:
 	HRESULT Ready_Meshes(MODEL eModel);
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 	HRESULT Ready_Bones(aiNode* pNode, _int iParentIndex);
+
+	HRESULT Save_Binary_Model(MODEL eModel, const _char* pModelFielPath);
+	HRESULT Load_Binary_Model(MODEL eModel, const _char* pModelFielPath);
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());

@@ -1,6 +1,5 @@
 #include "Bone.h"
 
-
 CBone::CBone()
 {
 
@@ -17,13 +16,16 @@ HRESULT CBone::Initialize(aiNode* pNode, _int iParentIndex)
 
 	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
 
-
 	return S_OK;
 }
 
-void CBone::Update_CombinedTransformationMatrix()
+void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix)
 {
-	
+	if (-1 == m_iParentIndex)
+		XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity() * PreTransformMatrix);
+	else
+		XMStoreFloat4x4(&m_CombinedTransformationMatrix, 
+			XMLoadFloat4x4(&m_TransformationMatrix) * Bones[m_iParentIndex]->Get_CombinedTransformationMatrix());
 }
 
 CBone* CBone::Create(aiNode* pNode, _int iParentIndex)

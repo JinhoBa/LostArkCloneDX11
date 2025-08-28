@@ -282,7 +282,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* TEST CODE */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
 		return E_FAIL;
 
 	/* TEST CODE */
@@ -295,6 +295,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Shader_VertexMesh */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElement))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VertexAnimMesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElement))))
 		return E_FAIL;
 
 

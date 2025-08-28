@@ -13,17 +13,43 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CModel::CModel(CModel& Prototype)
     :CComponent{ Prototype },
+    m_eModel{Prototype.m_eModel},
     m_iNumMeshes{Prototype.m_iNumMeshes},
     m_iNumMaterials{Prototype.m_iNumMaterials },
     m_iNumBones{Prototype.m_iNumBones },
     m_Meshes{Prototype.m_Meshes},
-    m_Materials{Prototype.m_Materials }
+    m_Materials{Prototype.m_Materials },
+    m_Bones{Prototype.m_Bones},
+    m_PreTransformMatrix{Prototype.m_PreTransformMatrix }
 {
+    for (auto& pBone : m_Bones)
+        Safe_AddRef(pBone);
+
     for (auto& pMesh : m_Meshes)
         Safe_AddRef(pMesh);
 
     for (auto& pTexture : m_Materials)
         Safe_AddRef(pTexture);
+}
+
+_int CModel::Get_BoneIndex(const _char* pBoneName) const
+{
+    _int iBoneIndex = {};
+
+    auto iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool {
+
+        if (true == pBone->CompareName(pBoneName))
+            return true;
+
+        ++iBoneIndex;
+
+        return false;
+    });
+
+    if (m_Bones.end() == iter)
+        return -1;
+
+    return iBoneIndex;
 }
 
 HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
@@ -50,18 +76,16 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
             MSG_BOX("Failed to ReadFile...");
             return E_FAIL;
         }
+        
+        if(MODEL::ANIM == eModel)
+            Ready_Bones(m_pAiScene->mRootNode, -1);
+     
 
         if (FAILED(Ready_Meshes(eModel)))
             return E_FAIL;
 
         if (FAILED(Ready_Materials(pModelFilePath)))
             return E_FAIL;
-
-        m_Bones.reserve(200);
-
-        if (FAILED(Ready_Bones(m_pAiScene->mRootNode, -1)))
-            return E_FAIL;
-
     }
     else
     {
@@ -151,6 +175,80 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
     return S_OK;
 }
 
+HRESULT CModel::Bind_BoneMatirces(_uint iMeshIndex, CShader* pShader, const _char* pConstantName)
+{
+    if (iMeshIndex >= m_iNumMeshes)
+        return E_FAIL;
+
+    return  m_Meshes[iMeshIndex]->Bind_BoneMatices(m_Bones, pShader, pConstantName);
+}
+
+void CModel::Play_Animation(_float fTimeDelta)
+{
+    for (auto& pBone : m_Bones)
+    {
+        pBone->Update_CombinedTransformationMatrix(m_Bones, XMMatrixIdentity());
+    }
+}
+
+HRESULT CModel::Ready_Meshes(MODEL eModel)
+{
+    m_iNumMeshes = m_pAiScene->mNumMeshes;
+ 
+    for (_uint i = 0; i < m_iNumMeshes; ++i)
+    {
+        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, eModel, this, m_pAiScene->mMeshes[i], XMLoadFloat4x4(&m_PreTransformMatrix));
+        if (nullptr == pMesh)
+        {
+            MSG_BOX("Failed to Ready Mesh");
+            return E_FAIL;
+        }
+        m_Meshes.push_back(pMesh);
+    }
+
+    return S_OK;
+}
+
+HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
+{
+    m_iNumMaterials = m_pAiScene->mNumMaterials;
+
+    aiMaterial** ppMaterial = m_pAiScene->mMaterials;
+
+    for (_uint i = 0; i < m_iNumMaterials; ++i)
+    {
+        CMaterials* pMaterial = CMaterials::Create(m_pDevice, m_pContext, ppMaterial[i], pModelFilePath);
+
+        if (nullptr == pMaterial)
+            return E_FAIL;
+
+        m_Materials.push_back(pMaterial);
+    }
+
+    return S_OK;
+}
+
+HRESULT CModel::Ready_Bones(aiNode* pNode, _int _iParentIndex)
+{
+    CBone* pBone = CBone::Create(pNode, _iParentIndex);
+
+    if (nullptr == pBone)
+    {
+        return E_FAIL;
+    }
+
+    m_Bones.push_back(pBone);
+
+    _int iParentIndex = (_int)m_Bones.size() - 1;
+
+    for (_uint i = 0; i < pNode->mNumChildren; ++i)
+    {
+        Ready_Bones(pNode->mChildren[i], iParentIndex);
+    }
+
+    return S_OK;
+}
+
 HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 {
     ofstream out(pModelFielPath, ios::binary);
@@ -174,9 +272,9 @@ HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 
         if (FAILED(m_Meshes[i]->Save_To_Binary(eModel, Mesh, out)))
             return E_FAIL;
-       
+
         _uint iNumFaces = Mesh->mNumFaces;
-        
+
         for (_uint j = 0; j < iNumFaces; ++j)
         {
             out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[j].mIndices[0]), sizeof(_uint));
@@ -215,7 +313,7 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
     /* Mesh */
 
     in.read(reinterpret_cast<_char*>(&m_iNumMeshes), sizeof(_uint));
-    
+
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
         CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, eModel, in);
@@ -241,70 +339,9 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 
         m_Materials.push_back(pMaterial);
     }
-   
+
     in.close();
 
-
-    return S_OK;
-}
-
-
-HRESULT CModel::Ready_Meshes(MODEL eModel)
-{
-    m_iNumMeshes = m_pAiScene->mNumMeshes;
- 
-    for (_uint i = 0; i < m_iNumMeshes; ++i)
-    {
-        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, eModel, m_pAiScene->mMeshes[i]);
-        if (nullptr == pMesh)
-        {
-            MSG_BOX("Failed to Ready Mesh");
-            return E_FAIL;
-        }
-        m_Meshes.push_back(pMesh);
-    }
-
-    return S_OK;
-}
-
-HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
-{
-    m_iNumMaterials = m_pAiScene->mNumMaterials;
-
-    aiMaterial** ppMaterial = m_pAiScene->mMaterials;
-
-    for (_uint i = 0; i < m_iNumMaterials; ++i)
-    {
-        CMaterials* pMaterial = CMaterials::Create(m_pDevice, m_pContext, ppMaterial[i], pModelFilePath);
-
-        if (nullptr == pMaterial)
-            return E_FAIL;
-
-        m_Materials.push_back(pMaterial);
-    }
-
-    return S_OK;
-}
-
-HRESULT CModel::Ready_Bones(aiNode* pNode, _int _iParentIndex)
-{
-    CBone* pBone = CBone::Create(pNode, _iParentIndex);
-
-    if (nullptr == pBone)
-    {
-        Safe_Release(pBone);
-        return E_FAIL;
-    }
-
-    m_Bones.push_back(pBone);
-
-    _int iParentIndex = (_uint)m_Bones.size() - 1;
-
-    for (_uint i = 0; i < pNode->mNumChildren; i++)
-    {
-        if (FAILED(Ready_Bones(pNode->mChildren[i], iParentIndex)))
-            return E_FAIL;
-    }
 
     return S_OK;
 }

@@ -17,6 +17,7 @@ public:
 public:
 	HRESULT	Bind_Position(const _char* ConstantName, const _float4* pVector);
 	HRESULT	Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix);
+	HRESULT	Bind_Matrices(const _char* ConstantName, const _float4x4* pMatrix, _uint iNumMatrices);
 	HRESULT Bind_WorldMatrix(const _float4x4* pWorldMatrix);
 	HRESULT Bind_Resource(const _char* ConstantName, ID3D11ShaderResourceView* pSRV);
 	HRESULT Bind_Value(const _char* ConstantName, _float4* pValue);
