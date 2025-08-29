@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 
 CMaterials::CMaterials(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	:m_pDevice{pDevice}, m_pContext{pContext}
+	:m_pDevice{ pDevice }, m_pContext{ pContext }
 {
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
@@ -90,7 +90,7 @@ HRESULT CMaterials::Bind_SRV(CShader* pShader, const _char* pConstantName, TEXTU
 }
 HRESULT CMaterials::Bind_Value(CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex)
 {
-	if(m_vectorValues[ENUM_TO_INT(eTextureType)].empty())
+	if (m_vectorValues[ENUM_TO_INT(eTextureType)].empty())
 	{
 		_float4 DefaultValue = { 1.f, 1.f, 1.f, 1.f };
 		return pShader->Bind_Value(pConstantName, &DefaultValue);
@@ -159,15 +159,15 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 
 				switch (iDataIndex)
 				{
-				/* Scala */
-				case 0: 
+					/* Scala */
+				case 0:
 					// value
 					getline(file, strText);
 					// name
 					break;
 
-				/* Texture */
-				case 1: 
+					/* Texture */
+				case 1:
 					// value
 					iBeginIndex = (_uint)strText.find_first_of('.');
 					iEndIndex = (_uint)strText.rfind('\'');
@@ -185,8 +185,8 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 
 					iBeginIndex = (_uint)strText.find_first_of('_');
 					iEndIndex = (_uint)strText.rfind(' ');
-					
-					Name = strText.substr(iBeginIndex + 1, iEndIndex- iBeginIndex);
+
+					Name = strText.substr(iBeginIndex + 1, iEndIndex - iBeginIndex);
 
 					// Add Texture
 					if (FAILED(Add_Texture(szTextureFilePath, Name)))
@@ -194,12 +194,12 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 
 					break;
 
-				/* Vector Value */
+					/* Vector Value */
 				case 2:
 					// value
 					iBeginIndex = (_uint)strText.find_first_of('{');
 					iEndIndex = (_uint)strText.rfind('}');
-					
+
 					Value = strText.substr(iBeginIndex + 1, iEndIndex - iBeginIndex - 1);
 
 					// name
@@ -275,7 +275,7 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 
 	strcpy_s(TexturePath, pTextureFolderPath);
 	strcat_s(TexturePath, ".dds");
-	
+
 	_tchar szTextureFilePath[MAX_PATH] = {};
 
 	MultiByteToWideChar(CP_ACP, 0, TexturePath, (_int)strlen(TexturePath), szTextureFilePath, MAX_PATH);
@@ -291,13 +291,13 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 
 		MultiByteToWideChar(CP_ACP, 0, TexturePath_Png, (_int)strlen(TexturePath_Png), szTextureFilePath_Png, MAX_PATH);
 
-		if(FAILED(CreateWICTextureFromFile(m_pDevice, szTextureFilePath_Png, nullptr, &pSRV)))
+		if (FAILED(CreateWICTextureFromFile(m_pDevice, szTextureFilePath_Png, nullptr, &pSRV)))
 		{
 			MSG_BOX("Failed to Load TextureFile");
 			return E_FAIL;
 		}
 	}
-	
+
 
 	m_SRVs[ENUM_TO_INT(eTexture)].push_back(pSRV);
 

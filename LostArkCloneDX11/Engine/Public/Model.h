@@ -19,34 +19,39 @@ public:
 	virtual HRESULT Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
-	
+
 	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0, const _char* pValueConstanceName = nullptr);
-	HRESULT Bind_BoneMatirces(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
-	void	Play_Animation(_float fTimeDelta);
+	HRESULT Bind_BoneMatrices(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
+	void	Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta);
 
 
 private:
-	const aiScene*				m_pAiScene = {};
+	const aiScene* m_pAiScene = {};
 	Assimp::Importer			m_Importer = {};
 
 	MODEL						m_eModel = {};
 
 	_uint						m_iNumMeshes = {};
 	_uint						m_iNumMaterials = {};
-	_uint						m_iNumBones = {};
+
+	_uint						m_iNumAnimations = {};
+
+	_wstring					m_strFolderPath = {};
+	_float4x4					m_PreTransformMatrix = {};
+
+	_int						m_iCurrentAnimIndex = { -1 };
 
 	vector<class CMesh*>		m_Meshes;
 	vector<class CMaterials*>	m_Materials;
 	vector<class CBone*>		m_Bones;
+	vector<class CAnimation*>	m_Animations;
 
-	_wstring					m_strFolderPath = {};
-
-	_float4x4					m_PreTransformMatrix = {};
 
 private:
 	HRESULT Ready_Meshes(MODEL eModel);
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 	HRESULT Ready_Bones(aiNode* pNode, _int iParentIndex);
+	HRESULT Ready_Animations();
 
 	HRESULT Save_Binary_Model(MODEL eModel, const _char* pModelFielPath);
 	HRESULT Load_Binary_Model(MODEL eModel, const _char* pModelFielPath);

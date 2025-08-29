@@ -40,7 +40,7 @@ HRESULT CLevel_Tutorial::Render()
 
 HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-    ///* Background */
+    /* Background */
     if (FAILED(Load_MapData()))
         return E_FAIL;
 

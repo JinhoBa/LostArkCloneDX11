@@ -1,0 +1,31 @@
+#pragma once
+#include "Base.h"
+
+NS_BEGIN(Engine)
+
+class CChannel : public CBase
+{
+private:
+	CChannel();
+	virtual ~CChannel() = default;
+
+
+
+public:
+	HRESULT Initialize(const class CModel* pModel, const aiNodeAnim* pAiChannels);
+	void Update_TransformationMatrix(const vector<class CBone*> Bones, _float fCurrentTrackPosition);
+
+private:
+	_char				m_szName[MAX_PATH] = {};
+
+	_uint				m_iNumKeyFrames = {};
+	_uint				m_iBoneIndex = {};
+	_uint				m_iCurKeyFrameIndex = {0};
+	vector<KEYFRAME>	m_KeyFrames;
+
+public:
+	static CChannel* Create(const class CModel* pModel, const aiNodeAnim* pAiChannels);
+	virtual void Free() override;
+};
+
+NS_END

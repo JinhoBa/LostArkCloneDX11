@@ -5,22 +5,24 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Bone.h"
+#include "Animation.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CComponent{ pDevice, pContext}
+    :CComponent{ pDevice, pContext }
 {
 }
 
 CModel::CModel(CModel& Prototype)
     :CComponent{ Prototype },
-    m_eModel{Prototype.m_eModel},
-    m_iNumMeshes{Prototype.m_iNumMeshes},
-    m_iNumMaterials{Prototype.m_iNumMaterials },
-    m_iNumBones{Prototype.m_iNumBones },
-    m_Meshes{Prototype.m_Meshes},
-    m_Materials{Prototype.m_Materials },
-    m_Bones{Prototype.m_Bones},
-    m_PreTransformMatrix{Prototype.m_PreTransformMatrix }
+    m_eModel{ Prototype.m_eModel },
+    m_iNumMeshes{ Prototype.m_iNumMeshes },
+    m_iNumMaterials{ Prototype.m_iNumMaterials },
+    m_iNumAnimations{ Prototype.m_iNumAnimations },
+    m_Meshes{ Prototype.m_Meshes },
+    m_Materials{ Prototype.m_Materials },
+    m_Bones{ Prototype.m_Bones },
+    m_Animations{ Prototype.m_Animations },
+    m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
 {
     for (auto& pBone : m_Bones)
         Safe_AddRef(pBone);
@@ -28,25 +30,28 @@ CModel::CModel(CModel& Prototype)
     for (auto& pMesh : m_Meshes)
         Safe_AddRef(pMesh);
 
-    for (auto& pTexture : m_Materials)
-        Safe_AddRef(pTexture);
+    for (auto& pMaterial : m_Materials)
+        Safe_AddRef(pMaterial);
+
+    for (auto& pAnimaiton : m_Animations)
+        Safe_AddRef(pAnimaiton);
 }
 
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
 {
-    _int iBoneIndex = {};
+    _int	iBoneIndex = {};
 
-    auto iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool {
+    auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+        {
+            if (true == pBone->Compare_Name(pBoneName))
+                return true;
 
-        if (true == pBone->CompareName(pBoneName))
-            return true;
+            ++iBoneIndex;
 
-        ++iBoneIndex;
+            return false;
+        });
 
-        return false;
-    });
-
-    if (m_Bones.end() == iter)
+    if (iter == m_Bones.end())
         return -1;
 
     return iBoneIndex;
@@ -56,11 +61,13 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
 {
     _char szExt[MAX_PATH] = {};
 
+    m_eModel = eModel;
+
     _splitpath_s(pModelFilePath, nullptr, 0, nullptr, 0, nullptr, 0, szExt, MAX_PATH);
 
     if (!strcmp(szExt, ".fbx"))
     {
-        _uint iFlag = {};
+        _uint			iFlag = {};
 
         iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
 
@@ -76,16 +83,18 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
             MSG_BOX("Failed to ReadFile...");
             return E_FAIL;
         }
-        
-        if(MODEL::ANIM == eModel)
-            Ready_Bones(m_pAiScene->mRootNode, -1);
-     
 
-        if (FAILED(Ready_Meshes(eModel)))
+
+        Ready_Bones(m_pAiScene->mRootNode, -1);
+
+        if (FAILED(Ready_Meshes(m_eModel)))
             return E_FAIL;
 
         if (FAILED(Ready_Materials(pModelFilePath)))
             return E_FAIL;
+
+          if (FAILED(Ready_Animations()))
+              return E_FAIL;
     }
     else
     {
@@ -126,7 +135,7 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
     _char szDir[MAX_PATH] = {};
     _char szFileName[MAX_PATH] = {};
     _char szExt[MAX_PATH] = {};
-    
+
     _splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDir, MAX_PATH, szFileName, MAX_PATH, nullptr, 0);
 
     _char szBinaryFilePath[MAX_PATH] = {};
@@ -164,9 +173,9 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
 
     if (FAILED(m_Materials[iMaterialIndex]->Bind_SRV(pShader, pConstantName, eTextureType, iTextureIndex)))
         return E_FAIL;
-   
 
-    if(nullptr != pValueConstanceName)
+
+    if (nullptr != pValueConstanceName)
     {
         if (FAILED(m_Materials[iMaterialIndex]->Bind_Value(pShader, pValueConstanceName, eTextureType, iTextureIndex)))
             return E_FAIL;
@@ -175,29 +184,36 @@ HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* p
     return S_OK;
 }
 
-HRESULT CModel::Bind_BoneMatirces(_uint iMeshIndex, CShader* pShader, const _char* pConstantName)
+HRESULT CModel::Bind_BoneMatrices(_uint iMeshIndex, CShader* pShader, const _char* pConstantName)
 {
     if (iMeshIndex >= m_iNumMeshes)
         return E_FAIL;
 
-    return  m_Meshes[iMeshIndex]->Bind_BoneMatices(m_Bones, pShader, pConstantName);
+    return m_Meshes[iMeshIndex]->Bind_BoneMatrices(m_Bones, pShader, pConstantName);
 }
 
-void CModel::Play_Animation(_float fTimeDelta)
+void CModel::Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta)
 {
+    m_iCurrentAnimIndex = iAnimAnimIndex;
+
+    if (-1 == m_iCurrentAnimIndex || m_iNumAnimations <= m_iCurrentAnimIndex)
+        return;
+
+    m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, fTimeDelta);
+
     for (auto& pBone : m_Bones)
     {
-        pBone->Update_CombinedTransformationMatrix(m_Bones, XMMatrixIdentity());
+        pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
     }
 }
 
 HRESULT CModel::Ready_Meshes(MODEL eModel)
 {
     m_iNumMeshes = m_pAiScene->mNumMeshes;
- 
+
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
-        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, eModel, this, m_pAiScene->mMeshes[i], XMLoadFloat4x4(&m_PreTransformMatrix));
+        CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModel, this, m_pAiScene->mMeshes[i], XMLoadFloat4x4(&m_PreTransformMatrix));
         if (nullptr == pMesh)
         {
             MSG_BOX("Failed to Ready Mesh");
@@ -228,22 +244,37 @@ HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
     return S_OK;
 }
 
-HRESULT CModel::Ready_Bones(aiNode* pNode, _int _iParentIndex)
+HRESULT CModel::Ready_Bones(aiNode* pAINode, _int iParentIndex)
 {
-    CBone* pBone = CBone::Create(pNode, _iParentIndex);
-
+    CBone* pBone = CBone::Create(pAINode, iParentIndex);
     if (nullptr == pBone)
-    {
         return E_FAIL;
-    }
 
     m_Bones.push_back(pBone);
 
-    _int iParentIndex = (_int)m_Bones.size() - 1;
+    _int	iParent = m_Bones.size() - 1;
 
-    for (_uint i = 0; i < pNode->mNumChildren; ++i)
+    for (size_t i = 0; i < pAINode->mNumChildren; i++)
     {
-        Ready_Bones(pNode->mChildren[i], iParentIndex);
+        Ready_Bones(pAINode->mChildren[i], iParent);
+    }
+
+
+    return S_OK;
+}
+
+HRESULT CModel::Ready_Animations()
+{
+    m_iNumAnimations = m_pAiScene->mNumAnimations;
+
+    for (_uint i = 0; i < m_iNumAnimations; i++)
+    {
+        CAnimation* pAnimation = CAnimation::Create(this, m_pAiScene->mAnimations[i]);
+
+        if (nullptr == pAnimation)
+            return E_FAIL;
+
+        m_Animations.push_back(pAnimation);
     }
 
     return S_OK;
@@ -311,7 +342,6 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
     }
 
     /* Mesh */
-
     in.read(reinterpret_cast<_char*>(&m_iNumMeshes), sizeof(_uint));
 
     for (_uint i = 0; i < m_iNumMeshes; ++i)
@@ -325,6 +355,7 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
         m_Meshes.push_back(pMesh);
     }
 
+    /* Material */
     in.read(reinterpret_cast<_char*>(&m_iNumMaterials), sizeof(_uint));
 
     for (_uint i = 0; i < m_iNumMaterials; ++i)
@@ -403,6 +434,10 @@ void CModel::Free()
     for (auto& pBone : m_Bones)
         Safe_Release(pBone);
     m_Bones.clear();
+
+    for (auto& pAnimation : m_Animations)
+        Safe_Release(pAnimation);
+    m_Animations.clear();
 
     m_Importer.FreeScene();
 }

@@ -166,6 +166,9 @@
     <Filter Include="03.UIObject\GamePlay\Loading\Wallpaper">
       <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster">
+      <UniqueIdentifier>{6c8637e6-133d-4334-8593-450aabfea42a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -321,6 +324,9 @@
     <ClInclude Include="..\public\UIEffect.h">
       <Filter>03.UIObject\UIEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02.GameObject\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -471,6 +477,9 @@
     <ClCompile Include="..\private\UIEffect.cpp">
       <Filter>03.UIObject\UIEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02.GameObject\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
@@ -482,7 +491,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXAnimMesh.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

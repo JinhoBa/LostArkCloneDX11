@@ -113,12 +113,10 @@ HRESULT CShader::Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix
 HRESULT CShader::Bind_Matrices(const _char* ConstantName, const _float4x4* pMatrix, _uint iNumMatrices)
 {
 	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);
-
 	if (nullptr == pVariable)
 		return E_FAIL;
 
 	ID3DX11EffectMatrixVariable* pMatrixVariable = pVariable->AsMatrix();
-
 	if (nullptr == pMatrixVariable)
 		return E_FAIL;
 

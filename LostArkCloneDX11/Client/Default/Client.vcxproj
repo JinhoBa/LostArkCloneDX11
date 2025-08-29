@@ -189,6 +189,7 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\public\Level_MapEditor.h" />
     <ClInclude Include="..\public\MapObject.h" />
+    <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\public\Mouse.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
@@ -267,6 +268,7 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\private\Level_MapEditor.cpp" />
     <ClCompile Include="..\private\MapObject.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\pch.cpp">
@@ -291,7 +293,7 @@
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXAnimMesh.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl" />

@@ -12,15 +12,15 @@ private:
 public:
 	HRESULT Initialize(const _char* pMaterialFileName, const _char* pModelFilePath);
 	HRESULT Initialize(aiMaterial* pAiMaterial, const _char* pModelFilePath);
-	
+
 
 	HRESULT Bind_SRV(class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex);
 	HRESULT Bind_Value(class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex);
 
 private:
 	_uint								m_iNumSRV = {};
-	ID3D11Device*						m_pDevice = { nullptr };
-	ID3D11DeviceContext*				m_pContext = { nullptr };
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
 	vector<ID3D11ShaderResourceView*>	m_SRVs[ENUM_TO_INT(TEXTURE::END)] = {};
 	vector<_float4>						m_vectorValues[ENUM_TO_INT(TEXTURE::END)] = {};
 

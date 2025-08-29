@@ -5,7 +5,7 @@
 #include "Shader.h"
 
 CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CVIBuffer{pDevice, pContext}
+	:CVIBuffer{ pDevice, pContext }
 {
 }
 
@@ -14,7 +14,7 @@ CMesh::CMesh(CMesh& Prototype)
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(MODEL eModelType, const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
+HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
 {
 	strcpy_s(m_szName, pAIMesh->mName.data);
 
@@ -22,48 +22,59 @@ HRESULT CMesh::Initialize_Prototype(MODEL eModelType, const CModel* pModel, cons
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = pAIMesh->mNumVertices;
 
+
+
 	m_iNumIndices = pAIMesh->mNumFaces * 3;
 	m_iIndexStride = 4;
 
 	m_eIndexFormat = DXGI_FORMAT_R32_UINT;
 	m_ePrimitive = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-#pragma region VETEX_BUFFER
-	HRESULT hr = MODEL::NONANIM == eModelType ? Ready_VertexBuffer_For_NonAnim(pAIMesh, PreTransformMatrix) : Ready_VertexBuffer_For_Anim(pModel, pAIMesh);
+#pragma region VERTEX_BUFFER
+
+	HRESULT hr = MODEL::NONANIM == eType ?
+		Ready_VertexBuffer_For_NonAnim(pAIMesh, PreTransformMatrix) :
+		Ready_VertexBuffer_For_Anim(pModel, pAIMesh);
 
 	if (FAILED(hr))
 		return E_FAIL;
+
 #pragma endregion
 
 #pragma region INDEX_BUFFER
-	D3D11_BUFFER_DESC IBDesc = {};
-	IBDesc.ByteWidth = m_iNumIndices * m_iIndexStride;
+	D3D11_BUFFER_DESC		IBDesc{};
+	IBDesc.ByteWidth = m_iIndexStride * m_iNumIndices;
 	IBDesc.Usage = D3D11_USAGE_DEFAULT;
 	IBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	IBDesc.StructureByteStride = m_iIndexStride;
 	IBDesc.CPUAccessFlags = 0;
 	IBDesc.MiscFlags = 0;
 
+
 	_uint* pIndices = new _uint[m_iNumIndices];
 	ZeroMemory(pIndices, sizeof(_uint) * m_iNumIndices);
 
-	_uint iIndices = {};
+	_uint	iNumIndices = {};
 
-	for (_uint i = 0; i < pAIMesh->mNumFaces; ++i)
+	for (size_t i = 0; i < pAIMesh->mNumFaces; i++)
 	{
-		pIndices[iIndices++] = pAIMesh->mFaces[i].mIndices[0];
-		pIndices[iIndices++] = pAIMesh->mFaces[i].mIndices[1];
-		pIndices[iIndices++] = pAIMesh->mFaces[i].mIndices[2];
+		pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[0];
+		pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[1];
+		pIndices[iNumIndices++] = pAIMesh->mFaces[i].mIndices[2];
 	}
 
-	D3D11_SUBRESOURCE_DATA InitIBData = {};
-	InitIBData.pSysMem = pIndices;
 
-	if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitIBData, &m_pIB)))
+	D3D11_SUBRESOURCE_DATA	InitialIBData{};
+	InitialIBData.pSysMem = pIndices;
+
+	if (FAILED(m_pDevice->CreateBuffer(&IBDesc, &InitialIBData, &m_pIB)))
 		return E_FAIL;
 
 	Safe_Delete_Array(pIndices);
+
 #pragma endregion
+
+
 
 	return S_OK;
 }
@@ -77,7 +88,7 @@ HRESULT CMesh::Initialize_Prototype(MODEL eModelType, ifstream& stream)
 	stream.read(reinterpret_cast<_char*>(&m_iNumVertices), sizeof(_uint));
 	stream.read(reinterpret_cast<_char*>(&iNumFaces), sizeof(_uint));
 
-	HRESULT hr = 
+	HRESULT hr =
 		MODEL::NONANIM == eModelType ? Ready_VertexBuffer_For_NonAnim_Binary(iNumFaces, stream) : Ready_VertexBuffer_For_Anim_Binary(iNumFaces, stream);
 
 	if (FAILED(hr))
@@ -121,15 +132,13 @@ HRESULT CMesh::Initialize(void* pArg)
 	return S_OK;
 }
 
-HRESULT CMesh::Bind_BoneMatices(const vector<CBone*>& Bones, CShader* pShader, const _char* pConstantName)
+HRESULT CMesh::Bind_BoneMatrices(const vector<CBone*>& Bones, CShader* pShader, const _char* pConstantName)
 {
-	if (m_iNumBones >= 1024)
+	if (m_iNumBones >= 512)
 		return E_FAIL;
 
-
-	for (size_t i = 0; i < m_iNumBones; i++)
+	for (_uint i = 0; i < m_iNumBones; i++)
 	{
-		/* 최종적으로 렌더링하기위한 뼈의 행렬(CombinedTransformationMatrix). */
 		XMStoreFloat4x4(&m_pBoneMatrices[i], XMLoadFloat4x4(&m_OffsetMatrices[i]) * Bones[m_BoneIndices[i]]->Get_CombinedTransformationMatrix());
 	}
 
@@ -137,6 +146,7 @@ HRESULT CMesh::Bind_BoneMatices(const vector<CBone*>& Bones, CShader* pShader, c
 		return S_OK;
 
 	return pShader->Bind_Matrices(pConstantName, m_pBoneMatrices, m_iNumBones);
+
 }
 
 HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream& stream)
@@ -158,7 +168,7 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 
 	m_iNumBones = pAIMesh->mNumBones;
 
-	if(MODEL::ANIM == eModelType)
+	if (MODEL::ANIM == eModelType)
 	{
 		for (_uint i = 0; i < m_iNumBones; ++i)
 		{
@@ -195,7 +205,7 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 		}
 	}
 
-	if(MODEL::ANIM == eModelType)
+	if (MODEL::ANIM == eModelType)
 	{
 		for (_uint i = 0; i < m_iNumVertices; ++i)
 		{
@@ -305,7 +315,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* pModel, const aiMesh* p
 	_float4x4		OffsetMatrix;
 	XMStoreFloat4x4(&OffsetMatrix, XMMatrixIdentity());
 
-	for (_uint i = 0; i < m_iNumBones; ++i)
+	for (_uint i = 0; i < m_iNumBones; i++)
 	{
 		aiBone* pAIBone = pAIMesh->mBones[i];
 
@@ -320,7 +330,6 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* pModel, const aiMesh* p
 		m_OffsetMatrices.push_back(OffsetMatrix);
 		m_BoneIndices.push_back(iBoneIndex);
 
-		/* 이 뼈는 몇개의 정점에게 영향을 주는가? */
 		for (_uint j = 0; j < pAIBone->mNumWeights; j++)
 		{
 			aiVertexWeight	AIWeight = pAIBone->mWeights[j];
@@ -417,7 +426,6 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Binary(_uint iNumFames, ifstream& 
 
 HRESULT CMesh::Ready_VertexBuffer_For_Anim_Binary(_uint iNumFames, ifstream& stream)
 {
-	
 	m_iNumIndices = iNumFames * 3;
 	m_iIndexStride = 4;
 

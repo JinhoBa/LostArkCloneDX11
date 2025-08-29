@@ -11,14 +11,16 @@ private:
 	virtual ~CMesh() = default;
 
 public:
-	const _uint Get_MaterialIndex() { return m_iMaterialIndex; }
+	_uint Get_MaterialIndex() const {
+		return m_iMaterialIndex;
+	}
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eModelType, const class CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize_Prototype(MODEL eModelType, ifstream& stream);
 	virtual HRESULT Initialize(void* pArg) override;
 
-	HRESULT Bind_BoneMatices(const vector<class CBone*>& , class CShader* pShader, const _char* pConstantName);
+	HRESULT Bind_BoneMatrices(const vector<class CBone*>& Bones, class CShader* pShader, const _char* pConstantName);
 
 	HRESULT Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream& stream);
 

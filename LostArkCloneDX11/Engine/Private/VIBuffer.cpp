@@ -5,18 +5,18 @@ CVIBuffer::CVIBuffer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 }
 
-CVIBuffer::CVIBuffer(CVIBuffer& Prototype)
-    : CComponent{Prototype},
-    m_pVB{Prototype.m_pVB},
-    m_pIB{Prototype.m_pIB},
-    m_iNumVertices{Prototype.m_iNumVertices},
-    m_iVertexStride{Prototype.m_iVertexStride},
-    m_iNumIndices{Prototype.m_iNumIndices},
-    m_iIndexStride{Prototype.m_iIndexStride},
-    m_eIndexFormat{Prototype.m_eIndexFormat},
-    m_iNumVertexBuffers{Prototype.m_iNumVertexBuffers},
-    m_ePrimitive{Prototype.m_ePrimitive},
-    m_pVertexPositions{Prototype.m_pVertexPositions }
+CVIBuffer::CVIBuffer(const CVIBuffer& Prototype)
+    : CComponent{Prototype}
+    , m_pVB{ Prototype.m_pVB }
+    , m_pIB{ Prototype.m_pIB }
+    , m_pVertexPositions{ Prototype.m_pVertexPositions }
+    , m_iNumVertices{ Prototype.m_iNumVertices }
+    , m_iVertexStride{ Prototype.m_iVertexStride }
+    , m_iNumIndices{ Prototype.m_iNumIndices }
+    , m_iIndexStride{ Prototype.m_iIndexStride }
+    , m_iNumVertexBuffers{ Prototype.m_iNumVertexBuffers }
+    , m_eIndexFormat{ Prototype.m_eIndexFormat }
+    , m_ePrimitive{ Prototype.m_ePrimitive }
 {
     Safe_AddRef(m_pVB);
     Safe_AddRef(m_pIB);

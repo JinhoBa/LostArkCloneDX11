@@ -124,6 +124,12 @@
     <Filter Include="01.Utility\03.Components\Model\Bone">
       <UniqueIdentifier>{932303c1-4420-4bd0-9bc5-1f81bf8e4b98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Animation">
+      <UniqueIdentifier>{6b02bb4a-7c88-4d63-a78c-ac2f8a5a0a0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Animation\Channel">
+      <UniqueIdentifier>{11f55934-b296-4790-8059-6bf7afb9d7ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -273,6 +279,12 @@
     <ClInclude Include="..\public\Bone.h">
       <Filter>01.Utility\03.Components\Model\Bone</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animation.h">
+      <Filter>01.Utility\03.Components\Model\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Channel.h">
+      <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -379,6 +391,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Bone.cpp">
       <Filter>01.Utility\03.Components\Model\Bone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Animation.cpp">
+      <Filter>01.Utility\03.Components\Model\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Channel.cpp">
+      <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

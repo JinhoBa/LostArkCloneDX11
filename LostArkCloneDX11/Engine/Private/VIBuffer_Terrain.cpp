@@ -209,6 +209,7 @@ HRESULT CVIBuffer_Terrain::Save_HeightFile(const _char* pFilePath)
 
 HRESULT CVIBuffer_Terrain::Load_HeightFile(const _char* pFilePath)
 {
+
 	if (nullptr == pFilePath)
 		return S_OK;
 

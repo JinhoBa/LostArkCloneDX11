@@ -33,6 +33,8 @@ private:
 	CModel*					m_pModelCom = { nullptr };
 	vector<class CSkill*>	m_Skills = {};
 
+	_int m_iAnimIndex = {};
+
 private:
 	void			Key_Input(_float fTimeDelta);
 	HRESULT			Add_Components();

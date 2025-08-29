@@ -33,10 +33,10 @@ HRESULT CPlayer::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_pTransformCom->Set_Scale(_float3(1.f, 1.f, 1.f));
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(STATE::UP), XMConvertToRadians(180.f));
-
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
+
+    m_iAnimIndex = 0;
+
 
     return S_OK;
 }
@@ -48,7 +48,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-    m_pModelCom->Play_Animation(fTimeDelta);
 
 #pragma region TESTCODE
     //if (m_pGameInstance->Get_KeyPressing(DIK_W))
@@ -87,7 +86,7 @@ void CPlayer::Update(_float fTimeDelta)
 
     Key_Input(fTimeDelta);
 
-
+    m_pModelCom->Play_Animation(m_iAnimIndex, fTimeDelta);
 
 }
 
@@ -98,6 +97,10 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+#pragma region TESTCODE
+    ImGui::InputInt("Animation", &m_iAnimIndex);
+#pragma endregion
+
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
@@ -107,22 +110,23 @@ HRESULT CPlayer::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
+
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
-       if (FAILED(m_pModelCom->Bind_BoneMatirces(i, m_pShaderCom, "g_BoneMatrices")))
+        if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
             return E_FAIL;
 
+
         if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
+
 
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
-
-   
 
     return S_OK;
 }
@@ -143,8 +147,8 @@ HRESULT CPlayer::Add_Components()
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
-    /*Shader_VTXPosTex*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexAnimMesh"),
+    /*Shader_VTXAnimTex*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
