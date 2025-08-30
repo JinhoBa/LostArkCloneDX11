@@ -132,17 +132,19 @@ void CTransform::Go_Backward_World(_float fTimeDelta)
     Set_State(STATE::POSITION, vPosition);
 }
 
-void CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos)
+_bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos)
 {
     _vector vPosition = Get_State(STATE::POSITION);
     _vector vDirection = vTargetPos - vPosition;
 
     if (0.1f >= XMVectorGetX(XMVector3Length(vDirection)))
-        return;
+        return false;
 
     vPosition += XMVector3Normalize(vDirection) * m_fSpeedPersec * fTimeDelta;
 
     Set_State(STATE::POSITION, vPosition);
+
+    return true;
 }
 
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)

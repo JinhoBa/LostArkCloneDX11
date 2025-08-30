@@ -12,6 +12,7 @@ private:
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAiAnimation);
 	void	Update_TransformationMatrix(const vector<class CBone*> Bones, _float fTimeDelta);
+	void    Reset_TrackPosition();
 private:
 	_uint					m_iNumChannels = {};
 	_float					m_fDuration = {};

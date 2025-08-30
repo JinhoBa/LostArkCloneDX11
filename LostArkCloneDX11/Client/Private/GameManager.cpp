@@ -69,8 +69,8 @@ void CGameManager::Bind_PickingPos(_float3* pPickingPos)
 {
 	if (nullptr == m_pPickingPos)
 		m_pPickingPos = pPickingPos;
-	if(m_pPickingPos->y <= pPickingPos->y)
-		m_pPickingPos = pPickingPos;
+	//if(m_pPickingPos->y <= pPickingPos->y)
+	//	m_pPickingPos = pPickingPos;
 }
 
 void CGameManager::Free()

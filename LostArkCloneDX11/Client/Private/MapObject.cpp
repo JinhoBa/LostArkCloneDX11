@@ -98,6 +98,8 @@ HRESULT CMapObject::Render()
 
 void CMapObject::Update_ImGui()
 {
+    if (nullptr == m_pGameInstance)
+        return;
     if (m_isDead)
         return;
     if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
@@ -114,7 +116,7 @@ void CMapObject::Update_ImGui()
     ImGui::Text(m_pGameInstance->WstringToUtf8(m_strPrototypeTag).c_str());
     ImGui::Text("----- Transfrom ----");
     ImGui::InputFloat("X##Position", &m_vPosition.x, 1.f, 10.f);
-    ImGui::InputFloat("Y##Position", &m_vPosition.y, 1.f, 10.f);
+    ImGui::InputFloat("Y##Position", &m_vPosition.y, 0.1f, 1.f);
     ImGui::InputFloat("Z##Position", &m_vPosition.z, 1.f, 10.f);
 
     ImGui::Text("----- Rotation ----");

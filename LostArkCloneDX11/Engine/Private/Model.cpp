@@ -194,9 +194,14 @@ HRESULT CModel::Bind_BoneMatrices(_uint iMeshIndex, CShader* pShader, const _cha
 
 void CModel::Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta)
 {
+    if (m_iCurrentAnimIndex != iAnimAnimIndex && -1 != m_iCurrentAnimIndex)
+    {
+        m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
+    }
+
     m_iCurrentAnimIndex = iAnimAnimIndex;
 
-    if (-1 == m_iCurrentAnimIndex || m_iNumAnimations <= m_iCurrentAnimIndex)
+    if (-1 == m_iCurrentAnimIndex || (_int)m_iNumAnimations <= m_iCurrentAnimIndex)
         return;
 
     m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, fTimeDelta);
@@ -252,7 +257,7 @@ HRESULT CModel::Ready_Bones(aiNode* pAINode, _int iParentIndex)
 
     m_Bones.push_back(pBone);
 
-    _int	iParent = m_Bones.size() - 1;
+    _int	iParent = (_int)m_Bones.size() - 1;
 
     for (size_t i = 0; i < pAINode->mNumChildren; i++)
     {

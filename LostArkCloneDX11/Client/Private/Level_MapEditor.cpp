@@ -47,7 +47,7 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Kamen_floar02",
         "Prototype_Component_Model_Kamen_floar03",
         "Prototype_Component_Model_Kamen_floar04",
-        "Prototype_Component_Model_Kamen_floar05",
+       // "Prototype_Component_Model_Kamen_floar05",
         "Prototype_Component_Model_Kamen_floar05a",
         "Prototype_Component_Model_Kamen_floar05b",
         "Prototype_Component_Model_Kamen_floar05c",
@@ -74,12 +74,12 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_Model_Kamen_deco02b",
         "Prototype_Component_Model_Kamen_deco03",
         "Prototype_Component_Model_Kamen_deco04",
-        "Prototype_Component_Model_Kamen_deco05",
+       // "Prototype_Component_Model_Kamen_deco05",
         "Prototype_Component_Model_Kamen_deco06",
         "Prototype_Component_Model_Kamen_pillar01",
         "Prototype_Component_Model_Kamen_pillar01a",
         "Prototype_Component_Model_Kamen_pillar02",
-        "Prototype_Component_Model_Kamen_pillar02a",
+        //"Prototype_Component_Model_Kamen_pillar02a",
         "Prototype_Component_Model_Kamen_pillar02low",
         "Prototype_Component_Model_Kamen_pillar03",
         "Prototype_Component_Model_Kamen_pillar04",
@@ -221,7 +221,7 @@ HRESULT CLevel_MapEditor::Render()
         if (nullptr == pMapObject)
             continue;
 
-        strSrc = m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()) + "##" + to_string(iObjectIndex++);
+        strSrc = m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()) + to_string(iObjectIndex) + "##" + to_string(iObjectIndex++);
 
         if(ImGui::Button(strSrc.c_str()))
         {
@@ -307,11 +307,16 @@ HRESULT CLevel_MapEditor::Add_MapObject()
     Desc.strPrototypeTag = m_pGameInstance->Utf8ToWstring(m_MapObject_PrototypeTags[m_iMapObject_ComboIndex]);
     Desc.vPosition = _float3(0.f, 0.f, 0.f);
     Desc.vRotation = _float3(0.f, 0.f, 0.f);
-    Desc.vScale = _float3(1.f, 1.f, 1.f);
+    Desc.vScale = _float3(2.5f, 2.5f, 2.5f);
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
         ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"), &Desc)))
         return E_FAIL;
+    CMapObject* pMapObject = dynamic_cast<CMapObject*>(m_pBackGroundObject->back());
+    if (nullptr == pMapObject)
+        return S_OK;
+
+    m_pMapObject = pMapObject;
 
     return S_OK;
 }

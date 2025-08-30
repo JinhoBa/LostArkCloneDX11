@@ -36,6 +36,15 @@ void CAnimation::Update_TransformationMatrix(const vector<CBone*> Bones, _float 
 	}
 }
 
+void CAnimation::Reset_TrackPosition()
+{
+	m_fCurrentTrackPosition = 0;
+
+	for (auto& pChannel : m_Channels)
+		pChannel->Reset_KeyFrame();
+}
+
+
 CAnimation* CAnimation::Create(const class CModel* pModel, const aiAnimation* pAiAnimation)
 {
 	CAnimation* pInstance = new CAnimation();
