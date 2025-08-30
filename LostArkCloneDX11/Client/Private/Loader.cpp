@@ -281,15 +281,15 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(-45.0f));
 	/* TEST CODE */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.fbx", PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.bin"))))
 		return E_FAIL;
 
 	/* TEST CODE */
 	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create_BinaryFile(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player/Player.fbx"))))
+		CModel::Create_BinaryFile(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.fbx", PreTransformMatrix))))
 		return E_FAIL;*/
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");

@@ -166,40 +166,41 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 		memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 	}
 
-	m_iNumBones = pAIMesh->mNumBones;
-
 	if (MODEL::ANIM == eModelType)
 	{
-		for (_uint i = 0; i < m_iNumBones; ++i)
+		if(0 != pAIMesh->mNumBones)
 		{
-			aiBone* pBone = pAIMesh->mBones[i];
-
-			if (nullptr == pBone)
-				return E_FAIL;
-
-			for (_uint j = 0; j < pBone->mNumWeights; ++j)
+			for (_uint i = 0; i < pAIMesh->mNumBones; ++i)
 			{
-				aiVertexWeight Weight = pBone->mWeights[j];
+				aiBone* pBone = pAIMesh->mBones[i];
 
-				if (0.f == pVertices[Weight.mVertexId].vBlendWeight.x)
+				if (nullptr == pBone)
+					return E_FAIL;
+
+				for (_uint j = 0; j < pBone->mNumWeights; ++j)
 				{
-					pVertices[Weight.mVertexId].vBlendIndex.x = i;
-					pVertices[Weight.mVertexId].vBlendWeight.x = Weight.mWeight;
-				}
-				else if (0.f == pVertices[Weight.mVertexId].vBlendWeight.y)
-				{
-					pVertices[Weight.mVertexId].vBlendIndex.y = i;
-					pVertices[Weight.mVertexId].vBlendWeight.y = Weight.mWeight;
-				}
-				else if (0.f == pVertices[Weight.mVertexId].vBlendWeight.z)
-				{
-					pVertices[Weight.mVertexId].vBlendIndex.z = i;
-					pVertices[Weight.mVertexId].vBlendWeight.z = Weight.mWeight;
-				}
-				else
-				{
-					pVertices[Weight.mVertexId].vBlendIndex.w = i;
-					pVertices[Weight.mVertexId].vBlendWeight.w = Weight.mWeight;
+					aiVertexWeight Weight = pBone->mWeights[j];
+
+					if (0.f == pVertices[Weight.mVertexId].vBlendWeight.x)
+					{
+						pVertices[Weight.mVertexId].vBlendIndex.x = i;
+						pVertices[Weight.mVertexId].vBlendWeight.x = Weight.mWeight;
+					}
+					else if (0.f == pVertices[Weight.mVertexId].vBlendWeight.y)
+					{
+						pVertices[Weight.mVertexId].vBlendIndex.y = i;
+						pVertices[Weight.mVertexId].vBlendWeight.y = Weight.mWeight;
+					}
+					else if (0.f == pVertices[Weight.mVertexId].vBlendWeight.z)
+					{
+						pVertices[Weight.mVertexId].vBlendIndex.z = i;
+						pVertices[Weight.mVertexId].vBlendWeight.z = Weight.mWeight;
+					}
+					else
+					{
+						pVertices[Weight.mVertexId].vBlendIndex.w = i;
+						pVertices[Weight.mVertexId].vBlendWeight.w = Weight.mWeight;
+					}
 				}
 			}
 		}
@@ -209,12 +210,21 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 	{
 		for (_uint i = 0; i < m_iNumVertices; ++i)
 		{
+			
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vPosition), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vNormal), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vTangent), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vTexcoord), sizeof(_float2));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vBlendIndex), sizeof(_float4));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vBlendWeight), sizeof(_float4));
+		}
+
+		stream.write(reinterpret_cast<const _char*>(&m_iNumBones), sizeof(_uint));
+
+		for (_uint i = 0; i < m_iNumBones; ++i)
+		{
+			stream.write(reinterpret_cast<const _char*>(&m_BoneIndices[i]), sizeof(_int));
+			stream.write(reinterpret_cast<const _char*>(&m_OffsetMatrices[i]), sizeof(_float4x4));
 		}
 	}
 	else
@@ -457,6 +467,27 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim_Binary(_uint iNumFames, ifstream& str
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vTexcoord), sizeof(_float2));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vBlendIndex), sizeof(_float4));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vBlendWeight), sizeof(_float4));
+	}
+	
+	stream.read(reinterpret_cast<_char*>(&m_iNumBones), sizeof(_uint));
+
+	m_pBoneMatrices = new _float4x4[m_iNumBones];
+	ZeroMemory(m_pBoneMatrices, sizeof(_float4x4) * m_iNumBones);
+
+	m_BoneIndices.reserve(static_cast<size_t>(m_iNumBones));
+	m_OffsetMatrices.reserve(static_cast<size_t>(m_iNumBones));
+
+	_int BoneIndex = {};
+	_float4x4 OffsetMatirx;
+	XMStoreFloat4x4(&OffsetMatirx, XMMatrixIdentity());
+
+	for (_uint i = 0; i < m_iNumBones; ++i)
+	{
+		stream.read(reinterpret_cast<_char*>(&BoneIndex), sizeof(_int));
+		stream.read(reinterpret_cast<_char*>(&OffsetMatirx), sizeof(_float4x4));
+
+		m_BoneIndices.push_back(BoneIndex);
+		m_OffsetMatrices.push_back(OffsetMatirx);
 	}
 
 	D3D11_SUBRESOURCE_DATA InitVBData = {};

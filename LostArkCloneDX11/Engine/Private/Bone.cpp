@@ -10,12 +10,22 @@ HRESULT CBone::Initialize(const aiNode* pAINode, _int iParentIndex)
 
 	m_iParentBoneIndex = iParentIndex;
 
-	/* m_TransformationMatrix : 뼈만의 상태 */
-	/* 갱신이 필요할거야! -> 어심프로부터 애니메이션이 이용하고 있는 특정 뼈대들만 정보를 받아와서 갱신 */
 	memcpy(&m_TransformationMatrix, &pAINode->mTransformation, sizeof(_float4x4));
 	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
 		 
-	/* 추후 최초 렌더링시에도 반드시 전체뼈를 갱신하여 생성하고 렌더링할 것이다. */
+	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
+
+	return S_OK;
+}
+
+HRESULT CBone::Initialize(ifstream& in)
+{
+	in.read(reinterpret_cast<_char*>(m_szName), MAX_NAME);
+
+	in.read(reinterpret_cast<_char*>(&m_iParentBoneIndex), sizeof(_int));
+
+	in.read(reinterpret_cast<_char*>(&m_TransformationMatrix), sizeof(_float4x4));
+
 	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
 
 	return S_OK;
@@ -32,6 +42,22 @@ void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fm
 			XMLoadFloat4x4(&m_TransformationMatrix) * Bones[m_iParentBoneIndex]->Get_CombinedTransformationMatrix());
 }
 
+void CBone::Save_To_Binary(ofstream& out, _fmatrix PreTransformMatrix)
+{
+	out.write(reinterpret_cast<const _char*>(m_szName), MAX_NAME);
+	out.write(reinterpret_cast<const _char*>(&m_iParentBoneIndex), sizeof(_uint));
+
+	// PreTransformMatrix와 Transpose 변환한 상태로 저장
+
+	if (-1 == m_iParentBoneIndex)
+	{
+		XMStoreFloat4x4(&m_TransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * PreTransformMatrix);
+	}
+
+	out.write(reinterpret_cast<const _char*>(&m_TransformationMatrix), sizeof(_float4x4));
+
+}
+
 CBone* CBone::Create(const aiNode* pAINode, _int iParentIndex)
 {
 	CBone* pInstance = new CBone();
@@ -45,9 +71,20 @@ CBone* CBone::Create(const aiNode* pAINode, _int iParentIndex)
 	return pInstance;
 }
 
+CBone* CBone::Create(ifstream& in)
+{
+	CBone* pInstance = new CBone();
+
+	if (FAILED(pInstance->Initialize(in)))
+	{
+		MSG_BOX("Failed to Created : CBone");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
 void CBone::Free()
 {
 	__super::Free();
-
-
 }

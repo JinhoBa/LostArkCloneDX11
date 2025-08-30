@@ -33,7 +33,7 @@ private:
 
 	_uint						m_iNumMeshes = {};
 	_uint						m_iNumMaterials = {};
-
+	_uint						m_iNumBones = {};
 	_uint						m_iNumAnimations = {};
 
 	_wstring					m_strFolderPath = {};
@@ -53,7 +53,7 @@ private:
 	HRESULT Ready_Bones(aiNode* pNode, _int iParentIndex);
 	HRESULT Ready_Animations();
 
-	HRESULT Save_Binary_Model(MODEL eModel, const _char* pModelFielPath);
+	HRESULT Save_Binary_Model(MODEL eModel, const _char* pModelFielPath, _fmatrix PreTransformMatrix);
 	HRESULT Load_Binary_Model(MODEL eModel, const _char* pModelFielPath);
 
 public:

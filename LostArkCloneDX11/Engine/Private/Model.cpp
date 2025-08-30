@@ -93,11 +93,14 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
         if (FAILED(Ready_Materials(pModelFilePath)))
             return E_FAIL;
 
-          if (FAILED(Ready_Animations()))
-              return E_FAIL;
+        if (FAILED(Ready_Animations()))
+            return E_FAIL;
+
     }
     else
     {
+        XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
+
         if (FAILED(Load_Binary_Model(eModel, pModelFilePath)))
             return E_FAIL;
     }
@@ -117,6 +120,8 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
 
     m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 
+    m_eModel = eModel;
+
     XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
 
     if (nullptr == m_pAiScene)
@@ -125,10 +130,15 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
         return E_FAIL;
     }
 
-    if (FAILED(Ready_Meshes(eModel)))
+    Ready_Bones(m_pAiScene->mRootNode, -1);
+
+    if (FAILED(Ready_Meshes(m_eModel)))
         return E_FAIL;
 
     if (FAILED(Ready_Materials(pModelFilePath)))
+        return E_FAIL;
+
+    if (FAILED(Ready_Animations()))
         return E_FAIL;
 
     _char szDrive[MAX_PATH] = {};
@@ -145,7 +155,7 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
     strcat_s(szBinaryFilePath, szFileName);
     strcat_s(szBinaryFilePath, ".bin");
 
-    if (FAILED(Save_Binary_Model(eModel, szBinaryFilePath)))
+    if (FAILED(Save_Binary_Model(eModel, szBinaryFilePath, PreTransformMatrix)))
         return E_FAIL;
 
     return S_OK;
@@ -285,7 +295,7 @@ HRESULT CModel::Ready_Animations()
     return S_OK;
 }
 
-HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
+HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath, _fmatrix PreTransformMatrix)
 {
     ofstream out(pModelFielPath, ios::binary);
 
@@ -295,6 +305,17 @@ HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
         return E_FAIL;
     }
 
+#pragma region BONES
+    m_iNumBones = (_uint)m_Bones.size();
+    out.write(reinterpret_cast<const _char*>(&m_iNumBones), sizeof(_uint));
+
+    for (auto& pBone : m_Bones)
+    {
+        pBone->Save_To_Binary(out, PreTransformMatrix);
+    }
+#pragma endregion
+    
+#pragma region MESH
     out.write(reinterpret_cast<const _char*>(&m_pAiScene->mNumMeshes), sizeof(_uint));
 
     /* Mesh */
@@ -318,7 +339,9 @@ HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
             out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[j].mIndices[2]), sizeof(_uint));
         }
     }
-
+#pragma endregion
+    
+#pragma region MATERIAL
     /* Material */
     aiMaterial** ppMaterial = m_pAiScene->mMaterials;
 
@@ -330,6 +353,16 @@ HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 
         out.write(reinterpret_cast<const _char*>(Material->GetName().data), MAX_PATH);
     }
+#pragma endregion
+
+#pragma region ANMATION
+    out.write(reinterpret_cast<const _char*>(&m_iNumAnimations), sizeof(_uint));
+
+    for (auto& pAnimation : m_Animations)
+    {
+        pAnimation->Save_To_Binary(out);
+    }
+#pragma endregion
 
     out.close();
 
@@ -346,8 +379,29 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
         return E_FAIL;
     }
 
-    /* Mesh */
+#pragma region READY_BONES
+
+    in.read(reinterpret_cast<_char*>(&m_iNumBones), sizeof(_uint));
+    
+    m_Bones.reserve((size_t)m_iNumBones);
+
+    for (_uint i = 0; i < m_iNumBones; ++i)
+    {
+        CBone* pBone = CBone::Create(in);
+
+        if (nullptr == pBone)
+            return E_FAIL;
+
+        m_Bones.push_back(pBone);
+    }
+    
+#pragma endregion
+
+#pragma region READY_MESH
+
     in.read(reinterpret_cast<_char*>(&m_iNumMeshes), sizeof(_uint));
+
+    m_Meshes.reserve((size_t)m_iNumMeshes);
 
     for (_uint i = 0; i < m_iNumMeshes; ++i)
     {
@@ -360,8 +414,13 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
         m_Meshes.push_back(pMesh);
     }
 
-    /* Material */
+#pragma endregion
+
+#pragma region READY_MATERIAL
+
     in.read(reinterpret_cast<_char*>(&m_iNumMaterials), sizeof(_uint));
+
+    m_Materials.reserve((size_t)m_iNumMaterials);
 
     for (_uint i = 0; i < m_iNumMaterials; ++i)
     {
@@ -375,6 +434,26 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
 
         m_Materials.push_back(pMaterial);
     }
+
+#pragma endregion
+
+#pragma region READY_ANMATION
+
+    in.read(reinterpret_cast<_char*>(&m_iNumAnimations), sizeof(_uint));
+
+    m_Animations.reserve((size_t)m_iNumAnimations);
+
+    for (_uint i = 0; i < m_iNumAnimations; ++i)
+    {
+        CAnimation* pAnimation = CAnimation::Create(in);
+
+        if (nullptr == pAnimation)
+            return E_FAIL;
+
+        m_Animations.push_back(pAnimation);
+    }
+
+#pragma endregion
 
     in.close();
 

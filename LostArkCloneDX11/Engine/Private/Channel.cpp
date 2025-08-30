@@ -10,7 +10,6 @@ CChannel::CChannel()
 HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAiChannels)
 {
 	strcpy_s(m_szName, pAiChannels->mNodeName.data);
-
 	m_iBoneIndex = pModel->Get_BoneIndex(m_szName);
 
 	if (-1 == m_iBoneIndex)
@@ -62,6 +61,33 @@ HRESULT CChannel::Initialize(const CModel* pModel, const aiNodeAnim* pAiChannels
 	return S_OK;
 }
 
+HRESULT CChannel::Initialize(ifstream& in)
+{
+	in.read(reinterpret_cast<_char*>(m_szName), MAX_NAME);
+	in.read(reinterpret_cast<_char*>(&m_iBoneIndex), sizeof(_uint));
+	in.read(reinterpret_cast<_char*>(&m_iNumKeyFrames), sizeof(_uint));
+	
+	if (-1 == m_iBoneIndex)
+		return E_FAIL;
+
+	_float3 vScale = {};
+	_float4 vRotation = {};
+	_float3 vTranslation = {};
+
+	m_KeyFrames.reserve((size_t)m_iNumKeyFrames);
+
+	for (_uint i = 0; i < m_iNumKeyFrames; ++i)
+	{
+		KEYFRAME KeyFrame = {};
+
+		in.read(reinterpret_cast<_char*>(&KeyFrame), sizeof(KEYFRAME));
+
+		m_KeyFrames.push_back(KeyFrame);
+	}
+
+	return S_OK;
+}
+
 void CChannel::Update_TransformationMatrix(const vector<CBone*> Bones, _float fCurrentTrackPosition)
 {
 	KEYFRAME LastKeyFrame = m_KeyFrames.back();
@@ -105,11 +131,38 @@ void CChannel::Update_TransformationMatrix(const vector<CBone*> Bones, _float fC
 	Bones[m_iBoneIndex]->Set_TransformationMatrix(BoneTransformationMatrix);
 }
 
+void CChannel::Save_To_Binary(ofstream& out)
+{
+	out.write(reinterpret_cast<const _char*>(m_szName), MAX_NAME);
+
+	out.write(reinterpret_cast<const _char*>(&m_iBoneIndex), sizeof(_int));
+	out.write(reinterpret_cast<const _char*>(&m_iNumKeyFrames), sizeof(_uint));
+
+	for (auto& Keyframe : m_KeyFrames)
+	{
+		out.write(reinterpret_cast<const _char*>(&Keyframe), sizeof(KEYFRAME));
+	}
+}
+
 CChannel* CChannel::Create(const CModel* pModel, const aiNodeAnim* pAiChannels)
 {
 	CChannel* pInstance = new CChannel();
 
 	if (FAILED(pInstance->Initialize(pModel, pAiChannels)))
+	{
+		Safe_Release(pInstance);
+		MSG_BOX("Failed to Create : CChannel");
+		return nullptr;
+	}
+
+	return pInstance;
+}
+
+CChannel* CChannel::Create(ifstream& in)
+{
+	CChannel* pInstance = new CChannel();
+
+	if (FAILED(pInstance->Initialize(in)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CChannel");

@@ -2,6 +2,7 @@
 #define Engine_Macro_h__
 
 #define			MAX_KEY					0xff
+#define			MAX_NAME				0x40
 #define			ENUM_TO_INT(ENUM)		static_cast<unsigned int>(ENUM)
 
 #ifndef			MSG_BOX
