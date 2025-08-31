@@ -19,20 +19,21 @@ HRESULT CSkill::Initialize(_uint iSkillID)
 }
 void CSkill::Update(_float fTimeDelta)
 {
-
-	if (m_bUse)
+	if (false == m_bUse)
 	{
 		m_fCoolTime -= fTimeDelta;
 
 		if (0.f >= m_fCoolTime)
+		{
 			m_bUse = true;
+			m_fCoolTime = 0.f;
+		}
 	}
-
 }
 
 _bool CSkill::Use_Skill()
 {
-	if (!m_bUse)
+	if (false == m_bUse)
 		return false;
 
 	m_bUse = false;

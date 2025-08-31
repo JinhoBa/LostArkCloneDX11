@@ -1,10 +1,10 @@
 #include "Client_Defines.h"
 
-#include "UIPanel.h"
+#include "HUD.h"
 
 NS_BEGIN(Client)
 
-class CIdentity : public CUIPanel
+class CIdentity : public CHUD
 {
 	enum class STATE { FLURRY, FOCUS, TO_FLURRY, TO_FOCUS, END};
 private:

@@ -63,7 +63,6 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
         m_TerrainDatas.push_back(Terrain_Data);
     }
 
-
     /* Map */
     MAP_DATA Map_Data = {};
 
@@ -223,35 +222,6 @@ HRESULT CData_Manager::Save_MapData(const _char* pFileName)
     return S_OK;
 }
 
-HRESULT CData_Manager::Load_PreviewTextures(const _char* pFilePath)
-{
-
-    tinyxml2::XMLDocument xmlDoc;
-
-    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
-        return E_FAIL;
-
-    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("MapObjectPreview_FileName");
-
-    if (nullptr == root)
-    {
-        MSG_BOX("Failed to Find root");
-        return E_FAIL;
-    }
-
-
-    for (auto* png = root->FirstChildElement("Name"); png; png = png->NextSiblingElement("Name"))
-    {
-        const _char* txt = png->GetText();
-
-        if (nullptr != txt)
-        {
-            m_MapPreviewFileNames.push_back(CGameInstance::GetInstance()->Utf8ToWstring(txt));
-        }
-    }
-    return S_OK;
-}
-
 HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
 {
     tinyxml2::XMLDocument xmlDoc;
@@ -382,7 +352,7 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
     return S_OK;
 }
 
-const SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
+SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
 {
     if(m_SkillDatas.size() <= iSkillID)
         return nullptr;
@@ -390,9 +360,7 @@ const SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
     return &m_SkillDatas[iSkillID];
 }
 
-
-
-CData_Manager* CData_Manager::Creat()
+CData_Manager* CData_Manager::Create()
 {
     return new CData_Manager();
 }

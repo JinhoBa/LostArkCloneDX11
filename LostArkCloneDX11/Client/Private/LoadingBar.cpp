@@ -67,7 +67,7 @@ void CLoadingBar::Update(_float fTimeDelta)
 
 	m_pTransformCom_Point->Set_State(STATE::POSITION, vPoint);
 
-	m_fValue = fProgress / 100.f;
+	m_vValue.x = fProgress / 100.f;
 	
 }
 

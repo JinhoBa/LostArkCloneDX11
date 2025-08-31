@@ -37,9 +37,14 @@ namespace Client
 
 	typedef struct tagPlayer_Info
 	{
-		_uint iHp;
-		_uint iMp;
+		STANCE eStance;
+		_float fMaxHp;
+		_float fMaxMp;
+		_float fHp;
+		_float fMp;
 		_float fAttack;
+		_float fIdentity;
+
 	}PLAYER_INFO;
 
 	typedef struct tagMapData

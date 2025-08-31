@@ -12,7 +12,7 @@ public:
 	virtual ~CSkill() = default;
 
 public:
-	_float Get_CoolTime() { return m_fCoolTime; }
+	const _float Get_CoolTime() const { return m_fCoolTime; }
 	const SKILL_INFO* Get_Skill_Info() { return m_pSkill_Info; }
 
 public:

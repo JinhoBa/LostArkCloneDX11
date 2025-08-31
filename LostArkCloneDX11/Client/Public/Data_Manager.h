@@ -17,32 +17,28 @@ private:
 
 public:
 #pragma region MAP_DATA
-	vector<MAP_DATA>*		Get_MapDataPtr() { return &m_MapDatas; }
-	vector<TERRAIN_DATA>*	Get_TerrainDataPtr() { return &m_TerrainDatas; }
-	HRESULT					Load_MapData(const _char* pFilePath);
-	HRESULT					Save_MapData(const _char* pFileName);
-#pragma endregion
+	const vector<MAP_DATA>&		Get_MapData() { return m_MapDatas; }
+	const vector<TERRAIN_DATA>&	Get_TerrainData() { return m_TerrainDatas; }
 
-#pragma region MAP_PREVIEW
-	vector<_wstring>*	Get_PreviewTexturesPtr() { return &m_MapPreviewFileNames; }
-	HRESULT				Load_PreviewTextures(const _char* pFilePath);
+	HRESULT						Load_MapData(const _char* pFilePath);
+	HRESULT						Save_MapData(const _char* pFileName);
 #pragma endregion
 
 #pragma region SKILL_DATA
-	HRESULT				Load_SkillData(const _char* pFilePath);
-	const SKILL_INFO*	Get_SkillInfo_Prt(_uint iSkillID);
+	HRESULT						Load_SkillData(const _char* pFilePath);
+	SKILL_INFO*			Get_SkillInfo_Prt(_uint iSkillID);
 #pragma endregion
-
 
 private:
 	CGameInstance*			m_pGameInstance = { nullptr };
+
 	vector<TERRAIN_DATA>	m_TerrainDatas = {};
 	vector<MAP_DATA>		m_MapDatas = {};
 	vector<_wstring>		m_MapPreviewFileNames = {};
 	vector<SKILL_INFO>		m_SkillDatas = {};
 	
 public:
-	static CData_Manager* Creat();
+	static CData_Manager* Create();
 	virtual void Free() override;
 };
 

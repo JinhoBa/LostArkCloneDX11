@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 CIden_Gauge::CIden_Gauge(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIPanel{ pDevice, pContext }
+	: CHUD{ pDevice, pContext }
 {
 }
 
 CIden_Gauge::CIden_Gauge(const CIden_Gauge& Prototype)
-	: CUIPanel{ Prototype }
+	: CHUD{ Prototype }
 {
 }
 
@@ -37,7 +37,7 @@ HRESULT CIden_Gauge::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-
+	m_vGauge = _float4(0.f, 0.f, 0.f, 0.f);
 
 	return S_OK;
 }
@@ -49,6 +49,8 @@ void CIden_Gauge::Priority_Update(_float fTimeDelta)
 void CIden_Gauge::Update(_float fTimeDelta)
 {
 	m_pAnimationCom->Update(fTimeDelta);
+
+	m_vGauge.x = m_pPlayerInfo->fIdentity / MAX_IDENTITY;
 }
 
 void CIden_Gauge::Late_Update(_float fTimeDelta)
@@ -71,7 +73,7 @@ HRESULT CIden_Gauge::Render()
 	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFireTextureCom->Get_SRV(m_pAnimationCom->Get_Frame()))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(4)))
+	if (FAILED(m_pShaderCom->Begin(0)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -80,8 +82,28 @@ HRESULT CIden_Gauge::Render()
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
 
+	// Gauge Frame
+	if (FAILED(__super::Bind_ShaderResource(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+
 	// Gauge
 	if (FAILED(__super::Bind_ShaderResource(1)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Vector("g_Vecotr", &m_vGauge)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(4)))

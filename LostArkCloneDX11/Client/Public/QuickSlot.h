@@ -1,11 +1,11 @@
 #pragma once
 #include "Client_Defines.h"
 
-#include "UIPanel.h"
+#include "HUD.h"
 
 NS_BEGIN(Client)
 
-class CQuickSlot : public CUIPanel
+class CQuickSlot : public CHUD
 {
 public:
 	typedef struct QuickSlot_Desc : public CUIObject::UIOBJECT_DESC
@@ -28,12 +28,15 @@ public:
 	virtual HRESULT Render()override;
 
 protected:
-	_byte			m_byKey = {};
-	const _tchar*	m_pKey = {};
-	_uint			m_iSlotID = {};
-	_uint			m_iTextureIndex = {};
-	CTexture*		m_pFrameTextureCom = { nullptr };
-	FONT_DESC		m_Font_Key = {};
+	class CGameManager* m_pGameManager = { nullptr };
+
+	_byte				m_byKey = {};
+	const _tchar*		m_pKey = {};
+	_uint				m_iSlotID = {};
+	_uint				m_iTextureIndex = {};
+	CTexture*			m_pFrameTextureCom = { nullptr };
+	FONT_DESC			m_Font_Key = {};
+	FONT_DESC			m_Font_CoolTime = {};
 
 protected:
 	HRESULT Bind_Resource();

@@ -14,6 +14,8 @@ public:
 	_uint Get_NumMeshes() const { return m_iNumMeshes; }
 	_int Get_BoneIndex(const _char* pBoneName) const;
 
+	_bool IsAnimationFinished();
+
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);

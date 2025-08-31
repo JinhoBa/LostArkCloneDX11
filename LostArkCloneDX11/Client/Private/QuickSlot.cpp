@@ -2,15 +2,18 @@
 #include "QuickSlot.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 CQuickSlot::CQuickSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIPanel{ pDevice, pContext }
+	: CHUD{ pDevice, pContext }, m_pGameManager{ CGameManager::GetInstance() }
 {
+	Safe_AddRef(m_pGameManager);
 }
 
 CQuickSlot::CQuickSlot(const CQuickSlot& Prototype)
-	: CUIPanel{ Prototype }
+	: CHUD{ Prototype }, m_pGameManager{Prototype.m_pGameManager}
 {
+	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CQuickSlot::Initialize_Prototype()
@@ -47,7 +50,6 @@ void CQuickSlot::Priority_Update(_float fTimeDelta)
 
 void CQuickSlot::Update(_float fTimeDelta)
 {
-
 }
 
 void CQuickSlot::Late_Update(_float fTimeDelta)
@@ -145,6 +147,11 @@ HRESULT CQuickSlot::Ready_Font()
 	m_Font_Key.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_Font_Key.fScale = 0.25f;
 
+	m_Font_CoolTime.strWord = L"";
+	m_Font_CoolTime.vPositon = _float4(m_fX - 15.f, m_fY - 9.f, 1.f, 1.f);
+	m_Font_CoolTime.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
+	m_Font_CoolTime.fScale = 0.4f;
+
 	return S_OK;
 }
 
@@ -181,4 +188,5 @@ void CQuickSlot::Free()
 	__super::Free();
 
 	Safe_Release(m_pFrameTextureCom);
+	Safe_Release(m_pGameManager);
 }

@@ -27,7 +27,10 @@ public:
 
 private:
 	STANCE		m_eStance = {};
+	_uint		m_iPassIndex = {};
+
 	_uint		m_iSkillID[ENUM_TO_INT(STANCE::IDEN_END)] = {};
+	_float		m_fMaxCoolTime[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 	_float		m_fCoolTime = {};
 
 	CTexture*	m_pTextureCom_Skill = { nullptr };

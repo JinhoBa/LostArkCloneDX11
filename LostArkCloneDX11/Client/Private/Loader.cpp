@@ -5,12 +5,13 @@
 #include "GameManager.h"
 
 #pragma region UI
+#include "HUD.h"
 #include "Canvars.h"
 #include "Background_Logo.h"
 #include "LogoPanel.h"
 #include "ServerListPanel.h"
 #include "ExpBar.h"
-#include "HUD.h"
+#include "HUD_Panel.h"
 #include "HpBar.h"
 #include "MpBar.h"
 #include "Identity.h"
@@ -197,8 +198,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	
 
-	if (FAILED(CGameManager::GetInstance()->Load_SkillData("../Bin/Resources/Data/Skill_Data.xml")))
-		return E_FAIL;
+
 	
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
@@ -380,7 +380,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_GameObject_ExpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HUD"),
-		CHUD::Create(m_pDevice, m_pContext))))
+		CHUD_Panel::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_HpBar */
@@ -616,9 +616,6 @@ HRESULT CLoader::Loading_For_Tutorial()
 HRESULT CLoader::Loading_For_MapEditor()
 {
 	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/KamenMap.xml")))
-		return E_FAIL;
-
-	if (FAILED(CGameManager::GetInstance()->Load_PreviewTextures("../Bin/Resources/Data/MeshPreview.xml")))
 		return E_FAIL;
 
 	if (FAILED(Loading_For_GamePlay()))

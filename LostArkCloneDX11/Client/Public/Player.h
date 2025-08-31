@@ -1,5 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
+#include "Client_Struct.h"
 #include "GameObject.h"
 
 NS_BEGIN(Engine)
@@ -17,7 +18,8 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
-	vector<class CSkill*>* Get_Skills_Ptr() { return &m_Skills; }
+	STANCE Get_Stance() { return m_Info.eStance; }
+	PLAYER_INFO* Get_Info() { return &m_Info; }
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -28,17 +30,22 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	class CGameManager*		m_pGameManger = { nullptr };
+
+	_bool					m_bMove = {};
+	_bool					m_bAnimLoop = {};
+	_int					m_iAnimIndex = {};
 	_uint					m_iNumMesh = {};
+
 	CShader*				m_pShaderCom = { nullptr };
 	CModel*					m_pModelCom = { nullptr };
-	vector<class CSkill*>	m_Skills = {};
 
-	_int m_iAnimIndex = {};
+	PLAYER_INFO				m_Info = {};
 
 private:
 	void			Key_Input(_float fTimeDelta);
 	HRESULT			Add_Components();
-	HRESULT			Ready_Skills();
+	void			Change_Stance();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

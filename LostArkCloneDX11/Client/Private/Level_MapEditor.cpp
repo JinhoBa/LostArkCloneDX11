@@ -32,11 +32,6 @@ HRESULT CLevel_MapEditor::Initialize()
     m_iMapObject_ComboIndex = 0;
     m_iTerrain_ComboIndex = 0;
     m_strSaveFileName;
-       
-    m_pImagesNames = m_pGameManager->Get_PreviewTexturesPtr();
-    if (nullptr == m_pImagesNames)
-        return E_FAIL;
-
 
     m_MapObject_PrototypeTags = { 
         // Kamen
@@ -349,12 +344,7 @@ HRESULT CLevel_MapEditor::Load_MapData()
         pMapObject->Set_Dead();
     }
 
-    vector<TERRAIN_DATA>* pTerrainData = m_pGameManager->Get_TerrainDataPtr();
-
-    if (nullptr == pTerrainData)
-        return E_FAIL;
-
-    for (auto& TerrainData : *pTerrainData)
+    for (const auto& TerrainData : m_pGameManager->Get_TerrainData())
     {
         CTerrain::TERRAIN_DESC Desc = {};
 
@@ -368,12 +358,7 @@ HRESULT CLevel_MapEditor::Load_MapData()
             return E_FAIL;
     }
 
-    vector<MAP_DATA>* pData = m_pGameManager->Get_MapDataPtr();
-
-    if (nullptr == pData)
-        return E_FAIL;
-
-    for (auto& MapData : *pData)
+    for (const auto& MapData : m_pGameManager->Get_MapData())
     {
         CMapObject::MAPOBJECT_DESC Desc = {};
 

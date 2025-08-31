@@ -57,6 +57,14 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
     return iBoneIndex;
 }
 
+_bool CModel::IsAnimationFinished()
+{
+    if (-1 == m_iCurrentAnimIndex || (_int)m_iNumAnimations <= m_iCurrentAnimIndex)
+        return false;
+
+    return m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished();
+}
+
 HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     _char szExt[MAX_PATH] = {};

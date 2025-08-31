@@ -172,6 +172,15 @@
     <Filter Include="02.GameObject\Camera\Camera_Fix">
       <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Skill\Manger">
+      <UniqueIdentifier>{9998b1c8-e252-45c3-ac1b-5f3f029fd649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Skill\Identity">
+      <UniqueIdentifier>{03d58a48-2daa-43ba-9e1f-061ae86c5042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\Panel">
+      <UniqueIdentifier>{5bdf0330-c5e5-46c4-9e60-53a6c28de6a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -255,9 +264,6 @@
     <ClInclude Include="..\public\ExpBar.h">
       <Filter>03.UIObject\GamePlay\EPXbar</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\HUD.h">
-      <Filter>03.UIObject\GamePlay\HUD</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\HpBar.h">
       <Filter>03.UIObject\GamePlay\HUD\HpBar</Filter>
     </ClInclude>
@@ -335,6 +341,18 @@
     </ClInclude>
     <ClInclude Include="..\public\Camera_Fix.h">
       <Filter>02.GameObject\Camera\Camera_Fix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Skill_Manager.h">
+      <Filter>04.Skill\Manger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Identity_Skill.h">
+      <Filter>04.Skill\Identity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HUD_Panel.h">
+      <Filter>03.UIObject\GamePlay\HUD\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HUD.h">
+      <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -417,9 +435,6 @@
     <ClCompile Include="..\private\ExpBar.cpp">
       <Filter>03.UIObject\GamePlay\EPXbar</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\HUD.cpp">
-      <Filter>03.UIObject\GamePlay\HUD</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\HpBar.cpp">
       <Filter>03.UIObject\GamePlay\HUD\HpBar</Filter>
     </ClCompile>
@@ -494,6 +509,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_Fix.cpp">
       <Filter>02.GameObject\Camera\Camera_Fix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Skill_Manager.cpp">
+      <Filter>04.Skill\Manger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Identity_Skill.cpp">
+      <Filter>04.Skill\Identity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HUD_Panel.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HUD.cpp">
+      <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

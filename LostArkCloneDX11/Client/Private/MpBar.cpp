@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "Player.h"
+
 CMpBar::CMpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CUIBar{ pDevice, pContext }
 {
@@ -41,6 +43,13 @@ HRESULT CMpBar::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	m_pPlayerInfo = dynamic_cast<CPlayer*>(
+		m_pGameInstance->Get_LayerObjects(
+			ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"))->back())->Get_Info();
+
+	if (nullptr == m_pPlayerInfo)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -56,7 +65,7 @@ void CMpBar::Update(_float fTimeDelta)
 void CMpBar::Late_Update(_float fTimeDelta)
 {
 	Update_Position();
-	m_fValue = 0.5f;
+	m_vValue.x = m_pPlayerInfo->fMp / m_pPlayerInfo->fMaxMp;
 
 }
 

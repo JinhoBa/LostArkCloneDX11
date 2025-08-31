@@ -20,6 +20,9 @@ public:
 	virtual HRESULT Render()override;
 
 private:
+	PLAYER_INFO* m_pPlayerInfo = { nullptr };
+
+private:
 	HRESULT		Add_Components();
 
 public:

@@ -78,7 +78,7 @@ HRESULT CShader::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CShader::Bind_Position(const _char* ConstantName, const _float4* pVector)
+HRESULT CShader::Bind_Vector(const _char* ConstantName, const _float4* pVector)
 {
 	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);
 

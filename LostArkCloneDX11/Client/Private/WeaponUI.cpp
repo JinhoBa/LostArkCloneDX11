@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 CWeaponUI::CWeaponUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIPanel{ pDevice, pContext }
+	: CHUD{ pDevice, pContext }
 {
 }
 
 CWeaponUI::CWeaponUI(const CWeaponUI& Prototype)
-	: CUIPanel{ Prototype },
+	: CHUD{ Prototype },
 	m_iNumShake{0},
 	m_fTimeAcc{0.f}
 {
@@ -42,6 +42,8 @@ HRESULT CWeaponUI::Initialize(void* pArg)
 	m_ePreState = STATE::TO_FLURRY;
 	m_eCurState = STATE::TO_FLURRY;
 
+	m_eStance = STANCE::FLURRY;
+
 	m_iTextureIndex = 0;
 	m_fShakeSpeed = 15.f;
 
@@ -57,9 +59,11 @@ void CWeaponUI::Priority_Update(_float fTimeDelta)
 void CWeaponUI::Update(_float fTimeDelta)
 {
 #pragma region MyRegion
-	if (m_pGameInstance->Get_KeyDown(DIK_Z))
+	if (m_eStance != m_pPlayerInfo->eStance)
 	{
-		if (0 == m_iTextureIndex)
+		m_eStance = m_pPlayerInfo->eStance;
+
+		if (STANCE::FOCUS == m_eStance)
 		{
 			m_eCurState = STATE::TO_FOCUS;
 			m_iTextureIndex = 1;
@@ -70,7 +74,6 @@ void CWeaponUI::Update(_float fTimeDelta)
 			m_iTextureIndex = 0;
 		}
 	}
-
 #pragma endregion
 
 
@@ -153,6 +156,7 @@ void CWeaponUI::Change_State()
 		case Client::CWeaponUI::STATE::FLURRY:
 			m_pTransformCom->Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(0.f));
 			m_iNumShake = 0;
+
 			break;
 
 		case Client::CWeaponUI::STATE::FOCUS:
@@ -161,9 +165,11 @@ void CWeaponUI::Change_State()
 		case Client::CWeaponUI::STATE::TO_FLURRY:
 			m_fTurnTime = 0.07f;
 			m_fShakeSpeed = 15.f;
+			m_iTextureIndex = 0;
 			break;
 
 		case Client::CWeaponUI::STATE::TO_FOCUS:
+			m_iTextureIndex = 1;
 			break;
 
 		default:

@@ -2,6 +2,7 @@
 #include "HpBar.h"
 
 #include "GameInstance.h"
+#include "Player.h"
 
 CHpBar::CHpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CUIBar{ pDevice, pContext }
@@ -41,6 +42,14 @@ HRESULT CHpBar::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	m_pPlayerInfo = dynamic_cast<CPlayer*>(
+		m_pGameInstance->Get_LayerObjects(
+			ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"))->back())->Get_Info();
+
+	if (nullptr == m_pPlayerInfo)
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -50,13 +59,14 @@ void CHpBar::Priority_Update(_float fTimeDelta)
 
 void CHpBar::Update(_float fTimeDelta)
 {
-
 }
 
 void CHpBar::Late_Update(_float fTimeDelta)
 {
 	Update_Position();
-	m_fValue = 1.f;
+	m_vValue.x = m_pPlayerInfo->fHp / m_pPlayerInfo->fMaxHp;
+
+
 }
 
 HRESULT CHpBar::Render()

@@ -1,6 +1,6 @@
 #include "Client_Defines.h"
 
-#include "UIPanel.h"
+#include "HUD.h"
 
 NS_BEGIN(Engine)
 class CUIAnimation;
@@ -8,7 +8,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CIden_Gauge : public CUIPanel
+class CIden_Gauge : public CHUD
 {
 private:
 	CIden_Gauge(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -28,6 +28,7 @@ private:
 
 	CTexture*		m_pFireTextureCom = { nullptr };
 	CUIAnimation*	m_pAnimationCom = {nullptr};
+	_float4			m_vGauge = {};
 	
 
 private:

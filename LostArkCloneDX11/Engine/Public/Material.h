@@ -19,8 +19,10 @@ public:
 
 private:
 	_uint								m_iNumSRV = {};
-	ID3D11Device* m_pDevice = { nullptr };
-	ID3D11DeviceContext* m_pContext = { nullptr };
+
+	ID3D11Device*						m_pDevice = { nullptr };
+	ID3D11DeviceContext*				m_pContext = { nullptr };
+
 	vector<ID3D11ShaderResourceView*>	m_SRVs[ENUM_TO_INT(TEXTURE::END)] = {};
 	vector<_float4>						m_vectorValues[ENUM_TO_INT(TEXTURE::END)] = {};
 

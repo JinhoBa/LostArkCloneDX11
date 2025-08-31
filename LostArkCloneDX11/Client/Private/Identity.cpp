@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 CIdentity::CIdentity(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIPanel{ pDevice, pContext }
+	: CHUD{ pDevice, pContext }
 {
 }
 
 CIdentity::CIdentity(const CIdentity& Prototype)
-	: CUIPanel{ Prototype }
+	: CHUD{ Prototype }
 {
 }
 

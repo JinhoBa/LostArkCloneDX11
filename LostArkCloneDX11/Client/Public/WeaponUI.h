@@ -1,10 +1,10 @@
 #include "Client_Defines.h"
 
-#include "UIPanel.h"
+#include "HUD.h"
 
 NS_BEGIN(Client)
 
-class CWeaponUI : public CUIPanel
+class CWeaponUI final : public CHUD
 {
 	enum class STATE { FLURRY, FOCUS, TO_FLURRY, TO_FOCUS, END };
 private:
@@ -21,6 +21,8 @@ public:
 	virtual HRESULT Render()override;
 
 private:
+	STANCE			m_eStance = {};
+
 	STATE			m_ePreState = {};
 	STATE			m_eCurState = {};
 

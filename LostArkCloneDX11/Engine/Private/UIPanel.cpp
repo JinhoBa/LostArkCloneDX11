@@ -64,20 +64,6 @@ HRESULT CUIPanel::Bind_ShaderResource(_uint iSVRIndex)
     return S_OK;
 }
 
-CUIPanel* CUIPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-{
-    CUIPanel* pInstance = new CUIPanel(pDevice, pContext);
-
-    if (FAILED(pInstance->Initialize_Prototype()))
-    {
-        Safe_Release(pInstance);
-        MSG_BOX("Failed to Create : CUIPanel");
-        return nullptr;
-    }
-
-    return pInstance;
-}
-
 CGameObject* CUIPanel::Clone(void* pArg)
 {
     CGameObject* pInstance = new CUIPanel(*this);

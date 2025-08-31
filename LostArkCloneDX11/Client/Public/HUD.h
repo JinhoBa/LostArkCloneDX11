@@ -1,13 +1,14 @@
 #pragma once
 #include "Client_Defines.h"
+#include "Client_Struct.h"
 
 #include "UIPanel.h"
 
 NS_BEGIN(Client)
 
-class CHUD : public CUIPanel
+class CHUD  : public CUIPanel
 {
-private:
+protected:
 	CHUD(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CHUD(const CHUD& Prototype);
 	virtual ~CHUD() = default;
@@ -20,14 +21,11 @@ public:
 	virtual void	Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
-private:
-	HRESULT Add_Components();
-	HRESULT Ready_Layer(const _wstring& strLayerTag);
-	HRESULT Add_QuickSlots(const _wstring& strLayerTag);
+protected:
+	PLAYER_INFO* m_pPlayerInfo = { nullptr };
 
 public:
-	static CHUD* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg) PURE;
 	virtual void Free() override;
 };
 

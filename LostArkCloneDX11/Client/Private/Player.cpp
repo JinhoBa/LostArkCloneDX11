@@ -7,13 +7,16 @@
 #include "Skill.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CGameObject{ pDevice, pContext }
+    :CGameObject{ pDevice, pContext }, m_pGameManger{ CGameManager::GetInstance() }
 {
+    Safe_AddRef(m_pGameManger);
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
-    :CGameObject{ Prototype }
+    :CGameObject{ Prototype }, 
+    m_pGameManger{Prototype.m_pGameManger}
 {
+    Safe_AddRef(m_pGameManger);
 }
 
 HRESULT CPlayer::Initialize_Prototype()
@@ -37,8 +40,19 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
-    m_iAnimIndex = 0;
+    m_iAnimIndex = 35;
+    m_bAnimLoop = true;
+    m_bMove = true;
 
+
+    m_Info.eStance = STANCE::FLURRY;
+    m_Info.fHp = m_Info.fMaxHp = 10000.f;
+    m_Info.fMp = m_Info.fMaxMp = 8000.f;
+    m_Info.fIdentity = 0.f;
+    m_Info.fAttack = 10000.f;
+
+    m_pGameInstance->Add_Timer(TEXT("Timer_Stance"));
+    m_pGameInstance->Compute_TimeDelta(TEXT("Timer_Stance"));
 
     return S_OK;
 }
@@ -50,24 +64,15 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
+    if (MAX_IDENTITY >= m_Info.fIdentity)
+    {
+        m_Info.fIdentity += 2.f * fTimeDelta;
+    }
+    m_pGameManger->Update_Skills(fTimeDelta);
+
 
 #pragma region TESTCODE
-    //if (m_pGameInstance->Get_KeyPressing(DIK_W))
-    //{
-    //    m_pTransformCom->Go_Straight(fTimeDelta);
-    //}
-    //if (m_pGameInstance->Get_KeyPressing(DIK_S))
-    //{
-    //    m_pTransformCom->Go_Backward(fTimeDelta);
-    //}
-    //if (m_pGameInstance->Get_KeyPressing(DIK_A))
-    //{
-    //    m_pTransformCom->Go_Left(fTimeDelta);
-    //}
-    //if (m_pGameInstance->Get_KeyPressing(DIK_D))
-    //{
-    //    m_pTransformCom->Go_Right(fTimeDelta);
-    //}
+  
     //if (m_pGameInstance->Get_KeyPressing(DIK_SPACE))
     //{
     //    m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::UP), fTimeDelta);
@@ -78,18 +83,32 @@ void CPlayer::Update(_float fTimeDelta)
     //  
     //   //m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(CGameManager::GetInstance()->Get_PickingPos()), 1.f));
     //}
-    _float3* pPickingPos = CGameManager::GetInstance()->Get_PickingPos();
-    if (nullptr != pPickingPos)
-        m_pTransformCom->MoveTo(fTimeDelta * 2.f, XMVectorSetW(XMLoadFloat3(pPickingPos), 1.f));
-#pragma endregion
 
-    for (auto& pSkill : m_Skills)
-        pSkill->Update(fTimeDelta);
+    _float3* pPickingPos = m_pGameManger->Get_PickingPos();
+    if (nullptr != pPickingPos && m_bMove)
+    {
+        if (m_pTransformCom->MoveTo(fTimeDelta * 2.f, XMVectorSetW(XMLoadFloat3(pPickingPos), 1.f)))
+        {
+            m_bAnimLoop = true;
+            m_iAnimIndex = 45;
+        }
+        else
+        {
+            m_bAnimLoop = true;
+            m_iAnimIndex = 35;
+        }
+    }
+#pragma endregion
 
     Key_Input(fTimeDelta);
 
-    m_pModelCom->Play_Animation(m_iAnimIndex, fTimeDelta, true);
-
+    m_pModelCom->Play_Animation(m_iAnimIndex, fTimeDelta, m_bAnimLoop);
+    if (m_pModelCom->IsAnimationFinished())
+    {
+        m_bAnimLoop = true;
+        m_iAnimIndex = 35;
+        m_bMove = true;
+    }
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -135,9 +154,21 @@ HRESULT CPlayer::Render()
 
 void CPlayer::Key_Input(_float fTimeDelta)
 {
-    if (m_pGameInstance->Get_KeyDown(DIK_Q))
+    if (m_pGameInstance->Get_KeyDown(DIK_D))
     {
-        //m_Skills[0]->Use_Skill();
+        if(m_pGameManger->Use_Skill(6))
+        {
+            m_bAnimLoop = false;
+            m_iAnimIndex = 30;
+            m_bMove = false;
+        }
+    }
+    else if (m_pGameInstance->Get_KeyDown(DIK_Z))
+    {
+        if (m_Info.fIdentity > 5.f)
+        {
+            Change_Stance();      
+        }
     }
 
 }
@@ -157,19 +188,17 @@ HRESULT CPlayer::Add_Components()
     return S_OK;
 }
 
-HRESULT CPlayer::Ready_Skills()
+void CPlayer::Change_Stance()
 {
-    for (_uint i = 0; i < 14; ++i)
-    {
-        CSkill* pSkill = CSkill::Create(i);
+    m_Info.eStance = STANCE::FLURRY == m_Info.eStance ? STANCE::FOCUS : STANCE::FLURRY;
 
-        if (nullptr == pSkill)
-            return E_FAIL;
-
-        m_Skills.push_back(pSkill);
-    }
-    return S_OK;
+    if (40.f <= m_Info.fIdentity)  //น๖วม
+        m_Info.fIdentity -= 40.f;
+    else
+        m_Info.fIdentity = 0.f;
+ 
 }
+
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -203,10 +232,8 @@ void CPlayer::Free()
 {
     __super::Free();
 
-    for (auto pSkill : m_Skills)
-        Safe_Release(pSkill);
-    m_Skills.clear();
-
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
+
+    Safe_Release(m_pGameManger);
 }

@@ -172,7 +172,9 @@
     <ClInclude Include="..\public\GameManager.h" />
     <ClInclude Include="..\public\HpBar.h" />
     <ClInclude Include="..\public\HUD.h" />
+    <ClInclude Include="..\public\HUD_Panel.h" />
     <ClInclude Include="..\public\Identity.h" />
+    <ClInclude Include="..\public\Identity_Skill.h" />
     <ClInclude Include="..\public\Iden_Gauge.h" />
     <ClInclude Include="..\Public\IMGUI\imconfig.h" />
     <ClInclude Include="..\Public\IMGUI\imgui.h" />
@@ -200,6 +202,7 @@
     <ClInclude Include="..\public\ServerListPanel.h" />
     <ClInclude Include="..\public\Skill.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
+    <ClInclude Include="..\public\Skill_Manager.h" />
     <ClInclude Include="..\public\SkySphere.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\Public\tinyxml2.h" />
@@ -233,7 +236,9 @@
     <ClCompile Include="..\private\GameManager.cpp" />
     <ClCompile Include="..\private\HpBar.cpp" />
     <ClCompile Include="..\private\HUD.cpp" />
+    <ClCompile Include="..\private\HUD_Panel.cpp" />
     <ClCompile Include="..\private\Identity.cpp" />
+    <ClCompile Include="..\private\Identity_Skill.cpp" />
     <ClCompile Include="..\private\Iden_Gauge.cpp" />
     <ClCompile Include="..\Private\IMGUI\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -284,6 +289,7 @@
     <ClCompile Include="..\private\ServerListPanel.cpp" />
     <ClCompile Include="..\private\Skill.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
+    <ClCompile Include="..\private\Skill_Manager.cpp" />
     <ClCompile Include="..\private\SkySphere.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\Private\tinyxml2.cpp">

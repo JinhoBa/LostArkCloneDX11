@@ -1,15 +1,16 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIBar.h"
+
+#include "UIPanel.h"
 
 NS_BEGIN(Client)
 
-class CHpBar : public CUIBar
+class CHUD_Panel : public CUIPanel
 {
 private:
-	CHpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CHpBar(const CHpBar& Prototype);
-	virtual ~CHpBar() = default;
+	CHUD_Panel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CHUD_Panel(const CHUD_Panel& Prototype);
+	virtual ~CHUD_Panel() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
@@ -20,13 +21,12 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	PLAYER_INFO* m_pPlayerInfo = { nullptr };
-
-private:
-	HRESULT		Add_Components();
+	HRESULT Add_Components();
+	HRESULT Ready_Layer(const _wstring& strLayerTag);
+	HRESULT Add_QuickSlots(const _wstring& strLayerTag);
 
 public:
-	static CHpBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CHUD_Panel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

@@ -109,12 +109,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
 }
 HRESULT CLevel_Tutorial::Load_MapData()
 {
-    vector<TERRAIN_DATA>* pTerrainData = CGameManager::GetInstance()->Get_TerrainDataPtr();
-
-    if (nullptr == pTerrainData)
-        return E_FAIL;
-
-    for (auto& TerrainData : *pTerrainData)
+    for (const auto& TerrainData : CGameManager::GetInstance()->Get_TerrainData())
     {
         CTerrain::TERRAIN_DESC Desc = {};
 
@@ -127,12 +122,8 @@ HRESULT CLevel_Tutorial::Load_MapData()
             return E_FAIL;
     }
 
-    vector<MAP_DATA>* pData = CGameManager::GetInstance()->Get_MapDataPtr();
 
-    if (nullptr == pData)
-        return E_FAIL;
-
-    for (auto& MapData : *pData)
+    for (auto& MapData : CGameManager::GetInstance()->Get_MapData())
     {
         CMapObject::MAPOBJECT_DESC Desc = {};
 

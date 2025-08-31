@@ -3,8 +3,12 @@
 #include <process.h>
 #include <fstream>
 #include "../Default/framework.h"
+
+constexpr float MAX_IDENTITY = 120.f;
+
 namespace Client
 {
+
 	const unsigned int g_iWinSizeX = 1280;
 	const unsigned int g_iWinSizeY = 720;
 
