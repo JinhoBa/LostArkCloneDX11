@@ -1,8 +1,10 @@
 #ifndef Engine_Macro_h__
 #define Engine_Macro_h__
 
+#define         PI         3.141592f
+
 #define			MAX_KEY					0xff
-#define			MAX_NAME				0x40
+#define			MAX_NAME				0x80
 #define			ENUM_TO_INT(ENUM)		static_cast<unsigned int>(ENUM)
 
 #ifndef			MSG_BOX

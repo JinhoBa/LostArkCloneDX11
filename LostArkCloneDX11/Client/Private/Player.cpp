@@ -24,14 +24,16 @@ HRESULT CPlayer::Initialize_Prototype()
 HRESULT CPlayer::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC Desc = {};
-    Desc.fRotatePersec = 5.f;
-    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = 3.f;
+    Desc.fSpeedPersec = 1.3f;
 
-    if (FAILED(__super::Initialize(pArg)))
+    if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
     if (FAILED(Add_Components()))
         return E_FAIL;
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(40.f, 0.f, 40.f, 1.f));
 
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
@@ -86,7 +88,7 @@ void CPlayer::Update(_float fTimeDelta)
 
     Key_Input(fTimeDelta);
 
-    m_pModelCom->Play_Animation(m_iAnimIndex, fTimeDelta);
+    m_pModelCom->Play_Animation(m_iAnimIndex, fTimeDelta, true);
 
 }
 

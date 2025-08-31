@@ -138,7 +138,23 @@ _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos)
     _vector vDirection = vTargetPos - vPosition;
 
     if (0.1f >= XMVectorGetX(XMVector3Length(vDirection)))
+    {
+        Set_State(STATE::POSITION, vTargetPos);
         return false;
+    }
+    _float3 vDot = {};
+    vDirection = XMVector3Normalize(vDirection);
+    XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::LOOK), vDirection));
+
+    if(0.9f >= vDot.x)
+    {
+        XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::RIGHT), vDirection));
+        if(vDot.x < 0.f)
+            Turn(Get_State(STATE::UP), -fTimeDelta);
+        else
+            Turn(Get_State(STATE::UP), fTimeDelta);
+    }
+
 
     vPosition += XMVector3Normalize(vDirection) * m_fSpeedPersec * fTimeDelta;
 
