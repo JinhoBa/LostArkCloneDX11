@@ -10,6 +10,9 @@ private:
 	virtual ~CAnimation() = default;
 
 public:
+	_bool IsAnimationFinished() { return m_fCurrentTrackPosition > m_fDuration; }
+
+public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAiAnimation);
 	HRESULT Initialize(ifstream& in);
 	void	Update_TransformationMatrix(const vector<class CBone*> Bones, _float fTimeDelta);

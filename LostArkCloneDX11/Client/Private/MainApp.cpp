@@ -12,6 +12,7 @@
 #include "LoadingBar.h"
 #include "Wallpaper.h"
 #include "Camera_Free.h"
+#include "Camera_Fix.h"
 #include "UIButton.h"
 #include "Font.h"
 #include "Mouse.h"
@@ -193,11 +194,18 @@ HRESULT CMainApp::Ready_Prototype()
 #pragma endregion
 
     
-   
+#pragma region CAMERA
     /*For Prototype_GameObject_Camera_Free*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"),
         CCamera_Free::Create(m_pDevice, m_pContext))))
         return E_FAIL;
+
+    /*For Prototype_GameObject_Camera_Fix*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Fix"),
+        CCamera_Fix::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+#pragma endregion
+
 
 #pragma region UIOBJECT
     /*For Prototype_GameObject_Canvars*/

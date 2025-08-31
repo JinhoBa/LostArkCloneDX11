@@ -22,7 +22,7 @@ public:
 
 	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0, const _char* pValueConstanceName = nullptr);
 	HRESULT Bind_BoneMatrices(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
-	void	Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta);
+	void	Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta, _bool bLoop = false);
 
 
 private:

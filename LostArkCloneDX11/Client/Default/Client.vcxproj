@@ -161,6 +161,8 @@
     <ClInclude Include="..\public\AwakeSlot.h" />
     <ClInclude Include="..\public\Background_Loading.h" />
     <ClInclude Include="..\public\Background_Logo.h" />
+    <ClInclude Include="..\public\Boss.h" />
+    <ClInclude Include="..\public\Camera_Fix.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Canvars.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -222,6 +224,8 @@
     <ClCompile Include="..\private\AwakeSlot.cpp" />
     <ClCompile Include="..\private\Background_Loading.cpp" />
     <ClCompile Include="..\private\Background_Logo.cpp" />
+    <ClCompile Include="..\private\Boss.cpp" />
+    <ClCompile Include="..\private\Camera_Fix.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Canvars.cpp" />
     <ClCompile Include="..\private\Data_Manager.cpp" />

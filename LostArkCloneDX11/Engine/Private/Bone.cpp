@@ -45,9 +45,8 @@ void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fm
 void CBone::Save_To_Binary(ofstream& out, _fmatrix PreTransformMatrix)
 {
 	out.write(reinterpret_cast<const _char*>(m_szName), MAX_NAME);
-	out.write(reinterpret_cast<const _char*>(&m_iParentBoneIndex), sizeof(_uint));
 
-	// PreTransformMatrix와 Transpose 변환한 상태로 저장
+	out.write(reinterpret_cast<const _char*>(&m_iParentBoneIndex), sizeof(_uint));
 
 	if (-1 == m_iParentBoneIndex)
 	{
@@ -55,7 +54,6 @@ void CBone::Save_To_Binary(ofstream& out, _fmatrix PreTransformMatrix)
 	}
 
 	out.write(reinterpret_cast<const _char*>(&m_TransformationMatrix), sizeof(_float4x4));
-
 }
 
 CBone* CBone::Create(const aiNode* pAINode, _int iParentIndex)

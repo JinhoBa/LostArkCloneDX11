@@ -86,6 +86,9 @@ HRESULT CMaterials::Initialize(aiMaterial* pAiMaterial, const _char* pModelFileP
 }
 HRESULT CMaterials::Bind_SRV(CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex)
 {
+	if (0 >= m_SRVs[ENUM_TO_INT(eTextureType)].size())
+		return S_OK;
+
 	return pShader->Bind_Resource(pConstantName, m_SRVs[ENUM_TO_INT(eTextureType)][iTextureIndex]);
 }
 HRESULT CMaterials::Bind_Value(CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex)
@@ -261,6 +264,8 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 			eTexture = TEXTURE::MASK;
 		else if (!strcmp(FileType.c_str(), "diffuse_base"))
 			eTexture = TEXTURE::DIFFUSE;
+		else if (!strcmp(FileType.c_str(), "orm"))
+			eTexture = TEXTURE::ORM;
 		else if (!strcmp(FileType.c_str(), "tdspecular"))
 			eTexture = TEXTURE::SPECULAR;
 		else if (!strcmp(FileType.c_str(), "detail_normal"))

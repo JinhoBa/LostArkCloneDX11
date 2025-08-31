@@ -21,6 +21,9 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
         return E_FAIL;
 
+    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
 
@@ -44,6 +47,26 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
     if (FAILED(Load_MapData()))
         return E_FAIL;
 
+    return S_OK;
+}
+
+HRESULT CLevel_Tutorial::Ready_Layer_Player(const _wstring& strLayerTag)
+{
+    // 0 : Player
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
+    // Kamen
+ /*   if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boss"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;*/
+
+    return S_OK;
+}
+
+HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
+{
     CCamera::CAMERA_DESC Desc = {};
 
     Desc.fNear = 0.1f;
@@ -54,22 +77,12 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
     Desc.fSpeedPersec = 5.f;
     Desc.fRotatePersec = XMConvertToRadians(90.f);
 
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"),
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Fix"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
         return E_FAIL;
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkySphere"),
         ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Sky"), &Desc)))
-        return E_FAIL;
-
-    return S_OK;
-}
-
-HRESULT CLevel_Tutorial::Ready_Layer_Player(const _wstring& strLayerTag)
-{
-    // 0 : Player
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
     return S_OK;

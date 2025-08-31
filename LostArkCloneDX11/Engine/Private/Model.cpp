@@ -202,7 +202,7 @@ HRESULT CModel::Bind_BoneMatrices(_uint iMeshIndex, CShader* pShader, const _cha
     return m_Meshes[iMeshIndex]->Bind_BoneMatrices(m_Bones, pShader, pConstantName);
 }
 
-void CModel::Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta)
+void CModel::Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta, _bool bLoop)
 {
     if (m_iCurrentAnimIndex != iAnimAnimIndex && -1 != m_iCurrentAnimIndex)
     {
@@ -215,6 +215,12 @@ void CModel::Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta)
         return;
 
     m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, fTimeDelta);
+
+    if (bLoop)
+    {
+        if(true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
+            m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
+    }
 
     for (auto& pBone : m_Bones)
     {
@@ -311,7 +317,7 @@ HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath, _fm
 
     for (auto& pBone : m_Bones)
     {
-        pBone->Save_To_Binary(out, PreTransformMatrix);
+        pBone->Save_To_Binary(out, XMLoadFloat4x4(&m_PreTransformMatrix));
     }
 #pragma endregion
     
