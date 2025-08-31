@@ -18,7 +18,7 @@ HRESULT CLevel_Logo::Initialize()
         return E_FAIL;
 
 #pragma region TEST_CODE
-    m_pGameInstance->PlayBGM(L"vol3_05_Bern Castle.mp3", m_fBGM_Volume);
+   // m_pGameInstance->PlayBGM(L"vol3_05_Bern Castle.mp3", m_fBGM_Volume);
 #pragma endregion
 
     SetWindowText(g_hWnd,TEXT("LEVEL_LOGO"));

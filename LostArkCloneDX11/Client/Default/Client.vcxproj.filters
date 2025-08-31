@@ -88,9 +88,6 @@
     <Filter Include="02.GameObject\Camera\Camera_Free">
       <UniqueIdentifier>{7f2c039f-7088-49f0-9799-30bd0b8f1100}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_Main">
-      <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Camera\Camera_Skill">
       <UniqueIdentifier>{6ccba7d0-5360-48fe-bb07-b8ed0dbc5397}</UniqueIdentifier>
     </Filter>
@@ -168,6 +165,12 @@
     </Filter>
     <Filter Include="02.GameObject\Monster">
       <UniqueIdentifier>{6c8637e6-133d-4334-8593-450aabfea42a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss">
+      <UniqueIdentifier>{d916f16b-eff0-43d9-af42-bf1f0d834450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Fix">
+      <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +330,12 @@
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObject\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Boss.h">
+      <Filter>02.GameObject\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Camera_Fix.h">
+      <Filter>02.GameObject\Camera\Camera_Fix</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -479,6 +488,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Boss.cpp">
+      <Filter>02.GameObject\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_Fix.cpp">
+      <Filter>02.GameObject\Camera\Camera_Fix</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

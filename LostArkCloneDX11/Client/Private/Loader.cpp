@@ -26,6 +26,7 @@
 #include "Terrain.h"
 #include "Camera_Free.h"
 #include "Player.h"
+#include "Boss.h"
 #include "MapObject.h"
 #include "SkySphere.h"
 #pragma endregion
@@ -202,10 +203,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
-	///* For.Prototype_Component_Texture_Player */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Test"),
-	//	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Test.dds"), 1))))
-	//	return E_FAIL;
+	/* For.Prototype_Component_Texture_KamenBase */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_KamenBase"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Kamen/Texture2D/mn_cdkcn_00-1_d.dds"), 1))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -281,11 +282,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(-45.0f));
-	/* TEST CODE */
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.f));
+	/* Player*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.bin"))))
 		return E_FAIL;
+
+	/* TEST CODE */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen/Kamen.fbx"))))
+	//	return E_FAIL;
 
 	/* TEST CODE */
 	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
@@ -358,6 +364,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	///* For.Prototype_GameObject_Boss */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boss"),
+	//	CBoss::Create(m_pDevice, m_pContext))))
+	//	return E_FAIL;
 
 #pragma endregion
 

@@ -59,7 +59,7 @@ void CMouse::Update(_float fTimeDelta)
 
 void CMouse::Late_Update(_float fTimeDelta)
 {
-	//m_pGameInstance->Add_RenderGroup(RENDER::CURSOR, this);
+	m_pGameInstance->Add_RenderGroup(RENDER::CURSOR, this);
 }
 
 HRESULT CMouse::Render()
