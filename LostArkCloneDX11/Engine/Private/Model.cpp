@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "Bone.h"
 #include "Animation.h"
+#include "Transform.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CComponent{ pDevice, pContext }
@@ -15,17 +16,20 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CModel::CModel(CModel& Prototype)
     :CComponent{ Prototype },
     m_eModel{ Prototype.m_eModel },
+    m_iNumBones{Prototype.m_iNumBones},
     m_iNumMeshes{ Prototype.m_iNumMeshes },
     m_iNumMaterials{ Prototype.m_iNumMaterials },
     m_iNumAnimations{ Prototype.m_iNumAnimations },
     m_Meshes{ Prototype.m_Meshes },
     m_Materials{ Prototype.m_Materials },
-    m_Bones{ Prototype.m_Bones },
     m_Animations{ Prototype.m_Animations },
-    m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
+    m_PreTransformMatrix{ Prototype.m_PreTransformMatrix },
+    m_fInterpolationTime{0.f},
+    m_fMaxInterpolationTime{ 0.f },
+    m_isLoop{false}
 {
-    for (auto& pBone : m_Bones)
-        Safe_AddRef(pBone);
+    for (auto& PrototypeBone : Prototype.m_Bones)
+        m_Bones.push_back(PrototypeBone->Clone());
 
     for (auto& pMesh : m_Meshes)
         Safe_AddRef(pMesh);
@@ -33,8 +37,8 @@ CModel::CModel(CModel& Prototype)
     for (auto& pMaterial : m_Materials)
         Safe_AddRef(pMaterial);
 
-    for (auto& pAnimaiton : m_Animations)
-        Safe_AddRef(pAnimaiton);
+    for (auto& PrototypeAnimaiton : Prototype.m_Animations)
+        m_Animations.push_back(PrototypeAnimaiton->Clone());
 }
 
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
@@ -57,12 +61,32 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
     return iBoneIndex;
 }
 
-_bool CModel::IsAnimationFinished()
+_matrix CModel::Get_BoneMatirx(_uint iBoneIndex)
 {
-    if (-1 == m_iCurrentAnimIndex || (_int)m_iNumAnimations <= m_iCurrentAnimIndex)
-        return false;
+    if (m_iNumBones <= iBoneIndex)
+        return XMMatrixIdentity();
 
-    return m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished();
+    return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
+}
+
+void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoop, _float fChangeTime)
+{
+    m_isLoop = bLoop;
+
+    if(m_iCurrentAnimIndex != iIndex)
+    {
+        pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(m_pRootBone->Get_CombinedTransformationMatrix().r[3], XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
+  
+        Update_PreAnimationKeyFrames();
+        m_fMaxInterpolationTime = fChangeTime;
+        m_fInterpolationTime = 0.f;
+    }
+
+    m_iPreAnimIndex = m_iCurrentAnimIndex;
+    m_iCurrentAnimIndex = iIndex;
+
+    if (-1 == m_iPreAnimIndex)
+        m_iPreAnimIndex = iIndex;
 }
 
 HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
@@ -171,6 +195,20 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
 
 HRESULT CModel::Initialize(void* pArg)
 {
+    for (auto& pAnim : m_Animations)
+    {
+        m_AnimationNames.push_back(pAnim->GetAnimationName());
+    }
+
+    for (auto& pBone : m_Bones)
+    {
+        if (pBone->Compare_Name("b_root"))
+        {
+            m_pRootBone = pBone;
+            Safe_AddRef(m_pRootBone);
+        }
+    }
+
     return S_OK;
 }
 
@@ -210,30 +248,47 @@ HRESULT CModel::Bind_BoneMatrices(_uint iMeshIndex, CShader* pShader, const _cha
     return m_Meshes[iMeshIndex]->Bind_BoneMatrices(m_Bones, pShader, pConstantName);
 }
 
-void CModel::Play_Animation(_uint iAnimAnimIndex, _float fTimeDelta, _bool bLoop)
+_bool CModel::Play_Animation(_float fTimeDelta)
 {
-    if (m_iCurrentAnimIndex != iAnimAnimIndex && -1 != m_iCurrentAnimIndex)
-    {
-        m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
-    }
-
-    m_iCurrentAnimIndex = iAnimAnimIndex;
-
     if (-1 == m_iCurrentAnimIndex || (_int)m_iNumAnimations <= m_iCurrentAnimIndex)
-        return;
+        return false;
+ 
+    _bool isFinish = { false };
 
-    m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, fTimeDelta);
-
-    if (bLoop)
+    if(m_iPreAnimIndex != m_iCurrentAnimIndex)
     {
-        if(true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
-            m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
+        isFinish = false;
+        m_fInterpolationTime += fTimeDelta;
+        if (m_fMaxInterpolationTime <= m_fInterpolationTime)
+        {
+            m_Animations[m_iPreAnimIndex]->Reset_TrackPosition();
+            m_fInterpolationTime = 0.f;
+            m_iPreAnimIndex = m_iCurrentAnimIndex;
+            m_PreAnimationKeyFrames.clear();
+        }
+        else
+            m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, m_fInterpolationTime / m_fMaxInterpolationTime, m_PreAnimationKeyFrames);
+    }
+    else
+    {
+        m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, fTimeDelta);
+         if (m_isLoop)
+         {
+            isFinish = false;
+
+            if(true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
+                m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
+         }
+         else
+             isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished();
     }
 
     for (auto& pBone : m_Bones)
     {
         pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
     }
+
+    return isFinish;
 }
 
 HRESULT CModel::Ready_Meshes(MODEL eModel)
@@ -305,6 +360,8 @@ HRESULT CModel::Ready_Animations()
 
         m_Animations.push_back(pAnimation);
     }
+
+    
 
     return S_OK;
 }
@@ -475,6 +532,27 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
     return S_OK;
 }
 
+void CModel::Update_PreAnimationKeyFrames()
+{
+    m_PreAnimationKeyFrames.reserve((size_t)m_iNumBones);
+
+    for (auto& pBone : m_Bones)
+    {
+        KEYFRAME KeyFrame = {};
+        _vector vScale;
+        _vector vRotation;
+        _vector vTranslation;
+        KeyFrame.fTrackPosition = { 0.f };
+
+        XMMatrixDecompose(&vScale, &vRotation, &vTranslation, pBone->Get_TransformationMatrix());
+        XMStoreFloat3(&KeyFrame.vScale, vScale);
+        XMStoreFloat4(&KeyFrame.vRotation, vRotation);
+        XMStoreFloat3(&KeyFrame.vTranslation, vTranslation);
+
+        m_PreAnimationKeyFrames.push_back(KeyFrame);
+    }
+}
+
 CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     CModel* pInstance = new CModel(pDevice, pContext);
@@ -520,22 +598,24 @@ CComponent* CModel::Clone(void* pArg)
 void CModel::Free()
 {
     __super::Free();
+    
+    Safe_Release(m_pRootBone);
 
-    for (auto& pMesh : m_Meshes)
-        Safe_Release(pMesh);
-    m_Meshes.clear();
+    for (auto& pAnimation : m_Animations)
+        Safe_Release(pAnimation);
+    m_Animations.clear();
 
     for (auto& pMaterial : m_Materials)
         Safe_Release(pMaterial);
     m_Materials.clear();
 
+    for (auto& pMesh : m_Meshes)
+        Safe_Release(pMesh);
+    m_Meshes.clear();
+
     for (auto& pBone : m_Bones)
         Safe_Release(pBone);
     m_Bones.clear();
-
-    for (auto& pAnimation : m_Animations)
-        Safe_Release(pAnimation);
-    m_Animations.clear();
 
     m_Importer.FreeScene();
 }

@@ -27,6 +27,7 @@
 #include "Terrain.h"
 #include "Camera_Free.h"
 #include "Player.h"
+#include "Body_Player.h"
 #include "Boss.h"
 #include "MapObject.h"
 #include "SkySphere.h"
@@ -231,7 +232,6 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/QuickSlot/quickslot_%d.dds"), 3))))
 		return E_FAIL;
 
-
 	/* For.Prototype_Component_Texture_Iden_Frame */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Frame"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Iden/identity_weaponFrame.dds"), 1))))
@@ -314,6 +314,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 
 #pragma region COMPONENT
+	/*For Prototype_Component_StateMachine*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_StateMachine"),
+		CStateMachine::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	/*For Prototype_Component_VIBuffer_Terrain_Trision_Floor*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_Trision_Floor"),
@@ -363,6 +368,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Body_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"),
+		CBody_Player::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	///* For.Prototype_GameObject_Boss */

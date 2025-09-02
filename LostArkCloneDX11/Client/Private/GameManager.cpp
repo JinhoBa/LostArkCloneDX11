@@ -5,12 +5,22 @@
 #include "Skill_Manager.h"
 
 #include "UIObject.h"
+#include "Camera_Fix.h"
 
 IMPLEMENT_SINGLETON(CGameManager)
 
 CGameManager::CGameManager()
 {
 
+}
+
+void CGameManager::Set_Camera(CCamera* pCamera)
+{
+	if (nullptr != m_pCamera)
+		Safe_Release(m_pCamera);
+
+	m_pCamera = pCamera;
+	Safe_AddRef(m_pCamera);
 }
 
 HRESULT CGameManager::Initialize_Manager()
@@ -101,6 +111,7 @@ void CGameManager::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pCamera);
 	Safe_Release(m_pData_Manager);
 	Safe_Release(m_pSkill_Manager);
 }

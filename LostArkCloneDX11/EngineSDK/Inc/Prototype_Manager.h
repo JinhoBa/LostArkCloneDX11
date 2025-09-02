@@ -10,6 +10,7 @@
 #include "UIAnimation.h"
 #include "Model.h"
 #include "Mesh.h"
+#include "StateMachine.h"
 
 /* 객체들의 원형을 레벨별로 보관 */
 /* 컴포넌트들의 원형을 레벨별로 보관 */

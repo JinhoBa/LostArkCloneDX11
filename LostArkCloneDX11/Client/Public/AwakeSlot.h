@@ -21,7 +21,13 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	CTexture*		m_pAwakeTextureCom = { nullptr };
+	_uint		m_iSkillID = {};
+	_uint		m_iPassIndex = {};
+
+	_float		m_fMaxCoolTime = {};
+	_float		m_fCoolTime = {};
+
+	CTexture*	m_pAwakeTextureCom = { nullptr };
 
 private:
 	HRESULT Add_Components();

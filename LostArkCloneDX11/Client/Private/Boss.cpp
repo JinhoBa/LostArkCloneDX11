@@ -52,7 +52,7 @@ void CBoss::Update(_float fTimeDelta)
         pSkill->Update(fTimeDelta);
 
 
-    m_pModelCom->Play_Animation(m_iAnimIndex, fTimeDelta);
+    //m_pModelCom->Play_Animation(fTimeDelta);
 
 }
 

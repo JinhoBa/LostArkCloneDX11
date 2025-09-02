@@ -7,15 +7,20 @@ class CAnimation final : public CBase
 {
 private:
 	CAnimation();
+	CAnimation(const CAnimation& Prototype);
 	virtual ~CAnimation() = default;
 
 public:
+	vector<class CChannel*>& Get_Channels() { return m_Channels; }
 	_bool IsAnimationFinished() { return m_fCurrentTrackPosition > m_fDuration; }
+	_char* GetAnimationName() { return m_szName; }
+
 
 public:
 	HRESULT Initialize(const class CModel* pModel, const aiAnimation* pAiAnimation);
 	HRESULT Initialize(ifstream& in);
 	void	Update_TransformationMatrix(const vector<class CBone*> Bones, _float fTimeDelta);
+	void	Update_TransformationMatrix(const vector<class CBone*> Bones, _float fRatio, vector<KEYFRAME>& PreAnimKeyFrames);
 	void    Reset_TrackPosition();
 
 #ifdef _DEBUG
@@ -30,10 +35,15 @@ private:
 	_float					m_fCurrentTrackPosition = {};
 
 	vector<class CChannel*>	m_Channels;
+	vector<_uint>			m_iCurKeyFrameIndices;
+
+
+
 
 public:
 	static CAnimation* Create(const class CModel* pModel, const aiAnimation* pAiAnimation);
 	static CAnimation* Create(ifstream& in);
+	CAnimation* Clone();
 	virtual void Free() override;
 };
 

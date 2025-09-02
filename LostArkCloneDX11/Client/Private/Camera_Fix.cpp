@@ -2,6 +2,8 @@
 #include "Camera_Fix.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
+
 
 CCamera_Fix::CCamera_Fix(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CCamera{ pDevice, pContext }
@@ -11,6 +13,11 @@ CCamera_Fix::CCamera_Fix(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CCamera_Fix::CCamera_Fix(const CCamera_Fix& Prototype)
     :CCamera{ Prototype }
 {
+}
+
+void CCamera_Fix::Set_CameraTargetPosition(_vector TargetPosition)
+{
+    XMStoreFloat4(&m_pTargetPosition, TargetPosition);
 }
 
 HRESULT CCamera_Fix::Initialize_Prototype()
@@ -24,15 +31,9 @@ HRESULT CCamera_Fix::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
-        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
-
-    if (nullptr == m_pPlayerTransformCom)
-        return E_FAIL;
-
     m_vDistance = _float3(0.f, 5.f, -5.f);
 
-
+    CGameManager::GetInstance()->Set_Camera(this);
 
     return S_OK;
 }
@@ -69,11 +70,12 @@ void CCamera_Fix::Priority_Update(_float fTimeDelta)
             m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::RIGHT), fTimeDelta * lValue * 0.1f);
         }
     }
-#pragma endregion
 
     Update_Camera_Position();
 
     __super::Bind_Transform();
+#pragma endregion
+
 }
 
 void CCamera_Fix::Update(_float fTimeDelta)
@@ -83,24 +85,23 @@ void CCamera_Fix::Update(_float fTimeDelta)
 
 void CCamera_Fix::Late_Update(_float fTimeDelta)
 {
-
+   
 }
 
 HRESULT CCamera_Fix::Render()
 {
-    ImGui::InputFloat3("",reinterpret_cast<_float*>(&m_vDistance));
 
     return S_OK;
 }
 
 void CCamera_Fix::Update_Camera_Position()
 {
-    _vector vPlayerPosition = m_pPlayerTransformCom->Get_Position();
+    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_pTargetPosition) + XMLoadFloat3(&m_vDistance));
 
-    m_pTransformCom->Set_State(STATE::POSITION, vPlayerPosition + XMLoadFloat3(&m_vDistance));
-
-    m_pTransformCom->LookAt(vPlayerPosition);
+    m_pTransformCom->LookAt(XMLoadFloat4(&m_pTargetPosition));
 }
+
+
 
 CCamera_Fix* CCamera_Fix::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

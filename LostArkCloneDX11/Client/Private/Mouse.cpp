@@ -15,7 +15,7 @@ CMouse::CMouse(const CMouse& Prototype)
 
 HRESULT CMouse::Initialize_Prototype()
 {
-	ShowCursor(FALSE);
+	//ShowCursor(FALSE);
 
 	return S_OK;
 }

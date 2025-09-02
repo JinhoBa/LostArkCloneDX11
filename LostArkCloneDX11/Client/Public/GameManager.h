@@ -2,6 +2,10 @@
 #include "Client_Defines.h"
 #include "Base.h"
 
+NS_BEGIN(Engine)
+class CCamera;
+NS_END
+
 NS_BEGIN(Client)
 
 class CGameManager final : public CBase
@@ -13,10 +17,11 @@ private:
 
 public:
 	_float3* Get_PickingPos() { return m_pPickingPos; }
+	CCamera* Get_Camera() { return m_pCamera; }
 
+	void Set_Camera(CCamera* pCamera);
 public:
 	HRESULT Initialize_Manager();
-
 
 #pragma region MAPDATA
 	const vector<MAP_DATA>&		Get_MapData();
@@ -44,6 +49,7 @@ public:
 
 private:
 	_float3*				m_pPickingPos = {};
+	class CCamera*			m_pCamera = { nullptr };
 
 	class CData_Manager*	m_pData_Manager = { nullptr };
 	class CSkill_Manager*	m_pSkill_Manager = { nullptr };

@@ -31,6 +31,7 @@ public:
 	}
 
 	void Set_Scale(_float3 vScale);
+	void Set_WorldMatrix(_fmatrix matrix);
 
 	_float4x4& Get_WorldMatrix() { return m_WorldMatrix; }
 	_float4x4& Get_WorldMatrixInv();

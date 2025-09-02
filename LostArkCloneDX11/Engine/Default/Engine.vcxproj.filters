@@ -79,12 +79,6 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Rect">
       <UniqueIdentifier>{42156336-546a-4f39-8771-9101a474a3bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Animation">
-      <UniqueIdentifier>{08d13f8e-03b6-439a-a94f-d49e342e4424}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.Components\Animation\UIAnimation">
-      <UniqueIdentifier>{f7bd3814-2307-4606-97ae-b1e765f6349f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\02.GameObject\UIObject\Bar">
       <UniqueIdentifier>{7cec91e4-47f1-4487-ad1c-ebde81f88e9d}</UniqueIdentifier>
     </Filter>
@@ -129,6 +123,24 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\Animation\Channel">
       <UniqueIdentifier>{11f55934-b296-4790-8059-6bf7afb9d7ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObject\ContainerObject">
+      <UniqueIdentifier>{bfb0ecf9-c406-466f-ae01-6c5d6e77f91f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\02.GameObject\PartObject">
+      <UniqueIdentifier>{72380354-52b2-4994-bbf9-7f96f42f2abb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\StateMachine">
+      <UniqueIdentifier>{8d7b5fb0-1dd5-440e-8328-fd5a947812a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\UIAnimation">
+      <UniqueIdentifier>{08d13f8e-03b6-439a-a94f-d49e342e4424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\UIAnimation\UIAnimation">
+      <UniqueIdentifier>{f7bd3814-2307-4606-97ae-b1e765f6349f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\StateMachine\State">
+      <UniqueIdentifier>{c00dd82f-59e0-4be6-a8a0-399add6e5600}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +253,7 @@
       <Filter>01.Utility\03.Components\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UIAnimation.h">
-      <Filter>01.Utility\03.Components\Animation\UIAnimation</Filter>
+      <Filter>01.Utility\03.Components\UIAnimation\UIAnimation</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UIBar.h">
       <Filter>01.Utility\02.GameObject\UIObject\Bar</Filter>
@@ -284,6 +296,18 @@
     </ClInclude>
     <ClInclude Include="..\public\Channel.h">
       <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ContainerObject.h">
+      <Filter>01.Utility\02.GameObject\ContainerObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PartObject.h">
+      <Filter>01.Utility\02.GameObject\PartObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\State.h">
+      <Filter>01.Utility\03.Components\StateMachine\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\StateMachine.h">
+      <Filter>01.Utility\03.Components\StateMachine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -354,7 +378,7 @@
       <Filter>01.Utility\03.Components\Shader</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UIAnimation.cpp">
-      <Filter>01.Utility\03.Components\Animation\UIAnimation</Filter>
+      <Filter>01.Utility\03.Components\UIAnimation\UIAnimation</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UIBar.cpp">
       <Filter>01.Utility\02.GameObject\UIObject\Bar</Filter>
@@ -397,6 +421,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Channel.cpp">
       <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ContainerObject.cpp">
+      <Filter>01.Utility\02.GameObject\ContainerObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PartObject.cpp">
+      <Filter>01.Utility\02.GameObject\PartObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\State.cpp">
+      <Filter>01.Utility\03.Components\StateMachine\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\StateMachine.cpp">
+      <Filter>01.Utility\03.Components\StateMachine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

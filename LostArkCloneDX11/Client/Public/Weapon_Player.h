@@ -1,22 +1,21 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Camera.h"
+#include "Client_Struct.h"
+#include "PartObject.h"
 
 NS_BEGIN(Engine)
+class CShader;
 class CModel;
 NS_END
 
 NS_BEGIN(Client)
 
-class CCamera_Fix final : public CCamera
+class CWeapon_Player final : public CPartObject
 {
 private:
-	CCamera_Fix(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCamera_Fix(const CCamera_Fix& Prototype);
-	virtual ~CCamera_Fix() = default;
-
-public:
-	void Set_CameraTargetPosition(_vector TargetPosition);
+	CWeapon_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CWeapon_Player(const CWeapon_Player& Prototype);
+	virtual ~CWeapon_Player() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -27,18 +26,19 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	_uint			m_iCameraBoneIndex = {};
-	_float3			m_vDistance = {};
+	_uint		m_iNumMesh = {};
 
-	_float4			m_pTargetPosition = {};
+	CShader*	m_pShaderCom = { nullptr };
+	CModel*		m_pModelCom = { nullptr };
 
 private:
-	void		Update_Camera_Position();
+	HRESULT		Add_Components();
 
 public:
-	static CCamera_Fix* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CWeapon_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
 
 NS_END
+

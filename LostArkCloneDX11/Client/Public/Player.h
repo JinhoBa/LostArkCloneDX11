@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Client_Struct.h"
-#include "GameObject.h"
+#include "ContainerObject.h"
 
 NS_BEGIN(Engine)
 class CShader;
@@ -10,16 +10,19 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CPlayer final : public CGameObject
+class CPlayer final : public CContainerObject
 {
+public:
+	enum STATE {IDLE, MOVE, ATTACK};
+
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPlayer(const CPlayer& Prototype);
 	virtual ~CPlayer() = default;
 
 public:
-	STANCE Get_Stance() { return m_Info.eStance; }
-	PLAYER_INFO* Get_Info() { return &m_Info; }
+	STANCE Get_Stance() { return m_PlayerInfo.eStance; }
+	PLAYER_INFO* Get_Info() { return &m_PlayerInfo; }
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -30,22 +33,28 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	PLAYER_INFO				m_PlayerInfo = {};
+	_float3*				m_pPickingPos = { nullptr };
+
+	STATE					m_ePreState = {};
+	STATE					m_eCurState = {};
+
+	_bool					m_bSkillLoop = {};
+	_uint					m_iSkillID = {};
+
 	class CGameManager*		m_pGameManger = { nullptr };
 
-	_bool					m_bMove = {};
-	_bool					m_bAnimLoop = {};
-	_int					m_iAnimIndex = {};
-	_uint					m_iNumMesh = {};
+	class CBody_Player*		m_pBodyPlayer = { nullptr };
 
-	CShader*				m_pShaderCom = { nullptr };
-	CModel*					m_pModelCom = { nullptr };
-
-	PLAYER_INFO				m_Info = {};
+	class CStateMachine*	m_pStateMachineCom = { nullptr };
+	class CState_Idle*		m_pState_Idle = { nullptr };
 
 private:
+	HRESULT			Ready_PartObjects();
+
 	void			Key_Input(_float fTimeDelta);
-	HRESULT			Add_Components();
 	void			Change_Stance();
+	void            Change_State();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

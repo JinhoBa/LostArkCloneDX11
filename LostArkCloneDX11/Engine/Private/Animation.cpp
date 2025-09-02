@@ -7,6 +7,20 @@ CAnimation::CAnimation()
 {
 }
 
+CAnimation::CAnimation(const CAnimation& Prototype)
+	:m_iNumChannels{Prototype.m_iNumChannels}
+	,m_fDuration{Prototype.m_fDuration}
+	,m_fTickPerSecond{Prototype.m_fTickPerSecond}
+	, m_fCurrentTrackPosition{Prototype.m_fCurrentTrackPosition}
+	, m_Channels{Prototype.m_Channels}
+	, m_iCurKeyFrameIndices{Prototype.m_iCurKeyFrameIndices}
+{
+	memcpy(&m_szName, Prototype.m_szName, MAX_NAME);
+
+	for (auto& pChannel : m_Channels)
+		Safe_AddRef(pChannel);
+}
+
 HRESULT CAnimation::Initialize(const class CModel* pModel, const aiAnimation* pAiAnimation)
 {
 	strcpy_s(m_szName, pAiAnimation->mName.data);
@@ -22,6 +36,7 @@ HRESULT CAnimation::Initialize(const class CModel* pModel, const aiAnimation* pA
 			return E_FAIL;
 
 		m_Channels.push_back(pChannel);
+		m_iCurKeyFrameIndices.push_back(0);
 	}
 
 	return S_OK;
@@ -38,6 +53,7 @@ HRESULT CAnimation::Initialize(ifstream& in)
 	in.read(reinterpret_cast<_char*>(&m_fTickPerSecond), sizeof(_float));
 
 	m_Channels.reserve((size_t)m_iNumChannels);
+	m_iCurKeyFrameIndices.reserve((size_t)m_iNumChannels);
 
 	for (_uint i = 0; i < m_iNumChannels; ++i)
 	{
@@ -47,6 +63,7 @@ HRESULT CAnimation::Initialize(ifstream& in)
 			return E_FAIL;
 
 		m_Channels.push_back(pChannel);
+		m_iCurKeyFrameIndices.push_back(0);
 	}
 
 	return S_OK;
@@ -56,9 +73,23 @@ void CAnimation::Update_TransformationMatrix(const vector<CBone*> Bones, _float 
 {
 	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 
+	_uint iIndex = {};
+
 	for (auto& pChannel : m_Channels)
 	{
-		pChannel->Update_TransformationMatrix(Bones, m_fCurrentTrackPosition);
+		pChannel->Update_TransformationMatrix(&m_iCurKeyFrameIndices[iIndex++], Bones, m_fCurrentTrackPosition);
+	}
+}
+
+void CAnimation::Update_TransformationMatrix(const vector<class CBone*> Bones, _float fRatio, vector<KEYFRAME>& PreAnimKeyFrames)
+{
+	_uint iIndex = {};
+	
+	for (auto& pChannel : m_Channels)
+	{
+		pChannel->Update_TransformationMatrix(
+			&m_iCurKeyFrameIndices[iIndex], Bones, fRatio, PreAnimKeyFrames);
+		++iIndex;
 	}
 }
 
@@ -66,8 +97,8 @@ void CAnimation::Reset_TrackPosition()
 {
 	m_fCurrentTrackPosition = 0;
 
-	for (auto& pChannel : m_Channels)
-		pChannel->Reset_KeyFrame();
+	for (auto& iIndex : m_iCurKeyFrameIndices)
+		iIndex = 0;
 }
 
 void CAnimation::Save_To_Binary(ofstream& out)
@@ -86,7 +117,6 @@ void CAnimation::Save_To_Binary(ofstream& out)
 	}
 	
 }
-
 
 CAnimation* CAnimation::Create(const class CModel* pModel, const aiAnimation* pAiAnimation)
 {
@@ -114,6 +144,11 @@ CAnimation* CAnimation::Create(ifstream& in)
 	}
 
 	return pInstance;
+}
+
+CAnimation* CAnimation::Clone()
+{
+	return  new CAnimation(*this);
 }
 
 void CAnimation::Free()

@@ -30,6 +30,11 @@ void CTransform::Set_Scale(_float3 vScale)
     Set_State(STATE::LOOK, vLook);
 }
 
+void CTransform::Set_WorldMatrix(_fmatrix matrix)
+{
+    XMStoreFloat4x4(&m_WorldMatrix, matrix);
+}
+
 _float4x4& CTransform::Get_WorldMatrixInv()
 {
     XMStoreFloat4x4(&m_WorldMatrixInv, (XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix))));

@@ -4,6 +4,14 @@ CBone::CBone()
 {
 }
 
+_vector CBone::Get_Position()
+{
+	_vector vPosition;
+	memcpy(&vPosition, m_CombinedTransformationMatrix.m[4], sizeof(_float4));
+
+	return vPosition;
+}
+
 HRESULT CBone::Initialize(const aiNode* pAINode, _int iParentIndex)
 {
 	strcpy_s(m_szName, pAINode->mName.data);
@@ -80,6 +88,11 @@ CBone* CBone::Create(ifstream& in)
 	}
 
 	return pInstance;
+}
+
+CBone* CBone::Clone()
+{
+	return new CBone(*this);
 }
 
 void CBone::Free()

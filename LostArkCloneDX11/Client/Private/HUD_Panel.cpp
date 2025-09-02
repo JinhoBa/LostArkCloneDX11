@@ -66,18 +66,7 @@ void CHUD_Panel::Late_Update(_float fTimeDelta)
 
 HRESULT CHUD_Panel::Render()
 {
-	//if (FAILED(__super::Bind_ShaderResource(0)))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pShaderCom->Begin(0)))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pVIBufferCom->Bind_Resources()))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pVIBufferCom->Render()))
-	//	return E_FAIL;
-
+	/*ÇÏÀ§ °èÃş¸¸ ·»´õ*/
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 

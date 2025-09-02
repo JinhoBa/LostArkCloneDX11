@@ -181,6 +181,15 @@
     <Filter Include="03.UIObject\GamePlay\HUD\Panel">
       <UniqueIdentifier>{5bdf0330-c5e5-46c4-9e60-53a6c28de6a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Body">
+      <UniqueIdentifier>{2c120c0e-58c6-4126-b0b3-a3bf09f7d837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\Weapon">
+      <UniqueIdentifier>{5cfa2529-1df6-48fd-9efc-beba0905ce4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\States">
+      <UniqueIdentifier>{7a680735-1d3e-4780-8821-8228b4c4268f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -354,6 +363,15 @@
     <ClInclude Include="..\public\HUD.h">
       <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Body_Player.h">
+      <Filter>02.GameObject\Player\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\State_Idle.h">
+      <Filter>02.GameObject\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Weapon_Player.h">
+      <Filter>02.GameObject\Player\Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -521,6 +539,15 @@
     </ClCompile>
     <ClCompile Include="..\private\HUD.cpp">
       <Filter>03.UIObject\GamePlay\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Body_Player.cpp">
+      <Filter>02.GameObject\Player\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\State_Idle.cpp">
+      <Filter>02.GameObject\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Weapon_Player.cpp">
+      <Filter>02.GameObject\Player\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

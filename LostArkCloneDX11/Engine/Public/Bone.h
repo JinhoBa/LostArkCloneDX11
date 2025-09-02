@@ -10,8 +10,12 @@ private:
 	virtual ~CBone() = default;
 
 public:
+	_vector Get_Position();
 	_matrix Get_CombinedTransformationMatrix() const {
 		return XMLoadFloat4x4(&m_CombinedTransformationMatrix);
+	}
+	_matrix Get_TransformationMatrix() const {
+		return XMLoadFloat4x4(&m_TransformationMatrix);
 	}
 	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
@@ -37,6 +41,7 @@ private:
 public:
 	static CBone* Create(const aiNode* pAINode, _int iParentIndex);
 	static CBone* Create(ifstream& in);
+	CBone* Clone();
 	virtual void Free() override;
 };
 
