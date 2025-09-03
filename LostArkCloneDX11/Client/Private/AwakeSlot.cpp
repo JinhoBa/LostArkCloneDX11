@@ -73,9 +73,9 @@ void CAwakeSlot::Late_Update(_float fTimeDelta)
 	if (0.f != m_fCoolTime)
 	{
 		_uint iMinute = (_uint)m_fCoolTime / 60;
-		if (1 > iMinute)
+		if (60.f < m_fCoolTime)
 		{
-			m_Font_CoolTime.strWord = L" " + to_wstring(m_fCoolTime + 1.f).substr(0, 1) + L"m";
+			m_Font_CoolTime.strWord = L" " + to_wstring(iMinute + 1).substr(0, 1) + L"m";
 		}
 		else
 		{

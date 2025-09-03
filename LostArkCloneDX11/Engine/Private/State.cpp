@@ -1,22 +1,25 @@
 #include "State.h"
+#include "GameInstance.h"
+#include "StateMachine.h"
 
 CState::CState()
+	:m_pGameInstance{ CGameInstance::GetInstance()}
 {
+	Safe_AddRef(m_pGameInstance);
 }
 
-void CState::Set_State(_uint iIndex, _bool bLoop)
+void CState::Set_State()
 {
-	m_iAnimIndex = iIndex;
-	m_bLoop = bLoop;
+
 }
 
-HRESULT CState::Initilize(CModel* pModel, CTransform* pTransform)
+HRESULT CState::Initilize()
 {
 
 	return S_OK;
 }
 
-void CState::Enter()
+void CState::Enter(void* pArg)
 {
 
 }
@@ -31,8 +34,9 @@ void CState::Exit()
 
 }
 
-
 void CState::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pGameInstance);
 }

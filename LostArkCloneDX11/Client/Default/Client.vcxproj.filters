@@ -190,6 +190,15 @@
     <Filter Include="02.GameObject\Player\States">
       <UniqueIdentifier>{7a680735-1d3e-4780-8821-8228b4c4268f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\States\IDLE">
+      <UniqueIdentifier>{9bbef063-48a6-4c83-a3f9-6cf8e5fc741a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\States\SKill">
+      <UniqueIdentifier>{9262bfd1-d04d-420c-ab56-4df4b0567e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\States\MOVE">
+      <UniqueIdentifier>{173bbd62-6b48-4b35-a10e-0554b04fa9d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -366,11 +375,20 @@
     <ClInclude Include="..\public\Body_Player.h">
       <Filter>02.GameObject\Player\Body</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\State_Idle.h">
-      <Filter>02.GameObject\Player\States</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Weapon_Player.h">
       <Filter>02.GameObject\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_Idle.h">
+      <Filter>02.GameObject\Player\States\IDLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_State.h">
+      <Filter>02.GameObject\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_NormalSkill.h">
+      <Filter>02.GameObject\Player\States\SKill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_Move.h">
+      <Filter>02.GameObject\Player\States\MOVE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -543,11 +561,20 @@
     <ClCompile Include="..\private\Body_Player.cpp">
       <Filter>02.GameObject\Player\Body</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\State_Idle.cpp">
-      <Filter>02.GameObject\Player\States</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Weapon_Player.cpp">
       <Filter>02.GameObject\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Idle.cpp">
+      <Filter>02.GameObject\Player\States\IDLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_State.cpp">
+      <Filter>02.GameObject\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_NormalSkill.cpp">
+      <Filter>02.GameObject\Player\States\SKill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Move.cpp">
+      <Filter>02.GameObject\Player\States\MOVE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

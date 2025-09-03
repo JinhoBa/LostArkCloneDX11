@@ -5,8 +5,15 @@
 #include "GameManager.h"
 
 #include "Skill.h"
+
 #include "PartObject.h"
 #include "Body_Player.h"
+
+#include "StateMachine.h"
+#include "State.h"
+#include "Player_Idle.h"
+#include "Player_Move.h"
+#include "Player_NormalSkill.h"
 
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -22,6 +29,20 @@ CPlayer::CPlayer(const CPlayer& Prototype)
     Safe_AddRef(m_pGameManger);
 }
 
+void CPlayer::Set_Animation(_uint iIndex, _bool bLoop)
+{
+    m_pBodyPlayer->Set_Animation(iIndex, bLoop);
+}
+
+_bool CPlayer::isAnimationFinish()
+{
+    return m_pBodyPlayer->isAnimationFinish();
+}
+
+_bool CPlayer::Move(_float fTimeDelta, _vector vTargetPosition)
+{
+    return m_pTransformCom->MoveTo(fTimeDelta, vTargetPosition);
+}
 
 HRESULT CPlayer::Initialize_Prototype()
 {
@@ -30,9 +51,15 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
+    m_PlayerInfo.eStance = STANCE::FLURRY;
+    m_PlayerInfo.fHp = m_PlayerInfo.fMaxHp = 10000.f;
+    m_PlayerInfo.fMp = m_PlayerInfo.fMaxMp = 8000.f;
+    m_PlayerInfo.fIdentity = 0.f;
+    m_PlayerInfo.fAttack = 10000.f;
+
     GAMEOBJECT_DESC Desc = {};
-    Desc.fRotatePersec = 3.f;
-    Desc.fSpeedPersec = 1.3f;
+    Desc.fRotatePersec = 5.f;
+    Desc.fSpeedPersec = 3.f;
 
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
@@ -40,15 +67,20 @@ HRESULT CPlayer::Initialize(void* pArg)
     if (FAILED(Ready_PartObjects()))
         return E_FAIL;
 
+    if (FAILED(Ready_StateMachine()))
+        return E_FAIL;
+
+    if (FAILED(Ready_States()))
+        return E_FAIL;
+
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(40.f, 0.f, 40.f, 1.f));
 
-    m_PlayerInfo.eStance = STANCE::FLURRY;
-    m_PlayerInfo.fHp = m_PlayerInfo.fMaxHp = 10000.f;
-    m_PlayerInfo.fMp = m_PlayerInfo.fMaxMp = 8000.f;
-    m_PlayerInfo.fIdentity = 0.f;
-    m_PlayerInfo.fAttack = 10000.f;
-
     m_pBodyPlayer = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")));
+
+    if (nullptr == m_pBodyPlayer)
+        return E_FAIL;
+
+    m_pStateMachineCom->Start_State(m_States[IDLE]);
 
     return S_OK;
 }
@@ -64,25 +96,14 @@ void CPlayer::Update(_float fTimeDelta)
     {
         m_PlayerInfo.fIdentity += 2.f * fTimeDelta;
     }
+    if(m_pGameInstance->Get_KeyDown(DIK_Z))
+        Change_Stance();
+
+    m_pStateMachineCom->Upadte(fTimeDelta);
+
     m_pGameManger->Update_Skills(fTimeDelta);
 
     Key_Input(fTimeDelta);
-
-    if (m_pBodyPlayer->isAnimationFinish())
-    {
-        m_eCurState = IDLE;
-
-    }
-
-    if (MOVE == m_eCurState)
-    {
-        if (false == m_pTransformCom->MoveTo(fTimeDelta * 2.f, XMVectorSetW(XMLoadFloat3(m_pPickingPos), 1.f)))
-        {
-            m_eCurState = IDLE;
-        }
-    }
-
-    Change_State();
 
     __super::Update(fTimeDelta);
 }
@@ -109,9 +130,29 @@ HRESULT CPlayer::Ready_PartObjects()
 
     return S_OK;
 }
+HRESULT CPlayer::Ready_StateMachine()
+{
+    /* StateMachine */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_StateMachine"),
+        TEXT("Com_StateMachine"), reinterpret_cast<CComponent**>(&m_pStateMachineCom))))
+        return E_FAIL;
+
+    return S_OK;
+}
+HRESULT CPlayer::Ready_States()
+{
+    m_States[IDLE] = CPlayer_Idle::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+
+    m_States[MOVE] = CPlayer_Move::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+
+    m_States[NORMAL_SKILL] = CPlayer_NormalSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+
+
+    return S_OK;
+}
 void CPlayer::Key_Input(_float fTimeDelta)
 {
-    if(STATE::IDLE == m_eCurState)
+ /*   if(STATE::IDLE == m_eCurState)
     {
         if (m_pGameInstance->Get_KeyDown(DIK_D))
         {
@@ -144,7 +185,7 @@ void CPlayer::Key_Input(_float fTimeDelta)
             if(nullptr != m_pPickingPos)
                 m_eCurState = STATE::MOVE;
         }
-    }
+    }*/
     
 }
 
@@ -157,32 +198,6 @@ void CPlayer::Change_Stance()
     else
         m_PlayerInfo.fIdentity = 0.f;
  
-}
-void  CPlayer::Change_State()
-{
-    if (m_ePreState != m_eCurState)
-    {
-        switch (m_eCurState)
-        {
-        case Client::CPlayer::IDLE:
-            m_iSkillID = STANCE::FLURRY == m_PlayerInfo.eStance ? 35 : 36;
-            m_pBodyPlayer->Set_Animation(m_iSkillID, true);
-            break;
-
-        case Client::CPlayer::MOVE:
-            m_iSkillID = STANCE::FLURRY == m_PlayerInfo.eStance ? 45 : 46;
-            m_pBodyPlayer->Set_Animation(m_iSkillID, true);
-            break;
-
-        case Client::CPlayer::ATTACK:
-            m_pBodyPlayer->Set_Animation(m_iSkillID);
-            break;
-
-        default:
-            break;
-        }
-        m_ePreState = m_eCurState;
-    }
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -218,4 +233,9 @@ void CPlayer::Free()
     __super::Free();
 
     Safe_Release(m_pGameManger);
+
+    for (_uint i = 0; i < STATE::STATE_END; ++i)
+    {
+        Safe_Release(m_States[i]);
+    }
 }

@@ -199,13 +199,16 @@
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\public\Player_Move.h" />
+    <ClInclude Include="..\public\Player_NormalSkill.h" />
+    <ClInclude Include="..\public\Player_State.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\ServerListPanel.h" />
     <ClInclude Include="..\public\Skill.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\public\Skill_Manager.h" />
     <ClInclude Include="..\public\SkySphere.h" />
-    <ClInclude Include="..\public\State_Idle.h" />
+    <ClInclude Include="..\public\Player_Idle.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\Public\tinyxml2.h" />
     <ClInclude Include="..\public\TopMenu.h" />
@@ -289,13 +292,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\private\Player_Move.cpp" />
+    <ClCompile Include="..\private\Player_NormalSkill.cpp" />
+    <ClCompile Include="..\private\Player_State.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\ServerListPanel.cpp" />
     <ClCompile Include="..\private\Skill.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\private\Skill_Manager.cpp" />
     <ClCompile Include="..\private\SkySphere.cpp" />
-    <ClCompile Include="..\private\State_Idle.cpp" />
+    <ClCompile Include="..\private\Player_Idle.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\Private\tinyxml2.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

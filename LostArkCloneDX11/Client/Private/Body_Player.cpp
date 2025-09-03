@@ -6,8 +6,6 @@
 
 #include "Skill.h"
 #include "Camera_Fix.h"
-#include "State_Idle.h"
-#include "StateMachine.h"
 
 CBody_Player::CBody_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CPartObject{ pDevice, pContext }
@@ -96,7 +94,7 @@ void CBody_Player::Update(_float fTimeDelta)
 
 #pragma endregion
 
-    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta);
+    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * 1.2f);
    
 
     /* 부모 행렬 적용 */
@@ -166,6 +164,7 @@ HRESULT CBody_Player::Render()
 
 void CBody_Player::Set_Animation(_uint iAnimationIdex, _bool bLoop)
 {
+    m_isAnimationFinish = false;
     m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, iAnimationIdex, bLoop);
 
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
@@ -174,12 +173,12 @@ void CBody_Player::Set_Animation(_uint iAnimationIdex, _bool bLoop)
 
 HRESULT CBody_Player::Add_Components()
 {
-    /*VIBuffer_Rect*/
+    /* AnimModel */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
-    /*Shader_VTXAnimTex*/
+    /* Shader_VTXAnimTex */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;

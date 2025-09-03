@@ -201,6 +201,8 @@ HRESULT CModel::Initialize(void* pArg)
         m_AnimationNames.push_back(pAnim->GetAnimationName());
     }
 
+    m_PreAnimationKeyFrames.reserve((size_t)m_iNumBones);
+
     for (auto& pBone : m_Bones)
     {
         if (pBone->Compare_Name("b_root"))
@@ -209,6 +211,19 @@ HRESULT CModel::Initialize(void* pArg)
             m_pRootBone = pBone;
             Safe_AddRef(m_pRootBone);
         }
+
+        KEYFRAME KeyFrame = {};
+        _vector vScale;
+        _vector vRotation;
+        _vector vTranslation;
+        KeyFrame.fTrackPosition = { 0.f };
+
+        XMMatrixDecompose(&vScale, &vRotation, &vTranslation, pBone->Get_TransformationMatrix());
+        XMStoreFloat3(&KeyFrame.vScale, vScale);
+        XMStoreFloat4(&KeyFrame.vRotation, vRotation);
+        XMStoreFloat3(&KeyFrame.vTranslation, vTranslation);
+
+        m_PreAnimationKeyFrames.push_back(KeyFrame);
     }
 
     return S_OK;
@@ -266,7 +281,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
             m_Animations[m_iPreAnimIndex]->Reset_TrackPosition();
             m_fInterpolationTime = 0.f;
             m_iPreAnimIndex = m_iCurrentAnimIndex;
-            m_PreAnimationKeyFrames.clear();
+            //m_PreAnimationKeyFrames.clear();
         }
         else
             m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, m_fInterpolationTime / m_fMaxInterpolationTime, m_PreAnimationKeyFrames);
@@ -540,31 +555,28 @@ void CModel::Update_PreAnimationKeyFrames(CTransform* pTransform)
 
     _matrix vRootBoneTrans = m_pRootBone->Get_TransformationMatrix();
 
-    _float4 vPos = _float4(0.f, 0.f, 0.f, 1.f);
+    _float4 vRootPosition = _float4(0.f, 0.f, 0.f, 1.f);
 
-    memcpy(&vRootBoneTrans.r[3], &vPos, sizeof(_float4));
+    memcpy(&vRootBoneTrans.r[3], &vRootPosition, sizeof(_float4));
 
     m_pRootBone->Set_TransformationMatrix(vRootBoneTrans);
 
-    for (_uint i = m_iRootBoneIndex + 1; i< m_iNumBones; ++i)
+    for (_uint i = 0; i < m_iNumBones; ++i)
     {
         m_Bones[i]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-    }
 
-    for (auto& pBone : m_Bones)
-    {
         KEYFRAME KeyFrame = {};
         _vector vScale;
         _vector vRotation;
         _vector vTranslation;
         KeyFrame.fTrackPosition = { 0.f };
 
-        XMMatrixDecompose(&vScale, &vRotation, &vTranslation, pBone->Get_TransformationMatrix());
+        XMMatrixDecompose(&vScale, &vRotation, &vTranslation, m_Bones[i]->Get_TransformationMatrix());
         XMStoreFloat3(&KeyFrame.vScale, vScale);
         XMStoreFloat4(&KeyFrame.vRotation, vRotation);
         XMStoreFloat3(&KeyFrame.vTranslation, vTranslation);
 
-        m_PreAnimationKeyFrames.push_back(KeyFrame);
+        memcpy(&m_PreAnimationKeyFrames[i], &KeyFrame, sizeof(KEYFRAME));
     }
 }
 
@@ -615,6 +627,8 @@ void CModel::Free()
     __super::Free();
     
     Safe_Release(m_pRootBone);
+
+    m_PreAnimationKeyFrames.clear();
 
     for (auto& pAnimation : m_Animations)
         Safe_Release(pAnimation);

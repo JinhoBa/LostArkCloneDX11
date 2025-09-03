@@ -4,6 +4,7 @@
 NS_BEGIN(Engine)
 class CModel;
 class CTransform;
+class CGameInstance;
 class ENGINE_DLL CState abstract : public CBase
 {
 protected:
@@ -11,19 +12,17 @@ protected:
 	virtual ~CState() = default;
 
 public:
-	void Set_State(_uint iIndex, _bool bLoop = false);
+	void Set_State();
 
 public:
-	virtual HRESULT Initilize(CModel* pModel, CTransform* pTransform);
-	virtual void Enter();
+	virtual HRESULT Initilize();
+	virtual void Enter(void* pArg);
 	virtual void Update(_float fTimeDelta);
 	virtual void Exit();
 
 protected:
-	_uint				m_iAnimIndex = {};
-	_bool				m_bLoop = {};
-	class CModel*		m_pModel = { nullptr };
-	class CTransform*	m_pTransform = { nullptr };
+	class CStateMachine*	m_pStateMachine = {};
+	class CGameInstance*	m_pGameInstance = {};
 
 public:
 	virtual void Free() override;

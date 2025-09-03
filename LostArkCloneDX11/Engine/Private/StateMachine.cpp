@@ -27,19 +27,21 @@ void CStateMachine::Upadte(_float fTimeDelta)
 	m_pState->Update(fTimeDelta);
 }
 
-void CStateMachine::Change_State(CState* pState)
+void CStateMachine::Start_State(CState* pState)
+{
+	m_pState = pState;
+}
+
+void CStateMachine::Change_State(CState* pState, void* pArg)
 {
 	if (nullptr != m_pState)
 	{
 		m_pState->Exit();
-		Safe_Release(m_pState);
 	}
 
 	m_pState = pState;
 
-	Safe_AddRef(m_pState);
-
-	m_pState->Enter();
+	m_pState->Enter(pArg);
 }
 
 CStateMachine* CStateMachine::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -73,6 +75,4 @@ CComponent* CStateMachine::Clone(void* pArg)
 void CStateMachine::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pState);
 }

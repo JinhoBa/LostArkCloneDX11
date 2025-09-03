@@ -14,8 +14,8 @@ public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Upadte(_float fTimeDelta);
-
-	void Change_State(class CState* pState);
+	void Start_State(class CState* pState);
+	void Change_State(class CState* pState, void* pArg);
 
 private:
 	class CState* m_pState = { nullptr };
