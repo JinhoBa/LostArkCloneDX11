@@ -76,9 +76,10 @@ void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoo
     if(m_iCurrentAnimIndex != iIndex)
     {
         pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(m_pRootBone->Get_CombinedTransformationMatrix().r[3], XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
-  
-        Update_PreAnimationKeyFrames();
+
+        Update_PreAnimationKeyFrames(pTransform);
         m_fMaxInterpolationTime = fChangeTime;
+        //m_fMaxInterpolationTime = 0.f;
         m_fInterpolationTime = 0.f;
     }
 
@@ -204,6 +205,7 @@ HRESULT CModel::Initialize(void* pArg)
     {
         if (pBone->Compare_Name("b_root"))
         {
+            m_iRootBoneIndex = Get_BoneIndex("b_root");
             m_pRootBone = pBone;
             Safe_AddRef(m_pRootBone);
         }
@@ -532,9 +534,22 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
     return S_OK;
 }
 
-void CModel::Update_PreAnimationKeyFrames()
+void CModel::Update_PreAnimationKeyFrames(CTransform* pTransform)
 {
     m_PreAnimationKeyFrames.reserve((size_t)m_iNumBones);
+
+    _matrix vRootBoneTrans = m_pRootBone->Get_TransformationMatrix();
+
+    _float4 vPos = _float4(0.f, 0.f, 0.f, 1.f);
+
+    memcpy(&vRootBoneTrans.r[3], &vPos, sizeof(_float4));
+
+    m_pRootBone->Set_TransformationMatrix(vRootBoneTrans);
+
+    for (_uint i = m_iRootBoneIndex + 1; i< m_iNumBones; ++i)
+    {
+        m_Bones[i]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+    }
 
     for (auto& pBone : m_Bones)
     {

@@ -45,6 +45,7 @@ private:
 	_uint						m_iNumMaterials = {};
 	_uint						m_iNumBones = {};
 	_uint						m_iNumAnimations = {};
+	_uint						m_iRootBoneIndex = {};
 
 	_int						m_iPreAnimIndex = { -1 };
 	_int						m_iCurrentAnimIndex = { -1 };
@@ -74,7 +75,7 @@ private:
 	HRESULT Save_Binary_Model(MODEL eModel, const _char* pModelFielPath, _fmatrix PreTransformMatrix);
 	HRESULT Load_Binary_Model(MODEL eModel, const _char* pModelFielPath);
 
-	void	Update_PreAnimationKeyFrames();
+	void	Update_PreAnimationKeyFrames(class CTransform* pTransform);
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());

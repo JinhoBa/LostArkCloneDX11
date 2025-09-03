@@ -72,7 +72,6 @@ void CPlayer::Update(_float fTimeDelta)
     {
         m_eCurState = IDLE;
 
-
     }
 
     if (MOVE == m_eCurState)
