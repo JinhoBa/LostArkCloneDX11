@@ -123,6 +123,15 @@ void CPlayer::Key_Input(_float fTimeDelta)
                 m_bSkillLoop = false;
             }
         }
+        if (m_pGameInstance->Get_KeyDown(DIK_E))
+        {
+            if (m_pGameManger->Use_Skill(2))
+            {
+                m_eCurState = STATE::ATTACK;
+                m_iSkillID = 137;
+                m_bSkillLoop = false;
+            }
+        }
         else if (m_pGameInstance->Get_KeyDown(DIK_Z))
         {
             if (m_PlayerInfo.fIdentity > 5.f)
@@ -137,12 +146,8 @@ void CPlayer::Key_Input(_float fTimeDelta)
                 m_eCurState = STATE::MOVE;
         }
     }
-
     
 }
-
-
-
 
 void CPlayer::Change_Stance()
 {

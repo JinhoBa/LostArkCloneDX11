@@ -126,7 +126,7 @@ HRESULT CBody_Player::Render()
         {
             m_bAnimLoop = true;
             m_iAnimIndex = iIndex;
-            m_pModelCom->Set_AnimationIndex(m_pTransformCom, m_iAnimIndex, true);
+            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
         }
         ++iIndex;
         ImGui::SameLine();
