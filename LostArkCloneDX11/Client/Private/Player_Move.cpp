@@ -7,6 +7,7 @@
 #include "StateMachine.h"
 #include "Player.h"
 #include "Player_NormalSkill.h"
+#include "Player_ChangeStance.h"
 
 CPlayer_Move::CPlayer_Move()
 	:CPlayer_State{}
@@ -23,16 +24,6 @@ HRESULT CPlayer_Move::Initilize(CStateMachine* pStateMachine, STANCE* pStance, C
 
 void CPlayer_Move::Enter(void* pArg)
 {
-	if (nullptr == pArg)
-	{
-		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
-		return;
-	}
-
-	PLAYERMOVE_DESC* pDesc = static_cast<PLAYERMOVE_DESC*>(pArg);
-
-	memcpy(&m_vPinkingPosition, &pDesc->vPickingPosition, sizeof(_float3));
-
 	if (STANCE::FLURRY == *m_pPlayerStance)
 	{
 		m_pPlayer->Set_Animation(45, true);
@@ -45,6 +36,18 @@ void CPlayer_Move::Enter(void* pArg)
 
 void CPlayer_Move::Update(_float fTimeDelta)
 {
+	if (__super::Check_Dash())
+	{
+		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::DASH), nullptr);
+		return;
+	}
+
+	if (m_pGameInstance->Get_KeyDown(DIK_Z))
+	{
+		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::CHANGE_STANCE), nullptr);
+		return;
+	}
+
 	_bool isUseSkill = { false };
 	_bool bLoop = { false };
 	_uint iSkillID = {};
@@ -151,15 +154,7 @@ void CPlayer_Move::Update(_float fTimeDelta)
 	}
 	else
 	{
-		if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
-		{
-			_float3* pPickingPos = m_pGameManager->Get_PickingPos();
-
-			if (nullptr != pPickingPos)
-				memcpy(&m_vPinkingPosition, pPickingPos, sizeof(_float3));
-		}
-
-		if (false == m_pPlayer->Move(fTimeDelta, XMVectorSetW(XMLoadFloat3(&m_vPinkingPosition), 1.f)))
+		if (false == m_pPlayer->Move(fTimeDelta))
 		{
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
 			return;

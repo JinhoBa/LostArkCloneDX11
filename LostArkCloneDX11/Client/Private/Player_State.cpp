@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player_State.h"
 
+#include "GameInstance.h"
 #include "GameManager.h"
 #include "Player.h"
 #include "StateMachine.h"
@@ -36,6 +37,16 @@ void CPlayer_State::Update(_float fTimeDelta)
 
 void CPlayer_State::Exit()
 {
+}
+
+_bool CPlayer_State::Check_Dash()
+{
+	if (m_pGameInstance->Get_KeyDown(DIK_SPACE))
+	{
+		return m_pGameManager->Use_Skill(16);
+	}
+
+	return false;
 }
 
 void CPlayer_State::Free()

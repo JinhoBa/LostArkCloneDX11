@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Player_Move.h"
 #include "Player_NormalSkill.h"
+#include "Player_ChangeStance.h"
 
 CPlayer_Idle::CPlayer_Idle()
 	:CPlayer_State{}
@@ -36,6 +37,18 @@ void CPlayer_Idle::Enter(void* pArg)
 
 void CPlayer_Idle::Update(_float fTimeDelta)
 {
+	if(__super::Check_Dash())
+	{
+		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::DASH), nullptr);
+		return;
+	}
+
+	if (m_pGameInstance->Get_KeyDown(DIK_Z))
+	{
+		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::CHANGE_STANCE), nullptr);
+		return;
+	}
+
 	_bool isUseSkill = { false };
 	_bool bLoop = { false };
 	_uint iSkillID = {};
@@ -149,15 +162,10 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 	{
 		if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
 		{
-			_float3* pPickingPos = m_pGameManager->Get_PickingPos();
-			CPlayer_Move::PLAYERMOVE_DESC Desc = {};
-			if (nullptr != pPickingPos)
-			{
-				memcpy(&Desc.vPickingPosition, pPickingPos, sizeof(_float3));
-				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), &Desc);
-			}
-
+			if(true == m_pPlayer->Move(fTimeDelta))
+				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
 		}
+			
 	}
 }
 

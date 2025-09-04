@@ -16,6 +16,8 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
 
+	_bool Check_Dash();
+
 protected:
 	class CGameManager* m_pGameManager = { nullptr };
 	STANCE*				m_pPlayerStance = {nullptr};

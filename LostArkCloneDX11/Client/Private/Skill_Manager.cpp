@@ -17,9 +17,9 @@ const _bool CSkill_Manager::Use_Skill(_uint iSkillID) const
 	return m_Skills[iSkillID]->Use_Skill();
 }
 
-HRESULT		CSkill_Manager::Initialize()
+HRESULT	CSkill_Manager::Initialize()
 {
-	for (_uint i = 0; i < 15; i++)
+	for (_uint i = 0; i < 18; i++)
 	{
 		CSkill* pSkill = CSkill::Create(i);
 
@@ -31,7 +31,7 @@ HRESULT		CSkill_Manager::Initialize()
 
 	return S_OK;
 }
-void	CSkill_Manager::Update(_float fTimeDelta)
+void CSkill_Manager::Update(_float fTimeDelta)
 {
 	for (auto& pSkill : m_Skills)
 		pSkill->Update(fTimeDelta);

@@ -4,17 +4,11 @@
 
 NS_BEGIN(Client)
 
-class CPlayer_Move final : public CPlayer_State
+class CPlayer_Dash final : public CPlayer_State
 {
-public:
-	typedef struct PlayerMove_Desc
-	{
-		_float3 vPickingPosition;
-	}PLAYERMOVE_DESC;
-
 private:
-	CPlayer_Move();
-	virtual ~CPlayer_Move() = default;
+	CPlayer_Dash();
+	virtual ~CPlayer_Dash() = default;
 
 public:
 	virtual HRESULT Initilize(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
@@ -23,7 +17,7 @@ public:
 	virtual void Exit()override;
 
 public:
-	static CPlayer_Move* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
+	static CPlayer_Dash* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

@@ -15,7 +15,7 @@ NS_BEGIN(Client)
 class CPlayer final : public CContainerObject
 {
 public:
-	enum STATE {IDLE, MOVE, NORMAL_SKILL, STATE_END};
+	enum STATE {IDLE, MOVE, NORMAL_SKILL, DASH, CHANGE_STANCE, HIT, STATE_END};
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -23,12 +23,12 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
-	STANCE Get_Stance() { return m_PlayerInfo.eStance; }
-	PLAYER_INFO* Get_Info() { return &m_PlayerInfo; }
-	CState* Get_State(STATE eState) { return m_States[eState]; }
-	void Set_Animation(_uint iIndex, _bool bLoop = false);
-	_bool isAnimationFinish();
-	_bool Move(_float fTimeDelta, _vector vTargetPosition);
+	const STANCE	Get_Stance() { return m_PlayerInfo.eStance; }
+	PLAYER_INFO*	Get_Info() { return &m_PlayerInfo; }
+	CState*			Get_State(STATE eState) { return m_States[eState]; }
+	void			Set_Animation(_uint iIndex, _bool bLoop = false);
+	_bool			isAnimationFinish();
+
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -38,22 +38,18 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
+public:
+	_bool	Move(_float fTimeDelta);
+	void	Change_Stance();
+
 private:
+	class CGameManager*		m_pGameManager = { nullptr };
+
 	PLAYER_INFO				m_PlayerInfo = {};
 	_float3*				m_pPickingPos = { nullptr };
 
-	_bool					m_bSkillLoop = {};
-	_uint					m_iSkillID = {};
-
-	class CGameManager*		m_pGameManger = { nullptr };
-
-	class CBody_Player*		m_pBodyPlayer = { nullptr };
-
 	class CStateMachine*	m_pStateMachineCom = { nullptr };
-
 	class CState*			m_States[STATE_END] = {};
-
-	class CState_Idle*		m_pState_Idle = { nullptr };
 
 private:
 	HRESULT			Ready_PartObjects();
@@ -61,7 +57,7 @@ private:
 	HRESULT			Ready_States();
 
 	void			Key_Input(_float fTimeDelta);
-	void			Change_Stance();
+
 	void            Change_State();
 
 public:

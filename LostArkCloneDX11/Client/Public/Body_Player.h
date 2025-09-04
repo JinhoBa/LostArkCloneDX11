@@ -19,7 +19,10 @@ private:
 	virtual ~CBody_Player() = default;
 
 public:
-	_bool isAnimationFinish() { return m_isAnimationFinish; }
+	const _bool isAnimationFinish() const { 
+		return m_isAnimationFinish; }
+	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
+	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false);
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -29,15 +32,10 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
-	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false);
-
 private:
 	_bool					m_isAnimationFinish = {};
-	_bool					m_isMoving = {};
-	_bool					m_bAnimLoop = {};
 	_int					m_iAnimIndex = {};
 	_uint					m_iNumMesh = {};
-
 	_uint					m_iCameraTargetBoneIndex = {};
 
 	class CCamera_Fix*		m_pCamera = { nullptr };

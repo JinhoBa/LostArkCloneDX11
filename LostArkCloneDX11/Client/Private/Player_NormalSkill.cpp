@@ -26,12 +26,6 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_pSkill_Desc->iSkillID);
 
-	if(nullptr == m_pSkill_Desc)
-	{
-		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
-		return;
-	}
-
 	m_pPlayer->Set_Animation(m_pSkill_Desc->iAnimationIndex, m_pSkill_Desc->bLoop);
 	
 }
@@ -39,11 +33,14 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 void CPlayer_NormalSkill::Update(_float fTimeDelta)
 {
 	// 피격 체크 추가
-
-
-
+	
 	if (m_pPlayer->isAnimationFinish())
-		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+	{
+		if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
+		else
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+	}
 }
 
 void CPlayer_NormalSkill::Exit()
