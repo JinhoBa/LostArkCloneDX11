@@ -69,6 +69,22 @@ _matrix CModel::Get_BoneMatirx(_uint iBoneIndex)
     return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
 }
 
+const _float4x4* CModel::Get_BoneMatrixPrt(const _char* pBoneName)
+{
+    auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+        {
+            if (true == pBone->Compare_Name(pBoneName))
+                return true;
+
+            return false;
+        });
+
+    if (iter == m_Bones.end())
+        return nullptr;
+    
+    return (*iter)->Get_CombinedTransformationMatrixPrt();
+}
+
 void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoop, _float fChangeTime)
 {
     m_isLoop = bLoop;
@@ -76,10 +92,9 @@ void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoo
     if(m_iCurrentAnimIndex != iIndex)
     {
         pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(m_pRootBone->Get_CombinedTransformationMatrix().r[3], XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
-
+        
         Update_PreAnimationKeyFrames(pTransform);
         m_fMaxInterpolationTime = fChangeTime;
-        //m_fMaxInterpolationTime = 0.f;
         m_fInterpolationTime = 0.f;
     }
 
@@ -119,6 +134,8 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
 
 
         Ready_Bones(m_pAiScene->mRootNode, -1);
+
+        m_iNumBones = (_uint)m_Bones.size();
 
         if (FAILED(Ready_Meshes(m_eModel)))
             return E_FAIL;
@@ -272,16 +289,14 @@ _bool CModel::Play_Animation(_float fTimeDelta)
  
     _bool isFinish = { false };
 
-    if(m_iPreAnimIndex != m_iCurrentAnimIndex)
+    if (m_iPreAnimIndex != m_iCurrentAnimIndex)
     {
-        isFinish = false;
         m_fInterpolationTime += fTimeDelta;
         if (m_fMaxInterpolationTime <= m_fInterpolationTime)
         {
             m_Animations[m_iPreAnimIndex]->Reset_TrackPosition();
             m_fInterpolationTime = 0.f;
             m_iPreAnimIndex = m_iCurrentAnimIndex;
-            //m_PreAnimationKeyFrames.clear();
         }
         else
             m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, m_fInterpolationTime / m_fMaxInterpolationTime, m_PreAnimationKeyFrames);
@@ -289,15 +304,13 @@ _bool CModel::Play_Animation(_float fTimeDelta)
     else
     {
         m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrix(m_Bones, fTimeDelta);
-         if (m_isLoop)
-         {
-            isFinish = false;
-
-            if(true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
+        if (m_isLoop)
+        {
+            if (true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
                 m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
-         }
-         else
-             isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished();
+        }
+        else
+            isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished();
     }
 
     for (auto& pBone : m_Bones)

@@ -22,8 +22,6 @@ HRESULT CMesh::Initialize_Prototype(MODEL eType, const class CModel* pModel, con
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = pAIMesh->mNumVertices;
 
-
-
 	m_iNumIndices = pAIMesh->mNumFaces * 3;
 	m_iIndexStride = 4;
 

@@ -199,6 +199,9 @@
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\public\Player_ChangeStance.h" />
+    <ClInclude Include="..\public\Player_Dash.h" />
+    <ClInclude Include="..\public\Player_Hit.h" />
     <ClInclude Include="..\public\Player_Move.h" />
     <ClInclude Include="..\public\Player_NormalSkill.h" />
     <ClInclude Include="..\public\Player_State.h" />
@@ -292,6 +295,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\private\Player_ChangeStance.cpp" />
+    <ClCompile Include="..\private\Player_Dash.cpp" />
+    <ClCompile Include="..\private\Player_Hit.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />
     <ClCompile Include="..\private\Player_NormalSkill.cpp" />
     <ClCompile Include="..\private\Player_State.cpp" />

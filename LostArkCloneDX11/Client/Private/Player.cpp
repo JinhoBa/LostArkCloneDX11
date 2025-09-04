@@ -8,40 +8,51 @@
 
 #include "PartObject.h"
 #include "Body_Player.h"
+#include "Weapon_Player.h"
 
+#pragma region STATE
 #include "StateMachine.h"
 #include "State.h"
 #include "Player_Idle.h"
 #include "Player_Move.h"
 #include "Player_NormalSkill.h"
+#include "Player_ChangeStance.h"
+#include "Player_Dash.h"
+#include "Player_Hit.h"
+#pragma endregion
+
+
 
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CContainerObject{ pDevice, pContext }, m_pGameManger{ CGameManager::GetInstance() }
+    :CContainerObject{ pDevice, pContext }, m_pGameManager{ CGameManager::GetInstance() }
 {
-    Safe_AddRef(m_pGameManger);
+    Safe_AddRef(m_pGameManager);
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
     :CContainerObject{ Prototype },
-    m_pGameManger{Prototype.m_pGameManger}
+    m_pGameManager{Prototype.m_pGameManager }
 {
-    Safe_AddRef(m_pGameManger);
+    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer::Set_Animation(_uint iIndex, _bool bLoop)
 {
-    m_pBodyPlayer->Set_Animation(iIndex, bLoop);
+    static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Set_Animation(iIndex, bLoop);
 }
 
 _bool CPlayer::isAnimationFinish()
 {
-    return m_pBodyPlayer->isAnimationFinish();
+    return static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->isAnimationFinish();
 }
 
-_bool CPlayer::Move(_float fTimeDelta, _vector vTargetPosition)
+_bool CPlayer::Move(_float fTimeDelta)
 {
-    return m_pTransformCom->MoveTo(fTimeDelta, vTargetPosition);
+    if (nullptr == m_pGameManager->Get_PickingPos())
+        return false;
+
+    return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f));
 }
 
 HRESULT CPlayer::Initialize_Prototype()
@@ -75,11 +86,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(40.f, 0.f, 40.f, 1.f));
 
-    m_pBodyPlayer = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")));
-
-    if (nullptr == m_pBodyPlayer)
-        return E_FAIL;
-
     m_pStateMachineCom->Start_State(m_States[IDLE]);
 
     return S_OK;
@@ -96,16 +102,18 @@ void CPlayer::Update(_float fTimeDelta)
     {
         m_PlayerInfo.fIdentity += 2.f * fTimeDelta;
     }
-    if(m_pGameInstance->Get_KeyDown(DIK_Z))
-        Change_Stance();
+    //if(m_pGameInstance->Get_KeyDown(DIK_Z))
+    //    Change_Stance();
+
+    __super::Update(fTimeDelta);
 
     m_pStateMachineCom->Upadte(fTimeDelta);
 
-    m_pGameManger->Update_Skills(fTimeDelta);
+    m_pGameManager->Update_Skills(fTimeDelta);
 
-    Key_Input(fTimeDelta);
+    //Key_Input(fTimeDelta);
 
-    __super::Update(fTimeDelta);
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -122,10 +130,18 @@ HRESULT CPlayer::Render()
 }
 HRESULT CPlayer::Ready_PartObjects()
 {
-    CPartObject::PARTOBJECT_DESC Desc = {};
-    Desc.pParentTransform = m_pTransformCom;
+    CPartObject::PARTOBJECT_DESC Body_Desc = {};
+    Body_Desc.pParentTransform = m_pTransformCom;
 
-    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Desc)))
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Body_Desc)))
+        return E_FAIL;
+
+    CWeapon_Player::WEAPON_DESC Weapon_Desc = {};
+    Weapon_Desc.pStance = &m_PlayerInfo.eStance;
+    Weapon_Desc.pParentTransform = m_pTransformCom;
+    Weapon_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"), TEXT("Weapon_Player"), &Weapon_Desc)))
         return E_FAIL;
 
     return S_OK;
@@ -142,11 +158,11 @@ HRESULT CPlayer::Ready_StateMachine()
 HRESULT CPlayer::Ready_States()
 {
     m_States[IDLE] = CPlayer_Idle::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-
     m_States[MOVE] = CPlayer_Move::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-
     m_States[NORMAL_SKILL] = CPlayer_NormalSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-
+    m_States[DASH] = CPlayer_Dash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }
@@ -197,7 +213,6 @@ void CPlayer::Change_Stance()
         m_PlayerInfo.fIdentity -= 40.f;
     else
         m_PlayerInfo.fIdentity = 0.f;
- 
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -232,7 +247,8 @@ void CPlayer::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pGameManger);
+    Safe_Release(m_pGameManager);
+    Safe_Release(m_pStateMachineCom);
 
     for (_uint i = 0; i < STATE::STATE_END; ++i)
     {

@@ -15,6 +15,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
+	HRESULT Bind_RawValue(const _char* ConstantName, const void* pRawValue, _uint iLength);
 	HRESULT	Bind_Vector(const _char* ConstantName, const _float4* pVector);
 	HRESULT	Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix);
 	HRESULT	Bind_Matrices(const _char* ConstantName, const _float4x4* pMatrix, _uint iNumMatrices);

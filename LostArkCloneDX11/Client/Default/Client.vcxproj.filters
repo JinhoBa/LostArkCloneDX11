@@ -199,6 +199,15 @@
     <Filter Include="02.GameObject\Player\States\MOVE">
       <UniqueIdentifier>{173bbd62-6b48-4b35-a10e-0554b04fa9d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\States\DASH">
+      <UniqueIdentifier>{6926daeb-0bda-4b40-81d7-e1c28776b2e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\States\CHANGE">
+      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\States\HIT">
+      <UniqueIdentifier>{43282a82-1efe-4949-a116-192f2b3f64d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -390,6 +399,15 @@
     <ClInclude Include="..\public\Player_Move.h">
       <Filter>02.GameObject\Player\States\MOVE</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Player_Dash.h">
+      <Filter>02.GameObject\Player\States\DASH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_ChangeStance.h">
+      <Filter>02.GameObject\Player\States\CHANGE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_Hit.h">
+      <Filter>02.GameObject\Player\States\HIT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -575,6 +593,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Player_Move.cpp">
       <Filter>02.GameObject\Player\States\MOVE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Dash.cpp">
+      <Filter>02.GameObject\Player\States\DASH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_ChangeStance.cpp">
+      <Filter>02.GameObject\Player\States\CHANGE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Hit.cpp">
+      <Filter>02.GameObject\Player\States\HIT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

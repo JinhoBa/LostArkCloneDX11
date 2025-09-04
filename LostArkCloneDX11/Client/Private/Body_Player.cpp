@@ -18,6 +18,11 @@ CBody_Player::CBody_Player(const CBody_Player& Prototype)
 
 }
 
+const _float4x4* CBody_Player::Get_BoneMatrixPtr(const _char* pBoneName) const
+{
+    return m_pModelCom->Get_BoneMatrixPrt(pBoneName);
+}
+
 HRESULT CBody_Player::Initialize_Prototype()
 {
     return S_OK;
@@ -35,9 +40,6 @@ HRESULT CBody_Player::Initialize(void* pArg)
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
     m_iAnimIndex = 35;
-    m_bAnimLoop = true;
-
-    m_isMoving = false;
 
     m_pCamera = dynamic_cast<CCamera_Fix*>(CGameManager::GetInstance()->Get_Camera());
 
@@ -53,50 +55,12 @@ HRESULT CBody_Player::Initialize(void* pArg)
 
 void CBody_Player::Priority_Update(_float fTimeDelta)
 {
-
 }
 
 void CBody_Player::Update(_float fTimeDelta)
 {
-#pragma region TESTCODE
-    //if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
-    //{
-    //    m_pPickingPos = m_pGameManger->Get_PickingPos();
-    //    m_pModelCom->Set_AnimationIndex(m_pTransformCom, m_iAnimIndex, 0.3f);
-    //}
-    //if (nullptr != m_pPickingPos && m_bMove)
-    //{
-    //    if (m_pTransformCom->MoveTo(fTimeDelta * 2.f, XMVectorSetW(XMLoadFloat3(m_pPickingPos), 1.f)))
-    //    {
-    //        if (false == m_isMoving)
-    //        {
-    //            m_isMoving = true;
-    //            m_bAnimLoop = true;
-    //            m_iAnimIndex = 45;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        m_isMoving = false;
-    //        m_bAnimLoop = true;
-    //        m_iAnimIndex = 35;
-    //        m_pModelCom->Set_AnimationIndex(m_pTransformCom, m_iAnimIndex, 0.3f);
-    //    }
-    //}
-
-      /*if (m_pModelCom->IsAnimationFinished())
-    {
-        m_bAnimLoop = true;
-        m_iAnimIndex = 35;
-        m_pModelCom->Set_AnimationIndex(m_pTransformCom, m_iAnimIndex);
-        m_bMove = true;
-    }*/
-
-#pragma endregion
-
-    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * 1.2f);
+    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta);
    
-
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
@@ -115,14 +79,13 @@ void CBody_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CBody_Player::Render()
 {
-#pragma region TESTCODE
+#pragma region ANIMATION_TEST
     ImGui::InputInt("Animation", &m_iAnimIndex);
     _int iIndex = {};
     for (auto pName : m_pModelCom->Get_AnimationNames())
     {
         if (ImGui::Button(to_string(iIndex).c_str()))
         {
-            m_bAnimLoop = true;
             m_iAnimIndex = iIndex;
             m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
         }
@@ -165,6 +128,7 @@ HRESULT CBody_Player::Render()
 void CBody_Player::Set_Animation(_uint iAnimationIdex, _bool bLoop)
 {
     m_isAnimationFinish = false;
+
     m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, iAnimationIdex, bLoop);
 
     XMStoreFloat4x4(&m_CombinedWorldMatrix,

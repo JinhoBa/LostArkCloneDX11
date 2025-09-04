@@ -12,6 +12,13 @@ NS_BEGIN(Client)
 
 class CWeapon_Player final : public CPartObject
 {
+public:
+	typedef struct Weapon_Desc :public CPartObject::PARTOBJECT_DESC
+	{
+		const STANCE*		pStance;
+		const _float4x4*	pSocketMatrix;
+	}WEAPON_DESC;
+
 private:
 	CWeapon_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon_Player(const CWeapon_Player& Prototype);
@@ -26,11 +33,14 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	_uint		m_iNumMesh = {};
+	const STANCE*			m_pStance = { nullptr };
+	const _float4x4*		m_pSocketMatrix = { nullptr };
 
-	CShader*	m_pShaderCom = { nullptr };
-	CModel*		m_pModelCom = { nullptr };
+	_uint					m_iNumMesh[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 
+	CShader*				m_pShaderCom = { nullptr };
+	CModel*					m_pModelCom[ENUM_TO_INT(STANCE::IDEN_END)] = {};
+	
 private:
 	HRESULT		Add_Components();
 
