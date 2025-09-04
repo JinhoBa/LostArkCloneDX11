@@ -315,6 +315,8 @@ HRESULT CMaterials::Add_VectorValue(string& strValue, string& strName)
 
 	if (!strcmp(strName.c_str(), "diffuse_color"))
 		eTexture = TEXTURE::DIFFUSE;
+	else if (!strcmp(strName.c_str(), "emissive_color"))
+		eTexture = TEXTURE::EMISSIVE;
 	else
 		return S_OK;
 

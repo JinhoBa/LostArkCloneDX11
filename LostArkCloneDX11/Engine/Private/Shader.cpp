@@ -78,6 +78,16 @@ HRESULT CShader::Initialize(void* pArg)
     return S_OK;
 }
 
+HRESULT CShader::Bind_RawValue(const _char* ConstantName, const void* pRawValue, _uint iLength)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);
+
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	return pVariable->SetRawValue(pRawValue, 0, iLength);
+}
+
 HRESULT CShader::Bind_Vector(const _char* ConstantName, const _float4* pVector)
 {
 	ID3DX11EffectVariable* pVariable = m_pEffects->GetVariableByName(ConstantName);
@@ -91,8 +101,6 @@ HRESULT CShader::Bind_Vector(const _char* ConstantName, const _float4* pVector)
 		return E_FAIL;
 
 	return pVectorVariable->SetFloatVector(reinterpret_cast<const _float*>(pVector));
-
-	return S_OK;
 }
 
 HRESULT CShader::Bind_Matrix(const _char* ConstantName, const _float4x4* pMatrix )

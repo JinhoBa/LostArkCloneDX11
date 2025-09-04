@@ -20,6 +20,18 @@ namespace Engine
 		float fScale;
 	}FONT_DESC;
 
+	typedef struct tagLightDesc
+	{
+		LIGHT eType;
+		XMFLOAT4 vDiffuse;
+		XMFLOAT4 vAmbient;
+		XMFLOAT4 vSpecular;
+
+		XMFLOAT4 vDirection;
+		XMFLOAT4 vPosition;
+		float fRange;
+	}LIGHT_DESC;
+
 	typedef struct tagVertexPositionTexcoord
 	{
 		XMFLOAT3						vPosition;

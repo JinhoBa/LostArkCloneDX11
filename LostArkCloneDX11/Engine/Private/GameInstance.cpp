@@ -11,6 +11,7 @@
 #include "PipeLine.h"
 #include "Picking.h"
 #include "Font_Manager.h"
+#include "Light_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -50,6 +51,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pSound_Manager)
 		return E_FAIL;
 
+	m_pLight_Manager = CLight_Manager::Create();
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
 	
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pRenderer)
@@ -380,10 +384,25 @@ void CGameInstance::Clear_Fonts()
 
 #pragma endregion
 
+#pragma region LIGHT_MANAGER
+
+const LIGHT_DESC& CGameInstance::Get_Desc(_uint iLightIndex)
+{
+	return m_pLight_Manager->Get_Desc(iLightIndex);
+}
+
+HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
+{
+	return m_pLight_Manager->Add_Light(LightDesc);
+}
+
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pPipeLine);

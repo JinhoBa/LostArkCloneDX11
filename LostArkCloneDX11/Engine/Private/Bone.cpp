@@ -7,7 +7,7 @@ CBone::CBone()
 _vector CBone::Get_Position()
 {
 	_vector vPosition;
-	memcpy(&vPosition, m_CombinedTransformationMatrix.m[4], sizeof(_float4));
+	memcpy(&vPosition, m_CombinedTransformationMatrix.m[3], sizeof(_float4));
 
 	return vPosition;
 }

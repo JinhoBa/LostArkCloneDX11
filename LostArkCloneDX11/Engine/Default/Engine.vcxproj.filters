@@ -142,6 +142,12 @@
     <Filter Include="01.Utility\03.Components\StateMachine\State">
       <UniqueIdentifier>{c00dd82f-59e0-4be6-a8a0-399add6e5600}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\10.Light">
+      <UniqueIdentifier>{0f26f09c-b019-46f0-94df-0c6861356031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\10.Light\Manager">
+      <UniqueIdentifier>{6ba47f52-f297-4635-b5d6-70aa2a814807}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -309,6 +315,12 @@
     <ClInclude Include="..\public\StateMachine.h">
       <Filter>01.Utility\03.Components\StateMachine</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Light.h">
+      <Filter>01.Utility\10.Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Light_Manager.h">
+      <Filter>01.Utility\10.Light\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -433,6 +445,12 @@
     </ClCompile>
     <ClCompile Include="..\private\StateMachine.cpp">
       <Filter>01.Utility\03.Components\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Light.cpp">
+      <Filter>01.Utility\10.Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Light_Manager.cpp">
+      <Filter>01.Utility\10.Light\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
