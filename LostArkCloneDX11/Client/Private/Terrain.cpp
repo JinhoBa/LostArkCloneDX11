@@ -140,6 +140,11 @@ HRESULT CTerrain::Render()
     return S_OK;
 }
 
+_bool CTerrain::Picking(_float3* vPosition)
+{
+    return m_pVIBufferCom->Picking(m_pTransformCom, vPosition);
+}
+
 void CTerrain::Update_ImGui()
 {
 #pragma region TESTCODE

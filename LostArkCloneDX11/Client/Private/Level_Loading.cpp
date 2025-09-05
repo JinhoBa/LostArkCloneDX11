@@ -2,6 +2,7 @@
 #include "Level_Loading.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #include "Loader.h"
 #include "Level_Logo.h"
@@ -56,6 +57,8 @@ void CLevel_Loading::Update(_float fTimeDelta)
 
         if(FAILED(m_pGameInstance->Change_Level(pNextLevel)))
             return;
+
+        CGameManager::GetInstance()->Set_Level(m_eNextLevelID);
     }
 }
 

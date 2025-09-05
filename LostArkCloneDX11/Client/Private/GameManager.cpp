@@ -1,17 +1,23 @@
 #include "pch.h"
 #include "GameManager.h"
 
+#include "GameInstance.h"
+
 #include "Data_Manager.h"
 #include "Skill_Manager.h"
+#include "Buff_Manager.h"
 
 #include "UIObject.h"
 #include "Camera_Fix.h"
+#include "Terrain.h"
+#include "Buff.h"
 
 IMPLEMENT_SINGLETON(CGameManager)
 
 CGameManager::CGameManager()
+	: m_pGameInstance{ CGameInstance::GetInstance()}
 {
-
+	Safe_AddRef(m_pGameInstance);
 }
 
 void CGameManager::Set_Camera(CCamera* pCamera)
@@ -34,6 +40,10 @@ HRESULT CGameManager::Initialize_Manager()
 
 	m_pSkill_Manager = CSkill_Manager::Create();
 	if (nullptr == m_pSkill_Manager)
+		return E_FAIL;
+
+	m_pBuff_Manager = CBuff_Manager::Create();
+	if (nullptr == m_pBuff_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -99,12 +109,55 @@ const _bool	CGameManager::Use_Skill(_uint iSkillID) const
 
 #pragma endregion
 
+#pragma region BUFF_MANAGER
+
+CBuff* CGameManager::Add_Buff(_uint iBuffID)
+{
+	return m_pBuff_Manager->Add_Buff(iBuffID);
+}
+
+void CGameManager::Remove_Buff(CBuff* pBuff)
+{
+	m_pBuff_Manager->Remove_Buff(pBuff);
+}
+
+#pragma endregion
+
+
 void CGameManager::Bind_PickingPos(_float3* pPickingPos)
 {
-	if (nullptr == m_pPickingPos)
-		m_pPickingPos = pPickingPos;
+	//if (nullptr == m_pPickingPos)
+	//	m_pPickingPos = pPickingPos;
 	//if(m_pPickingPos->y <= pPickingPos->y)
 	//	m_pPickingPos = pPickingPos;
+}
+
+_vector CGameManager::Picking_Terrains()
+{
+	_vector vCameraPosition = XMLoadFloat4(m_pGameInstance->Get_Camera_Position());
+	_float distance = { 100.f };
+
+	list<CGameObject*>* pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(m_eCurLevel), TEXT("Layer_Terrain"));
+
+	if (nullptr == pTerrains)
+		return XMVectorSet(0.f, 0.f, 0.f, 1.f);
+
+	_float3 vPickingPosition = {};
+
+	for (auto iter = pTerrains->begin(); iter != pTerrains->end(); iter++)
+	{
+		_float3 vPosition = {};
+
+		if (dynamic_cast<CTerrain*>(*iter)->Picking(&vPosition))
+		{
+			if (distance >= XMVector3Length(XMLoadFloat3(&vPosition) - vCameraPosition).m128_f32[0])
+				vPickingPosition = vPosition;
+		}
+	}
+
+	m_PickingPos = vPickingPosition;
+
+	return XMVectorSetW(XMLoadFloat3(&vPickingPosition), 1.f);
 }
 
 void CGameManager::Free()
@@ -112,6 +165,10 @@ void CGameManager::Free()
 	__super::Free();
 
 	Safe_Release(m_pCamera);
-	Safe_Release(m_pData_Manager);
+
+	Safe_Release(m_pBuff_Manager);
 	Safe_Release(m_pSkill_Manager);
+	Safe_Release(m_pData_Manager);
+
+	Safe_Release(m_pGameInstance);
 }

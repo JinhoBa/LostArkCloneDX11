@@ -37,6 +37,8 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
+	_bool				Picking(_float3* vPosition);
+
 	void				Update_ImGui();
 
 private:

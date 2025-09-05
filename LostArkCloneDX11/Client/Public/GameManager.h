@@ -4,6 +4,7 @@
 
 NS_BEGIN(Engine)
 class CCamera;
+class CGameInstance;
 NS_END
 
 NS_BEGIN(Client)
@@ -16,10 +17,11 @@ private:
 	virtual ~CGameManager() = default;
 
 public:
-	_float3* Get_PickingPos() { return m_pPickingPos; }
+	_float3* Get_PickingPos() { return &m_PickingPos; }
 	CCamera* Get_Camera() { return m_pCamera; }
 
 	void Set_Camera(CCamera* pCamera);
+	void Set_Level(LEVEL eLevel) { m_eCurLevel = eLevel; }
 public:
 	HRESULT Initialize_Manager();
 
@@ -43,16 +45,26 @@ public:
 	const _bool			Use_Skill(_uint iSkillID) const;
 #pragma endregion
 
+#pragma region BUFF_MANAGER
+	class CBuff* Add_Buff(_uint iBuffID);
+	void Remove_Buff(class CBuff* pBuff);
+#pragma endregion
+
 
 	void Bind_PickingPos(_float3* pPickingPos);
+	_vector Picking_Terrains();
 	
 
 private:
-	_float3*				m_pPickingPos = {};
+	_float3					m_PickingPos = {};
+	LEVEL					m_eCurLevel = {};
+
+	CGameInstance*			m_pGameInstance = { nullptr };
 	class CCamera*			m_pCamera = { nullptr };
 
 	class CData_Manager*	m_pData_Manager = { nullptr };
 	class CSkill_Manager*	m_pSkill_Manager = { nullptr };
+	class CBuff_Manager*	m_pBuff_Manager = { nullptr };
 
 public:
 	virtual void Free() override;
