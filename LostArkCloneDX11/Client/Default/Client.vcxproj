@@ -163,6 +163,8 @@
     <ClInclude Include="..\public\Background_Logo.h" />
     <ClInclude Include="..\public\Body_Player.h" />
     <ClInclude Include="..\public\Boss.h" />
+    <ClInclude Include="..\public\Buff.h" />
+    <ClInclude Include="..\public\Buff_Manager.h" />
     <ClInclude Include="..\public\Camera_Fix.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Canvars.h" />
@@ -200,6 +202,8 @@
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Player_ChangeStance.h" />
+    <ClInclude Include="..\public\Player_ChargeSkill.h" />
+    <ClInclude Include="..\public\Player_ComboSkill.h" />
     <ClInclude Include="..\public\Player_Dash.h" />
     <ClInclude Include="..\public\Player_Hit.h" />
     <ClInclude Include="..\public\Player_Move.h" />
@@ -238,6 +242,8 @@
     <ClCompile Include="..\private\Background_Logo.cpp" />
     <ClCompile Include="..\private\Body_Player.cpp" />
     <ClCompile Include="..\private\Boss.cpp" />
+    <ClCompile Include="..\private\Buff.cpp" />
+    <ClCompile Include="..\private\Buff_Manager.cpp" />
     <ClCompile Include="..\private\Camera_Fix.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Canvars.cpp" />
@@ -296,6 +302,8 @@
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\Player_ChangeStance.cpp" />
+    <ClCompile Include="..\private\Player_ChargeSkill.cpp" />
+    <ClCompile Include="..\private\Player_ComboSkill.cpp" />
     <ClCompile Include="..\private\Player_Dash.cpp" />
     <ClCompile Include="..\private\Player_Hit.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />

@@ -208,6 +208,18 @@
     <Filter Include="02.GameObject\Player\States\HIT">
       <UniqueIdentifier>{43282a82-1efe-4949-a116-192f2b3f64d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\States\CHARGE_SKILL">
+      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\States\COMBO">
+      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Buff">
+      <UniqueIdentifier>{57eebbcf-8d91-4142-b682-090531719bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Buff\Manager">
+      <UniqueIdentifier>{252a5b4f-6baa-45c0-9ba1-7a1e3cc11c2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -408,6 +420,18 @@
     <ClInclude Include="..\public\Player_Hit.h">
       <Filter>02.GameObject\Player\States\HIT</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Player_ChargeSkill.h">
+      <Filter>02.GameObject\Player\States\CHARGE_SKILL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_ComboSkill.h">
+      <Filter>02.GameObject\Player\States\COMBO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Buff.h">
+      <Filter>05. Buff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Buff_Manager.h">
+      <Filter>05. Buff\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -602,6 +626,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Player_Hit.cpp">
       <Filter>02.GameObject\Player\States\HIT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_ChargeSkill.cpp">
+      <Filter>02.GameObject\Player\States\CHARGE_SKILL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_ComboSkill.cpp">
+      <Filter>02.GameObject\Player\States\COMBO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Buff.cpp">
+      <Filter>05. Buff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Buff_Manager.cpp">
+      <Filter>05. Buff\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

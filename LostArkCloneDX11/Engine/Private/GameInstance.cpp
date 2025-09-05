@@ -386,7 +386,7 @@ void CGameInstance::Clear_Fonts()
 
 #pragma region LIGHT_MANAGER
 
-const LIGHT_DESC& CGameInstance::Get_Desc(_uint iLightIndex)
+const LIGHT_DESC& CGameInstance::Get_LightDesc(_uint iLightIndex)
 {
 	return m_pLight_Manager->Get_Desc(iLightIndex);
 }

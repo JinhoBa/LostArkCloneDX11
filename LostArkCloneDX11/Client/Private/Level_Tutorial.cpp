@@ -15,6 +15,9 @@ CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 HRESULT CLevel_Tutorial::Initialize()
 {
+    if (FAILED(Ready_Light()))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
 
@@ -37,6 +40,22 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 
 HRESULT CLevel_Tutorial::Render()
 {
+
+    return S_OK;
+}
+
+HRESULT CLevel_Tutorial::Ready_Light()
+{
+    LIGHT_DESC Desc = {};
+
+    Desc.eType = LIGHT::DIRECTIONAL;
+    Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    Desc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+    Desc.vSpecular = _float4(1.f, 1.f, 1.f, 0.5f);
+    Desc.vDirection = _float4(0.5f, 0.5f, -0.5f, 0.f);
+
+    if (FAILED(m_pGameInstance->Add_Light(Desc)))
+        return E_FAIL;
 
     return S_OK;
 }

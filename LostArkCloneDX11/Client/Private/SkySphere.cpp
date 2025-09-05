@@ -77,7 +77,7 @@ HRESULT CSkySphere::Render()
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::EMISSIVE)))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(0)))
+        if (FAILED(m_pShaderCom->Begin(3)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Render(i)))
