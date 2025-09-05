@@ -23,16 +23,19 @@ HRESULT CPlayer_Dash::Initilize(CStateMachine* pStateMachine, STANCE* pStance, C
 void CPlayer_Dash::Enter(void* pArg)
 {
 	if(STANCE::FLURRY ==  *m_pPlayerStance)
-		m_pPlayer->Set_Animation(127, false);
+		m_pPlayer->Set_Animation(127, false, 0.f);
 	else
-		m_pPlayer->Set_Animation(128, false);
+		m_pPlayer->Set_Animation(128, false, 0.f);
+
+	m_bChangeStance = false;
 }
 
 void CPlayer_Dash::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->Get_KeyDown(DIK_Z))
+	if (m_pGameInstance->Get_KeyDown(DIK_Z) && false == m_bChangeStance)
 	{
 		m_pPlayer->Change_Stance();
+		m_bChangeStance = true;
 	}
 
 	if (m_pPlayer->isAnimationFinish())

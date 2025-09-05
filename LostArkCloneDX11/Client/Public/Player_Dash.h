@@ -16,6 +16,9 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
 
+private:
+	_bool m_bChangeStance = {};
+
 public:
 	static CPlayer_Dash* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
 	virtual void Free() override;

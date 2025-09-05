@@ -88,7 +88,7 @@ const _float4x4* CModel::Get_BoneMatrixPrt(const _char* pBoneName)
 void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoop, _float fChangeTime)
 {
     m_isLoop = bLoop;
-
+    
     if(m_iCurrentAnimIndex != iIndex)
     {
         pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(m_pRootBone->Get_CombinedTransformationMatrix().r[3], XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
@@ -96,6 +96,7 @@ void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoo
         Update_PreAnimationKeyFrames(pTransform);
         m_fMaxInterpolationTime = fChangeTime;
         m_fInterpolationTime = 0.f;
+        m_Animations[m_iPreAnimIndex]->Reset_TrackPosition();
     }
 
     m_iPreAnimIndex = m_iCurrentAnimIndex;
