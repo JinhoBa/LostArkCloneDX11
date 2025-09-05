@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "Player_Move.h"
 #include "Player_NormalSkill.h"
+#include "Player_ChargeSkill.h"
+#include "Player_ComboSkill.h"
 #include "Player_ChangeStance.h"
 
 CPlayer_Idle::CPlayer_Idle()
@@ -39,6 +41,7 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 {
 	if(__super::Check_Dash())
 	{
+		m_pPlayer->TurnToCursor();
 		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::DASH), nullptr);
 		return;
 	}
@@ -53,6 +56,8 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 	_bool bLoop = { false };
 	_uint iSkillID = {};
 	_uint iAnimationIndex = {};
+	_uint iKey = {};
+	_uint iCount = {};
 
 	if (m_pGameInstance->Get_KeyDown(DIK_V))
 	{
@@ -76,6 +81,7 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 			iSkillID = 2;
 			iAnimationIndex = 137;
 			isUseSkill = m_pGameManager->Use_Skill(iSkillID);
+			
 		}
 		else if (m_pGameInstance->Get_KeyDown(DIK_R))
 		{
@@ -100,6 +106,7 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 			iSkillID = 6;
 			iAnimationIndex = 30;
 			isUseSkill = m_pGameManager->Use_Skill(iSkillID);
+			
 		}
 		else if (m_pGameInstance->Get_KeyDown(DIK_F))
 		{
@@ -113,7 +120,9 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 		if (m_pGameInstance->Get_KeyDown(DIK_Q))
 		{
 			iSkillID = 8;
-			iAnimationIndex = 17;
+			iAnimationIndex = 164;
+			iCount = 2;
+			iKey = DIK_Q;
 			isUseSkill = m_pGameManager->Use_Skill(iSkillID);
 		}
 		else if (m_pGameInstance->Get_KeyDown(DIK_W))
@@ -137,26 +146,61 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 		else if (m_pGameInstance->Get_KeyDown(DIK_D))
 		{
 			iSkillID = 12;
-			iAnimationIndex = 126;
+			iKey = DIK_D;
 			isUseSkill = m_pGameManager->Use_Skill(iSkillID);
 		}
 		else if (m_pGameInstance->Get_KeyDown(DIK_F))
 		{
 			iSkillID = 13;
-			iAnimationIndex = 133;
+			iKey = DIK_F;
 			isUseSkill = m_pGameManager->Use_Skill(iSkillID);
 		}
 	}
 
 	if (true == isUseSkill)
 	{
-		CPlayer_NormalSkill::NORMALSKILL_DESC Desc = {};
+		SKILL_TYPE eType = m_pGameManager->Get_SkillInfo_Prt(iSkillID)->eSkilltype;
 
-		Desc.bLoop = bLoop;
-		Desc.iAnimationIndex = iAnimationIndex;
-		Desc.iSkillID = iSkillID;
+		if(SKILL_TYPE::SKILL_NORAML == eType)
+		{
+			CPlayer_NormalSkill::NORMALSKILL_DESC Desc = {};
 
-		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::NORMAL_SKILL), &Desc);
+			Desc.bLoop = bLoop;
+			Desc.iAnimationIndex = iAnimationIndex;
+			Desc.iSkillID = iSkillID;
+
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::NORMAL_SKILL), &Desc);
+		}
+		else if(SKILL_TYPE::SKILL_CHARGE == eType)
+		{
+			CPlayer_ChargeSkill::CHARGESKILL_DESC Desc = {};
+
+			Desc.iKey = iKey;
+			Desc.iSkillID = iSkillID;
+
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::CHARGE_SKILL), &Desc);
+		}
+		else if(SKILL_TYPE::SKILL_COMBO == eType)
+		{
+			CPlayer_ComboSkill::COMBOSKILL_DESC Desc = {};
+
+			Desc.iKey = iKey;
+			Desc.iSkillID = iSkillID;
+			Desc.iAnimationIndex = iAnimationIndex;
+			Desc.iCount = iCount;
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::COMBO_SKILL), &Desc);
+		}
+		else
+		{
+			CPlayer_NormalSkill::NORMALSKILL_DESC Desc = {};
+
+			Desc.bLoop = bLoop;
+			Desc.iAnimationIndex = iAnimationIndex;
+			Desc.iSkillID = iSkillID;
+
+			m_pPlayer->TurnToCursor();
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::NORMAL_SKILL), &Desc);
+		}
 	}
 	else
 	{

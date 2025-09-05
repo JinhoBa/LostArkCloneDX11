@@ -284,6 +284,8 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
             Skill_Info.eSkilltype = SKILL_TYPE::SKILL_COMBO;
         else if (!strcmp(pSkillType, "point"))
             Skill_Info.eSkilltype = SKILL_TYPE::SKILL_POINT;
+        else if (!strcmp(pSkillType, "charge"))
+            Skill_Info.eSkilltype = SKILL_TYPE::SKILL_CHARGE;
         else
             return E_FAIL;
 

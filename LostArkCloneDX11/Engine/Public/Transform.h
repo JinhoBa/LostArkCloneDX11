@@ -55,6 +55,7 @@ public:
 	void Rotation(_fvector vAxis, _float fRadian);
 	void Rotation(_float fRadianX, _float fRadianY, _float fRadianZ);
 	void LookAt(_fvector vTarget);
+	void TurnTo(_fvector vTarget);
 
 private:
 	_float		m_fSpeedPersec = {};

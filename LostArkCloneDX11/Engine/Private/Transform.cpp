@@ -225,6 +225,19 @@ void CTransform::LookAt(_fvector vTarget)
 
 }
 
+void CTransform::TurnTo(_fvector vTarget)
+{
+    _float3 vScale = Get_Scale();
+
+    _vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+    _vector vRight = XMVector3Cross(vUp, vTarget - Get_State(STATE::POSITION));
+    _vector vLook = XMVector3Cross(vRight, vUp);
+
+    Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
+    Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
+    Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CTransform* pInstance = new CTransform(pDevice, pContext);

@@ -15,7 +15,7 @@ NS_BEGIN(Client)
 class CPlayer final : public CContainerObject
 {
 public:
-	enum STATE {IDLE, MOVE, NORMAL_SKILL, DASH, CHANGE_STANCE, HIT, STATE_END};
+	enum STATE {IDLE, MOVE, NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE, HIT, STATE_END};
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -40,13 +40,16 @@ public:
 
 public:
 	_bool	Move(_float fTimeDelta);
+	void	TurnToCursor();
 	void	Change_Stance();
 
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 
 	PLAYER_INFO				m_PlayerInfo = {};
-	_float3*				m_pPickingPos = { nullptr };
+
+	STAT					m_Default_Stat = {};
+	STAT					m_Final_Stat = {};
 
 	class CStateMachine*	m_pStateMachineCom = { nullptr };
 	class CState*			m_States[STATE_END] = {};

@@ -16,6 +16,8 @@
 #include "Player_Idle.h"
 #include "Player_Move.h"
 #include "Player_NormalSkill.h"
+#include "Player_ChargeSkill.h"
+#include "Player_ComboSkill.h"
 #include "Player_ChangeStance.h"
 #include "Player_Dash.h"
 #include "Player_Hit.h"
@@ -53,6 +55,11 @@ _bool CPlayer::Move(_float fTimeDelta)
         return false;
 
     return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f));
+}
+
+void CPlayer::TurnToCursor()
+{
+    m_pTransformCom->TurnTo(m_pGameManager->Picking_Terrains());
 }
 
 HRESULT CPlayer::Initialize_Prototype()
@@ -94,6 +101,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
+
+    if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+        m_pGameManager->Picking_Terrains();
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -112,7 +122,6 @@ void CPlayer::Update(_float fTimeDelta)
     m_pGameManager->Update_Skills(fTimeDelta);
 
     //Key_Input(fTimeDelta);
-
 
 }
 
@@ -160,6 +169,8 @@ HRESULT CPlayer::Ready_States()
     m_States[IDLE] = CPlayer_Idle::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[MOVE] = CPlayer_Move::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[NORMAL_SKILL] = CPlayer_NormalSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[CHARGE_SKILL] = CPlayer_ChargeSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[COMBO_SKILL] = CPlayer_ComboSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[DASH] = CPlayer_Dash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
