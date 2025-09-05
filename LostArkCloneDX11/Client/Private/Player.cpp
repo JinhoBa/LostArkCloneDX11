@@ -37,9 +37,9 @@ CPlayer::CPlayer(const CPlayer& Prototype)
     Safe_AddRef(m_pGameManager);
 }
 
-void CPlayer::Set_Animation(_uint iIndex, _bool bLoop)
+void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
 {
-    static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Set_Animation(iIndex, bLoop);
+    static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Set_Animation(iIndex, bLoop, fLerpTime);
 }
 
 _bool CPlayer::isAnimationFinish()

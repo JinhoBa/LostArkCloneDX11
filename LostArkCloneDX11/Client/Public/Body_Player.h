@@ -22,7 +22,7 @@ public:
 	const _bool isAnimationFinish() const { 
 		return m_isAnimationFinish; }
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
-	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false);
+	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.1f);
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

@@ -125,14 +125,11 @@ HRESULT CBody_Player::Render()
     return S_OK;
 }
 
-void CBody_Player::Set_Animation(_uint iAnimationIdex, _bool bLoop)
+void CBody_Player::Set_Animation(_uint iAnimationIdex, _bool bLoop, _float fLerpTime)
 {
     m_isAnimationFinish = false;
 
-    m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, iAnimationIdex, bLoop);
-
-    XMStoreFloat4x4(&m_CombinedWorldMatrix,
-        XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+    m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, iAnimationIdex, bLoop, fLerpTime);
 }
 
 HRESULT CBody_Player::Add_Components()

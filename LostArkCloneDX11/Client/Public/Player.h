@@ -26,7 +26,7 @@ public:
 	const STANCE	Get_Stance() { return m_PlayerInfo.eStance; }
 	PLAYER_INFO*	Get_Info() { return &m_PlayerInfo; }
 	CState*			Get_State(STATE eState) { return m_States[eState]; }
-	void			Set_Animation(_uint iIndex, _bool bLoop = false);
+	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
 	_bool			isAnimationFinish();
 
 
