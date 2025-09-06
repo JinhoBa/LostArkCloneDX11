@@ -63,6 +63,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 			m_eState = CPlayer_ChargeSkill::LOOP;
 			m_pPlayer->Set_Animation(m_iAnimLoop, true, 0.f);
 			m_fChargeTime = 0.f;
+			m_pPlayer->Play_CameraAnimation(CAMERA_ANIM::ZOOMOUT);
 		}
 		break;
 

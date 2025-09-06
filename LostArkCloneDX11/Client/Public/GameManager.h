@@ -39,7 +39,8 @@ public:
 #pragma endregion
 
 #pragma region SKILL_MANAGER
-	void				Update_Skills(_float fTimeDelta);
+	void		Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
+	void		Update_Skills(_float fTimeDelta);
 
 	const _float		Check_CoolTime(_uint iSkillID) const;
 	const _bool			Use_Skill(_uint iSkillID) const;

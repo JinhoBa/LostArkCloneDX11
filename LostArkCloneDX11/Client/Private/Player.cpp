@@ -10,6 +10,7 @@
 #include "Body_Player.h"
 #include "Weapon_Player.h"
 #include "Buff.h"
+#include "Camera_Fix.h"
 
 #pragma region STATE
 #include "StateMachine.h"
@@ -110,6 +111,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(40.f, 0.f, 40.f, 1.f));
 
     m_pStateMachineCom->Start_State(m_States[IDLE]);
+
+    m_pGameManager->Set_PlayerInfoPrt(&m_PlayerInfo);
 
     return S_OK;
 }
@@ -254,6 +257,11 @@ void CPlayer::Add_Buff(_uint iBuffID)
 
     if(m_Buffs.end() == iter)
         m_Buffs.push_back(m_pGameManager->Add_Buff(iBuffID));
+}
+
+void CPlayer::Play_CameraAnimation(CAMERA_ANIM eState)
+{
+    dynamic_cast<CCamera_Fix*>(CGameManager::GetInstance()->Get_Camera())->Set_State(eState);
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

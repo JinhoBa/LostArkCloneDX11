@@ -17,6 +17,7 @@ private:
 
 public:
 	void Set_CameraTargetPosition(_vector TargetPosition);
+	void Set_State(CAMERA_ANIM eState) { m_eCurState = eState; }
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -27,13 +28,21 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	CAMERA_ANIM		m_ePreState = {};
+	CAMERA_ANIM		m_eCurState = {};
+
 	_uint			m_iCameraBoneIndex = {};
+
+	_float			m_fDuration = {};
+	_float          m_fTimeAcc = {};
+
 	_float3			m_vDistance = {};
 
 	_float4			m_pTargetPosition = {};
 
 private:
 	void		Update_Camera_Position();
+	void		Change_State();
 
 public:
 	static CCamera_Fix* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

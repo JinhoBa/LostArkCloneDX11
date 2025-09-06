@@ -7,6 +7,12 @@ CSkill_Manager::CSkill_Manager()
 {
 }
 
+void CSkill_Manager::Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo)
+{
+	for (auto& pSkill : m_Skills)
+		pSkill->Set_PlayerInfo(pPlayerInfo);
+}
+
 const _float CSkill_Manager::Check_CoolTime(_uint iSkillID) const
 {
 	return m_Skills[iSkillID]->Get_CoolTime();

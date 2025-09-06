@@ -11,6 +11,7 @@ private:
 	virtual ~CSkill_Manager() = default;
 
 public:
+	void	Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
 	const _float Check_CoolTime(_uint iSkillID) const;
 	const _bool Use_Skill(_uint iSkillID) const;
 

@@ -89,6 +89,10 @@ SKILL_INFO* CGameManager::Get_SkillInfo_Prt(_uint iSkillID)
 #pragma endregion
 
 #pragma region SKILL_MANAGER
+void CGameManager::Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo)
+{
+	m_pSkill_Manager->Set_PlayerInfoPrt(pPlayerInfo);
+}
 
 void CGameManager::Update_Skills(_float fTimeDelta)
 {

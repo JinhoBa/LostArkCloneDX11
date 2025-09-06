@@ -2,6 +2,9 @@
 #include "Skill.h"
 
 #include "GameManager.h"
+#include "GameInstance.h"
+
+#include "Player.h"
 
 CSkill::CSkill()
 	:m_bUse{ true }, m_fCoolTime{ 0.f }
@@ -19,7 +22,7 @@ HRESULT CSkill::Initialize(_uint iSkillID)
 }
 void CSkill::Update(_float fTimeDelta)
 {
-	if (false == m_bUse)
+	if (false == m_bUse )
 	{
 		m_fCoolTime -= fTimeDelta;
 
@@ -33,9 +36,11 @@ void CSkill::Update(_float fTimeDelta)
 
 _bool CSkill::Use_Skill()
 {
-	if (false == m_bUse)
+	if (false == m_bUse || m_pPlayerInfo->fMp < (_float)m_pSkill_Info->iNeedMp)
 		return false;
 
+	m_pPlayerInfo->fMp -= (_float)m_pSkill_Info->iNeedMp;
+	
 	m_bUse = false;
 
 	m_fCoolTime = m_pSkill_Info->fCoolTime;

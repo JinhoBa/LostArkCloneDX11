@@ -12,6 +12,7 @@ public:
 	virtual ~CSkill() = default;
 
 public:
+	void Set_PlayerInfo(PLAYER_INFO* pPlayerInfo) { m_pPlayerInfo = pPlayerInfo; }
 	const _float Get_CoolTime() const { return m_fCoolTime; }
 	const SKILL_INFO* Get_Skill_Info() { return m_pSkill_Info; }
 
@@ -24,6 +25,7 @@ public:
 private:
 	_bool				m_bUse = {};
 	_float				m_fCoolTime = {};
+	PLAYER_INFO*		m_pPlayerInfo = { nullptr };
 
 	const SKILL_INFO*	m_pSkill_Info = { nullptr };
 

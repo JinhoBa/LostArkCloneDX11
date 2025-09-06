@@ -14,7 +14,8 @@ namespace Client
 
 	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, TUTORIAL, MAP_EDITOR, END};
 	enum class STANCE {FLURRY, FOCUS, IDEN_END};
-	
+	enum class CAMERA_ANIM { IDLE, SHAKE, ZOOMOUT };
+
 	enum class ATTACK_TYPE {NORMAL, HEAD, BACK};
 	enum class HIT_TYPE { NORMAL, PUSH, FLOAT };
 

@@ -32,7 +32,8 @@ HRESULT CCamera_Fix::Initialize(void* pArg)
         return E_FAIL;
 
     m_vDistance = _float3(0.f, 5.f, -5.f);
-
+    m_eCurState = m_ePreState = CAMERA_ANIM::IDLE;
+    m_fTimeAcc = 0.f;
     CGameManager::GetInstance()->Set_Camera(this);
 
     return S_OK;
@@ -80,7 +81,36 @@ void CCamera_Fix::Priority_Update(_float fTimeDelta)
 
 void CCamera_Fix::Update(_float fTimeDelta)
 {
- 
+    Change_State();
+
+    switch (m_eCurState)
+    {   
+    case Client::CAMERA_ANIM::IDLE:
+
+        break;
+    case Client::CAMERA_ANIM::SHAKE:
+        m_fTimeAcc += fTimeDelta;
+
+        if (m_fTimeAcc >= m_fDuration)
+            m_eCurState = CAMERA_ANIM::IDLE;
+
+        break;
+
+    case Client::CAMERA_ANIM::ZOOMOUT:
+         m_fTimeAcc += fTimeDelta;
+         if (m_fTimeAcc < m_fDuration)
+         {
+             m_vDistance.z -= fTimeDelta* 0.5f;
+             m_vDistance.y += fTimeDelta * 0.5f;
+         }
+        else
+            m_eCurState = CAMERA_ANIM::IDLE;
+        break;
+
+    default:
+        break;
+    }
+
 }
 
 void CCamera_Fix::Late_Update(_float fTimeDelta)
@@ -96,12 +126,52 @@ HRESULT CCamera_Fix::Render()
 
 void CCamera_Fix::Update_Camera_Position()
 {
-    m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_pTargetPosition) + XMLoadFloat3(&m_vDistance));
+    if (CAMERA_ANIM::SHAKE == m_eCurState)
+    {
+        _float4 fRandomPosition = _float4(
+            m_pTargetPosition.x + m_pGameInstance->Random(-0.3f, 0.3f),
+            m_pTargetPosition.y + m_pGameInstance->Random(-0.3f, 0.3f),
+            m_pTargetPosition.z + m_pGameInstance->Random(-0.3f, 0.3f), 1.f
+        );
+
+        m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&fRandomPosition) + XMLoadFloat3(&m_vDistance));
+    }
+    else
+        m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_pTargetPosition) + XMLoadFloat3(&m_vDistance));
 
     m_pTransformCom->LookAt(XMLoadFloat4(&m_pTargetPosition));
 }
 
+void CCamera_Fix::Change_State()
+{
+    if (m_ePreState != m_eCurState)
+    {
+        switch (m_eCurState)
+        {
+        case CAMERA_ANIM::IDLE:
+            m_fTimeAcc = 0.f;
+            m_vDistance = _float3(0.f, 5.f, -5.f);
+            break;
 
+        case CAMERA_ANIM::SHAKE:
+            m_fTimeAcc = 0.f;
+            m_fDuration = 1.f;
+
+            break;
+        case CAMERA_ANIM::ZOOMOUT:
+            m_fTimeAcc = 0.f;
+            m_fDuration = 1.f;
+ 
+            break;
+
+
+        default:
+            break;
+        }
+        m_ePreState = m_eCurState;
+    }
+
+}
 
 CCamera_Fix* CCamera_Fix::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

@@ -30,7 +30,7 @@ public:
 	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
 	_bool			isAnimationFinish();
-
+	
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -45,7 +45,7 @@ public:
 	void	TurnToCursor();
 	void	Change_Stance();
 	void	Add_Buff(_uint iBuffID);
-
+	void	Play_CameraAnimation(CAMERA_ANIM eState);
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 
