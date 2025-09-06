@@ -164,7 +164,7 @@ void CPlayer_Move::Update(_float fTimeDelta)
 		}
 		else if (SKILL_TYPE::SKILL_CHARGE == eType)
 		{
-			CPlayer_ChargeSkill::CHARGESKILL_DESC Desc = {};
+			CPlayer_ChargeSkill::CHARGESTATE_DESC Desc = {};
 
 			Desc.iKey = iKey;
 			Desc.iSkillID = iSkillID;

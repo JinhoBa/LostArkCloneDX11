@@ -37,6 +37,13 @@ CPlayer::CPlayer(const CPlayer& Prototype)
     Safe_AddRef(m_pGameManager);
 }
 
+void CPlayer::Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime)
+{
+    m_ChargeSkill_Desc.isUsing = isUsing;
+    m_ChargeSkill_Desc.fChargingTime = fChargingTime;
+
+}
+
 void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
 {
     static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Set_Animation(iIndex, bLoop, fLerpTime);
@@ -78,6 +85,10 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_DefaultInfo.fMoveSpeed = 3.f;
 
     memcpy(&m_PlayerInfo, &m_DefaultInfo, sizeof(PLAYER_INFO));
+
+    m_ChargeSkill_Desc.isUsing = false;
+    m_ChargeSkill_Desc.fMaxChargeTime = 1.f;
+    m_ChargeSkill_Desc.fChargingTime = 0.f;
 
 
     GAMEOBJECT_DESC Desc = {};
@@ -185,7 +196,11 @@ void CPlayer::Update_Buff(_float fTimeDelta)
 {
     if (m_Buffs.empty())
     {
-        memcpy(&m_PlayerInfo, &m_DefaultInfo, sizeof(PLAYER_INFO));
+        m_PlayerInfo.Critical_Damage = m_DefaultInfo.Critical_Damage;
+        m_PlayerInfo.Critical_Probability = m_DefaultInfo.Critical_Probability;
+        m_PlayerInfo.fAttack = m_DefaultInfo.fAttack;
+        m_PlayerInfo.fAttackSpeed = m_DefaultInfo.fAttackSpeed;
+        m_PlayerInfo.fMoveSpeed = m_DefaultInfo.fMoveSpeed;
         return;
     }
 

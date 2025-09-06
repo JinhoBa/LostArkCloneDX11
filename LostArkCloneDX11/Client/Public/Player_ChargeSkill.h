@@ -14,7 +14,7 @@ public:
 	{
 		_int  iKey;
 		_uint iSkillID;
-	}CHARGESKILL_DESC;
+	}CHARGESTATE_DESC;
 private:
 	CPlayer_ChargeSkill();
 	virtual ~CPlayer_ChargeSkill() = default;

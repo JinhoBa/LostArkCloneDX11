@@ -34,7 +34,6 @@ namespace Client
 		_uint iHitType;
 	}HIT_INFO;
 
-
 	typedef struct tagPlayer_Info
 	{
 		STANCE eStance;
@@ -59,6 +58,14 @@ namespace Client
 		_float Critical_Probability_Flat;
 		_float Critical_Damage_Pct;
 	}BUFFSTAT;
+
+	typedef struct tagChargeSkill_Desc
+	{
+		_bool	isUsing;
+		_float	fMaxChargeTime;
+		_float	fChargingTime;
+	}CHARGE_SKILL_DESC;
+
 
 	typedef struct tagMapData
 	{

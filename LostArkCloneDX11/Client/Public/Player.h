@@ -25,6 +25,8 @@ private:
 public:
 	const STANCE	Get_Stance() const { return m_PlayerInfo.eStance; }
 	PLAYER_INFO*	Get_Info() { return &m_PlayerInfo; }
+	const CHARGE_SKILL_DESC* Get_ChargeSkill_Desc() { return &m_ChargeSkill_Desc; }
+	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);
 	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
 	_bool			isAnimationFinish();
@@ -49,8 +51,9 @@ private:
 
 	PLAYER_INFO				m_DefaultInfo = {};
 	PLAYER_INFO				m_PlayerInfo = {};
-
+	
 	BUFFSTAT				m_BuffStat = {};
+	CHARGE_SKILL_DESC		m_ChargeSkill_Desc = {};
 
 	class CStateMachine*	m_pStateMachineCom = { nullptr };
 	class CState*			m_States[STATE_END] = {};
