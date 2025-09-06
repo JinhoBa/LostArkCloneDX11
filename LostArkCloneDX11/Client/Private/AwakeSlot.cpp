@@ -106,9 +106,9 @@ HRESULT CAwakeSlot::Render()
 
 	if (0.f != m_fCoolTime)
 	{
-		_float4 vCooltime = _float4((m_fMaxCoolTime - m_fCoolTime) / m_fMaxCoolTime, 0.f, 0.f, 0.f);
+		_float fCooltime = (m_fMaxCoolTime - m_fCoolTime) / m_fMaxCoolTime;
 
-		if (FAILED(m_pShaderCom->Bind_Value("g_Vecotr", &vCooltime)))
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &fCooltime, sizeof(_float))))
 			return E_FAIL;
 	}
 

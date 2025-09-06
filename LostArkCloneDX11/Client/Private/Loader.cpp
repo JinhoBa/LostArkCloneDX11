@@ -21,6 +21,9 @@
 #include "SkillSlot.h"
 #include "AwakeSlot.h"
 #include "TopMenu.h"
+#include "UtilitySkillUI.h"
+#include "UtilitySkillSlot.h"
+#include "HoldingSkillUI.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -263,9 +266,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/EpicSkill_%d.dds"), 3))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Texture_Iden_Buff */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Buff"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/buff.dds"), 1))))
+	/* For.Prototype_Component_Texture_UtilitySkill */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_UtilitySkill"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/UtilitySkill_%d.dds"), 3))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Iden_Gauge */
@@ -276,6 +279,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Texture_Iden_Gauge_Fire */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Gauge_Fire"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/iden/Gauge/identity_Gauge_Fire_%d.dds"), 12))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Iden_HoldingSkillUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_HoldingSkillUI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/HoldingSkill/Holding_%d.dds"), 3))))
 		return E_FAIL;
 
 #pragma endregion
@@ -452,6 +460,21 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Iden_Gauge */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Iden_Gauge"),
 		CIden_Gauge::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UtilitySkillUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_UtilitySkillUI"),
+		CUtilitySkillUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_UtilitySkillSlot */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_UtilitySkillSlot"),
+		CUtilitySkillSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_HoldingSkillUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HoldingSkillUI"),
+		CHoldingSkillUI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

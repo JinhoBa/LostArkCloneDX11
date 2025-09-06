@@ -9,6 +9,7 @@
 #include "PartObject.h"
 #include "Body_Player.h"
 #include "Weapon_Player.h"
+#include "Buff.h"
 
 #pragma region STATE
 #include "StateMachine.h"
@@ -22,9 +23,6 @@
 #include "Player_Dash.h"
 #include "Player_Hit.h"
 #pragma endregion
-
-
-
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CContainerObject{ pDevice, pContext }, m_pGameManager{ CGameManager::GetInstance() }
@@ -54,7 +52,7 @@ _bool CPlayer::Move(_float fTimeDelta)
     if (nullptr == m_pGameManager->Get_PickingPos())
         return false;
 
-    return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f));
+    return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f), m_PlayerInfo.fMoveSpeed);
 }
 
 void CPlayer::TurnToCursor()
@@ -69,11 +67,18 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
-    m_PlayerInfo.eStance = STANCE::FLURRY;
-    m_PlayerInfo.fHp = m_PlayerInfo.fMaxHp = 10000.f;
-    m_PlayerInfo.fMp = m_PlayerInfo.fMaxMp = 8000.f;
-    m_PlayerInfo.fIdentity = 0.f;
-    m_PlayerInfo.fAttack = 10000.f;
+    m_DefaultInfo.eStance = STANCE::FLURRY;
+    m_DefaultInfo.fHp = m_DefaultInfo.fMaxHp = 10000.f;
+    m_DefaultInfo.fMp = m_DefaultInfo.fMaxMp = 8000.f;
+    m_DefaultInfo.fIdentity = 80.f;
+    m_DefaultInfo.fAttack = 10000.f;
+    m_DefaultInfo.Critical_Probability = 20.f;
+    m_DefaultInfo.Critical_Damage = 1.5f;
+    m_DefaultInfo.fAttackSpeed = 1.f;
+    m_DefaultInfo.fMoveSpeed = 3.f;
+
+    memcpy(&m_PlayerInfo, &m_DefaultInfo, sizeof(PLAYER_INFO));
+
 
     GAMEOBJECT_DESC Desc = {};
     Desc.fRotatePersec = 5.f;
@@ -104,6 +109,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
         m_pGameManager->Picking_Terrains();
+
+    Update_Buff(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -112,16 +119,12 @@ void CPlayer::Update(_float fTimeDelta)
     {
         m_PlayerInfo.fIdentity += 2.f * fTimeDelta;
     }
-    //if(m_pGameInstance->Get_KeyDown(DIK_Z))
-    //    Change_Stance();
 
     __super::Update(fTimeDelta);
 
     m_pStateMachineCom->Upadte(fTimeDelta);
 
     m_pGameManager->Update_Skills(fTimeDelta);
-
-    //Key_Input(fTimeDelta);
 
 }
 
@@ -139,9 +142,9 @@ HRESULT CPlayer::Render()
 }
 HRESULT CPlayer::Ready_PartObjects()
 {
-    CPartObject::PARTOBJECT_DESC Body_Desc = {};
+    CBody_Player::BODYPLAYER_DESC Body_Desc = {};
     Body_Desc.pParentTransform = m_pTransformCom;
-
+    Body_Desc.pAttackSpeed = &m_PlayerInfo.fAttackSpeed;
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Body_Desc)))
         return E_FAIL;
 
@@ -177,42 +180,41 @@ HRESULT CPlayer::Ready_States()
 
     return S_OK;
 }
+
+void CPlayer::Update_Buff(_float fTimeDelta)
+{
+    if (m_Buffs.empty())
+    {
+        memcpy(&m_PlayerInfo, &m_DefaultInfo, sizeof(PLAYER_INFO));
+        return;
+    }
+
+    auto iter = m_Buffs.begin();
+
+    ZeroMemory(&m_BuffStat, sizeof(BUFFSTAT));
+
+    for (; iter != m_Buffs.end();)
+    {
+        (*iter)->Update(fTimeDelta, &m_BuffStat);
+
+        if ((*iter)->isFinished())
+        {
+            m_pGameManager->Remove_Buff(*iter);
+            iter = m_Buffs.erase(iter);
+        }
+        else
+            iter++;
+    }
+
+    m_PlayerInfo.Critical_Damage = m_DefaultInfo.Critical_Damage * (1.f + m_BuffStat.Critical_Damage_Pct);
+    m_PlayerInfo.Critical_Probability = m_DefaultInfo.Critical_Probability + m_BuffStat.Critical_Probability_Flat;
+    m_PlayerInfo.fAttack = (m_DefaultInfo.fAttack + m_BuffStat.fAtk_Flat) * (1.f + m_BuffStat.Critical_Damage_Pct);
+    m_PlayerInfo.fAttackSpeed = m_DefaultInfo.fAttackSpeed * (1.f + m_BuffStat.fAtkSpeed_Pct);
+    m_PlayerInfo.fMoveSpeed = m_DefaultInfo.fMoveSpeed * (1.f + m_BuffStat.fMoveSpeed_Pct);
+}
+
 void CPlayer::Key_Input(_float fTimeDelta)
 {
- /*   if(STATE::IDLE == m_eCurState)
-    {
-        if (m_pGameInstance->Get_KeyDown(DIK_D))
-        {
-            if (m_pGameManger->Use_Skill(6))
-            {
-                m_eCurState = STATE::ATTACK;
-                m_iSkillID = 30;
-                m_bSkillLoop = false;
-            }
-        }
-        if (m_pGameInstance->Get_KeyDown(DIK_E))
-        {
-            if (m_pGameManger->Use_Skill(2))
-            {
-                m_eCurState = STATE::ATTACK;
-                m_iSkillID = 137;
-                m_bSkillLoop = false;
-            }
-        }
-        else if (m_pGameInstance->Get_KeyDown(DIK_Z))
-        {
-            if (m_PlayerInfo.fIdentity > 5.f)
-            {
-                Change_Stance();
-            }
-        }
-        else if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
-        {
-            m_pPickingPos = m_pGameManger->Get_PickingPos();
-            if(nullptr != m_pPickingPos)
-                m_eCurState = STATE::MOVE;
-        }
-    }*/
     
 }
 
@@ -221,9 +223,22 @@ void CPlayer::Change_Stance()
     m_PlayerInfo.eStance = STANCE::FLURRY == m_PlayerInfo.eStance ? STANCE::FOCUS : STANCE::FLURRY;
 
     if (40.f <= m_PlayerInfo.fIdentity)  //น๖วม
+    {
         m_PlayerInfo.fIdentity -= 40.f;
+        Add_Buff(0);
+    }
     else
         m_PlayerInfo.fIdentity = 0.f;
+}
+
+void CPlayer::Add_Buff(_uint iBuffID)
+{
+    auto iter = find_if(m_Buffs.begin(), m_Buffs.end(), [&](CBuff* pBuff)->_bool {
+        return (pBuff->Get_BuffID() == iBuffID);
+        });
+
+    if(m_Buffs.end() == iter)
+        m_Buffs.push_back(m_pGameManager->Add_Buff(iBuffID));
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

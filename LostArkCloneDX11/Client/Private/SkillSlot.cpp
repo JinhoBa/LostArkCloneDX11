@@ -113,9 +113,9 @@ HRESULT CSkillSlot::Render()
 
 		if(0.f != m_fCoolTime)
 		{
-			_float4 vCooltime = _float4((m_fMaxCoolTime[ENUM_TO_INT(m_eStance)] - m_fCoolTime) / m_fMaxCoolTime[ENUM_TO_INT(m_eStance)], 0.f, 0.f, 0.f);
+			_float fCooltime = (m_fMaxCoolTime[ENUM_TO_INT(m_eStance)] - m_fCoolTime) / m_fMaxCoolTime[ENUM_TO_INT(m_eStance)];
 
-			if (FAILED(m_pShaderCom->Bind_Value("g_Vecotr", &vCooltime)))
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &fCooltime, sizeof(_float))))
 				return E_FAIL;
 		}
 

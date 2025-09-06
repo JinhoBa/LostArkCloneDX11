@@ -37,7 +37,6 @@ HRESULT CHpBar::Initialize(void* pArg)
 	Desc.pParent_TransformCom = static_cast<UIBAR_DESC*>(pArg)->pParent_TransformCom;
 	Desc.fMax = 100.f;
 	Desc.fStartValue = 80.f;
-	Desc.fSizeY_Fill = Desc.fSizeY;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -63,10 +62,7 @@ void CHpBar::Update(_float fTimeDelta)
 
 void CHpBar::Late_Update(_float fTimeDelta)
 {
-	Update_Position();
-	m_vValue.x = m_pPlayerInfo->fHp / m_pPlayerInfo->fMaxHp;
-
-
+	m_fValue = m_pPlayerInfo->fHp / m_pPlayerInfo->fMaxHp;
 }
 
 HRESULT CHpBar::Render()
@@ -92,11 +88,6 @@ HRESULT CHpBar::Add_Components()
 	/*Shader_VTXPosTex*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-
-	/*Transform_Fill*/
-	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
-		TEXT("Com_Transform_Fill"), reinterpret_cast<CComponent**>(&m_pTransfromCom_BarFill))))
 		return E_FAIL;
 
 	return S_OK;

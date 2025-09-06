@@ -35,7 +35,6 @@ HRESULT CLevel_Tutorial::Initialize()
 
 void CLevel_Tutorial::Update(_float fTimeDelta)
 {
-
 }
 
 HRESULT CLevel_Tutorial::Render()
@@ -121,6 +120,11 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
 
     // 2 : TopMenu
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TopMenu"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
+    // 2 : HoldingSkillUI
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HoldingSkillUI"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 

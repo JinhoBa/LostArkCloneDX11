@@ -28,7 +28,7 @@ private:
 
 	CTexture*		m_pFireTextureCom = { nullptr };
 	CUIAnimation*	m_pAnimationCom = {nullptr};
-	_float4			m_vGauge = {};
+	_float			m_fGauge = {};
 	
 
 private:

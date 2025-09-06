@@ -35,10 +35,12 @@ HRESULT CExpBar::Initialize(void* pArg)
 	));
 	Desc.fMax = 100.f;
 	Desc.fStartValue = 0.1f;
-	Desc.fSizeY_Fill = 7.f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
+
+	Set_Indices(0, 1);
+	m_fValue = 0.8f;
 
 	return S_OK;
 }
@@ -57,8 +59,6 @@ void CExpBar::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 
 
-	Update_Bar(50.f);
-	Set_Indices(0, 1);
 }
 
 HRESULT CExpBar::Render()
@@ -69,7 +69,6 @@ HRESULT CExpBar::Render()
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-
 
 	// Background
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
@@ -82,14 +81,21 @@ HRESULT CExpBar::Render()
 		return E_FAIL;
 
 	// Render Fill
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransfromCom_BarFill->Get_WorldMatrix())))
-		return E_FAIL;
-
 	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iSRVIndex_Fill))))
 		return E_FAIL;
 
-	if (FAILED(Draw()))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fValue, sizeof(_float))))
 		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(3)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
 
 	/* Render Back */ 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
@@ -100,7 +106,7 @@ HRESULT CExpBar::Render()
 
 	if (FAILED(Draw()))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 
@@ -121,17 +127,12 @@ HRESULT CExpBar::Add_Components()
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	/*Transform_Fill*/
-	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
-		TEXT("Com_Transform_Fill"), reinterpret_cast<CComponent**>(&m_pTransfromCom_BarFill))))
-		return E_FAIL;
-
 	return S_OK;
 }
 
 HRESULT CExpBar::Draw()
 {
-	if (FAILED(m_pShaderCom->Begin(1)))
+	if (FAILED(m_pShaderCom->Begin(0)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Bind_Resources()))

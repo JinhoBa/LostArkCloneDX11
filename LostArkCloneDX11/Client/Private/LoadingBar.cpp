@@ -43,13 +43,15 @@ HRESULT CLoadingBar::Initialize(void* pArg)
 		ENUM_TO_INT(LEVEL::STATIC), TEXT("Layer_Canvars"), TEXT("Com_Transform")
 	));
 	Desc.fMax = 100.f;
-	Desc.fSizeY_Fill = Desc.fSizeY;
 	Desc.fStartValue = 0.1f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
 	m_pTransformCom_Point->Set_Scale(_float3(340.f, 30.f, 1.f));
+
+	Set_Indices(0, 1);
+
 	return S_OK;
 }
 
@@ -61,21 +63,17 @@ void CLoadingBar::Update(_float fTimeDelta)
 {
 	_float fProgress = m_pLoading->Get_Progress();
 
-	Update_Bar(fProgress);
-
 	_vector vPoint = XMVectorSet(fProgress* 12.8f - m_fSizeX * 0.5f - 155.f, -271.f, 1.f, 1.f);
 
 	m_pTransformCom_Point->Set_State(STATE::POSITION, vPoint);
 
-	m_vValue.x = fProgress / 100.f;
+	m_fValue = fProgress / 100.f;
 	
 }
 
 void CLoadingBar::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
-
-	Set_Indices(0, 1);
 }
 
 HRESULT CLoadingBar::Render()
@@ -115,11 +113,6 @@ HRESULT CLoadingBar::Add_Components()
 	/*Shader_VTXPosTex*/
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Shader_VTXPosTex"),
 		TEXT("Com_Shader_VTXPosTex"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-	
-	/*Transform_Fill*/
-	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_Component_Transform"),
-		TEXT("Com_Transform_Fill"), reinterpret_cast<CComponent**>(&m_pTransfromCom_BarFill))))
 		return E_FAIL;
 
 	/*Transform_Fill*/

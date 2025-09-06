@@ -220,6 +220,18 @@
     <Filter Include="05. Buff\Manager">
       <UniqueIdentifier>{252a5b4f-6baa-45c0-9ba1-7a1e3cc11c2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\BuffSlot">
+      <UniqueIdentifier>{4e357890-ea60-45d9-9705-186f6688e3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\UtilitySkill">
+      <UniqueIdentifier>{4a1d3c22-9428-4bc4-ba04-23934c3e03df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\UtilitySkill\Slot">
+      <UniqueIdentifier>{0e83961b-cc8e-4d37-ae06-98129a5f8570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\GamePlay\HoldSkillUI">
+      <UniqueIdentifier>{299b0d65-00f5-457a-bc24-2b210bc97b38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -432,6 +444,15 @@
     <ClInclude Include="..\public\Buff_Manager.h">
       <Filter>05. Buff\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UtilitySkillUI.h">
+      <Filter>03.UIObject\GamePlay\HUD\UtilitySkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UtilitySkillSlot.h">
+      <Filter>03.UIObject\GamePlay\HUD\UtilitySkill\Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HoldingSkillUI.h">
+      <Filter>03.UIObject\GamePlay\HoldSkillUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -638,6 +659,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Buff_Manager.cpp">
       <Filter>05. Buff\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UtilitySkillUI.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\UtilitySkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UtilitySkillSlot.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\UtilitySkill\Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HoldingSkillUI.cpp">
+      <Filter>03.UIObject\GamePlay\HoldSkillUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

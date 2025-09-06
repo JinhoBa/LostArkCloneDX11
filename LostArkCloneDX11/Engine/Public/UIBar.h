@@ -12,8 +12,6 @@ public:
 	{
 		_float fMax{};
 		_float fStartValue{};
-		_float fSizeY_Fill{};
-		_float fZ_Fill{};
 	}UIBAR_DESC;
 
 protected:
@@ -35,30 +33,16 @@ public:
 	virtual void	Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
-	
-
 protected:
 	_uint			m_iSRVIndex_Back = {};
 	_uint			m_iSRVIndex_Fill = {};
 
 	_float			m_fMax = {};
-	_float4			m_vValue = {};
-
-	_float			m_fX_Fill= {};
-	_float			m_fY_Fill= {};
-	_float			m_fZ_Fill= {};
-	_float			m_fSizeX_Fill= {};
-	_float			m_fSizeY_Fill= {};
-	
+	_float			m_fValue = {};
 
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTexture*		m_pTextureCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
-
-	CTransform*		m_pTransfromCom_BarFill = { nullptr };
-
-protected:
-	void Update_Bar(_float fValue);
 	
 
 public:

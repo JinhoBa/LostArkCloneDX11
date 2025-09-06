@@ -25,7 +25,7 @@ HRESULT CUIBar::Initialize(void* pArg)
     UIBAR_DESC* pDesc = static_cast<UIBAR_DESC*>(pArg);
 
     m_fMax = pDesc->fMax;
-    m_fSizeY_Fill = pDesc->fSizeY_Fill;
+    m_fValue = pDesc->fStartValue;
    
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -33,13 +33,8 @@ HRESULT CUIBar::Initialize(void* pArg)
     _float3 vPos = {};
     XMStoreFloat3(&vPos, m_pParent_TransformCom->Get_Position());
 
-    m_fY_Fill = vPos.y -m_fY;
-    m_vValue = _float4(0.f, 0.f, 0.f, 0.f);
-
     m_iSRVIndex_Back = 0;
     m_iSRVIndex_Fill = 1;
-
-    Update_Bar(pDesc->fStartValue);
 
     return S_OK;
 }
@@ -83,10 +78,8 @@ HRESULT CUIBar::Render()
         return E_FAIL;
 
     // Render Fill
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
-        return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Vector("g_Vecotr", &m_vValue)))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fValue, sizeof(_float))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iSRVIndex_Fill))))
@@ -105,22 +98,6 @@ HRESULT CUIBar::Render()
         return E_FAIL;
 
     return S_OK;
-}
-
-void CUIBar::Update_Bar(_float fValue)
-{
-    _float Value = fValue;
-
-    m_fSizeX_Fill = Value / m_fMax * m_fSizeX;
-
-    m_fX_Fill = m_fX + (m_fSizeX_Fill * 0.5f - m_fSizeX * 0.5f);
-
-    m_pTransfromCom_BarFill->Set_Scale(_float3(m_fSizeX_Fill, m_fSizeY_Fill, 1.f));
-
-    _float4 vPosition = { m_fX_Fill, m_fY_Fill , m_fZ, 1.f };
-
-    m_pTransfromCom_BarFill->Set_State(STATE::POSITION, XMLoadFloat4(&vPosition));
-
 }
 
 CUIBar* CUIBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -154,8 +131,6 @@ CGameObject* CUIBar::Clone(void* pArg)
 void CUIBar::Free()
 {
     __super::Free();
-
-    Safe_Release(m_pTransfromCom_BarFill);
 
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom);

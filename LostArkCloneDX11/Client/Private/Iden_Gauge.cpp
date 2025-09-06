@@ -37,7 +37,7 @@ HRESULT CIden_Gauge::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_vGauge = _float4(0.f, 0.f, 0.f, 0.f);
+	m_fGauge = 0.f;
 
 	return S_OK;
 }
@@ -50,7 +50,7 @@ void CIden_Gauge::Update(_float fTimeDelta)
 {
 	m_pAnimationCom->Update(fTimeDelta);
 
-	m_vGauge.x = m_pPlayerInfo->fIdentity / MAX_IDENTITY;
+	m_fGauge = m_pPlayerInfo->fIdentity / MAX_IDENTITY;
 }
 
 void CIden_Gauge::Late_Update(_float fTimeDelta)
@@ -70,7 +70,7 @@ HRESULT CIden_Gauge::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFireTextureCom->Get_SRV(m_pAnimationCom->Get_Frame()))))
+	/*if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pFireTextureCom->Get_SRV(m_pAnimationCom->Get_Frame()))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(0)))
@@ -80,7 +80,7 @@ HRESULT CIden_Gauge::Render()
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	// Gauge Frame
 	if (FAILED(__super::Bind_ShaderResource(0)))
@@ -98,12 +98,11 @@ HRESULT CIden_Gauge::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-
 	// Gauge
 	if (FAILED(__super::Bind_ShaderResource(1)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Vector("g_Vecotr", &m_vGauge)))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fGauge, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(4)))

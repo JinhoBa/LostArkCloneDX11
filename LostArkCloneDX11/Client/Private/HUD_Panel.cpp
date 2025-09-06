@@ -119,6 +119,10 @@ HRESULT CHUD_Panel::Ready_Layer(const _wstring& strLayerTag)
 		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_UtilitySkillUI"),
+		ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+		return E_FAIL;
+
 	if (FAILED(Add_QuickSlots(strLayerTag)))
 		return E_FAIL;
 
