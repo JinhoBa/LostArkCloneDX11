@@ -41,21 +41,21 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
-	void Go_Straight(_float fTimeDelta);
-	void Go_Backward(_float fTimeDelta);
-	void Go_Left(_float fTimeDelta);
-	void Go_Right(_float fTimeDelta);
-	void Go_Up(_float fTimeDelta);
-	void Go_Down(_float fTimeDelta);
-	void Go_Straight_World(_float fTimeDelta);
-	void Go_Backward_World(_float fTimeDelta);
+	void	Go_Straight(_float fTimeDelta);
+	void	Go_Backward(_float fTimeDelta);
+	void	Go_Left(_float fTimeDelta);
+	void	Go_Right(_float fTimeDelta);
+	void	Go_Up(_float fTimeDelta);
+	void	Go_Down(_float fTimeDelta);
+	void	Go_Straight_World(_float fTimeDelta);
+	void	Go_Backward_World(_float fTimeDelta);
 
-	_bool MoveTo(_float fTimeDelta, _fvector vTargetPos);
-	void Turn(_fvector vAxis, _float fTimeDelta);
-	void Rotation(_fvector vAxis, _float fRadian);
-	void Rotation(_float fRadianX, _float fRadianY, _float fRadianZ);
-	void LookAt(_fvector vTarget);
-	void TurnTo(_fvector vTarget);
+	_bool	MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec);
+	void	Turn(_fvector vAxis, _float fTimeDelta);
+	void	Rotation(_fvector vAxis, _float fRadian);
+	void	Rotation(_float fRadianX, _float fRadianY, _float fRadianZ);
+	void	LookAt(_fvector vTarget);
+	void	TurnTo(_fvector vTarget);
 
 private:
 	_float		m_fSpeedPersec = {};

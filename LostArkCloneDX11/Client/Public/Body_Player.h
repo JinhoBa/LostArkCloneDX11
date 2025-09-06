@@ -13,6 +13,12 @@ NS_BEGIN(Client)
 
 class CBody_Player final : public CPartObject
 {
+public:
+	typedef struct BodyPlayer_Desc : public CPartObject::PARTOBJECT_DESC
+	{
+		_float* pAttackSpeed;
+	}BODYPLAYER_DESC;
+
 private:
 	CBody_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CBody_Player(const CBody_Player& Prototype);
@@ -37,6 +43,8 @@ private:
 	_int					m_iAnimIndex = {};
 	_uint					m_iNumMesh = {};
 	_uint					m_iCameraTargetBoneIndex = {};
+
+	_float*					m_pAttackSpeed;
 
 	class CCamera_Fix*		m_pCamera = { nullptr };
 

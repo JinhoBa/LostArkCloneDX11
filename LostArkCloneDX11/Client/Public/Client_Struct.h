@@ -44,8 +44,21 @@ namespace Client
 		_float fMp;
 		_float fAttack;
 		_float fIdentity;
-
+		_float Critical_Probability;
+		_float Critical_Damage;
+		_float fAttackSpeed;
+		_float fMoveSpeed;
 	}PLAYER_INFO;
+
+	typedef struct tagStatistics
+	{
+		_float fAtk_Flat;
+		_float fAtk_Pct;
+		_float fAtkSpeed_Pct;
+		_float fMoveSpeed_Pct;
+		_float Critical_Probability_Flat;
+		_float Critical_Damage_Pct;
+	}BUFFSTAT;
 
 	typedef struct tagMapData
 	{

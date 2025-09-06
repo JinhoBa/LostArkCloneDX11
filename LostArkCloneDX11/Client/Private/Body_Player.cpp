@@ -30,6 +30,12 @@ HRESULT CBody_Player::Initialize_Prototype()
 
 HRESULT CBody_Player::Initialize(void* pArg)
 {
+    if (nullptr == pArg)
+        return E_FAIL;
+
+    BODYPLAYER_DESC* pDesc = static_cast<BODYPLAYER_DESC*>(pArg);
+
+    m_pAttackSpeed = pDesc->pAttackSpeed;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -59,7 +65,7 @@ void CBody_Player::Priority_Update(_float fTimeDelta)
 
 void CBody_Player::Update(_float fTimeDelta)
 {
-    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * 1.3f);
+    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * (*m_pAttackSpeed));
    
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,

@@ -23,7 +23,7 @@ private:
 	virtual ~CPlayer() = default;
 
 public:
-	const STANCE	Get_Stance() { return m_PlayerInfo.eStance; }
+	const STANCE	Get_Stance() const { return m_PlayerInfo.eStance; }
 	PLAYER_INFO*	Get_Info() { return &m_PlayerInfo; }
 	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
@@ -42,22 +42,26 @@ public:
 	_bool	Move(_float fTimeDelta);
 	void	TurnToCursor();
 	void	Change_Stance();
+	void	Add_Buff(_uint iBuffID);
 
 private:
 	class CGameManager*		m_pGameManager = { nullptr };
 
+	PLAYER_INFO				m_DefaultInfo = {};
 	PLAYER_INFO				m_PlayerInfo = {};
 
-	STAT					m_Default_Stat = {};
-	STAT					m_Final_Stat = {};
+	BUFFSTAT				m_BuffStat = {};
 
 	class CStateMachine*	m_pStateMachineCom = { nullptr };
 	class CState*			m_States[STATE_END] = {};
+
+	list<class CBuff*>		m_Buffs;
 
 private:
 	HRESULT			Ready_PartObjects();
 	HRESULT			Ready_StateMachine();
 	HRESULT			Ready_States();
+	void			Update_Buff(_float fTimeDelta);
 
 	void			Key_Input(_float fTimeDelta);
 
