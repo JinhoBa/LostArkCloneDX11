@@ -346,7 +346,6 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
             Hits->QueryFloatAttribute("damage", &fDamage);
             Skill_Info.Damages.push_back(fDamage);
         }
-         
 
         m_SkillDatas.push_back(Skill_Info);
     }
@@ -360,6 +359,126 @@ SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
         return nullptr;
 
     return &m_SkillDatas[iSkillID];
+}
+
+HRESULT CData_Manager::Load_AnimationData(const _char* pFilePath)
+{
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("Data");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+    for (auto* Monster = root->FirstChildElement("Monster"); Monster; Monster = Monster->NextSiblingElement("Monster"))
+    {
+        vector<ANIMATION_DESC> Animations;
+
+        for (_uint i = 0; i < ENUM_TO_INT(ANIMATIONSLOT::END); ++i)
+        {
+            ANIMATION_DESC Desc = {};
+
+            Animations.push_back(Desc);
+        }
+
+        _uint iID = {};
+        Monster->QueryUnsignedAttribute("id", &iID);
+
+        for (auto* Animation = Monster->FirstChildElement("Animation"); Animation; Animation = Animation->NextSiblingElement("Animation"))
+        {
+            ANIMATION_DESC Anim_Desc = {};
+
+            const char* pType;
+            Animation->QueryStringAttribute("type", &pType);
+
+#pragma region ANIM_SLOT
+            if (!strcmp(pType, "respawn"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::RESPAWN;
+            else if (!strcmp(pType, "idle"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::IDLE;
+            else if (!strcmp(pType, "idle_battle"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::IDLE_BATTLE;
+            else if (!strcmp(pType, "walk"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::WALK;
+            else if (!strcmp(pType, "run"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::RUN;
+            else if (!strcmp(pType, "turn_r"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::TURN_R;
+            else if (!strcmp(pType, "turn_l"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::TURN_L;
+            else if (!strcmp(pType, "dead"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::DEAD;
+            else if (!strcmp(pType, "dead_loop"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::DEAD_LOOP;
+            else if (!strcmp(pType, "attack_1"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::ATTACK_1;
+            else if (!strcmp(pType, "attack_2"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::ATTACK_2;
+            else if (!strcmp(pType, "attack_3"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::ATTACK_3;
+            else if (!strcmp(pType, "attack_4"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::ATTACK_4;
+            else if (!strcmp(pType, "attack_5"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::ATTACK_5;
+            else if (!strcmp(pType, "critical_start"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::CRITICAL_START;
+            else if (!strcmp(pType, "critical_loop"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::CRITICAL_LOOP;
+            else if (!strcmp(pType, "critical_end"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::CRITICAL_END;
+            else if (!strcmp(pType, "bound"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::BOUND;
+            else if (!strcmp(pType, "bound_hit"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::BOUND_HIT;
+            else if (!strcmp(pType, "bound_land"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::BOUND_LAND;
+            else if (!strcmp(pType, "ground"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::GROUND;
+            else if (!strcmp(pType, "standup"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::STANDUP;
+            else if (!strcmp(pType, "knokdown"))              // enum 철자 그대로 매칭
+                Anim_Desc.eSlot = ANIMATIONSLOT::KNOKDOWN;
+            else if (!strcmp(pType, "knokdown_land"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::KNOKDOWN_LAND;
+            else if (!strcmp(pType, "twist_knockdown"))       // enum: TWIST_KNOCKDOWN
+                Anim_Desc.eSlot = ANIMATIONSLOT::TWIST_KNOCKDOWN;
+            else if (!strcmp(pType, "twist_knockdown_land"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::TWIST_KNOCKDOWN_LAND;
+            else
+                return E_FAIL;
+#pragma endregion
+
+            /* 애니메이션 인덱스 */
+            Animation->QueryUnsignedAttribute("index", &Anim_Desc.iIndex);
+
+            /* Loop */
+            Animation->QueryBoolAttribute("loop", &Anim_Desc.bLoop);
+
+            /* 선형보간할 시간 */
+            Animation->QueryFloatAttribute("lerp", &Anim_Desc.fLerpTime);
+
+            Animations[ENUM_TO_INT(Anim_Desc.eSlot)] = Anim_Desc;
+        }
+
+        m_AnimationData.push_back(Animations);
+    }
+
+
+    return S_OK;
+}
+
+ANIMATION_DESC& CData_Manager::Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLOT eSlot)
+{
+    if (m_AnimationData.size() <= iMonsterID)
+        return m_AnimationData[0][0];
+
+    return m_AnimationData[iMonsterID][ENUM_TO_INT(eSlot)];
 }
 
 CData_Manager* CData_Manager::Create()

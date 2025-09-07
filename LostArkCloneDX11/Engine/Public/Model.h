@@ -48,7 +48,7 @@ private:
 	_uint						m_iNumAnimations = {};
 	_uint						m_iRootBoneIndex = {};
 
-	_int						m_iPreAnimIndex = { 35 };
+	_int						m_iPreAnimIndex = { 0 };
 	_int						m_iCurrentAnimIndex = { -1 };
 
 	_float						m_fInterpolationTime = {};

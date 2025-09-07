@@ -1,21 +1,48 @@
 #pragma once
-
 #include "Client_Defines.h"
+#include "Client_Struct.h"
+
 #include "GameObject.h"
 
 NS_BEGIN(Engine)
 class CModel;
 class CShader;
+class CStateMachine;
+class CState;
 NS_END
 
 NS_BEGIN(Client)
-
-class CMonster final : public CGameObject
+class CMonster abstract : public CGameObject
 {
-private:
+public:
+	enum STATE {IDLE, ATTACK, TURN, RUN, DEAD, STATE_END};
+public:
+	typedef struct Monster_Desc : public GAMEOBJECT_DESC
+	{
+		_uint iMonsterID{};
+		_uint iNumAttack{};
+		_float fMaxHp;
+		_float fHp;
+		_float fAttack;
+		_float fDetectDistance;
+		_float fAttackRange;
+		_float4 vPosition;
+		_wstring strModelPrototypeTag;
+	}MONSTER_DESC;
+
+protected:
 	CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster(const CMonster& Prototype);
 	virtual ~CMonster() = default;
+
+public:
+	const _bool isInAttackRange()const {
+		return m_fDistToPlayer <= m_MonsterInfo.fAttackRange; }
+	const _bool isInBattle() const { return m_bInBattle; }
+	const _bool isAnimationFinish() const { return m_isAnimationFinish; }
+	CState* Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
+	void Set_Animation(ANIMATIONSLOT eAnim);
+	void Chase(_float fTimeDelta);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -25,17 +52,35 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-private:
+protected:
+	_bool				m_bInBattle = {};
+	_bool				m_isAnimationFinish = {};
+
+	_uint				m_iMonsetrID = {};
+	_uint				m_iNumAttack = {};
+
+	_uint				m_iNumMesh = {};
+	_float				m_fDistToPlayer = {};
+
+	MONSTER				m_eType = {};
+	MONSTER_INFO		m_MonsterInfo = {};
+
 	CModel*				m_pModelCom = { nullptr };	
 	CShader*			m_pShaderCom = { nullptr };
+
+	CStateMachine*		m_pStateMachineCom = { nullptr };
+	CState*				m_States[STATE_END] = {};
+
+	CTransform*			m_pPlayerTransformCom = { nullptr };
+	class CGameManager* m_pGameManager = { nullptr };
 	
-private:
-	HRESULT Ready_Components();
+protected:
+	HRESULT Ready_Components(_wstring& strPrototypeTag);
 	HRESULT Bind_ShaderResources();
+	void	Detect_Player();
 
 public:
-	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg) override;
+	virtual CGameObject* Clone(void* pArg) PURE ;
 	virtual void Free() override;
 };
 

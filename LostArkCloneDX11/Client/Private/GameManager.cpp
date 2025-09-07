@@ -113,6 +113,18 @@ const _bool	CGameManager::Use_Skill(_uint iSkillID) const
 
 #pragma endregion
 
+#pragma region ANIMATION_DATA
+ANIMATION_DESC& CGameManager::Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLOT eSlot)
+{
+	return m_pData_Manager->Get_AnimationIndex(iMonsterID, eSlot);
+}
+HRESULT	CGameManager::Load_AnimationData(const _char* pFilePath)
+{
+	return m_pData_Manager->Load_AnimationData(pFilePath);
+}
+#pragma endregion
+
+
 #pragma region BUFF_MANAGER
 
 CBuff* CGameManager::Add_Buff(_uint iBuffID)

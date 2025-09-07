@@ -38,6 +38,14 @@ public:
 	SKILL_INFO*			Get_SkillInfo_Prt(_uint iSkillID);
 #pragma endregion
 
+#pragma region ANIMATION_DATA
+	ANIMATION_DESC&		Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLOT eSlot);
+	HRESULT				Load_AnimationData(const _char* pFilePath);
+#pragma endregion
+
+	
+
+
 #pragma region SKILL_MANAGER
 	void		Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
 	void		Update_Skills(_float fTimeDelta);

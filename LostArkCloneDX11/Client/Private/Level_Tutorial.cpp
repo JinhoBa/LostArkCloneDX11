@@ -7,6 +7,7 @@
 #include "Camera_Free.h"
 #include "Terrain.h"
 #include "MapObject.h"
+#include "Monster.h"
 
 CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{pDevice, pContext, ENUM_TO_INT(eLevelID)}
@@ -25,6 +26,9 @@ HRESULT CLevel_Tutorial::Initialize()
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+        return E_FAIL;
+
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
@@ -79,6 +83,41 @@ HRESULT CLevel_Tutorial::Ready_Layer_Player(const _wstring& strLayerTag)
  /*   if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boss"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;*/
+
+    return S_OK;
+}
+
+HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
+{
+    CMonster::MONSTER_DESC Desc = {};
+
+    Desc.iMonsterID = 0;
+    Desc.iNumAttack = 4;
+    Desc.fAttack = 500.f;
+    Desc.fAttackRange = 1.5f;
+    Desc.fDetectDistance = 3.f;
+    Desc.fMaxHp = Desc.fHp = 10000.f;
+    Desc.fSpeedPersec = 3.f;
+    Desc.fRotatePersec = 3.f;
+    Desc.vPosition = _float4(50.f, 0.f, 50.f, 1.f);
+    Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster1";
+
+    // 0 : Monter1
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Stand"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+        return E_FAIL;
+
+    Desc.iMonsterID = 1;
+    Desc.iNumAttack = 3;
+    Desc.fMaxHp = Desc.fHp = 5000.f;
+    Desc.fAttackRange = 1.f;
+    Desc.vPosition = _float4(45.f, 0.f, 50.f, 1.f);
+    Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
+    
+    // 0 : Monter2
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Stand"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+        return E_FAIL;
 
     return S_OK;
 }

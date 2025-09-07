@@ -232,6 +232,27 @@
     <Filter Include="03.UIObject\GamePlay\HoldSkillUI">
       <UniqueIdentifier>{299b0d65-00f5-457a-bc24-2b210bc97b38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\States">
+      <UniqueIdentifier>{5a6e520d-b00a-4300-8d66-919d82cfff72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\States\IDLE">
+      <UniqueIdentifier>{9c8a50ad-0191-4e06-8c67-4e1f047bf167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Monter_Named">
+      <UniqueIdentifier>{72231633-ad43-4f80-8fac-c3cae2e9bfb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\States\ATTACK">
+      <UniqueIdentifier>{039305d5-3762-4c83-ba53-811596c4e977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\States\RUN">
+      <UniqueIdentifier>{7cd25eec-b293-477d-b155-12e84b816028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\States\DEAD">
+      <UniqueIdentifier>{e642cbf9-e4a6-45d0-b25c-378757cbcb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\States\TURN">
+      <UniqueIdentifier>{e20da44e-9588-483b-bd65-331da14157b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -453,6 +474,27 @@
     <ClInclude Include="..\public\HoldingSkillUI.h">
       <Filter>03.UIObject\GamePlay\HoldSkillUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Monster_Named.h">
+      <Filter>02.GameObject\Monster\Monter_Named</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_State.h">
+      <Filter>02.GameObject\Monster\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Idle.h">
+      <Filter>02.GameObject\Monster\States\IDLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Dead.h">
+      <Filter>02.GameObject\Monster\States\DEAD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Run.h">
+      <Filter>02.GameObject\Monster\States\RUN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Attack.h">
+      <Filter>02.GameObject\Monster\States\ATTACK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Turn.h">
+      <Filter>02.GameObject\Monster\States\TURN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -668,6 +710,27 @@
     </ClCompile>
     <ClCompile Include="..\private\HoldingSkillUI.cpp">
       <Filter>03.UIObject\GamePlay\HoldSkillUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Named.cpp">
+      <Filter>02.GameObject\Monster\Monter_Named</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_State.cpp">
+      <Filter>02.GameObject\Monster\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Idle.cpp">
+      <Filter>02.GameObject\Monster\States\IDLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Dead.cpp">
+      <Filter>02.GameObject\Monster\States\DEAD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Run.cpp">
+      <Filter>02.GameObject\Monster\States\RUN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Attack.cpp">
+      <Filter>02.GameObject\Monster\States\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Turn.cpp">
+      <Filter>02.GameObject\Monster\States\TURN</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

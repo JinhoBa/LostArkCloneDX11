@@ -240,6 +240,8 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 
 	if (!strcmp(FileType.c_str(), "diffuse"))
 		eTexture = TEXTURE::DIFFUSE;
+	else if (!strcmp(FileType.c_str(), "basecolor"))
+		eTexture = TEXTURE::DIFFUSE;
 	else if (!strcmp(FileType.c_str(), "normal"))
 		eTexture = TEXTURE::NORMAL;
 	else if (!strcmp(FileType.c_str(), "specular"))

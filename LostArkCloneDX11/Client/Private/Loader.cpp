@@ -30,6 +30,7 @@
 #include "Terrain.h"
 #include "Camera_Free.h"
 #include "Player.h"
+#include "Monster_Named.h"
 #include "Body_Player.h"
 #include "Weapon_Player.h"
 #include "Boss.h"
@@ -201,7 +202,8 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_fLoadProgress = 1.f;
 	m_strMessage = TEXT("데이터 파일을 로딩 중 입니다.");
 
-	
+	if(FAILED(CGameManager::GetInstance()->Load_AnimationData("../Bin/Resources/Data/Animation_Data.xml")))
+		return E_FAIL;
 
 
 	
@@ -291,7 +293,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.f));
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	/* Player_Model */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.bin"))))
@@ -305,6 +307,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* Spear_Model */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player_Spear"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player_Weapons/WP_S.fbx"))))
+		return E_FAIL;
+
+	/* Monster1_Model */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Monster1"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster1/Monster1.bin"))))
+		return E_FAIL;
+
+	/* Monster2_Model */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Monster2"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster2/Monster2.bin"))))
 		return E_FAIL;
 
 	/* TEST CODE */
@@ -397,6 +409,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Weapon_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
 		CWeapon_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Monster_Stand */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Stand"),
+		CMonster_Named::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	///* For.Prototype_GameObject_Boss */

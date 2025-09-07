@@ -26,16 +26,23 @@ public:
 
 #pragma region SKILL_DATA
 	HRESULT						Load_SkillData(const _char* pFilePath);
-	SKILL_INFO*			Get_SkillInfo_Prt(_uint iSkillID);
+	SKILL_INFO*					Get_SkillInfo_Prt(_uint iSkillID);
 #pragma endregion
 
-private:
-	CGameInstance*			m_pGameInstance = { nullptr };
+#pragma region ANIMATION_MAP
+	HRESULT						Load_AnimationData(const _char* pFilePath);
+	ANIMATION_DESC&				Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLOT eSlot);
+#pragma endregion
 
-	vector<TERRAIN_DATA>	m_TerrainDatas = {};
-	vector<MAP_DATA>		m_MapDatas = {};
-	vector<_wstring>		m_MapPreviewFileNames = {};
-	vector<SKILL_INFO>		m_SkillDatas = {};
+
+private:
+	CGameInstance*				m_pGameInstance = { nullptr };
+
+	vector<TERRAIN_DATA>		m_TerrainDatas;
+	vector<MAP_DATA>			m_MapDatas;
+	vector<_wstring>			m_MapPreviewFileNames;
+	vector<SKILL_INFO>			m_SkillDatas;
+	vector<vector<ANIMATION_DESC>>	m_AnimationData;
 	
 public:
 	static CData_Manager* Create();

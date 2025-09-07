@@ -198,6 +198,13 @@
     <ClInclude Include="..\public\Level_MapEditor.h" />
     <ClInclude Include="..\public\MapObject.h" />
     <ClInclude Include="..\Public\Monster.h" />
+    <ClInclude Include="..\public\Monster_Attack.h" />
+    <ClInclude Include="..\public\Monster_Dead.h" />
+    <ClInclude Include="..\public\Monster_Idle.h" />
+    <ClInclude Include="..\public\Monster_Named.h" />
+    <ClInclude Include="..\public\Monster_Run.h" />
+    <ClInclude Include="..\Public\Monster_State.h" />
+    <ClInclude Include="..\public\Monster_Turn.h" />
     <ClInclude Include="..\public\Mouse.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
@@ -298,6 +305,13 @@
     <ClCompile Include="..\private\Level_MapEditor.cpp" />
     <ClCompile Include="..\private\MapObject.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
+    <ClCompile Include="..\private\Monster_Attack.cpp" />
+    <ClCompile Include="..\private\Monster_Dead.cpp" />
+    <ClCompile Include="..\private\Monster_Idle.cpp" />
+    <ClCompile Include="..\private\Monster_Named.cpp" />
+    <ClCompile Include="..\private\Monster_Run.cpp" />
+    <ClCompile Include="..\Private\Monster_State.cpp" />
+    <ClCompile Include="..\private\Monster_Turn.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\pch.cpp">

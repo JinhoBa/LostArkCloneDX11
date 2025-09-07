@@ -181,6 +181,7 @@ HRESULT CPlayer::Ready_StateMachine()
 
     return S_OK;
 }
+
 HRESULT CPlayer::Ready_States()
 {
     m_States[IDLE] = CPlayer_Idle::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);

@@ -49,6 +49,15 @@ namespace Client
 		_float fMoveSpeed;
 	}PLAYER_INFO;
 
+	typedef struct tagMonster_Info
+	{
+		_float fMaxHp;
+		_float fHp;
+		_float fAttack;
+		_float fDetectDistance;
+		_float fAttackRange;
+	}MONSTER_INFO;
+
 	typedef struct tagStatistics
 	{
 		_float fAtk_Flat;
@@ -81,4 +90,12 @@ namespace Client
 		_float3 vPosition;
 		_float3 vRotation;
 	}TERRAIN_DATA;
+
+	typedef struct tagAnimationDesc
+	{
+		ANIMATIONSLOT eSlot;
+		_uint iIndex;
+		_bool bLoop;
+		_float fLerpTime;
+	}ANIMATION_DESC;
 }

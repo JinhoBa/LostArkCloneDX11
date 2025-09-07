@@ -55,8 +55,8 @@ private:
 	BUFFSTAT				m_BuffStat = {};
 	CHARGE_SKILL_DESC		m_ChargeSkill_Desc = {};
 
-	class CStateMachine*	m_pStateMachineCom = { nullptr };
-	class CState*			m_States[STATE_END] = {};
+	CStateMachine*			m_pStateMachineCom = { nullptr };
+	CState*					m_States[STATE_END] = {};
 
 	list<class CBuff*>		m_Buffs;
 
