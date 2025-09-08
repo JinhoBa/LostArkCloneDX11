@@ -148,6 +148,12 @@
     <Filter Include="01.Utility\10.Light\Manager">
       <UniqueIdentifier>{6ba47f52-f297-4635-b5d6-70aa2a814807}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Navigation">
+      <UniqueIdentifier>{cc3b6601-6b38-4dea-adb7-7f03fba7abb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Navigation\Cell">
+      <UniqueIdentifier>{a8b6f505-a399-4a01-8c9f-43c269f610b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -321,6 +327,12 @@
     <ClInclude Include="..\public\Light_Manager.h">
       <Filter>01.Utility\10.Light\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Navigation.h">
+      <Filter>01.Utility\03.Components\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Cell.h">
+      <Filter>01.Utility\03.Components\Navigation\Cell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -451,6 +463,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Light_Manager.cpp">
       <Filter>01.Utility\10.Light\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Navigation.cpp">
+      <Filter>01.Utility\03.Components\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cell.cpp">
+      <Filter>01.Utility\03.Components\Navigation\Cell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
