@@ -39,6 +39,7 @@ private:
 	void Render_Priority();
 	void Render_NonBlend();
 	void Render_Blend();
+	void Render_WorldUI();
 	void Render_UI();
 
 

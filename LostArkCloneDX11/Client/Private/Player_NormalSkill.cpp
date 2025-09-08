@@ -22,6 +22,8 @@ HRESULT CPlayer_NormalSkill::Initilize(CStateMachine* pStateMachine, STANCE* pSt
 
 void CPlayer_NormalSkill::Enter(void* pArg)
 {
+	m_pPlayer->TurnToCursor();
+
 	NORMALSKILL_DESC* m_pSkill_Desc = static_cast<NORMALSKILL_DESC*>(pArg);
 
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_pSkill_Desc->iSkillID);

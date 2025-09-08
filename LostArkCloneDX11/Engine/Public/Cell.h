@@ -6,8 +6,8 @@ NS_BEGIN(Engine)
 class CCell : public CBase
 {
 public:
-	enum POINT { A, B, C, END };
-	enum LINE { AB, BC, CA, END };
+	enum POINT { A, B, C, POINT_END };
+	enum LINE { AB, BC, CA, LINE_END };
 
 private:
 	CCell();
@@ -18,8 +18,8 @@ public:
 
 private:
 	_uint			m_iIndex = {};
-	_float3			m_Points[POINT::END] = {};
-	_float3			m_Normals[LINE::END] = {};
+	_float3			m_Points[POINT::POINT_END] = {};
+	_float3			m_Normals[LINE::LINE_END] = {};
 
 public:
 	static CCell* Create(_uint iIndex, const _float3* pPoint);

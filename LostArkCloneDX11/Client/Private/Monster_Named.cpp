@@ -103,6 +103,9 @@ HRESULT CMonster_Named::Render()
 			return E_FAIL;
 	}
 
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 HRESULT CMonster_Named::Ready_Components()

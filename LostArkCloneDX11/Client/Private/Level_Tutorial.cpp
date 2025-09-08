@@ -55,7 +55,7 @@ HRESULT CLevel_Tutorial::Ready_Light()
     Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
     Desc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
     Desc.vSpecular = _float4(1.f, 1.f, 1.f, 0.5f);
-    Desc.vDirection = _float4(0.5f, 0.5f, -0.5f, 0.f);
+    Desc.vDirection = _float4(0.5f, 0.5f, 0.5f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(Desc)))
         return E_FAIL;
@@ -111,13 +111,21 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.iNumAttack = 3;
     Desc.fMaxHp = Desc.fHp = 5000.f;
     Desc.fAttackRange = 1.f;
-    Desc.vPosition = _float4(45.f, 0.f, 50.f, 1.f);
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
+
+
+   
+    for (_uint i = 0; i < 5; i++)
+    {
+        Desc.vPosition = _float4(40.f + m_pGameInstance->Random(-5.f, 5.f), 0.f, 40.f + m_pGameInstance->Random(-5.f, 5.f), 1.f);
+        // 0 : Monter2
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Stand"),
+            ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+            return E_FAIL;
+    }
     
-    // 0 : Monter2
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Stand"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
-        return E_FAIL;
+    
+  
 
     return S_OK;
 }

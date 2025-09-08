@@ -84,6 +84,7 @@ public:
 	_matrix				Get_Transfrom_Matrix(D3DTS eState);
 	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
 	const _float4*		Get_Camera_Position() const;
+	const _float4*		Get_Camera_Look() const;
 #pragma endregion
 
 #pragma region PICKING

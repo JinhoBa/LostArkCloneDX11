@@ -33,6 +33,7 @@
 #include "Monster_Named.h"
 #include "Body_Player.h"
 #include "Weapon_Player.h"
+#include "HpBar_Player.h"
 #include "Boss.h"
 #include "MapObject.h"
 #include "SkySphere.h"
@@ -204,15 +205,17 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	if(FAILED(CGameManager::GetInstance()->Load_AnimationData("../Bin/Resources/Data/Animation_Data.xml")))
 		return E_FAIL;
-
-
 	
-
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
 	/* For.Prototype_Component_Texture_KamenBase */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_KamenBase"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Kamen/Texture2D/mn_cdkcn_00-1_d.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_WorldHpBar */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WorldHpBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/WorldHp/WorldHpBar_%d.dds"), 3))))
 		return E_FAIL;
 
 #pragma endregion
@@ -409,6 +412,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Weapon_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"),
 		CWeapon_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_HpBar_Player*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"),
+		CHpBar_Player::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Monster_Stand */

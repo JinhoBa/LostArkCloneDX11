@@ -9,6 +9,7 @@
 #include "PartObject.h"
 #include "Body_Player.h"
 #include "Weapon_Player.h"
+#include "HpBar_Player.h"
 #include "Buff.h"
 #include "Camera_Fix.h"
 
@@ -114,6 +115,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     m_pGameManager->Set_PlayerInfoPrt(&m_PlayerInfo);
 
+
+
     return S_OK;
 }
 
@@ -168,6 +171,13 @@ HRESULT CPlayer::Ready_PartObjects()
     Weapon_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
 
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"), TEXT("Weapon_Player"), &Weapon_Desc)))
+        return E_FAIL;
+
+    CHpBar_Player::HPBAR_DESC  HpBar_Desc= {};
+    HpBar_Desc.pPlayerInfo = &m_PlayerInfo;
+    HpBar_Desc.pParentTransform = m_pTransformCom;
+    HpBar_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
         return E_FAIL;
 
     return S_OK;

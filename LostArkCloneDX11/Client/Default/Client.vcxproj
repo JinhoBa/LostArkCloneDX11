@@ -175,6 +175,7 @@
     <ClInclude Include="..\public\GameManager.h" />
     <ClInclude Include="..\public\HoldingSkillUI.h" />
     <ClInclude Include="..\public\HpBar.h" />
+    <ClInclude Include="..\public\HpBar_Player.h" />
     <ClInclude Include="..\public\HUD.h" />
     <ClInclude Include="..\public\HUD_Panel.h" />
     <ClInclude Include="..\public\Identity.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="..\private\GameManager.cpp" />
     <ClCompile Include="..\private\HoldingSkillUI.cpp" />
     <ClCompile Include="..\private\HpBar.cpp" />
+    <ClCompile Include="..\private\HpBar_Player.cpp" />
     <ClCompile Include="..\private\HUD.cpp" />
     <ClCompile Include="..\private\HUD_Panel.cpp" />
     <ClCompile Include="..\private\Identity.cpp" />

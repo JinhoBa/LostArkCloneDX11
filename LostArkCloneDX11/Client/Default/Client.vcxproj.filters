@@ -253,6 +253,9 @@
     <Filter Include="02.GameObject\Monster\States\TURN">
       <UniqueIdentifier>{e20da44e-9588-483b-bd65-331da14157b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\HpBar">
+      <UniqueIdentifier>{d710584d-582b-4f6e-b20f-02d2a176c003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -495,6 +498,9 @@
     <ClInclude Include="..\public\Monster_Turn.h">
       <Filter>02.GameObject\Monster\States\TURN</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\HpBar_Player.h">
+      <Filter>02.GameObject\Player\HpBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -731,6 +737,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Monster_Turn.cpp">
       <Filter>02.GameObject\Monster\States\TURN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HpBar_Player.cpp">
+      <Filter>02.GameObject\Player\HpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

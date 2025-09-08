@@ -60,6 +60,8 @@ private:
 
 	list<class CBuff*>		m_Buffs;
 
+	
+
 private:
 	HRESULT			Ready_PartObjects();
 	HRESULT			Ready_StateMachine();

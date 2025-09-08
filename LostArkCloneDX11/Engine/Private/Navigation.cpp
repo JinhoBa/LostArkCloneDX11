@@ -23,11 +23,11 @@ HRESULT CNavigation::Initialize_Prototype(const _char* pNavigaitonFilePath)
 
 	while (true)
 	{
-		_float3 Points[CCell::POINT::END] = {};
-		in.read(reinterpret_cast<_char*>(&Points), sizeof(_float3) * CCell::POINT::END);
-
 		if (true == in.eof())
 			break;
+
+		_float3 Points[CCell::POINT::POINT_END] = {};
+		in.read(reinterpret_cast<_char*>(&Points), sizeof(_float3) * CCell::POINT::POINT_END);
 
 		CCell* pCell = CCell::Create((_uint)m_Cells.size(), Points);
 

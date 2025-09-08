@@ -225,6 +225,19 @@ void CTransform::LookAt(_fvector vTarget)
 
 }
 
+void CTransform::BillBoard(_fvector vCameraLook)
+{
+    _float3 vScale = Get_Scale();
+
+    _vector vLook = vCameraLook;
+    _vector vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+    _vector vUp = XMVector3Cross(vLook, vRight);
+
+    Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
+    Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
+    Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
 void CTransform::TurnTo(_fvector vTarget)
 {
     _float3 vScale = Get_Scale();

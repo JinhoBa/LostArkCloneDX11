@@ -333,6 +333,10 @@ const _float4* CGameInstance::Get_Camera_Position() const
 {
 	return m_pPipeLine->Get_Camera_Position();
 }
+const _float4* CGameInstance::Get_Camera_Look() const
+{
+	return m_pPipeLine->Get_Camera_Look();
+}
 
 #pragma endregion
 
@@ -367,12 +371,12 @@ _bool CGameInstance::Picking_InLocalSpace(const FXMVECTOR vPointA, const FXMVECT
 
 #pragma region FONT_MANAGER
 
-void		CGameInstance::Add_Font(const _wstring& strFontTag, class CFont* pFont)
+void CGameInstance::Add_Font(const _wstring& strFontTag, class CFont* pFont)
 {
 	m_pFont_Manager->Add_Font(strFontTag, pFont);
 }
 
-void		CGameInstance::Add_FontDesc(const _wstring& strFontTag, FONT_DESC* pFontDesc)
+void CGameInstance::Add_FontDesc(const _wstring& strFontTag, FONT_DESC* pFontDesc)
 {
 	m_pFont_Manager->Add_FontDesc(strFontTag, pFontDesc);
 }

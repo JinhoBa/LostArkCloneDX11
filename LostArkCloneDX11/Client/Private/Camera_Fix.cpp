@@ -27,14 +27,18 @@ HRESULT CCamera_Fix::Initialize_Prototype()
 
 HRESULT CCamera_Fix::Initialize(void* pArg)
 {
+    m_pTargetPosition = _float4(0.f, 0.f, 0.f, 1.f);
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    m_vDistance = _float3(0.f, 5.f, -5.f);
+    m_vDistance = _float3(0.f, 5.f, 5.f);
     m_eCurState = m_ePreState = CAMERA_ANIM::IDLE;
     m_fTimeAcc = 0.f;
     CGameManager::GetInstance()->Set_Camera(this);
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+    __super::Bind_Transform();
 
     return S_OK;
 }
@@ -100,7 +104,7 @@ void CCamera_Fix::Update(_float fTimeDelta)
          m_fTimeAcc += fTimeDelta;
          if (m_fTimeAcc < m_fDuration)
          {
-             m_vDistance.z -= fTimeDelta* 0.5f;
+             m_vDistance.z += fTimeDelta* 0.5f;
              m_vDistance.y += fTimeDelta * 0.5f;
          }
         else
@@ -150,7 +154,7 @@ void CCamera_Fix::Change_State()
         {
         case CAMERA_ANIM::IDLE:
             m_fTimeAcc = 0.f;
-            m_vDistance = _float3(0.f, 5.f, -5.f);
+            m_vDistance = _float3(0.f, 5.f, 5.f);
             break;
 
         case CAMERA_ANIM::SHAKE:

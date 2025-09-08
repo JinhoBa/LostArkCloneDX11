@@ -80,6 +80,7 @@ void CRenderer::Render()
 	Render_Priority();
 	Render_NonBlend();
 	Render_Blend();
+	Render_WorldUI();
 	Render_UI();
 
 }
@@ -127,15 +128,28 @@ void CRenderer::Render_Blend()
 	}
 
 	m_RenderObjects[ENUM_TO_INT(RENDER::BLEND)].clear();
+}
 
-	
+void CRenderer::Render_WorldUI()
+{
+	// ±íÀÌ Å×½ºÆ® ²ô±â
+	m_pContext->OMSetDepthStencilState(m_pDSState_UI, 1);
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::WORLDUI)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_TO_INT(RENDER::WORLDUI)].clear();
 }
 
 void CRenderer::Render_UI()
 {
+
 	Sort_UI();
-	// ±íÀÌ Å×½ºÆ® ²ô±â
-	m_pContext->OMSetDepthStencilState(m_pDSState_UI, 1);
 
 	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::UI)])
 	{

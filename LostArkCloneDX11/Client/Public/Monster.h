@@ -9,6 +9,8 @@ class CModel;
 class CShader;
 class CStateMachine;
 class CState;
+class CTexture;
+class CVIBuffer_Rect;
 NS_END
 
 NS_BEGIN(Client)
@@ -40,9 +42,9 @@ public:
 		return m_fDistToPlayer <= m_MonsterInfo.fAttackRange; }
 	const _bool isInBattle() const { return m_bInBattle; }
 	const _bool isAnimationFinish() const { return m_isAnimationFinish; }
-	CState* Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
-	void Set_Animation(ANIMATIONSLOT eAnim);
-	void Chase(_float fTimeDelta);
+	CState*		Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
+	void		Set_Animation(ANIMATIONSLOT eAnim);
+	void		Chase(_float fTimeDelta);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -61,6 +63,7 @@ protected:
 
 	_uint				m_iNumMesh = {};
 	_float				m_fDistToPlayer = {};
+	_float				m_fShaderHpValue = {};
 
 	MONSTER				m_eType = {};
 	MONSTER_INFO		m_MonsterInfo = {};
@@ -72,11 +75,20 @@ protected:
 	CState*				m_States[STATE_END] = {};
 
 	CTransform*			m_pPlayerTransformCom = { nullptr };
+
 	class CGameManager* m_pGameManager = { nullptr };
+
+	const _float4x4*	m_pSocketMatrix = { nullptr };
+	CTexture*			m_pTextureCom = { nullptr };
+	CVIBuffer_Rect*		m_pVIBufferCom = { nullptr };
+	CShader*			m_pTexShaderCom = { nullptr };
+	CTransform*			m_pHpBarTransformCom = { nullptr };
+	_float4x4			m_CombinedWorldMatrix = {};
 	
 protected:
 	HRESULT Ready_Components(_wstring& strPrototypeTag);
 	HRESULT Bind_ShaderResources();
+	HRESULT Render_HPBar();
 	void	Detect_Player();
 
 public:

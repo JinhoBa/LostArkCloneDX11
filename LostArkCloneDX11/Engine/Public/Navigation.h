@@ -8,7 +8,7 @@ class ENGINE_DLL CNavigation : public CComponent
 public:
 	typedef struct Navigation_Desc
 	{
-		_uint iCurrentIndex{ -1 };
+		_int iCurrentIndex{ -1 };
 	}NAVIGATION_DESC;
 private:
 	CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -21,7 +21,7 @@ public:
 	virtual void	Upadte(_float fTimeDelta);
 
 private:
-	_uint					m_iCurrentIndex = {};
+	_int					m_iCurrentIndex = {};
 
 	vector<class CCell*>	m_Cells;
 
