@@ -22,7 +22,6 @@ CModel::CModel(CModel& Prototype)
     m_iNumAnimations{ Prototype.m_iNumAnimations },
     m_Meshes{ Prototype.m_Meshes },
     m_Materials{ Prototype.m_Materials },
-    m_Animations{ Prototype.m_Animations },
     m_PreTransformMatrix{ Prototype.m_PreTransformMatrix },
     m_fInterpolationTime{0.f},
     m_fMaxInterpolationTime{ 0.f },
