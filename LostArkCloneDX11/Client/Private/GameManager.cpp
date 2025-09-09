@@ -153,14 +153,14 @@ _vector CGameManager::Picking_Terrains()
 	_vector vCameraPosition = XMLoadFloat4(m_pGameInstance->Get_Camera_Position());
 	_float distance = { 100.f };
 
-	list<CGameObject*>* pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(m_eCurLevel), TEXT("Layer_Terrain"));
+	const list<CGameObject*>& Terrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(m_eCurLevel), TEXT("Layer_Terrain"));
 
-	if (nullptr == pTerrains)
+	if (Terrains.empty())
 		return XMVectorSet(0.f, 0.f, 0.f, 1.f);
 
 	_float3 vPickingPosition = {};
 
-	for (auto iter = pTerrains->begin(); iter != pTerrains->end(); iter++)
+	for (auto iter = Terrains.begin(); iter != Terrains.end(); iter++)
 	{
 		_float3 vPosition = {};
 

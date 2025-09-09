@@ -264,7 +264,7 @@ HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const 
 {
 	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLayerLevelIndex, strLayerTag, pArg);
 }
-list<class CGameObject*>* CGameInstance::Get_LayerObjects(_uint iLevelIndex, const _wstring& strLayerTag)
+const list<class CGameObject*>& CGameInstance::Get_LayerObjects(_uint iLevelIndex, const _wstring& strLayerTag)
 {
 	return m_pObject_Manager->Get_LayerObjects(iLevelIndex, strLayerTag);
 }

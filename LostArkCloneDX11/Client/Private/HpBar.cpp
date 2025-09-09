@@ -43,7 +43,7 @@ HRESULT CHpBar::Initialize(void* pArg)
 
 	m_pPlayerInfo = dynamic_cast<CPlayer*>(
 		m_pGameInstance->Get_LayerObjects(
-			ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"))->back())->Get_Info();
+			ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Info();
 
 	if (nullptr == m_pPlayerInfo)
 		return E_FAIL;

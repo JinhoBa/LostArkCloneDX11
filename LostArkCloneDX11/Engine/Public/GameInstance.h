@@ -61,9 +61,10 @@ public:
 #pragma endregion
 
 #pragma region OBJECT_MANAGER
-	CComponent*					Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
-	HRESULT						Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr);
-	list<class CGameObject*>*	Get_LayerObjects(_uint iLevelIndex, const _wstring& strLayerTag);
+	CComponent*	 Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
+	HRESULT		 Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr);
+	
+	const list<class CGameObject*>&	Get_LayerObjects(_uint iLevelIndex, const _wstring& strLayerTag);
 #pragma endregion
 
 #pragma region SOUND_MANAGER

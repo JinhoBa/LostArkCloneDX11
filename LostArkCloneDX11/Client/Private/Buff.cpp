@@ -11,6 +11,7 @@ HRESULT CBuff::Initilize(_uint iBuffID)
 	m_fTimeAcc = 0.f;
 	m_iBuffID = iBuffID;
 
+	/* 스텐스 변경 버프*/
 	if (0 == m_iBuffID)
 	{
 		m_BuffStat.fAtk_Flat = 500.f;
@@ -21,7 +22,28 @@ HRESULT CBuff::Initilize(_uint iBuffID)
 		m_BuffStat.Critical_Damage_Pct = 0.2f;
 		m_fDuration = 13.f;
 	}
-
+	/* 모코코 버프 */
+	else if (1 == m_iBuffID)
+	{
+		m_BuffStat.fAtk_Flat = 3000.f;
+		m_BuffStat.fAtk_Pct = 0.2f;
+		m_BuffStat.fAtkSpeed_Pct = 0.1f;
+		m_BuffStat.fMoveSpeed_Pct = 0.1f;
+		m_BuffStat.Critical_Probability_Flat = 10.f;
+		m_BuffStat.Critical_Damage_Pct = 0.1f;
+		m_fDuration = 9999999.f;
+	}
+	/* 회복버프 */
+	else if (2 == m_iBuffID)
+	{
+		m_BuffStat.fAtk_Flat = 0.f;
+		m_BuffStat.fAtk_Pct = 0.f;
+		m_BuffStat.fAtkSpeed_Pct = 0.f;
+		m_BuffStat.fMoveSpeed_Pct = 0.f;
+		m_BuffStat.Critical_Probability_Flat = 0.f;
+		m_BuffStat.Critical_Damage_Pct = 0.0f;
+		m_fDuration = 5.f;
+	}
 
 	return S_OK;
 }

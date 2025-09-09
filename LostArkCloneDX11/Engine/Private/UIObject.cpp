@@ -100,12 +100,12 @@ void CUIObject::Update_Position()
 
 HRESULT CUIObject::Add_ChildObjects(_uint iLevelID, const _wstring& strLayerTag)
 {
-    list<CGameObject*>* ChildList = m_pGameInstance->Get_LayerObjects(iLevelID, strLayerTag);
+    list<CGameObject*> ChildList = m_pGameInstance->Get_LayerObjects(iLevelID, strLayerTag);
 
-    if (nullptr == ChildList)
+    if (ChildList.empty())
         return S_OK;
 
-    for (auto pGameObject : *ChildList)
+    for (auto& pGameObject : ChildList)
     {
         m_ChildObjects.push_back(dynamic_cast<CUIObject*>(pGameObject));
         Safe_AddRef(pGameObject);

@@ -23,7 +23,7 @@ private:
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 	
 	SpriteFont*				m_pFont = {nullptr};
-	list<FONT_DESC*>		m_DrawFonts = {};
+	list<FONT_DESC>			m_DrawFonts = {};
 
 public:
 	static CFont* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath);

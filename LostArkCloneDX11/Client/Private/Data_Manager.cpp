@@ -110,15 +110,14 @@ HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
 
 HRESULT CData_Manager::Save_MapData(const _char* pFileName)
 {
-    list<CGameObject*>* pTerrainList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
-    list<CGameObject*>* pObjectList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
+    const list<CGameObject*>& TerrainList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+    const list<CGameObject*>& ObjectList =  m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
 
-    if (nullptr == pObjectList)
+    if (ObjectList.empty())
         return E_FAIL;
 
-    if (nullptr == pTerrainList)
+    if (TerrainList.empty())
         return E_FAIL;
-  
 
     tinyxml2::XMLDocument doc;
 
@@ -128,7 +127,7 @@ HRESULT CData_Manager::Save_MapData(const _char* pFileName)
     tinyxml2::XMLElement* land = doc.NewElement("Land");
     doc.InsertEndChild(land);
 
-    for (auto pObjcet : *pTerrainList)
+    for (auto& pObjcet : TerrainList)
     {
         CTerrain* pTerrain= dynamic_cast<CTerrain*>(pObjcet);
 
@@ -165,7 +164,7 @@ HRESULT CData_Manager::Save_MapData(const _char* pFileName)
 
     }
 
-    for (auto pObjcet : *pObjectList)
+    for (auto& pObjcet : ObjectList)
     {
         CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObjcet);
 

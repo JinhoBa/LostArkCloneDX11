@@ -256,6 +256,9 @@
     <Filter Include="02.GameObject\Player\HpBar">
       <UniqueIdentifier>{d710584d-582b-4f6e-b20f-02d2a176c003}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\GamePlay\HUD\BuffUI">
+      <UniqueIdentifier>{066c8c72-ecf0-4620-93e0-90ec17e5abd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -501,6 +504,9 @@
     <ClInclude Include="..\public\HpBar_Player.h">
       <Filter>02.GameObject\Player\HpBar</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\BuffUI.h">
+      <Filter>03.UIObject\GamePlay\HUD\BuffUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -740,6 +746,9 @@
     </ClCompile>
     <ClCompile Include="..\private\HpBar_Player.cpp">
       <Filter>02.GameObject\Player\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BuffUI.cpp">
+      <Filter>03.UIObject\GamePlay\HUD\BuffUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -33,8 +33,8 @@ private:
 
 	vector<_wstring>*		m_pImagesNames = {};
 
-	list<CGameObject*>*		m_pBackGroundObject = { nullptr };
-	list<CGameObject*>*		m_pTerrains = { nullptr };
+	list<CGameObject*>*	m_pBackGroundObject = {  };
+	list<CGameObject*>*	m_pTerrains = {  };
 	class CMapObject*		m_pMapObject = { nullptr };
 	class CTerrain*			m_pTerrain = { nullptr };
 

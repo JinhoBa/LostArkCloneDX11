@@ -24,6 +24,7 @@
 #include "UtilitySkillUI.h"
 #include "UtilitySkillSlot.h"
 #include "HoldingSkillUI.h"
+#include "BuffUI.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -276,6 +277,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Skill/UtilitySkill_%d.dds"), 3))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_Buff */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Buff"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Buff/buff_%d.dds"), 3))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_BuffFrame */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_BuffFrame"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Buff/BuffFrame.dds"), 1))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_Iden_Gauge */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_Gauge"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/iden/identity_Gauge_%d.dds"), 3))))
@@ -294,7 +305,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 #pragma endregion
 
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
-
+#pragma region MODEL
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	/* Player_Model */
@@ -331,9 +342,12 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
 		CModel::Create_BinaryFile(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.fbx", PreTransformMatrix))))
 		return E_FAIL;*/
+#pragma endregion
+
+	
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
-
+#pragma region SHADER
 	/* For.Prototype_Component_Shader_VertexMesh */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElement))))
@@ -343,6 +357,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElement))))
 		return E_FAIL;
+#pragma endregion
 
 
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
@@ -500,6 +515,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_HoldingSkillUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HoldingSkillUI"),
 		CHoldingSkillUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_BuffUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_BuffUI"),
+		CBuffUI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

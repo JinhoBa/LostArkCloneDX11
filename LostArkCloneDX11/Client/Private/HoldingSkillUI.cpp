@@ -46,7 +46,7 @@ HRESULT CHoldingSkillUI::Initialize(void* pArg)
 
 	m_pChargeSkill_Desc = dynamic_cast<CPlayer*>(
 		m_pGameInstance->Get_LayerObjects(
-			ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"))->back())->Get_ChargeSkill_Desc();
+			ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_ChargeSkill_Desc();
 
 
 	__super::Set_Indices(0, 1);

@@ -115,7 +115,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     m_pGameManager->Set_PlayerInfoPrt(&m_PlayerInfo);
 
-
+    Add_Buff(1);
 
     return S_OK;
 }
@@ -262,12 +262,26 @@ void CPlayer::Change_Stance()
 
 void CPlayer::Add_Buff(_uint iBuffID)
 {
-    auto iter = find_if(m_Buffs.begin(), m_Buffs.end(), [&](CBuff* pBuff)->_bool {
+   /* auto iter = find_if(m_Buffs.begin(), m_Buffs.end(), [&](CBuff* pBuff)->_bool {
         return (pBuff->Get_BuffID() == iBuffID);
-        });
+        });*/
 
-    if(m_Buffs.end() == iter)
-        m_Buffs.push_back(m_pGameManager->Add_Buff(iBuffID));
+    auto iter = m_Buffs.begin();
+
+    for (; iter != m_Buffs.end();)
+    {
+
+        if ((*iter)->Get_BuffID() == iBuffID)
+        {
+            m_pGameManager->Remove_Buff(*iter);
+            iter = m_Buffs.erase(iter);
+            break;
+        }
+        else
+            iter++;
+    }
+
+    m_Buffs.push_back(m_pGameManager->Add_Buff(iBuffID));
 }
 
 void CPlayer::Play_CameraAnimation(CAMERA_ANIM eState)

@@ -19,11 +19,14 @@ CComponent* CObject_Manager::Get_Component(_uint iLevelIndex, const _wstring& st
 	return pLayer->Get_Component(strComponentTag, iIndex);	
 }
 
-list<CGameObject*>* CObject_Manager::Get_LayerObjects(_uint iLevelIndex, const _wstring& strLayerTag)
+const list<CGameObject*>& CObject_Manager::Get_LayerObjects(_uint iLevelIndex, const _wstring& strLayerTag)
 {
 	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
 	if (nullptr == pLayer)
-		return nullptr;
+	{
+		static const list<CGameObject*> empty;
+		return empty;
+	}
 
 	return pLayer->Get_List();
 }

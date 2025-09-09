@@ -14,6 +14,7 @@ private:
 public:
 	const _bool isFinished() const { return m_isFinished; }
 	const _uint Get_BuffID() const { return m_iBuffID; }
+	const _float Get_CoolTime() const { return m_fDuration - m_fTimeAcc; }
 public:
 	HRESULT Initilize(_uint iBuffID);
 	void	Update(_float fTimeDelta, BUFFSTAT* pStat );

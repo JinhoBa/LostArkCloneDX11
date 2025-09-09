@@ -26,8 +26,8 @@ HRESULT CLevel_MapEditor::Initialize()
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
 
-    m_pBackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
-    m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+    //m_pBackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
+    //m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
 
     m_iMapObject_ComboIndex = 0;
     m_iTerrain_ComboIndex = 0;
@@ -156,7 +156,7 @@ HRESULT CLevel_MapEditor::Render()
             ImGui::End();
             return E_FAIL;
         }
-        m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+        //m_pTerrains = &m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
 
     }
    
@@ -168,7 +168,7 @@ HRESULT CLevel_MapEditor::Render()
             return E_FAIL;
         }
         SetWindowText(g_hWnd, TEXT("Load MapData"));
-        m_pTerrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+        //m_pTerrains = &m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
     }
     ImGui::Text("-------------------");
     ImGui::Text("Save File Name : ");
@@ -185,10 +185,11 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::Begin("Terrain List");
     _uint iTerrainIndex = {};
     string strTmp;
-    if(nullptr != m_pTerrains)
+    const list<CGameObject*>& Terrain = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+    if(!Terrain.empty())
     {
 
-        for (auto pObject : *m_pTerrains)
+        for (auto& pObject : Terrain)
         {
             CTerrain* pTerrain = dynamic_cast<CTerrain*>(pObject);
 

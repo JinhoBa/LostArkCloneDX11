@@ -164,6 +164,7 @@
     <ClInclude Include="..\public\Body_Player.h" />
     <ClInclude Include="..\public\Boss.h" />
     <ClInclude Include="..\public\Buff.h" />
+    <ClInclude Include="..\public\BuffUI.h" />
     <ClInclude Include="..\public\Buff_Manager.h" />
     <ClInclude Include="..\public\Camera_Fix.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="..\private\Body_Player.cpp" />
     <ClCompile Include="..\private\Boss.cpp" />
     <ClCompile Include="..\private\Buff.cpp" />
+    <ClCompile Include="..\private\BuffUI.cpp" />
     <ClCompile Include="..\private\Buff_Manager.cpp" />
     <ClCompile Include="..\private\Camera_Fix.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
