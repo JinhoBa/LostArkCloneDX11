@@ -1,31 +1,31 @@
 #include "pch.h"
-#include "HpBar_Player.h"
+#include "HpBar_Monster.h"
 
 #include "GameInstance.h"
 
-CHpBar_Player::CHpBar_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CHpBar_Monster::CHpBar_Monster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CPartObject{ pDevice, pContext }
 {
 }
 
-CHpBar_Player::CHpBar_Player(const CHpBar_Player& Prototype)
+CHpBar_Monster::CHpBar_Monster(const CHpBar_Monster& Prototype)
     :CPartObject{ Prototype }
 {
 }
 
-HRESULT CHpBar_Player::Initialize_Prototype()
+HRESULT CHpBar_Monster::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CHpBar_Player::Initialize(void* pArg)
+HRESULT CHpBar_Monster::Initialize(void* pArg)
 {
     if (nullptr == pArg)
         return E_FAIL;
 
-    HPBARPLAYER_DESC* pDesc = static_cast<HPBARPLAYER_DESC*>(pArg);
+    HPBAR_MONSTER_DESC* pDesc = static_cast<HPBAR_MONSTER_DESC*>(pArg);
 
-    m_pPlayerInfo = pDesc->pPlayerInfo;
+    m_pMonsterInfo = pDesc->pMonsterInfo;
     m_pSocketMatrix = pDesc->pSocketMatrix;
 
     if (FAILED(__super::Initialize(pArg)))
@@ -44,14 +44,14 @@ HRESULT CHpBar_Player::Initialize(void* pArg)
     return S_OK;
 }
 
-void CHpBar_Player::Priority_Update(_float fTimeDelta)
+void CHpBar_Monster::Priority_Update(_float fTimeDelta)
 {
 
 }
 
-void CHpBar_Player::Update(_float fTimeDelta)
+void CHpBar_Monster::Update(_float fTimeDelta)
 {
-    m_fValue = m_pPlayerInfo->fHp / m_pPlayerInfo->fMaxHp;
+    m_fValue = m_pMonsterInfo->fHp / m_pMonsterInfo->fMaxHp;
 
     _vector vPosition;
 
@@ -71,19 +71,17 @@ void CHpBar_Player::Update(_float fTimeDelta)
 
     vPosition = XMVector3TransformCoord(vPosition, XMLoadFloat4x4(m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ)));
 
-    m_PlayerNameFont.vPositon.x = (_float)g_iWinSizeX * 0.5f + vPosition.m128_f32[0] * (_float)g_iWinSizeX * 0.5f - 25.f;
-    m_PlayerNameFont.vPositon.y = (_float)g_iWinSizeY * 0.5f - vPosition.m128_f32[1] * (_float)g_iWinSizeY * 0.5f - 20.f;
+    m_NameFont.vPositon.x = (_float)g_iWinSizeX * 0.5f + vPosition.m128_f32[0] * (_float)g_iWinSizeX * 0.5f - 25.f;
+    m_NameFont.vPositon.y = (_float)g_iWinSizeY * 0.5f - vPosition.m128_f32[1] * (_float)g_iWinSizeY * 0.5f - 20.f;
 }
 
-void CHpBar_Player::Late_Update(_float fTimeDelta)
+void CHpBar_Monster::Late_Update(_float fTimeDelta)
 {
-   
-
-    m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_PlayerNameFont);
+    m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_NameFont);
     m_pGameInstance->Add_RenderGroup(RENDER::WORLDUI, this);
 }
 
-HRESULT CHpBar_Player::Render()
+HRESULT CHpBar_Monster::Render()
 {
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
@@ -108,7 +106,7 @@ HRESULT CHpBar_Player::Render()
         return E_FAIL;
 
     /* Gauge */
-    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(1))))
+    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(2))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fValue, sizeof(_float))))
@@ -127,7 +125,7 @@ HRESULT CHpBar_Player::Render()
     return S_OK;
 }
 
-HRESULT CHpBar_Player::Add_Components()
+HRESULT CHpBar_Monster::Add_Components()
 {
     /*Texture*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WorldHpBar"),
@@ -146,48 +144,49 @@ HRESULT CHpBar_Player::Add_Components()
 
     return S_OK;
 }
-HRESULT CHpBar_Player::Ready_Font()
+HRESULT CHpBar_Monster::Ready_Font()
 {
-    m_PlayerNameFont.strWord = L"  NULL";
-    m_PlayerNameFont.vPositon = _float4(0.f, 0.f, 1.f, 1.f);
-    m_PlayerNameFont.vColor = _float4(0.9f, 0.9f, 0.7f, 1.f);
-    m_PlayerNameFont.fScale = 0.36f;
+    m_NameFont.strWord = L"monster";
+    m_NameFont.vPositon = _float4(0.f, 0.f, 1.f, 1.f);
+    m_NameFont.vColor = _float4(1.f, 0.2f, 0.2f, 1.f);
+    m_NameFont.fScale = 0.36f;
 
     return S_OK;
 }
 
-CHpBar_Player* CHpBar_Player::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CHpBar_Monster* CHpBar_Monster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CHpBar_Player* pInstance = new CHpBar_Player(pDevice, pContext);
+    CHpBar_Monster* pInstance = new CHpBar_Monster(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
         Safe_Release(pInstance);
-        MSG_BOX("Failed to Create : CHpBar_Player");
+        MSG_BOX("Failed to Create : CHpBar_Monster");
         return nullptr;
     }
 
     return pInstance;
 }
 
-CGameObject* CHpBar_Player::Clone(void* pArg)
+CGameObject* CHpBar_Monster::Clone(void* pArg)
 {
-    CGameObject* pInstance = new CHpBar_Player(*this);
+    CGameObject* pInstance = new CHpBar_Monster(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
         Safe_Release(pInstance);
-        MSG_BOX("Failed to Clone : CHpBar_Player");
+        MSG_BOX("Failed to Clone : CHpBar_Monster");
         return nullptr;
     }
 
     return pInstance;
 }
 
-void CHpBar_Player::Free()
+void CHpBar_Monster::Free()
 {
     __super::Free();
-
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pTextureCom);
+
 }

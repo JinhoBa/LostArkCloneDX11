@@ -31,10 +31,12 @@
 #include "Terrain.h"
 #include "Camera_Free.h"
 #include "Player.h"
-#include "Monster_Named.h"
 #include "Body_Player.h"
 #include "Weapon_Player.h"
 #include "HpBar_Player.h"
+#include "Body_Monster.h"
+#include "HpBar_Monster.h"
+#include "Monster_Named.h"
 #include "Boss.h"
 #include "MapObject.h"
 #include "SkySphere.h"
@@ -434,10 +436,21 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CHpBar_Player::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For.Prototype_GameObject_Monster_Stand */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Stand"),
+	/* For.Prototype_GameObject_Monster_Named */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
 		CMonster_Named::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_Body_Monster */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Monster"),
+		CBody_Monster::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_HpBar_Monster */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Monster"),
+		CHpBar_Monster::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	///* For.Prototype_GameObject_Boss */
 	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boss"),

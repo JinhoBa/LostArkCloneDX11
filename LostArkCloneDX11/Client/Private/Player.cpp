@@ -157,6 +157,7 @@ HRESULT CPlayer::Render()
 
     return S_OK;
 }
+
 HRESULT CPlayer::Ready_PartObjects()
 {
     CBody_Player::BODYPLAYER_DESC Body_Desc = {};
@@ -173,7 +174,7 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"), TEXT("Weapon_Player"), &Weapon_Desc)))
         return E_FAIL;
 
-    CHpBar_Player::HPBAR_DESC  HpBar_Desc= {};
+    CHpBar_Player::HPBARPLAYER_DESC  HpBar_Desc= {};
     HpBar_Desc.pPlayerInfo = &m_PlayerInfo;
     HpBar_Desc.pParentTransform = m_pTransformCom;
     HpBar_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
@@ -182,6 +183,7 @@ HRESULT CPlayer::Ready_PartObjects()
 
     return S_OK;
 }
+
 HRESULT CPlayer::Ready_StateMachine()
 {
     /* StateMachine */

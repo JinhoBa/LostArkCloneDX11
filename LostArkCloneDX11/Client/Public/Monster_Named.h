@@ -20,10 +20,6 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	/*Test Code*/
-	_int m_iAnimIndex = {};
-
-private:
 	HRESULT Ready_Components();
 	HRESULT Ready_States();
 

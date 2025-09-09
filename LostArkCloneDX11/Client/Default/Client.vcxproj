@@ -161,6 +161,7 @@
     <ClInclude Include="..\public\AwakeSlot.h" />
     <ClInclude Include="..\public\Background_Loading.h" />
     <ClInclude Include="..\public\Background_Logo.h" />
+    <ClInclude Include="..\public\Body_Monster.h" />
     <ClInclude Include="..\public\Body_Player.h" />
     <ClInclude Include="..\public\Boss.h" />
     <ClInclude Include="..\public\Buff.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\public\Camera_Fix.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Canvars.h" />
+    <ClInclude Include="..\public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\Client_Struct.h" />
     <ClInclude Include="..\public\Data_Manager.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="..\public\GameManager.h" />
     <ClInclude Include="..\public\HoldingSkillUI.h" />
     <ClInclude Include="..\public\HpBar.h" />
+    <ClInclude Include="..\public\HpBar_Monster.h" />
     <ClInclude Include="..\public\HpBar_Player.h" />
     <ClInclude Include="..\public\HUD.h" />
     <ClInclude Include="..\public\HUD_Panel.h" />
@@ -252,6 +255,7 @@
     <ClCompile Include="..\private\AwakeSlot.cpp" />
     <ClCompile Include="..\private\Background_Loading.cpp" />
     <ClCompile Include="..\private\Background_Logo.cpp" />
+    <ClCompile Include="..\private\Body_Monster.cpp" />
     <ClCompile Include="..\private\Body_Player.cpp" />
     <ClCompile Include="..\private\Boss.cpp" />
     <ClCompile Include="..\private\Buff.cpp" />
@@ -260,11 +264,13 @@
     <ClCompile Include="..\private\Camera_Fix.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Canvars.cpp" />
+    <ClCompile Include="..\private\Character.cpp" />
     <ClCompile Include="..\private\Data_Manager.cpp" />
     <ClCompile Include="..\private\ExpBar.cpp" />
     <ClCompile Include="..\private\GameManager.cpp" />
     <ClCompile Include="..\private\HoldingSkillUI.cpp" />
     <ClCompile Include="..\private\HpBar.cpp" />
+    <ClCompile Include="..\private\HpBar_Monster.cpp" />
     <ClCompile Include="..\private\HpBar_Player.cpp" />
     <ClCompile Include="..\private\HUD.cpp" />
     <ClCompile Include="..\private\HUD_Panel.cpp" />

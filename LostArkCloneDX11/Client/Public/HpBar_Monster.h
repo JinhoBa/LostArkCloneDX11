@@ -1,5 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
+#include "Client_Struct.h"
 #include "PartObject.h"
 
 NS_BEGIN(Engine)
@@ -10,18 +11,18 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CHpBar_Player final : public CPartObject
+class CHpBar_Monster final : public CPartObject
 {
 public:
-	typedef struct HPBarPlayerDesc : public PARTOBJECT_DESC
+	typedef struct HPBarMonster_Desc : public PARTOBJECT_DESC
 	{
-		const PLAYER_INFO* pPlayerInfo = { nullptr };
-		const _float4x4*   pSocketMatrix;
-	}HPBARPLAYER_DESC;
+		const MONSTER_INFO*	pMonsterInfo;
+		const _float4x4* pSocketMatrix;
+	}HPBAR_MONSTER_DESC;
 private:
-	CHpBar_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CHpBar_Player(const CHpBar_Player& Prototype);
-	virtual ~CHpBar_Player() = default;
+	CHpBar_Monster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CHpBar_Monster(const CHpBar_Monster& Prototype);
+	virtual ~CHpBar_Monster() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -34,21 +35,21 @@ public:
 private:
 	_float				m_fValue = {};
 
-	const PLAYER_INFO*	m_pPlayerInfo = { nullptr };
 	const _float4x4*	m_pSocketMatrix = { nullptr };
+	const MONSTER_INFO* m_pMonsterInfo = { nullptr };
 
 	CTexture*			m_pTextureCom = { nullptr };
 	CVIBuffer_Rect*		m_pVIBufferCom = { nullptr };
 	CShader*			m_pShaderCom = { nullptr };
 
-	FONT_DESC			m_PlayerNameFont = {};
+	FONT_DESC			m_NameFont = {};
 
 private:
 	HRESULT		Add_Components();
 	HRESULT     Ready_Font();
 
 public:
-	static CHpBar_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CHpBar_Monster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

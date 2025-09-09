@@ -103,9 +103,6 @@
     <Filter Include="03.UIObject\GamePlay\HUD\QuickSlot\AwakeSlot">
       <UniqueIdentifier>{25c9c77b-9e83-4f3d-9c80-058822c86b09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Player">
-      <UniqueIdentifier>{2fd8baa6-8256-4cd5-9c4d-cd8fa8fb41fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="95.GameManager">
       <UniqueIdentifier>{62e5d424-6387-47bb-9833-3535d8cdb5b6}</UniqueIdentifier>
     </Filter>
@@ -163,9 +160,6 @@
     <Filter Include="03.UIObject\GamePlay\Loading\Wallpaper">
       <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster">
-      <UniqueIdentifier>{6c8637e6-133d-4334-8593-450aabfea42a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Boss">
       <UniqueIdentifier>{d916f16b-eff0-43d9-af42-bf1f0d834450}</UniqueIdentifier>
     </Filter>
@@ -180,39 +174,6 @@
     </Filter>
     <Filter Include="03.UIObject\GamePlay\HUD\Panel">
       <UniqueIdentifier>{5bdf0330-c5e5-46c4-9e60-53a6c28de6a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\Body">
-      <UniqueIdentifier>{2c120c0e-58c6-4126-b0b3-a3bf09f7d837}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\Weapon">
-      <UniqueIdentifier>{5cfa2529-1df6-48fd-9efc-beba0905ce4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States">
-      <UniqueIdentifier>{7a680735-1d3e-4780-8821-8228b4c4268f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\IDLE">
-      <UniqueIdentifier>{9bbef063-48a6-4c83-a3f9-6cf8e5fc741a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\SKill">
-      <UniqueIdentifier>{9262bfd1-d04d-420c-ab56-4df4b0567e3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\MOVE">
-      <UniqueIdentifier>{173bbd62-6b48-4b35-a10e-0554b04fa9d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\DASH">
-      <UniqueIdentifier>{6926daeb-0bda-4b40-81d7-e1c28776b2e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\CHANGE">
-      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\HIT">
-      <UniqueIdentifier>{43282a82-1efe-4949-a116-192f2b3f64d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\CHARGE_SKILL">
-      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\States\COMBO">
-      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
     </Filter>
     <Filter Include="05. Buff">
       <UniqueIdentifier>{57eebbcf-8d91-4142-b682-090531719bdf}</UniqueIdentifier>
@@ -232,32 +193,80 @@
     <Filter Include="03.UIObject\GamePlay\HoldSkillUI">
       <UniqueIdentifier>{299b0d65-00f5-457a-bc24-2b210bc97b38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Monster\States">
-      <UniqueIdentifier>{5a6e520d-b00a-4300-8d66-919d82cfff72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\States\IDLE">
-      <UniqueIdentifier>{9c8a50ad-0191-4e06-8c67-4e1f047bf167}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\Monter_Named">
-      <UniqueIdentifier>{72231633-ad43-4f80-8fac-c3cae2e9bfb4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\States\ATTACK">
-      <UniqueIdentifier>{039305d5-3762-4c83-ba53-811596c4e977}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\States\RUN">
-      <UniqueIdentifier>{7cd25eec-b293-477d-b155-12e84b816028}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\States\DEAD">
-      <UniqueIdentifier>{e642cbf9-e4a6-45d0-b25c-378757cbcb9a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\States\TURN">
-      <UniqueIdentifier>{e20da44e-9588-483b-bd65-331da14157b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Player\HpBar">
-      <UniqueIdentifier>{d710584d-582b-4f6e-b20f-02d2a176c003}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.UIObject\GamePlay\HUD\BuffUI">
       <UniqueIdentifier>{066c8c72-ecf0-4620-93e0-90ec17e5abd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character">
+      <UniqueIdentifier>{674f9c74-b734-4660-95dd-49232aa1ef7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster">
+      <UniqueIdentifier>{6c8637e6-133d-4334-8593-450aabfea42a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States">
+      <UniqueIdentifier>{5a6e520d-b00a-4300-8d66-919d82cfff72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\IDLE">
+      <UniqueIdentifier>{9c8a50ad-0191-4e06-8c67-4e1f047bf167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\ATTACK">
+      <UniqueIdentifier>{039305d5-3762-4c83-ba53-811596c4e977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\RUN">
+      <UniqueIdentifier>{7cd25eec-b293-477d-b155-12e84b816028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\DEAD">
+      <UniqueIdentifier>{e642cbf9-e4a6-45d0-b25c-378757cbcb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\TURN">
+      <UniqueIdentifier>{e20da44e-9588-483b-bd65-331da14157b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\Monter_Named">
+      <UniqueIdentifier>{72231633-ad43-4f80-8fac-c3cae2e9bfb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player">
+      <UniqueIdentifier>{2fd8baa6-8256-4cd5-9c4d-cd8fa8fb41fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\Body">
+      <UniqueIdentifier>{2c120c0e-58c6-4126-b0b3-a3bf09f7d837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\Weapon">
+      <UniqueIdentifier>{5cfa2529-1df6-48fd-9efc-beba0905ce4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States">
+      <UniqueIdentifier>{7a680735-1d3e-4780-8821-8228b4c4268f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\IDLE">
+      <UniqueIdentifier>{9bbef063-48a6-4c83-a3f9-6cf8e5fc741a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill">
+      <UniqueIdentifier>{9262bfd1-d04d-420c-ab56-4df4b0567e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\MOVE">
+      <UniqueIdentifier>{173bbd62-6b48-4b35-a10e-0554b04fa9d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\DASH">
+      <UniqueIdentifier>{6926daeb-0bda-4b40-81d7-e1c28776b2e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CHANGE">
+      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\HIT">
+      <UniqueIdentifier>{43282a82-1efe-4949-a116-192f2b3f64d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CHARGE_SKILL">
+      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\COMBO">
+      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\HpBar">
+      <UniqueIdentifier>{d710584d-582b-4f6e-b20f-02d2a176c003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\Body">
+      <UniqueIdentifier>{2189303a-eb0f-4210-bc07-2b841cfb97b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\HpBar">
+      <UniqueIdentifier>{19772885-0cf9-451b-bae3-7851d8c45c89}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -373,7 +382,7 @@
       <Filter>03.UIObject\GamePlay\HUD\QuickSlot\AwakeSlot</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player.h">
-      <Filter>02.GameObject\Player</Filter>
+      <Filter>02.GameObject\Character\Player</Filter>
     </ClInclude>
     <ClInclude Include="..\public\GameManager.h">
       <Filter>95.GameManager</Filter>
@@ -412,7 +421,7 @@
       <Filter>03.UIObject\UIEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
-      <Filter>02.GameObject\Monster</Filter>
+      <Filter>02.GameObject\Character\Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Boss.h">
       <Filter>02.GameObject\Boss</Filter>
@@ -433,37 +442,37 @@
       <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Body_Player.h">
-      <Filter>02.GameObject\Player\Body</Filter>
+      <Filter>02.GameObject\Character\Player\Body</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Weapon_Player.h">
-      <Filter>02.GameObject\Player\Weapon</Filter>
+      <Filter>02.GameObject\Character\Player\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_Idle.h">
-      <Filter>02.GameObject\Player\States\IDLE</Filter>
+      <Filter>02.GameObject\Character\Player\States\IDLE</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_State.h">
-      <Filter>02.GameObject\Player\States</Filter>
+      <Filter>02.GameObject\Character\Player\States</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_NormalSkill.h">
-      <Filter>02.GameObject\Player\States\SKill</Filter>
+      <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_Move.h">
-      <Filter>02.GameObject\Player\States\MOVE</Filter>
+      <Filter>02.GameObject\Character\Player\States\MOVE</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_Dash.h">
-      <Filter>02.GameObject\Player\States\DASH</Filter>
+      <Filter>02.GameObject\Character\Player\States\DASH</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_ChangeStance.h">
-      <Filter>02.GameObject\Player\States\CHANGE</Filter>
+      <Filter>02.GameObject\Character\Player\States\CHANGE</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_Hit.h">
-      <Filter>02.GameObject\Player\States\HIT</Filter>
+      <Filter>02.GameObject\Character\Player\States\HIT</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_ChargeSkill.h">
-      <Filter>02.GameObject\Player\States\CHARGE_SKILL</Filter>
+      <Filter>02.GameObject\Character\Player\States\CHARGE_SKILL</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_ComboSkill.h">
-      <Filter>02.GameObject\Player\States\COMBO</Filter>
+      <Filter>02.GameObject\Character\Player\States\COMBO</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Buff.h">
       <Filter>05. Buff</Filter>
@@ -481,31 +490,40 @@
       <Filter>03.UIObject\GamePlay\HoldSkillUI</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Monster_Named.h">
-      <Filter>02.GameObject\Monster\Monter_Named</Filter>
+      <Filter>02.GameObject\Character\Monster\Monter_Named</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_State.h">
-      <Filter>02.GameObject\Monster\States</Filter>
+      <Filter>02.GameObject\Character\Monster\States</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Monster_Idle.h">
-      <Filter>02.GameObject\Monster\States\IDLE</Filter>
+      <Filter>02.GameObject\Character\Monster\States\IDLE</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Monster_Dead.h">
-      <Filter>02.GameObject\Monster\States\DEAD</Filter>
+      <Filter>02.GameObject\Character\Monster\States\DEAD</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Monster_Run.h">
-      <Filter>02.GameObject\Monster\States\RUN</Filter>
+      <Filter>02.GameObject\Character\Monster\States\RUN</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Monster_Attack.h">
-      <Filter>02.GameObject\Monster\States\ATTACK</Filter>
+      <Filter>02.GameObject\Character\Monster\States\ATTACK</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Monster_Turn.h">
-      <Filter>02.GameObject\Monster\States\TURN</Filter>
+      <Filter>02.GameObject\Character\Monster\States\TURN</Filter>
     </ClInclude>
     <ClInclude Include="..\public\HpBar_Player.h">
-      <Filter>02.GameObject\Player\HpBar</Filter>
+      <Filter>02.GameObject\Character\Player\HpBar</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BuffUI.h">
       <Filter>03.UIObject\GamePlay\HUD\BuffUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Character.h">
+      <Filter>02.GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Body_Monster.h">
+      <Filter>02.GameObject\Character\Monster\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HpBar_Monster.h">
+      <Filter>02.GameObject\Character\Monster\HpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -619,7 +637,7 @@
       <Filter>03.UIObject\GamePlay\HUD\QuickSlot\AwakeSlot</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
-      <Filter>02.GameObject\Player</Filter>
+      <Filter>02.GameObject\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\private\GameManager.cpp">
       <Filter>95.GameManager</Filter>
@@ -655,7 +673,7 @@
       <Filter>03.UIObject\UIEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
-      <Filter>02.GameObject\Monster</Filter>
+      <Filter>02.GameObject\Character\Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Boss.cpp">
       <Filter>02.GameObject\Boss</Filter>
@@ -676,37 +694,37 @@
       <Filter>03.UIObject\GamePlay\HUD</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Body_Player.cpp">
-      <Filter>02.GameObject\Player\Body</Filter>
+      <Filter>02.GameObject\Character\Player\Body</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Weapon_Player.cpp">
-      <Filter>02.GameObject\Player\Weapon</Filter>
+      <Filter>02.GameObject\Character\Player\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_Idle.cpp">
-      <Filter>02.GameObject\Player\States\IDLE</Filter>
+      <Filter>02.GameObject\Character\Player\States\IDLE</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_State.cpp">
-      <Filter>02.GameObject\Player\States</Filter>
+      <Filter>02.GameObject\Character\Player\States</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_NormalSkill.cpp">
-      <Filter>02.GameObject\Player\States\SKill</Filter>
+      <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_Move.cpp">
-      <Filter>02.GameObject\Player\States\MOVE</Filter>
+      <Filter>02.GameObject\Character\Player\States\MOVE</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_Dash.cpp">
-      <Filter>02.GameObject\Player\States\DASH</Filter>
+      <Filter>02.GameObject\Character\Player\States\DASH</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_ChangeStance.cpp">
-      <Filter>02.GameObject\Player\States\CHANGE</Filter>
+      <Filter>02.GameObject\Character\Player\States\CHANGE</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_Hit.cpp">
-      <Filter>02.GameObject\Player\States\HIT</Filter>
+      <Filter>02.GameObject\Character\Player\States\HIT</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_ChargeSkill.cpp">
-      <Filter>02.GameObject\Player\States\CHARGE_SKILL</Filter>
+      <Filter>02.GameObject\Character\Player\States\CHARGE_SKILL</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_ComboSkill.cpp">
-      <Filter>02.GameObject\Player\States\COMBO</Filter>
+      <Filter>02.GameObject\Character\Player\States\COMBO</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Buff.cpp">
       <Filter>05. Buff</Filter>
@@ -724,31 +742,40 @@
       <Filter>03.UIObject\GamePlay\HoldSkillUI</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Monster_Named.cpp">
-      <Filter>02.GameObject\Monster\Monter_Named</Filter>
+      <Filter>02.GameObject\Character\Monster\Monter_Named</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_State.cpp">
-      <Filter>02.GameObject\Monster\States</Filter>
+      <Filter>02.GameObject\Character\Monster\States</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Monster_Idle.cpp">
-      <Filter>02.GameObject\Monster\States\IDLE</Filter>
+      <Filter>02.GameObject\Character\Monster\States\IDLE</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Monster_Dead.cpp">
-      <Filter>02.GameObject\Monster\States\DEAD</Filter>
+      <Filter>02.GameObject\Character\Monster\States\DEAD</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Monster_Run.cpp">
-      <Filter>02.GameObject\Monster\States\RUN</Filter>
+      <Filter>02.GameObject\Character\Monster\States\RUN</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Monster_Attack.cpp">
-      <Filter>02.GameObject\Monster\States\ATTACK</Filter>
+      <Filter>02.GameObject\Character\Monster\States\ATTACK</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Monster_Turn.cpp">
-      <Filter>02.GameObject\Monster\States\TURN</Filter>
+      <Filter>02.GameObject\Character\Monster\States\TURN</Filter>
     </ClCompile>
     <ClCompile Include="..\private\HpBar_Player.cpp">
-      <Filter>02.GameObject\Player\HpBar</Filter>
+      <Filter>02.GameObject\Character\Player\HpBar</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BuffUI.cpp">
       <Filter>03.UIObject\GamePlay\HUD\BuffUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Character.cpp">
+      <Filter>02.GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Body_Monster.cpp">
+      <Filter>02.GameObject\Character\Monster\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HpBar_Monster.cpp">
+      <Filter>02.GameObject\Character\Monster\HpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

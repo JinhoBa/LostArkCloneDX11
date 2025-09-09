@@ -73,7 +73,7 @@ HRESULT CNavigation::Initialize_Prototype(const _char* pNavigaitonFilePath)
 	}
 
 #ifdef _DEBUG
-	m_pShaderCom = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXPos.hlsl"), VTXPOS::Elements, VTXPOS::iNumElement);
+	m_pShaderCom = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Cell.hlsl"), VTXPOS::Elements, VTXPOS::iNumElement);
 
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
