@@ -12,18 +12,35 @@ public:
 	}NAVIGATION_DESC;
 private:
 	CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CNavigation(const CComponent& Prototype);
+	CNavigation(const CNavigation& Prototype);
 	virtual ~CNavigation() = default;
+
+public:
+	_bool isMove(_fvector vPosition);
 
 public:
 	virtual HRESULT Initialize_Prototype(const _char* pNavigaitonFilePath);
 	virtual HRESULT Initialize(void* pArg);
-	virtual void	Upadte(_float fTimeDelta);
+
+	void	Update_WorldMatrix(_fmatrix WorldMatrix) {
+		XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix);
+	}
+
+#ifdef _DEBUG
+public:
+	virtual HRESULT	Render();
+#endif // _DEBUG
 
 private:
 	_int					m_iCurrentIndex = {};
 
+	static _float4x4		m_WorldMatrix;
+
+	class CShader*			m_pShaderCom = { nullptr };
 	vector<class CCell*>	m_Cells;
+
+private:
+	void Set_NeighborIndices();
 
 public:
 	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pNavigaitonFilePath);

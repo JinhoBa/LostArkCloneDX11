@@ -10,19 +10,39 @@ public:
 	enum LINE { AB, BC, CA, LINE_END };
 
 private:
-	CCell();
+	CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CCell() = default;
+
+public:
+	_vector Get_Point(POINT ePoint) const { return XMLoadFloat3(&m_Points[ePoint]); }
+	void	Set_Neighbor(LINE eLine, CCell* pNeighborCell) { 
+		m_NeighborIndices[eLine] = pNeighborCell->m_iIndex;
+	}
+	const _bool isInCell(_vector vPositon, _int* pNeighborIndex) const;
+	const _bool isNeighbor(_vector vSrcPositon, _vector vDestPositon) const;
 
 public:
 	HRESULT Initialize(_uint iIndex, const _float3* pPoint);
 
+#ifdef _DEBUG
+	HRESULT Render();
+#endif
+
 private:
-	_uint			m_iIndex = {};
-	_float3			m_Points[POINT::POINT_END] = {};
-	_float3			m_Normals[LINE::LINE_END] = {};
+	ID3D11Device*			m_pDevice = { nullptr };
+	ID3D11DeviceContext*	m_pContext = { nullptr };
+
+	_uint					m_iIndex = {};
+	_int					m_NeighborIndices[LINE::LINE_END] = { -1, -1, -1 };
+	_float3					m_Points[POINT::POINT_END] = {};
+	_float3					m_Normals[LINE::LINE_END] = {};
+
+#ifdef _DEBUG
+	class CVIBuffer_Cell* m_pVIBufferCom = { nullptr };
+#endif 
 
 public:
-	static CCell* Create(_uint iIndex, const _float3* pPoint);
+	static CCell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iIndex, const _float3* pPoint);
 	virtual void Free();
 };
 

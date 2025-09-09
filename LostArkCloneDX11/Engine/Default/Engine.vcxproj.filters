@@ -154,6 +154,12 @@
     <Filter Include="01.Utility\03.Components\Navigation\Cell">
       <UniqueIdentifier>{a8b6f505-a399-4a01-8c9f-43c269f610b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Cell">
+      <UniqueIdentifier>{44bdffdd-1277-4dfb-9b2d-f2f7916e221e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles">
+      <UniqueIdentifier>{be3c4c0e-13a4-4309-aacf-57a84d1156bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -333,6 +339,9 @@
     <ClInclude Include="..\public\Cell.h">
       <Filter>01.Utility\03.Components\Navigation\Cell</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Cell.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -470,6 +479,9 @@
     <ClCompile Include="..\private\Cell.cpp">
       <Filter>01.Utility\03.Components\Navigation\Cell</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Cell.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Cell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Public\FMOD\fmod.cs">
@@ -489,5 +501,10 @@
     <Library Include="..\Public\FMOD\fmodL_vc.lib">
       <Filter>01.Utility\06.Sound\FMOD</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
