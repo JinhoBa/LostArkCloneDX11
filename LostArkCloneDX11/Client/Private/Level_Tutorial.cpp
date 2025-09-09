@@ -79,16 +79,19 @@ HRESULT CLevel_Tutorial::Ready_Layer_Player(const _wstring& strLayerTag)
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
-    // Kamen
- /*   if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boss"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-        return E_FAIL;*/
+
 
     return S_OK;
 }
 
 HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
 {
+    /* Kamen */
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
+
     CMonster::MONSTER_DESC Desc = {};
 
     Desc.iMonsterID = 0;

@@ -160,9 +160,6 @@
     <Filter Include="03.UIObject\GamePlay\Loading\Wallpaper">
       <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Boss">
-      <UniqueIdentifier>{d916f16b-eff0-43d9-af42-bf1f0d834450}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Camera\Camera_Fix">
       <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
     </Filter>
@@ -267,6 +264,15 @@
     </Filter>
     <Filter Include="02.GameObject\Character\Monster\HpBar">
       <UniqueIdentifier>{19772885-0cf9-451b-bae3-7851d8c45c89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen">
+      <UniqueIdentifier>{d916f16b-eff0-43d9-af42-bf1f0d834450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\Body">
+      <UniqueIdentifier>{0b13d1a5-e478-40dd-88a3-0f108dac4b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State">
+      <UniqueIdentifier>{5d49de0a-5bf5-4296-9beb-1cb3f6ea0e7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -423,8 +429,8 @@
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObject\Character\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Boss.h">
-      <Filter>02.GameObject\Boss</Filter>
+    <ClInclude Include="..\public\Kamen.h">
+      <Filter>02.GameObject\Character\Kamen</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Camera_Fix.h">
       <Filter>02.GameObject\Camera\Camera_Fix</Filter>
@@ -524,6 +530,9 @@
     </ClInclude>
     <ClInclude Include="..\public\HpBar_Monster.h">
       <Filter>02.GameObject\Character\Monster\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Body_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -675,8 +684,8 @@
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObject\Character\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Boss.cpp">
-      <Filter>02.GameObject\Boss</Filter>
+    <ClCompile Include="..\private\Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Camera_Fix.cpp">
       <Filter>02.GameObject\Camera\Camera_Fix</Filter>
@@ -776,6 +785,9 @@
     </ClCompile>
     <ClCompile Include="..\private\HpBar_Monster.cpp">
       <Filter>02.GameObject\Character\Monster\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Body_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

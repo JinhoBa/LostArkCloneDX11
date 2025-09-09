@@ -37,7 +37,8 @@
 #include "Body_Monster.h"
 #include "HpBar_Monster.h"
 #include "Monster_Named.h"
-#include "Boss.h"
+#include "Kamen.h"
+#include "Body_Kamen.h"
 #include "MapObject.h"
 #include "SkySphere.h"
 #pragma endregion
@@ -336,9 +337,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 		return E_FAIL;
 
 	/* TEST CODE */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
-	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen/Kamen.fbx"))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen/Kamen.bin"))))
+		return E_FAIL;
 
 	/* TEST CODE */
 	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
@@ -452,10 +453,15 @@ HRESULT CLoader::Loading_For_GamePlay()
 		return E_FAIL;
 
 
-	///* For.Prototype_GameObject_Boss */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Boss"),
-	//	CBoss::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	/* For.Prototype_GameObject_Kamen */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
+		CKamen::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Body_Kamen */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Kamen"),
+		CBody_Kamen::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 

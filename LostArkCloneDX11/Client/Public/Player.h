@@ -1,18 +1,17 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Client_Struct.h"
-#include "ContainerObject.h"
+
+#include "Character.h"
 
 NS_BEGIN(Engine)
-class CShader;
-class CModel;
 class CStateMachine;
 class CState;
 NS_END
 
 NS_BEGIN(Client)
 
-class CPlayer final : public CContainerObject
+class CPlayer final : public CCharacter
 {
 public:
 	enum STATE {IDLE, MOVE, NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE, HIT, STATE_END};
@@ -47,9 +46,8 @@ public:
 	void	Change_Stance();
 	void	Add_Buff(_uint iBuffID);
 	void	Play_CameraAnimation(CAMERA_ANIM eState);
-private:
-	class CGameManager*		m_pGameManager = { nullptr };
 
+private:
 	PLAYER_INFO				m_DefaultInfo = {};
 	PLAYER_INFO				m_PlayerInfo = {};
 	
@@ -60,8 +58,6 @@ private:
 	CState*					m_States[STATE_END] = {};
 
 	list<class CBuff*>		m_Buffs;
-
-	
 
 private:
 	HRESULT			Ready_PartObjects();

@@ -27,16 +27,13 @@
 #pragma endregion
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CContainerObject{ pDevice, pContext }, m_pGameManager{ CGameManager::GetInstance() }
+    :CCharacter{ pDevice, pContext }
 {
-    Safe_AddRef(m_pGameManager);
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
-    :CContainerObject{ Prototype },
-    m_pGameManager{Prototype.m_pGameManager }
+    :CCharacter{ Prototype }
 {
-    Safe_AddRef(m_pGameManager);
 }
 
 void CPlayer::Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime)
@@ -323,7 +320,6 @@ void CPlayer::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pGameManager);
     Safe_Release(m_pStateMachineCom);
 
     for (_uint i = 0; i < STATE::STATE_END; ++i)
