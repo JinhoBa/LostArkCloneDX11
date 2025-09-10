@@ -62,9 +62,10 @@ void CMonster::Chase(_float fTimeDelta)
 		vCohesion += vNeighborPositon;
 	}
 	vCohesion = (vCohesion / (_float)(iNumMonster + 1)) - vOwnPositon;
+	vSepration = vSepration / (_float)iNumMonster;
 
-	_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.7f +
-		vSepration * 0.9f + vCohesion * 1.f;
+	_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.3f +
+		vSepration * 1.5f + vCohesion * 0.3f;
 
 	m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed);
 }

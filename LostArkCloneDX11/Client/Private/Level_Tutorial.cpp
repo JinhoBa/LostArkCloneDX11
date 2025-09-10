@@ -123,7 +123,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.fAttackRange = 2.f;
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
 
-    for (_uint i = 0; i < 5; i++)
+    for (_uint i = 0; i < 20; i++)
     {
         Desc.vPosition = _float4(40.f + m_pGameInstance->Random(-5.f, 5.f), 0.f, 40.f + m_pGameInstance->Random(-5.f, 5.f), 1.f);
         // 0 : Monter2
