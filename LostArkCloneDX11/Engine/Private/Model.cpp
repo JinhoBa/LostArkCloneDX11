@@ -310,7 +310,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
                 m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
         }
         else
-            isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished();
+            isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished(0.8f);
     }
 
     for (auto& pBone : m_Bones)
