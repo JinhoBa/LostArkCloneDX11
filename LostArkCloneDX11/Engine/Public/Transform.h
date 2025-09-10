@@ -51,12 +51,14 @@ public:
 	void	Go_Backward_World(_float fTimeDelta);
 
 	_bool	MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec);
+	_bool	Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget, _float fSpeedPersec);
 	void	Turn(_fvector vAxis, _float fTimeDelta);
 	void	Rotation(_fvector vAxis, _float fRadian);
 	void	Rotation(_float fRadianX, _float fRadianY, _float fRadianZ);
 	void	LookAt(_fvector vTarget);
 	void	BillBoard(_fvector vCameraLook);
 	void	TurnTo(_fvector vTarget);
+	_bool	TurnLerp(_fvector vTarget, _float fTimeDelta);
 
 private:
 	_float		m_fSpeedPersec = {};

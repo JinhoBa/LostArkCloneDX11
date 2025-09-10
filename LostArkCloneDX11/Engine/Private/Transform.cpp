@@ -168,6 +168,32 @@ _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPe
     return true;
 }
 
+_bool CTransform::Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget, _float fSpeedPersec)
+{
+    _vector vPosition = Get_State(STATE::POSITION);
+
+    _float3 vDot = {};
+    _vector vToTarget = vTarget - vPosition;
+
+    XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::LOOK), XMVector3Normalize(vToTarget)));
+
+    if(0.9f >= vDot.x)
+    {
+        XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::RIGHT), vDirection));
+        if(vDot.x < 0.f)
+            Turn(Get_State(STATE::UP), -fTimeDelta);
+        else
+            Turn(Get_State(STATE::UP), fTimeDelta);
+    }
+
+
+    vPosition += XMVector3Normalize(vDirection) * fSpeedPersec * fTimeDelta;
+
+    Set_State(STATE::POSITION, vPosition);
+
+    return true;
+}
+
 void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
 {
     _vector vRight = Get_State(STATE::RIGHT);
@@ -249,6 +275,27 @@ void CTransform::TurnTo(_fvector vTarget)
     Set_State(STATE::RIGHT, XMVector3Normalize(vRight) * vScale.x);
     Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
     Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+
+_bool CTransform::TurnLerp(_fvector vTarget, _float fTimeDelta)
+{
+    _float3 vDot = {};
+
+    _vector vDirection = XMVector3Normalize(vTarget - Get_State(STATE::POSITION));
+    XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::LOOK), vDirection));
+
+    if (0.9f >= vDot.x)
+    {
+        XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::RIGHT), vDirection));
+        if (vDot.x < 0.f)
+            Turn(Get_State(STATE::UP), -fTimeDelta);
+        else
+            Turn(Get_State(STATE::UP), fTimeDelta);
+
+        return true;
+    }
+    else
+        return false;
 }
 
 CTransform* CTransform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

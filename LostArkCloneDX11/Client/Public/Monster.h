@@ -37,6 +37,13 @@ public:
 	const _bool isInAttackRange()const {
 		return m_fDistToPlayer <= m_MonsterInfo.fAttackRange; 
 	}
+	_vector Get_Position() {
+		return m_pTransformCom->Get_State(Engine::STATE::POSITION);
+	}
+	_bool Turn(_float fTimeDelta) {
+		return m_pTransformCom->TurnLerp(m_pPlayerTransformCom->Get_Position(), fTimeDelta);
+	}
+
 	const _bool isInBattle() const { return m_bInBattle; }
 	const _bool isAnimationFinish();
 	CState*		Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
@@ -53,7 +60,7 @@ public:
 
 protected:
 	_bool				m_bInBattle = {};
-
+	_float				m_fSpeed = {};
 	_uint				m_iMonsetrID = {};
 	_uint				m_iNumAttack = {};
 
@@ -68,8 +75,14 @@ protected:
 	
 protected:
 	HRESULT			Ready_PartObjects(_wstring& strModelPrototypeTag);
+	void			Detect_Player();
 
-	void	Detect_Player();
+#ifdef _DEBUG
+protected:
+	_float m_fWeight_Sepration = {1.f};
+	_float m_fWeight_Cohesion = {1.f};
+#endif // _DEBUG
+
 
 public:
 	virtual CGameObject* Clone(void* pArg) PURE ;

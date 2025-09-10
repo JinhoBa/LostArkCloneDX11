@@ -32,7 +32,41 @@ void CMonster::Set_Animation(ANIMATIONSLOT eAnim)
 
 void CMonster::Chase(_float fTimeDelta)
 {
-	m_pTransformCom->MoveTo(fTimeDelta, m_pPlayerTransformCom->Get_Position(), 1.5f);
+	_uint iNumMonster = {};
+
+	list<CGameObject*> Monsters = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Monster"));
+
+	_vector vOwnPositon = m_pTransformCom->Get_Position();
+	_vector vSepration = {};
+	_vector vCohesion = vOwnPositon;
+	
+	for (auto& pMonster : Monsters)
+	{
+		if (this == pMonster)
+			continue;
+
+		if (false == dynamic_cast<CMonster*>(pMonster)->isInBattle())
+			continue;
+
+		++iNumMonster;
+
+		_vector vNeighborPositon = pMonster->Get_Transform()->Get_Position();
+
+		/* Sepration */
+		_vector vDir = vOwnPositon - vNeighborPositon;
+
+		vDir = XMVectorSet(vDir.m128_f32[0], 0.f, vDir.m128_f32[2], 0.f);
+		vSepration += vDir* (1.f / XMVectorGetX(XMVector3Length(vDir)));
+
+		/* Cohesion */
+		vCohesion += vNeighborPositon;
+	}
+	vCohesion = (vCohesion / (_float)(iNumMonster + 1)) - vOwnPositon;
+
+	_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.7f +
+		vSepration * 0.9f + vCohesion * 1.f;
+
+	m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed);
 }
 
 HRESULT CMonster::Initialize_Prototype()
@@ -42,6 +76,9 @@ HRESULT CMonster::Initialize_Prototype()
 
 HRESULT CMonster::Initialize(void* pArg)
 {		
+
+	m_fSpeed = 1.5f;
+
 	MONSTER_DESC* pDesc = static_cast<MONSTER_DESC*>(pArg);
 
 	m_iMonsetrID = pDesc->iMonsterID;
@@ -87,10 +124,15 @@ void CMonster::Update(_float fTimeDelta)
 void CMonster::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+
+	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CMonster::Render()
 {
+
+
+
 	return S_OK;
 }
 

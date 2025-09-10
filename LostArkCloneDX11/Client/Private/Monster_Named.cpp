@@ -65,7 +65,6 @@ void CMonster_Named::Late_Update(_float fTimeDelta)
 
 HRESULT CMonster_Named::Render()
 {
-
 	return S_OK;
 }
 HRESULT CMonster_Named::Ready_Components()

@@ -28,7 +28,6 @@ HRESULT CMonster_Attack::Initilize(CStateMachine* pStateMachine, MONSTER* pType,
 void CMonster_Attack::Enter(void* pArg)
 {
 	ANIMATIONSLOT eType = static_cast<ANIMATIONSLOT>(ENUM_TO_INT(ANIMATIONSLOT::ATTACK_1) + m_iAttackIndex);
-
 	m_pMonster->Set_Animation(eType);
 }
 

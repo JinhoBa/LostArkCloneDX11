@@ -23,17 +23,19 @@ HRESULT CMonster_Turn::Initilize(CStateMachine* pStateMachine, MONSTER* pType, C
 
 void CMonster_Turn::Enter(void* pArg)
 {
-	if (true == m_pMonster->isInBattle())
+	/*if (true == m_pMonster->isInBattle())
 	{
 
 	}
 	else
 	{
 
-	}
+	}*/
+
+	//if(MONSTER::NORMAL == *m_pType)
 
 	/* 왼쪽 */
-	m_pMonster->Set_Animation(ANIMATIONSLOT::TURN_L);
+	//m_pMonster->Set_Animation(ANIMATIONSLOT::TURN_L);
 
 	/* 오른쪽 */
 	//m_pMonster->Set_Animation(14, true);
@@ -41,9 +43,9 @@ void CMonster_Turn::Enter(void* pArg)
 
 void CMonster_Turn::Update(_float fTimeDelta)
 {
-	if (m_pMonster->isAnimationFinish())
+	if (false == m_pMonster->Turn(fTimeDelta))
 	{
-		/* Attack 으로 ? */
+		m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::ATTACK), nullptr);
 	}
 }
 

@@ -37,7 +37,7 @@ void CMonster_Run::Update(_float fTimeDelta)
 	if (true == m_pMonster->isInBattle())
 	{
 		if(m_pMonster->isInAttackRange())
-			m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::ATTACK), nullptr);
+			m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::TURN), nullptr);
 	}
 	else
 	{

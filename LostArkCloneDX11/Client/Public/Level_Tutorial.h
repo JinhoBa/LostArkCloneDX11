@@ -20,6 +20,7 @@ private:
 	HRESULT Ready_Light();
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_Kamen(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Monster(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Canvas(const _wstring& strLayerTag);
