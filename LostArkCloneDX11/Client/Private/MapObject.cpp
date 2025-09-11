@@ -23,6 +23,7 @@ HRESULT CMapObject::Initialize(void* pArg)
 {
     MAPOBJECT_DESC* pDesc = static_cast<MAPOBJECT_DESC*>(pArg);
 
+    m_iLevelIndex = pDesc->iLevelIndex;
     m_strPrototypeTag = pDesc->strPrototypeTag;
     memcpy(&m_vPosition, &pDesc->vPosition, sizeof(_float3));
     memcpy(&m_vScale, &pDesc->vScale, sizeof(_float3));
@@ -160,7 +161,7 @@ HRESULT CMapObject::Add_Components()
         return E_FAIL;
 
     /*Model*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), m_strPrototypeTag,
+    if (FAILED(__super::Add_Component(m_iLevelIndex, m_strPrototypeTag,
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 

@@ -5,6 +5,7 @@
 
 NS_BEGIN(Engine)
 class CGameObject;
+class CNavigation_Tool;
 NS_END
 
 NS_BEGIN(Client)
@@ -25,22 +26,32 @@ private:
 
 	_int					m_iMapObject_ComboIndex = {};
 	_int					m_iTerrain_ComboIndex = {};
+#pragma region NAVIGATION
+	_float3					m_vPickingPositon = {};
+
+	_uint					m_iPointIndex = {};
+
+	_bool					m_bClicked[3] = {};
+	_float3					m_Points[3] = {};
 
 
+	CNavigation_Tool*		m_pNavigation_Tool = {};
+#pragma endregion
+
+#pragma region MAP_TOOL
 	vector<const _char*>	m_MapObject_PrototypeTags = {};
 	vector<const _char*>	m_Terrain_PrototypeTags = {};
 
-
-	vector<_wstring>*		m_pImagesNames = {};
-
-	list<CGameObject*>*	m_pBackGroundObject = {  };
-	list<CGameObject*>*	m_pTerrains = {  };
-	class CMapObject*		m_pMapObject = { nullptr };
-	class CTerrain*			m_pTerrain = { nullptr };
+	list<CGameObject*>* m_pBackGroundObject = {  };
+	list<CGameObject*>* m_pTerrains = {  };
+	class CMapObject* m_pMapObject = { nullptr };
+	class CTerrain* m_pTerrain = { nullptr };
+#pragma endregion
 
 	string					m_strSaveFileName = {};
 
 private:
+	HRESULT Ready_Light();
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Canvas(const _wstring& strLayerTag);

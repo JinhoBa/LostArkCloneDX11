@@ -58,7 +58,7 @@ _bool CPlayer::Move(_float fTimeDelta)
     if (nullptr == m_pGameManager->Get_PickingPos())
         return false;
 
-    return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f), m_PlayerInfo.fMoveSpeed);
+    return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f), m_PlayerInfo.fMoveSpeed, m_pNavigationCom);
 }
 
 void CPlayer::TurnToCursor()
@@ -97,6 +97,9 @@ HRESULT CPlayer::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
+    if (FAILED(Ready_Components()))
+        return E_FAIL;
+
     if (FAILED(Ready_PartObjects()))
         return E_FAIL;
 
@@ -106,11 +109,13 @@ HRESULT CPlayer::Initialize(void* pArg)
     if (FAILED(Ready_States()))
         return E_FAIL;
 
-    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(40.f, 0.f, 40.f, 1.f));
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(45.f, 0.f, 45.f, 1.f));
 
     m_pStateMachineCom->Start_State(m_States[IDLE]);
 
     m_pGameManager->Set_PlayerInfoPrt(&m_PlayerInfo);
+
+    m_pRootBoneMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_root");
 
     Add_Buff(1);
 
@@ -140,6 +145,14 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pGameManager->Update_Skills(fTimeDelta);
 
+    m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
+
+    _vector vPos =  m_pTransformCom->Get_Position() + XMVector3TransformCoord(
+            XMVectorSet(m_pRootBoneMatrix->_41, m_pRootBoneMatrix->_42, m_pRootBoneMatrix->_43, 1.f), 
+            XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
+    m_pNavigationCom->isMove(vPos);
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -151,6 +164,21 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+    m_pNavigationCom->Render();
+
+    return S_OK;
+}
+
+HRESULT CPlayer::Ready_Components()
+{
+    CNavigation::NAVIGATION_DESC NavDesc = {};
+
+    NavDesc.iCurrentIndex = 0;
+
+    /* Navigation */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation"),
+        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -162,6 +190,8 @@ HRESULT CPlayer::Ready_PartObjects()
     Body_Desc.pAttackSpeed = &m_PlayerInfo.fAttackSpeed;
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Body_Desc)))
         return E_FAIL;
+
+
 
     CWeapon_Player::WEAPON_DESC Weapon_Desc = {};
     Weapon_Desc.pStance = &m_PlayerInfo.eStance;
@@ -326,4 +356,6 @@ void CPlayer::Free()
     {
         Safe_Release(m_States[i]);
     }
+
+    Safe_Release(m_pNavigationCom);
 }

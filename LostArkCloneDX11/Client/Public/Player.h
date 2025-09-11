@@ -7,6 +7,7 @@
 NS_BEGIN(Engine)
 class CStateMachine;
 class CState;
+class CNavigation;
 NS_END
 
 NS_BEGIN(Client)
@@ -56,10 +57,14 @@ private:
 
 	CStateMachine*			m_pStateMachineCom = { nullptr };
 	CState*					m_States[STATE_END] = {};
+	CNavigation*			m_pNavigationCom = { nullptr };
+
+	const _float4x4*				m_pRootBoneMatrix = { nullptr };
 
 	list<class CBuff*>		m_Buffs;
 
 private:
+	HRESULT			Ready_Components();
 	HRESULT			Ready_PartObjects();
 	HRESULT			Ready_StateMachine();
 	HRESULT			Ready_States();

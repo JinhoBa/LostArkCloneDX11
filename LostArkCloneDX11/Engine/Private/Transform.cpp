@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+#include "Navigation.h"
+
 CTransform::CTransform(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CComponent{pDevice, pContext}
 {
@@ -137,7 +139,7 @@ void CTransform::Go_Backward_World(_float fTimeDelta)
     Set_State(STATE::POSITION, vPosition);
 }
 
-_bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec)
+_bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec, CNavigation* pNavigation)
 {
     _vector vPosition = Get_State(STATE::POSITION);
     _vector vDirection = vTargetPos - vPosition;
@@ -151,6 +153,11 @@ _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPe
     vDirection = XMVector3Normalize(vDirection);
     XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::LOOK), vDirection));
 
+    vPosition += XMVector3Normalize(vDirection) * fSpeedPersec * fTimeDelta;
+
+    if (false == pNavigation->isMove(vPosition))
+        return false;
+
     if(0.9f >= vDot.x)
     {
         XMStoreFloat3(&vDot, XMVector3Dot(Get_State(STATE::RIGHT), vDirection));
@@ -159,9 +166,6 @@ _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPe
         else
             Turn(Get_State(STATE::UP), fTimeDelta);
     }
-
-
-    vPosition += XMVector3Normalize(vDirection) * fSpeedPersec * fTimeDelta;
 
     Set_State(STATE::POSITION, vPosition);
 

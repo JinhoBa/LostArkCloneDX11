@@ -38,12 +38,30 @@ _bool CNavigation::isMove(_fvector vPosition)
 	{
 		if (-1 != iNeighborIndex)
 		{
+			while (true)
+			{
+				if (-1 == iNeighborIndex)
+					return false;
+
+				if (true == m_Cells[iNeighborIndex]->isInCell(vPosition, &iNeighborIndex))
+					break;
+			}
+
 			m_iCurrentIndex = iNeighborIndex;
 			return true;
 		}
 		
 		return false;
 	}
+}
+
+void CNavigation::SnapToNavMesh(CTransform* pTransform)
+{
+	_vector LocalPositon = XMVector3TransformCoord(pTransform->Get_Position(), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+
+	_float fHeight = m_Cells[m_iCurrentIndex]->Compute_Height(LocalPositon);
+
+	XMVector3TransformCoord(XMVectorSetY(LocalPositon, fHeight), XMLoadFloat4x4(&m_WorldMatrix));
 }
 
 HRESULT CNavigation::Initialize_Prototype(const _char* pNavigaitonFilePath)
@@ -94,6 +112,8 @@ HRESULT CNavigation::Initialize(void* pArg)
 
 	m_iCurrentIndex = pDesc->iCurrentIndex;
 
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+
 	return S_OK;
 }
 
@@ -131,13 +151,13 @@ void CNavigation::Set_NeighborIndices()
 				continue;
 
 			if (true == pDstCell->isNeighbor(pSrcCell->Get_Point(CCell::POINT::A), pSrcCell->Get_Point(CCell::POINT::B)))
-				pDstCell->Set_Neighbor(CCell::LINE::AB, pSrcCell);
+				pSrcCell->Set_Neighbor(CCell::LINE::AB, pDstCell);
 
 			if (true == pDstCell->isNeighbor(pSrcCell->Get_Point(CCell::POINT::B), pSrcCell->Get_Point(CCell::POINT::C)))
-				pDstCell->Set_Neighbor(CCell::LINE::BC, pSrcCell);
+				pSrcCell->Set_Neighbor(CCell::LINE::BC, pDstCell);
 
 			if (true == pDstCell->isNeighbor(pSrcCell->Get_Point(CCell::POINT::C), pSrcCell->Get_Point(CCell::POINT::A)))
-				pDstCell->Set_Neighbor(CCell::LINE::CA, pSrcCell);
+				pSrcCell->Set_Neighbor(CCell::LINE::CA, pDstCell);
 		}
 	}
 }

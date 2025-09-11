@@ -14,7 +14,7 @@ HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
 {
 	m_iNumVertexBuffers = 1;
 	m_iNumVertices = 3;
-	m_iVertexStride = sizeof(VTXPOSTEX);
+	m_iVertexStride = sizeof(VTXPOS);
 
 	m_iNumIndices = 4;
 	m_iIndexStride = 2;

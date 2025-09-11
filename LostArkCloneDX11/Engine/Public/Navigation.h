@@ -17,6 +17,7 @@ private:
 
 public:
 	_bool isMove(_fvector vPosition);
+	void SnapToNavMesh(class CTransform* pTransform);
 
 public:
 	virtual HRESULT Initialize_Prototype(const _char* pNavigaitonFilePath);

@@ -50,7 +50,7 @@ public:
 	void	Go_Straight_World(_float fTimeDelta);
 	void	Go_Backward_World(_float fTimeDelta);
 
-	_bool	MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec);
+	_bool	MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec, class CNavigation* pNavigation);
 	_bool	Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget, _float fSpeedPersec);
 	void	Turn(_fvector vAxis, _float fTimeDelta);
 	void	Rotation(_fvector vAxis, _float fRadian);

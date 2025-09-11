@@ -20,11 +20,14 @@ public:
 	}
 	const _bool isInCell(_vector vPositon, _int* pNeighborIndex) const;
 	const _bool isNeighbor(_vector vSrcPositon, _vector vDestPositon) const;
+	_float Compute_Height(_fvector vPosition) const;
 
 public:
 	HRESULT Initialize(_uint iIndex, const _float3* pPoint);
 
 #ifdef _DEBUG
+	_bool Check_Points(_fvector vPinkingPosition, _float3* pPoint);
+	HRESULT Save_Binary(ofstream& out);
 	HRESULT Render();
 #endif
 
@@ -36,6 +39,8 @@ private:
 	_int					m_NeighborIndices[LINE::LINE_END] = { -1, -1, -1 };
 	_float3					m_Points[POINT::POINT_END] = {};
 	_float3					m_Normals[LINE::LINE_END] = {};
+
+	_float4					m_vPlane = {};
 
 #ifdef _DEBUG
 	class CVIBuffer_Cell* m_pVIBufferCom = { nullptr };

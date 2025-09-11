@@ -7,6 +7,7 @@
 #include "Camera_Free.h"
 #include "MapObject.h"
 #include "Terrain.h"
+#include "Navigation_Tool.h"
 
 CLevel_MapEditor::CLevel_MapEditor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{ pDevice, pContext, ENUM_TO_INT(eLevelID) },
@@ -17,6 +18,9 @@ CLevel_MapEditor::CLevel_MapEditor(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 HRESULT CLevel_MapEditor::Initialize()
 {
+    if (FAILED(Ready_Light()))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
 
@@ -32,6 +36,14 @@ HRESULT CLevel_MapEditor::Initialize()
     m_iMapObject_ComboIndex = 0;
     m_iTerrain_ComboIndex = 0;
     m_strSaveFileName;
+
+    m_iPointIndex = 0;
+
+    for (_uint i = 0; i < 3; i++)
+    {
+        m_bClicked[i] = false;
+        m_Points[i] = _float3(0.f, 0.f, 0.f);
+    }
 
     m_MapObject_PrototypeTags = { 
         // Kamen
@@ -122,7 +134,7 @@ HRESULT CLevel_MapEditor::Initialize()
         "Prototype_Component_VIBuffer_Terrain_16"
     };
 
-   
+    m_pNavigation_Tool = CNavigation_Tool::Create(m_pDevice, m_pContext);
  
 
     return S_OK;
@@ -130,12 +142,102 @@ HRESULT CLevel_MapEditor::Initialize()
 
 void CLevel_MapEditor::Update(_float fTimeDelta)
 {
+    /* 새로운 점 선택 */
+    if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+    {
+        if(3 > m_iPointIndex)
+        {
+            XMStoreFloat3(&m_vPickingPositon, m_pGameManager->Picking_Terrains());
+
+            if(0.f < m_vPickingPositon.x)
+            {
+                memcpy(&m_Points[m_iPointIndex], &m_vPickingPositon, sizeof(_float3));
+                m_bClicked[m_iPointIndex] = true;
+                m_iPointIndex++;
+            }
+        }
+    }
+
+    /* 기존 점 선택 */
+    if (m_pGameInstance->Get_KeyPressing(DIK_LCONTROL) && m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
+    {
+        if (3 > m_iPointIndex)
+        {
+            XMStoreFloat3(&m_vPickingPositon, m_pGameManager->Picking_Terrains());
+
+            if (true == m_pNavigation_Tool->Pick_Cell(XMLoadFloat3(&m_vPickingPositon), &m_vPickingPositon))
+            {
+                memcpy(&m_Points[m_iPointIndex], &m_vPickingPositon, sizeof(_float3));
+                m_bClicked[m_iPointIndex] = true;
+                m_iPointIndex++;
+            }
+        }
+    }
+
+    /* 선택 취소 */
+    if (m_pGameInstance->Get_KeyDown(DIK_Z) && m_pGameInstance->Get_KeyPressing(DIK_LCONTROL))
+    {
+        if (0 < m_iPointIndex && 4 > m_iPointIndex)
+        {
+            --m_iPointIndex;
+            m_bClicked[m_iPointIndex] = false;
+            m_Points[m_iPointIndex] = _float3(0.f, 0.f, 0.f);
+        }
+    }
+
+    /* Cell 생성 */
+    if (m_pGameInstance->Get_KeyDown(DIK_RETURN))
+    {
+        if (m_bClicked[0] && m_bClicked[1] && m_bClicked[2])
+        {
+            if (FAILED(m_pNavigation_Tool->Add_Sell(m_Points)))
+                return;
+            else
+            {
+                for (_uint i = 0; i < 3; i++)
+                {
+                    m_bClicked[i] = false;
+                    m_Points[i] = _float3(0.f, 0.f, 0.f);
+                    m_iPointIndex = 0;
+                }
+            }
+        }
+    }
+
+    /* Cell 삭제 */
+    if (m_pGameInstance->Get_KeyDown(DIK_BACKSPACE))
+    {
+        m_pNavigation_Tool->Remove_Sell();
+    }
 
 }
 
 HRESULT CLevel_MapEditor::Render()
 {
+    ImGui::Begin("NAVIGATION");
 
+    ImGui::Text("CELL POINTS  :");
+    ImGui::SliderFloat3 ("A", reinterpret_cast<_float*>(&m_Points[0]), 0.1f, 1.f);
+    ImGui::SliderFloat3("B", reinterpret_cast<_float*>(&m_Points[1]), 0.1f, 1.f);
+    ImGui::SliderFloat3("C", reinterpret_cast<_float*>(&m_Points[2]), 0.1f, 1.f);
+    
+    if (ImGui::Button("Save Navigation File"))
+    {
+        if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Kamen_Navigation.bin")))
+            MSG_BOX("Succese Save File");
+        else
+            MSG_BOX("Failed to Save File");
+    }
+
+    if (ImGui::Button("Load"))
+    {
+        
+    }
+
+    ImGui::End();
+
+
+#pragma region MAP_EDIT
     ImGui::Begin("Map Edit");
 
     ImGui::Text("Prototype MapObject : ");
@@ -159,7 +261,7 @@ HRESULT CLevel_MapEditor::Render()
         //m_pTerrains = &m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
 
     }
-   
+
     if (ImGui::Button("Load"))
     {
         if (FAILED(Load_MapData()))
@@ -180,46 +282,55 @@ HRESULT CLevel_MapEditor::Render()
     }
 
     ImGui::End();
+#pragma endregion
 
-
-    ImGui::Begin("Terrain List");
-    _uint iTerrainIndex = {};
-    string strTmp;
-    const list<CGameObject*>& Terrain = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
-    if(!Terrain.empty())
-    {
-
-        for (auto& pObject : Terrain)
-        {
-            CTerrain* pTerrain = dynamic_cast<CTerrain*>(pObject);
-
-            if (nullptr == pTerrain)
-                continue;
-
-            strTmp = "Terrain##" + to_string(iTerrainIndex++);
-
-            if (ImGui::Button(strTmp.c_str()))
-            {
-                m_pTerrain = pTerrain;
-            }
-        }
-    }
-    ImGui::End();
     
 
+#pragma region TERRAIN_LIST
+
+    /*   ImGui::Begin("Terrain List");
+       _uint iTerrainIndex = {};
+       string strTmp;
+       const list<CGameObject*>& Terrain = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
+       if(!Terrain.empty())
+       {
+
+           for (auto& pObject : Terrain)
+           {
+               CTerrain* pTerrain = dynamic_cast<CTerrain*>(pObject);
+
+               if (nullptr == pTerrain)
+                   continue;
+
+               strTmp = "Terrain##" + to_string(iTerrainIndex++);
+
+               if (ImGui::Button(strTmp.c_str()))
+               {
+                   m_pTerrain = pTerrain;
+               }
+           }
+       }
+       ImGui::End();*/
+#pragma endregion
+
+
+#pragma region OBJECT_LIST
+       /*
     ImGui::Begin("Object List");
     _uint iObjectIndex = {};
     string strSrc;
-    for (auto pObject : *m_pBackGroundObject)
+
+    const list<CGameObject*>& BackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_BackGround"));
+    for (auto pObject : BackGroundObject)
     {
         CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObject);
-        
+
         if (nullptr == pMapObject)
             continue;
 
         strSrc = m_pGameInstance->WstringToUtf8(pMapObject->Get_PrototypeTag()) + to_string(iObjectIndex) + "##" + to_string(iObjectIndex++);
 
-        if(ImGui::Button(strSrc.c_str()))
+        if (ImGui::Button(strSrc.c_str()))
         {
             m_pMapObject = pMapObject;
         }
@@ -227,7 +338,7 @@ HRESULT CLevel_MapEditor::Render()
     ImGui::End();
 
     ImGui::Begin("EDIT");
-    if(ImGui::CollapsingHeader("Terrain"))
+    if (ImGui::CollapsingHeader("Terrain"))
     {
         if (nullptr != m_pTerrain)
             m_pTerrain->Update_ImGui();
@@ -238,7 +349,27 @@ HRESULT CLevel_MapEditor::Render()
             m_pMapObject->Update_ImGui();
     }
     ImGui::End();
-   
+    */
+#pragma endregion
+
+
+    m_pNavigation_Tool->Render();
+
+    return S_OK;
+}
+
+HRESULT CLevel_MapEditor::Ready_Light()
+{
+    LIGHT_DESC Desc = {};
+
+    Desc.eType = LIGHT::DIRECTIONAL;
+    Desc.vDiffuse = _float4(7.f, 7.f, 7.f, 1.f);
+    Desc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+    Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 0.5f);
+    Desc.vDirection = _float4(0.5f, 0.5f, -0.5f, 0.f);
+
+    if (FAILED(m_pGameInstance->Add_Light(Desc)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -268,30 +399,30 @@ HRESULT CLevel_MapEditor::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_MapEditor::Ready_Layer_Player(const _wstring& strLayerTag)
 {
-    // 0 : Player
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-        return E_FAIL;
+    //// 0 : Player
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Player"),
+    //    ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+    //    return E_FAIL;
 
     return S_OK;
 }
 
 HRESULT CLevel_MapEditor::Ready_Layer_Canvas(const _wstring& strLayerTag)
 {
-    // 0 : EXPBar
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ExpBar"),
-        ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag)))
-        return E_FAIL;
+    //// 0 : EXPBar
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_ExpBar"),
+    //    ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag)))
+    //    return E_FAIL;
 
-    // 1 : HUD
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HUD"),
-        ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag)))
-        return E_FAIL;
+    //// 1 : HUD
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HUD"),
+    //    ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag)))
+    //    return E_FAIL;
 
-    // 2 : TopMenu
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TopMenu"),
-        ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag)))
-        return E_FAIL;
+    //// 2 : TopMenu
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TopMenu"),
+    //    ENUM_TO_INT(LEVEL::MAP_EDITOR), strLayerTag)))
+    //    return E_FAIL;
 
     return S_OK;
 }
@@ -299,7 +430,7 @@ HRESULT CLevel_MapEditor::Ready_Layer_Canvas(const _wstring& strLayerTag)
 HRESULT CLevel_MapEditor::Add_MapObject()
 {
     CMapObject::MAPOBJECT_DESC Desc = {};
-
+    Desc.iLevelIndex = ENUM_TO_INT(LEVEL::GAMEPLAY);
     Desc.strPrototypeTag = m_pGameInstance->Utf8ToWstring(m_MapObject_PrototypeTags[m_iMapObject_ComboIndex]);
     Desc.vPosition = _float3(0.f, 0.f, 0.f);
     Desc.vRotation = _float3(0.f, 0.f, 0.f);
@@ -336,14 +467,6 @@ HRESULT CLevel_MapEditor::Add_Terrain()
 
 HRESULT CLevel_MapEditor::Load_MapData()
 {
-    for (auto pObject : *m_pBackGroundObject)
-    {
-        CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObject);
-
-        if (nullptr == pMapObject)
-            continue;
-        pMapObject->Set_Dead();
-    }
 
     for (const auto& TerrainData : m_pGameManager->Get_TerrainData())
     {
@@ -363,6 +486,7 @@ HRESULT CLevel_MapEditor::Load_MapData()
     {
         CMapObject::MAPOBJECT_DESC Desc = {};
 
+        Desc.iLevelIndex = ENUM_TO_INT(LEVEL::GAMEPLAY);
         Desc.strPrototypeTag = MapData.strPrototypeTag;
         Desc.vPosition = MapData.vPosition;
         Desc.vRotation = MapData.vRotation;
@@ -398,6 +522,8 @@ CLevel_MapEditor* CLevel_MapEditor::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 void CLevel_MapEditor::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pNavigation_Tool);
 
     Safe_Release(m_pGameManager);
 }

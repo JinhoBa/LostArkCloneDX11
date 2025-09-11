@@ -15,6 +15,7 @@ class CMapObject : public CGameObject
 public:
 	typedef struct MapObject_Desc : public CGameObject::GAMEOBJECT_DESC
 	{
+		_uint		iLevelIndex = {};
 		_wstring	strPrototypeTag = {};
 		_wstring    strTextureTag = {};
 		_float3		vPosition{};
@@ -46,6 +47,7 @@ public:
 	void				Update_ImGui();
 
 protected:
+	_uint		m_iLevelIndex = {};
 	_uint		m_iSeletPass = {};
 	_uint		m_iNumMesh = {};
 
