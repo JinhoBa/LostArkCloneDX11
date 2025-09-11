@@ -116,6 +116,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameManager->Set_PlayerInfoPrt(&m_PlayerInfo);
 
     m_pRootBoneMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_root");
+    m_PreRootBonePosition = _float4(0.f, 0.f, 0.f, 1.f);
+
 
     Add_Buff(1);
 
@@ -147,16 +149,22 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
-    _vector vPos =  m_pTransformCom->Get_Position() + XMVector3TransformCoord(
-            XMVectorSet(m_pRootBoneMatrix->_41, m_pRootBoneMatrix->_42, m_pRootBoneMatrix->_43, 1.f), 
-            XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
-
-    m_pNavigationCom->isMove(vPos);
-
+    
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+    _vector vRootBonePosition = XMVector3TransformCoord(
+        XMVectorSet(m_pRootBoneMatrix->_41, m_pRootBoneMatrix->_42, m_pRootBoneMatrix->_43, 1.f),
+        XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
+    _vector vDist = XMLoadFloat4(&m_PreRootBonePosition) - vRootBonePosition;
+
+    if (false == m_pNavigationCom->isMove(vRootBonePosition))
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + XMVectorSetY(vDist,0.f));
+    else
+        XMStoreFloat4(&m_PreRootBonePosition, vRootBonePosition);
+
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 
     __super::Late_Update(fTimeDelta);

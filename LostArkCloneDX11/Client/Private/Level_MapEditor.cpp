@@ -223,7 +223,7 @@ HRESULT CLevel_MapEditor::Render()
     
     if (ImGui::Button("Save Navigation File"))
     {
-        if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Kamen_Navigation.bin")))
+        if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Trision_Navigation.bin")))
             MSG_BOX("Succese Save File");
         else
             MSG_BOX("Failed to Save File");
@@ -366,7 +366,7 @@ HRESULT CLevel_MapEditor::Ready_Light()
     Desc.vDiffuse = _float4(7.f, 7.f, 7.f, 1.f);
     Desc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
     Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 0.5f);
-    Desc.vDirection = _float4(0.5f, 0.5f, -0.5f, 0.f);
+    Desc.vDirection = _float4(0.5f, 0.5f, 0.5f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(Desc)))
         return E_FAIL;

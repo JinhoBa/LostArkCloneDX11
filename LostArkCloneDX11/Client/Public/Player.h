@@ -59,7 +59,9 @@ private:
 	CState*					m_States[STATE_END] = {};
 	CNavigation*			m_pNavigationCom = { nullptr };
 
-	const _float4x4*				m_pRootBoneMatrix = { nullptr };
+	_float4					m_PreRootBonePosition = {};
+
+	const _float4x4*		m_pRootBoneMatrix = { nullptr };
 
 	list<class CBuff*>		m_Buffs;
 
