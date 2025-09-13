@@ -255,6 +255,15 @@ CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iLevelIndex, c
 
 #pragma region OBJECT_MANAGER
 
+void CGameInstance::Update_Level(_uint iLevelIndex, _float fTimeDelta)
+{
+	m_pInput_Device->Update();
+
+	m_pObject_Manager->Update_Level(iLevelIndex, fTimeDelta);
+
+	m_pLevel_Manager->Update(fTimeDelta);
+}
+
 CComponent* CGameInstance::Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex)
 {
 	return m_pObject_Manager->Get_Component(iLevelIndex, strLayerTag, strComponentTag, iIndex);	

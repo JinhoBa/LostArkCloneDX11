@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
+#include "Level_Loading.h"
+
 #include "Camera_Free.h"
 #include "Terrain.h"
 #include "MapObject.h"
@@ -42,6 +44,11 @@ HRESULT CLevel_Tutorial::Initialize()
 
 void CLevel_Tutorial::Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->Get_KeyDown(DIK_N))
+    {
+        m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::BOSS));
+    }
+
 }
 
 HRESULT CLevel_Tutorial::Render()
