@@ -45,9 +45,15 @@ private:
 	_uint					m_iNumMesh = {};
 	_int					m_iAnimIndex = {};
 
+#pragma region TESTCODE
+	_float m_Pos[3] = {};
+#pragma endregion
+
+
 	CShader*				m_pShaderCom = { nullptr };
 	CModel*					m_pModelCom = { nullptr };
 	CTexture*				m_pTextureCom = { nullptr };
+	CTexture*				m_pEmssiveTextureCom = { nullptr };
 
 private:
 	HRESULT			Add_Components();

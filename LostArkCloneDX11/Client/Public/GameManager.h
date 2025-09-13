@@ -20,9 +20,9 @@ public:
 	_vector Get_PickingPos() { return XMVectorSetW(XMLoadFloat3(&m_PickingPos),1.f); }
 	CCamera* Get_Camera() { return m_pCamera; }
 
-	void Set_Camera(CCamera* pCamera);
-	void Set_Level(LEVEL eLevel) { m_eCurLevel = eLevel; }
-	LEVEL Get_CurrentLevel() const { return m_eCurLevel; }
+	void	Set_Camera(CCamera* pCamera);
+	void	Set_Level(LEVEL eLevel) { m_eCurLevel = eLevel; }
+	LEVEL	Get_CurrentLevel() const { return m_eCurLevel; }
 public:
 	HRESULT Initialize_Manager();
 

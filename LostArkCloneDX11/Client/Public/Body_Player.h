@@ -44,7 +44,7 @@ private:
 	_uint					m_iNumMesh = {};
 	_uint					m_iCameraTargetBoneIndex = {};
 
-	_float*					m_pAttackSpeed;
+	_float*					m_pAttackSpeed = {nullptr};
 
 	class CCamera_Fix*		m_pCamera = { nullptr };
 

@@ -38,11 +38,11 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_iAnimIndex = 0;
+    m_iAnimIndex = 193;
 
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
-    m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, 0, true);
+    m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
 
     return S_OK;
 }
@@ -68,6 +68,7 @@ void CBody_Kamen::Late_Update(_float fTimeDelta)
 HRESULT CBody_Kamen::Render()
 {
 //#pragma region ANIMATION_TEST
+//    ImGui::InputFloat3("Pos", m_Pos, "%.2f");
 //    ImGui::InputInt("Animation", &m_iAnimIndex);
 //    _int iIndex = {};
 //    for (auto pName : m_pModelCom->Get_AnimationNames())
@@ -76,6 +77,7 @@ HRESULT CBody_Kamen::Render()
 //        {
 //            m_iAnimIndex = iIndex;
 //            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+//
 //        }
 //        ++iIndex;
 //        ImGui::SameLine();
@@ -89,16 +91,15 @@ HRESULT CBody_Kamen::Render()
     if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Get_SRV(0))))
         return E_FAIL;
 
+    if (FAILED(m_pShaderCom->Bind_Resource("g_EmissiveTexture", m_pEmssiveTextureCom->Get_SRV(0))))
+        return E_FAIL;
+
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
         if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
-  /*      if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
-            return E_FAIL;*/
-
-
-        if (FAILED(m_pShaderCom->Begin(0)))
+        if (FAILED(m_pShaderCom->Begin(1)))
             return E_FAIL;
 
 
@@ -121,6 +122,11 @@ HRESULT CBody_Kamen::Add_Components()
     /*Texture*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_KamenBase"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+        return E_FAIL;
+
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_KamenEmssive"),
+        TEXT("Com_EmssiveTexture"), reinterpret_cast<CComponent**>(&m_pEmssiveTextureCom))))
         return E_FAIL;
 
     /* Com_Model */

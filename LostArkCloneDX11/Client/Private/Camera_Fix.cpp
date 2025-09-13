@@ -47,6 +47,8 @@ HRESULT CCamera_Fix::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
     __super::Bind_Transform();
 
+
+
     return S_OK;
 }
 
@@ -66,6 +68,11 @@ void CCamera_Fix::Update(_float fTimeDelta)
     case Client::CAMERA_ANIM::IDLE:
 
         break;
+
+    case Client::CAMERA_ANIM::INTOR_BOSS:
+
+        break;
+
     case Client::CAMERA_ANIM::SHAKE:
         m_fTimeAcc += fTimeDelta;
 
@@ -86,7 +93,7 @@ void CCamera_Fix::Update(_float fTimeDelta)
              m_vDistance.y += fTimeDelta * 0.5f;
          }
         else
-            m_eCurState = CAMERA_ANIM::IDLE;
+            m_eCurState = m_eLevelState;
         break;
 
     default:
@@ -97,11 +104,19 @@ void CCamera_Fix::Update(_float fTimeDelta)
 
 void CCamera_Fix::Late_Update(_float fTimeDelta)
 {
-   
+ /*   m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);*/
 }
 
 HRESULT CCamera_Fix::Render()
-{
+{/*
+    _float fFovy = XMConvertToDegrees(m_fFovy);
+   
+    ImGui::InputFloat("Fovy", &fFovy, 0.1f, 1.f);
+    ImGui::InputFloat("X", &m_vDistance.x, 0.1f, 1.f);
+    ImGui::InputFloat("Y", &m_vDistance.y, 0.1f, 1.f);
+    ImGui::InputFloat("Z", &m_vDistance.z, 0.1f, 1.f);
+
+    m_fFovy = XMConvertToRadians(fFovy);*/
 
     return S_OK;
 }
@@ -132,7 +147,14 @@ void CCamera_Fix::Change_State()
         {
         case CAMERA_ANIM::IDLE:
             m_fTimeAcc = 0.f;
-            m_vDistance = m_Default_Direction;
+            m_fFovy = XMConvertToRadians(60.f);
+            m_vDistance = m_Default_Direction = _float3(0.f, 5.f, 5.f);;
+            break;
+
+        case CAMERA_ANIM::INTOR_BOSS:
+            m_fTimeAcc = 0.f;
+            m_fFovy = XMConvertToRadians(40.f);
+            m_vDistance = m_Default_Direction = _float3(0.f, 3.2f, -13.3f);
             break;
 
         case CAMERA_ANIM::SHAKE:
@@ -143,7 +165,7 @@ void CCamera_Fix::Change_State()
         case CAMERA_ANIM::ZOOMOUT:
             m_fTimeAcc = 0.f;
             m_fDuration = 1.f;
- 
+            m_eLevelState = m_ePreState;
             break;
 
 

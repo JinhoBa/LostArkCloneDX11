@@ -39,6 +39,7 @@
 #include "Monster_Named.h"
 #include "Kamen.h"
 #include "Body_Kamen.h"
+#include "Weapon_Kamen.h"
 #include "MapObject.h"
 #include "SkySphere.h"
 #include "Dynamic_SkyBox.h"
@@ -222,6 +223,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Kamen/Texture2D/mn_cdkcn_00-1_d.dds"), 1))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_KamenEmssive */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_KamenEmssive"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Kamen/Texture2D/mn_cdkcn_00-1_e.dds"), 1))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Texture_WorldHpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WorldHpBar"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/WorldHp/WorldHpBar_%d.dds"), 3))))
@@ -344,6 +350,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* TEST CODE */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen/Kamen.bin"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Weapon_Kamen"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kamen_Weapon/KamenWeapon.fbx"))))
 		return E_FAIL;
 
 	/* TEST CODE */
@@ -470,6 +480,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Body_Kamen */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Kamen"),
 		CBody_Kamen::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Body_Kamen */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Kamen"),
+		CWeapon_Kamen::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
@@ -735,7 +750,9 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 HRESULT CLoader::Loading_For_Boss()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/KamenMap.xml")))
+	//if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/KamenMap.xml")))
+	//	return E_FAIL;
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
 		return E_FAIL;
 
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
@@ -1068,7 +1085,7 @@ HRESULT CLoader::Loading_For_MapEditor()
 	//if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision0823.xml")))
 	//	return E_FAIL;
 
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/KamenMap.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
 		return E_FAIL;
 
 	if (FAILED(Loading_For_GamePlay()))

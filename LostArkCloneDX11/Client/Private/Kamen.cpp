@@ -5,7 +5,8 @@
 #include "GameManager.h"
 
 #include "Skill.h"
-#include "PartObject.h"
+#include "Body_Kamen.h"
+#include "Weapon_Kamen.h"
 
 CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CCharacter{ pDevice, pContext }
@@ -40,8 +41,8 @@ HRESULT CKamen::Initialize(void* pArg)
     if (FAILED(Ready_PartObjects()))
         return E_FAIL;
 
-    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(40.f, 0.f, 40.f, 1.f));
-
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
+    m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
     return S_OK;
 }
 
@@ -97,7 +98,17 @@ HRESULT CKamen::Ready_PartObjects()
 {
     CPartObject::PARTOBJECT_DESC Body_Desc = {};
     Body_Desc.pParentTransform = m_pTransformCom;
-    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Kamen"), TEXT("Body_Kamen"), &Body_Desc)))
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), 
+        TEXT("Prototype_GameObject_Body_Kamen"), TEXT("Body_Kamen"), &Body_Desc)))
+        return E_FAIL;
+
+
+    CWeapon_Kamen::WEAPON_KAMEN_DESC Weapon_Desc = {};
+    Weapon_Desc.pParentTransform = m_pTransformCom;
+    Weapon_Desc.pSocketMatrix = dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02");
+
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), 
+        TEXT("Prototype_GameObject_Weapon_Kamen"), TEXT("Weapon_Kamen"), &Weapon_Desc)))
         return E_FAIL;
 
 

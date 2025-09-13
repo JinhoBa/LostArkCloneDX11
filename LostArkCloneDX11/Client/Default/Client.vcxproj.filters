@@ -283,6 +283,9 @@
     <Filter Include="02.GameObject\Character\Player\States\JUMP">
       <UniqueIdentifier>{26b5cd47-25b6-476c-9e58-877347c9b9c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\Weapon">
+      <UniqueIdentifier>{e76fd810-d4db-411f-86d2-ac575438fbf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -552,6 +555,9 @@
     <ClInclude Include="..\public\Player_Jump.h">
       <Filter>02.GameObject\Character\Player\States\JUMP</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Weapon_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -815,6 +821,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Player_Jump.cpp">
       <Filter>02.GameObject\Character\Player\States\JUMP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Weapon_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

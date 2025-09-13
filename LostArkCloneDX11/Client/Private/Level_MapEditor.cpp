@@ -141,110 +141,118 @@ HRESULT CLevel_MapEditor::Initialize()
 }
 
 void CLevel_MapEditor::Update(_float fTimeDelta)
-{
-    /* 새로운 점 선택 */
-    if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
-    {
-        if(3 > m_iPointIndex)
-        {
-            XMStoreFloat3(&m_vPickingPositon, m_pGameManager->Picking_Terrains());
+{ 
+#pragma region NAVI
+    ///* 새로운 점 선택 */
+ //if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+ //{
+ //    if(3 > m_iPointIndex)
+ //    {
+ //        XMStoreFloat3(&m_vPickingPositon, m_pGameManager->Picking_Terrains());
 
-            if(0.f < m_vPickingPositon.x)
-            {
-                memcpy(&m_Points[m_iPointIndex], &m_vPickingPositon, sizeof(_float3));
-                m_bClicked[m_iPointIndex] = true;
-                m_iPointIndex++;
-            }
-        }
-    }
+ //        if(0.f < m_vPickingPositon.x)
+ //        {
+ //            memcpy(&m_Points[m_iPointIndex], &m_vPickingPositon, sizeof(_float3));
+ //            m_bClicked[m_iPointIndex] = true;
+ //            m_iPointIndex++;
+ //        }
+ //    }
+ //}
 
-    /* 기존 점 선택 */
-    if (m_pGameInstance->Get_KeyPressing(DIK_LCONTROL) && m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
-    {
-        if (3 > m_iPointIndex)
-        {
-            XMStoreFloat3(&m_vPickingPositon, m_pGameManager->Picking_Terrains());
+ ///* 기존 점 선택 */
+ //if (m_pGameInstance->Get_KeyPressing(DIK_LCONTROL) && m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::LBUTTON))
+ //{
+ //    if (3 > m_iPointIndex)
+ //    {
+ //        XMStoreFloat3(&m_vPickingPositon, m_pGameManager->Picking_Terrains());
 
-            if (true == m_pNavigation_Tool->Pick_Cell(XMLoadFloat3(&m_vPickingPositon), &m_vPickingPositon))
-            {
-                memcpy(&m_Points[m_iPointIndex], &m_vPickingPositon, sizeof(_float3));
-                m_bClicked[m_iPointIndex] = true;
-                m_iPointIndex++;
-            }
-        }
-    }
+ //        if (true == m_pNavigation_Tool->Pick_Cell(XMLoadFloat3(&m_vPickingPositon), &m_vPickingPositon))
+ //        {
+ //            memcpy(&m_Points[m_iPointIndex], &m_vPickingPositon, sizeof(_float3));
+ //            m_bClicked[m_iPointIndex] = true;
+ //            m_iPointIndex++;
+ //        }
+ //    }
+ //}
 
-    /* 선택 취소 */
-    if (m_pGameInstance->Get_KeyDown(DIK_Z) && m_pGameInstance->Get_KeyPressing(DIK_LCONTROL))
-    {
-        if (0 < m_iPointIndex && 4 > m_iPointIndex)
-        {
-            --m_iPointIndex;
-            m_bClicked[m_iPointIndex] = false;
-            m_Points[m_iPointIndex] = _float3(0.f, 0.f, 0.f);
-        }
-    }
+ ///* 선택 취소 */
+ //if (m_pGameInstance->Get_KeyDown(DIK_Z) && m_pGameInstance->Get_KeyPressing(DIK_LCONTROL))
+ //{
+ //    if (0 < m_iPointIndex && 4 > m_iPointIndex)
+ //    {
+ //        --m_iPointIndex;
+ //        m_bClicked[m_iPointIndex] = false;
+ //        m_Points[m_iPointIndex] = _float3(0.f, 0.f, 0.f);
+ //    }
+ //}
 
-    /* Cell 생성 */
+ ///* Cell 생성 */
 
-    if (m_bClicked[0] && m_bClicked[1] && m_bClicked[2])
-    {
-        if (FAILED(m_pNavigation_Tool->Add_Sell(m_Points)))
-            return;
-        else
-        {
-            for (_uint i = 0; i < 3; i++)
-            {
-                m_bClicked[i] = false;
-                m_Points[i] = _float3(0.f, 0.f, 0.f);
-                m_iPointIndex = 0;
-            }
-        }
-    }
+ //if (m_bClicked[0] && m_bClicked[1] && m_bClicked[2])
+ //{
+ //    if (FAILED(m_pNavigation_Tool->Add_Sell(m_Points)))
+ //        return;
+ //    else
+ //    {
+ //        for (_uint i = 0; i < 3; i++)
+ //        {
+ //            m_bClicked[i] = false;
+ //            m_Points[i] = _float3(0.f, 0.f, 0.f);
+ //            m_iPointIndex = 0;
+ //        }
+ //    }
+ //}
 
 
-    /* Cell 삭제 */
-    if (m_pGameInstance->Get_KeyDown(DIK_BACKSPACE))
-    {
-        m_pNavigation_Tool->Remove_Sell();
-    }
+ ///* Cell 삭제 */
+ //if (m_pGameInstance->Get_KeyDown(DIK_BACKSPACE))
+ //{
+ //    m_pNavigation_Tool->Remove_Sell();
+ //}
 
+#pragma endregion
+
+ 
 }
 
 HRESULT CLevel_MapEditor::Render()
 {
-    ImGui::Begin("NAVIGATION");
+#pragma region NAVI
+    /*ImGui::Begin("NAVIGATION");
 
-    ImGui::Text("CELL POINTS  :");
-    ImGui::SliderFloat3 ("A", reinterpret_cast<_float*>(&m_Points[0]), 0.1f, 1.f);
-    ImGui::SliderFloat3("B", reinterpret_cast<_float*>(&m_Points[1]), 0.1f, 1.f);
-    ImGui::SliderFloat3("C", reinterpret_cast<_float*>(&m_Points[2]), 0.1f, 1.f);
-    
-    if (ImGui::Button("Save Navigation File"))
-    {
-        if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Test.bin")))
-            MSG_BOX("Success Save File");
-        else
-            MSG_BOX("Failed to Save File");
-    }
+ ImGui::Text("CELL POINTS  :");
+ ImGui::SliderFloat3 ("A", reinterpret_cast<_float*>(&m_Points[0]), 0.1f, 1.f);
+ ImGui::SliderFloat3("B", reinterpret_cast<_float*>(&m_Points[1]), 0.1f, 1.f);
+ ImGui::SliderFloat3("C", reinterpret_cast<_float*>(&m_Points[2]), 0.1f, 1.f);
 
-    if (ImGui::Button("Load Navigation File"))
-    {
-        if(FAILED(m_pNavigation_Tool->LoadFile("../Bin/Resources/Data/Navigtion/Kamen_Navigation.bin")))
-            MSG_BOX("Failed to Load File");
-        else
-        {
-            MSG_BOX("Successed to Load File!");
-        }
+ if (ImGui::Button("Save Navigation File"))
+ {
+     if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Test.bin")))
+         MSG_BOX("Success Save File");
+     else
+         MSG_BOX("Failed to Save File");
+ }
 
-        
-    }
-    if (ImGui::Button("Load"))
-    {
-        
-    }
+ if (ImGui::Button("Load Navigation File"))
+ {
+     if(FAILED(m_pNavigation_Tool->LoadFile("../Bin/Resources/Data/Navigtion/Kamen_Navigation.bin")))
+         MSG_BOX("Failed to Load File");
+     else
+     {
+         MSG_BOX("Successed to Load File!");
+     }
 
-    ImGui::End();
+
+ }
+ if (ImGui::Button("Load"))
+ {
+
+ }
+
+ ImGui::End();*/
+#pragma endregion
+
+ 
 
 
 #pragma region MAP_EDIT
@@ -298,7 +306,7 @@ HRESULT CLevel_MapEditor::Render()
 
 #pragma region TERRAIN_LIST
 
-    /*   ImGui::Begin("Terrain List");
+       ImGui::Begin("Terrain List");
        _uint iTerrainIndex = {};
        string strTmp;
        const list<CGameObject*>& Terrain = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Terrain"));
@@ -320,12 +328,12 @@ HRESULT CLevel_MapEditor::Render()
                }
            }
        }
-       ImGui::End();*/
+       ImGui::End();
 #pragma endregion
 
 
 #pragma region OBJECT_LIST
-       /*
+       
     ImGui::Begin("Object List");
     _uint iObjectIndex = {};
     string strSrc;
@@ -359,7 +367,7 @@ HRESULT CLevel_MapEditor::Render()
             m_pMapObject->Update_ImGui();
     }
     ImGui::End();
-    */
+    
 #pragma endregion
 
 
@@ -449,11 +457,12 @@ HRESULT CLevel_MapEditor::Add_MapObject()
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
         ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"), &Desc)))
         return E_FAIL;
-    CMapObject* pMapObject = dynamic_cast<CMapObject*>(m_pBackGroundObject->back());
-    if (nullptr == pMapObject)
-        return S_OK;
 
-    m_pMapObject = pMapObject;
+    //CMapObject* pMapObject = dynamic_cast<CMapObject*>(m_pBackGroundObject->back());
+    //if (nullptr == pMapObject)
+    //    return S_OK;
+
+    //m_pMapObject = pMapObject;
 
     return S_OK;
 }

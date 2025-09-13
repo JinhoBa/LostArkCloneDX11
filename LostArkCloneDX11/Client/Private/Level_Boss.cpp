@@ -56,10 +56,10 @@ HRESULT CLevel_Boss::Ready_Light()
     LIGHT_DESC Desc = {};
 
     Desc.eType = LIGHT::DIRECTIONAL;
-    Desc.vDiffuse = _float4(0.55f, 0.5f, 0.6f, 1.f);
-    Desc.vAmbient = _float4(0.55f, 0.5f, 0.6f, 1.f);
+    Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    Desc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
     Desc.vSpecular = _float4(0.01f, 0.01f, 0.01f, 0.1f);
-    Desc.vDirection = _float4(0.5f, 0.5f, 0.5f, 0.f);
+    Desc.vDirection = _float4(0.5f, 0.5f, -0.5f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(Desc)))
         return E_FAIL;
@@ -71,8 +71,7 @@ HRESULT CLevel_Boss::Ready_Camera()
 {
     dynamic_cast<CCamera_Fix*>(
         m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-        ->Set_LookDircetion(XMVectorSet(0.f, 5.f, -8.f, 0.f));
-
+        ->Set_State(CAMERA_ANIM::INTOR_BOSS);
 
     return S_OK;
 }
@@ -99,10 +98,10 @@ HRESULT CLevel_Boss::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Boss::Ready_Layer_Kamen(const _wstring& strLayerTag)
 {
-    /* Kamen */
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-        return E_FAIL;
+    ///* Kamen */
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
+    //    ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+    //    return E_FAIL;
 
     return S_OK;
 }

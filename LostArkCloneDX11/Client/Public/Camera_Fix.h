@@ -29,6 +29,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	CAMERA_ANIM		m_eLevelState = {};
 	CAMERA_ANIM		m_ePreState = {};
 	CAMERA_ANIM		m_eCurState = {};
 
