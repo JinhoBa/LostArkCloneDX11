@@ -186,23 +186,22 @@ void CLevel_MapEditor::Update(_float fTimeDelta)
     }
 
     /* Cell 생성 */
-    if (m_pGameInstance->Get_KeyDown(DIK_RETURN))
+
+    if (m_bClicked[0] && m_bClicked[1] && m_bClicked[2])
     {
-        if (m_bClicked[0] && m_bClicked[1] && m_bClicked[2])
+        if (FAILED(m_pNavigation_Tool->Add_Sell(m_Points)))
+            return;
+        else
         {
-            if (FAILED(m_pNavigation_Tool->Add_Sell(m_Points)))
-                return;
-            else
+            for (_uint i = 0; i < 3; i++)
             {
-                for (_uint i = 0; i < 3; i++)
-                {
-                    m_bClicked[i] = false;
-                    m_Points[i] = _float3(0.f, 0.f, 0.f);
-                    m_iPointIndex = 0;
-                }
+                m_bClicked[i] = false;
+                m_Points[i] = _float3(0.f, 0.f, 0.f);
+                m_iPointIndex = 0;
             }
         }
     }
+
 
     /* Cell 삭제 */
     if (m_pGameInstance->Get_KeyDown(DIK_BACKSPACE))
@@ -223,12 +222,23 @@ HRESULT CLevel_MapEditor::Render()
     
     if (ImGui::Button("Save Navigation File"))
     {
-        if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Trision_Navigation.bin")))
-            MSG_BOX("Succese Save File");
+        if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Test.bin")))
+            MSG_BOX("Success Save File");
         else
             MSG_BOX("Failed to Save File");
     }
 
+    if (ImGui::Button("Load Navigation File"))
+    {
+        if(FAILED(m_pNavigation_Tool->LoadFile("../Bin/Resources/Data/Navigtion/Kamen_Navigation.bin")))
+            MSG_BOX("Failed to Load File");
+        else
+        {
+            MSG_BOX("Successed to Load File!");
+        }
+
+        
+    }
     if (ImGui::Button("Load"))
     {
         

@@ -33,7 +33,7 @@ private:
 
 	_bool					m_bClicked[3] = {};
 	_float3					m_Points[3] = {};
-
+	string					m_strNaviFileName = {};
 
 	CNavigation_Tool*		m_pNavigation_Tool = {};
 #pragma endregion

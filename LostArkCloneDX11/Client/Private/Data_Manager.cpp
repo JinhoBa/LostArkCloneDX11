@@ -15,6 +15,10 @@ CData_Manager::CData_Manager()
 
 HRESULT CData_Manager::Load_MapData(const _char* pFilePath)
 {
+    m_MapDatas.clear();
+    m_TerrainDatas.clear();
+    m_MapDatas.reserve(100);
+
     tinyxml2::XMLDocument xmlDoc;
 
     if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))

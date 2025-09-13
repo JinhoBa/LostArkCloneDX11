@@ -68,7 +68,7 @@ void CTerrain::Priority_Update(_float fTimeDelta)
         if (m_pVIBufferCom->Picking(m_pTransformCom, &m_pPickingPos))
             CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
 
-       /* if (m_pGameInstance->Get_KeyPressing(DIK_9))
+        if (m_pGameInstance->Get_KeyPressing(DIK_9))
         {
             if (m_pVIBufferCom->Picking_Edit(m_pTransformCom, &m_pPickingPos, 0.1f))
                 CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
@@ -85,7 +85,7 @@ void CTerrain::Priority_Update(_float fTimeDelta)
             if (m_pVIBufferCom->Picking_Smooth(m_pTransformCom, &m_pPickingPos, m_PosYValue))
                 CGameManager::GetInstance()->Bind_PickingPos(&m_pPickingPos);
         }
-        */
+        
     }
 
 }
