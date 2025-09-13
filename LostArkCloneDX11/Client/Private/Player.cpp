@@ -175,6 +175,15 @@ void CPlayer::Update(_float fTimeDelta)
         m_PlayerInfo.fIdentity += 2.f * fTimeDelta;
     }
 
+    if (m_PlayerInfo.fMaxMp < m_PlayerInfo.fMp)
+    {
+        m_PlayerInfo.fMp = m_PlayerInfo.fMaxMp;
+    }
+    else
+    {
+        m_PlayerInfo.fMp += fTimeDelta * 20.f;
+    }
+
     __super::Update(fTimeDelta);
 
     m_pStateMachineCom->Upadte(fTimeDelta);
@@ -189,6 +198,8 @@ void CPlayer::Update(_float fTimeDelta)
         m_pStateMachineCom->Change_State(Get_State(CPlayer::STATE::JUMP), nullptr);
     }
 #pragma endregion
+
+   // m_pNavigationCom->SnapToNavMesh(m_pTransformCom);
 
 }
 

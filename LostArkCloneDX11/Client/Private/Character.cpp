@@ -59,12 +59,21 @@ void CCharacter::Check_Navigation(CNavigation* pNavigation,const _float4x4* pRoo
 	   XMVectorSet(pRootBoneMatrix->_41, pRootBoneMatrix->_42, pRootBoneMatrix->_43, 1.f),
 	   XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
+	/* Check Position */
    _vector vDist = XMLoadFloat4(&m_PreRootBonePosition) - vRootBonePosition;
 
    if (false == pNavigation->isMove(vRootBonePosition))
 	   m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + XMVectorSetY(vDist,0.f));
    else
 	   XMStoreFloat4(&m_PreRootBonePosition, vRootBonePosition);
+
+   /* Check Height */
+   _float fNaviHeight = pNavigation->SnapToNavMesh(vRootBonePosition);
+   _float fY = XMVectorGetY(vRootBonePosition);
+   _vector vPosition = m_pTransformCom->Get_Position();
+
+   if(fY < fNaviHeight)
+		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetY(vPosition, XMVectorGetY(vPosition) + (fNaviHeight - fY)));
 }
 
 void CCharacter::Free()

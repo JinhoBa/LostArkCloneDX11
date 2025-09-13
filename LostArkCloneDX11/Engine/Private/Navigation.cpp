@@ -63,13 +63,9 @@ _bool CNavigation::isMove(_fvector vPosition)
 	}
 }
 
-void CNavigation::SnapToNavMesh(CTransform* pTransform)
+_float CNavigation::SnapToNavMesh(_fvector vPostion)
 {
-	_vector LocalPositon = XMVector3TransformCoord(pTransform->Get_Position(), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
-
-	_float fHeight = m_Cells[m_iCurrentIndex]->Compute_Height(LocalPositon);
-
-	XMVector3TransformCoord(XMVectorSetY(LocalPositon, fHeight), XMLoadFloat4x4(&m_WorldMatrix));
+	return  m_Cells[m_iCurrentIndex]->Compute_Height(vPostion);
 }
 
 HRESULT CNavigation::Initialize_Prototype(const _char* pNavigaitonFilePath)

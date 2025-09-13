@@ -167,7 +167,7 @@ _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPe
             Turn(Get_State(STATE::UP), fTimeDelta);
     }
 
-    Set_State(STATE::POSITION, vPosition);
+    Set_State(STATE::POSITION, XMVectorSetY(vPosition, pNavigation->SnapToNavMesh(vPosition)));
 
     return true;
 }
