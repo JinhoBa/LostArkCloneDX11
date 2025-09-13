@@ -17,6 +17,7 @@ private:
 
 public:
 	void Set_CameraTargetPosition(_vector TargetPosition);
+	void Set_LookDircetion(_fvector vDirection);
 	void Set_State(CAMERA_ANIM eState) { m_eCurState = eState; }
 
 public:
@@ -36,6 +37,7 @@ private:
 	_float			m_fDuration = {};
 	_float          m_fTimeAcc = {};
 
+	_float3			m_Default_Direction = {};
 	_float3			m_vDistance = {};
 
 	_float4			m_pTargetPosition = {};

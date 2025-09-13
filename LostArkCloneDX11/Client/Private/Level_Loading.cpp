@@ -7,6 +7,7 @@
 #include "Loader.h"
 #include "Level_Logo.h"
 #include "Level_Tutorial.h"
+#include "Level_Boss.h"
 #include "Level_MapEditor.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
@@ -27,6 +28,7 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
 
+    CGameManager::GetInstance()->Set_Level(LEVEL::LOADING);
 
     return S_OK;
 }
@@ -48,6 +50,10 @@ void CLevel_Loading::Update(_float fTimeDelta)
 
         case Client::LEVEL::TUTORIAL:
             pNextLevel = CLevel_Tutorial::Create(m_pDevice, m_pContext, m_eNextLevelID);
+            break;
+
+        case Client::LEVEL::BOSS:
+            pNextLevel = CLevel_Boss::Create(m_pDevice, m_pContext, m_eNextLevelID);
             break;
 
         case Client::LEVEL::MAP_EDITOR:

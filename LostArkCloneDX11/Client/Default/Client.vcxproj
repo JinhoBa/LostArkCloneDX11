@@ -164,6 +164,7 @@
     <ClInclude Include="..\public\Body_Kamen.h" />
     <ClInclude Include="..\public\Body_Monster.h" />
     <ClInclude Include="..\public\Body_Player.h" />
+    <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Kamen.h" />
     <ClInclude Include="..\public\Buff.h" />
     <ClInclude Include="..\public\BuffUI.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="..\Public\IMGUI\imstb_rectpack.h" />
     <ClInclude Include="..\Public\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\Public\IMGUI\imstb_truetype.h" />
+    <ClInclude Include="..\public\Level_Boss.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
     <ClInclude Include="..\public\Level_Tutorial.h" />
@@ -220,6 +222,7 @@
     <ClInclude Include="..\public\Player_ComboSkill.h" />
     <ClInclude Include="..\public\Player_Dash.h" />
     <ClInclude Include="..\public\Player_Hit.h" />
+    <ClInclude Include="..\public\Player_Jump.h" />
     <ClInclude Include="..\public\Player_Move.h" />
     <ClInclude Include="..\public\Player_NormalSkill.h" />
     <ClInclude Include="..\public\Player_State.h" />
@@ -259,6 +262,7 @@
     <ClCompile Include="..\private\Body_Kamen.cpp" />
     <ClCompile Include="..\private\Body_Monster.cpp" />
     <ClCompile Include="..\private\Body_Player.cpp" />
+    <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Kamen.cpp" />
     <ClCompile Include="..\private\Buff.cpp" />
     <ClCompile Include="..\private\BuffUI.cpp" />
@@ -307,6 +311,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\private\Level_Boss.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
     <ClCompile Include="..\private\Level_Tutorial.cpp" />
@@ -336,6 +341,7 @@
     <ClCompile Include="..\private\Player_ComboSkill.cpp" />
     <ClCompile Include="..\private\Player_Dash.cpp" />
     <ClCompile Include="..\private\Player_Hit.cpp" />
+    <ClCompile Include="..\private\Player_Jump.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />
     <ClCompile Include="..\private\Player_NormalSkill.cpp" />
     <ClCompile Include="..\private\Player_State.cpp" />

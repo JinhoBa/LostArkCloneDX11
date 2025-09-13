@@ -115,13 +115,7 @@ void CMapObject::Update_ImGui()
         return;
     if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
     {
-        _float3* pPickingPos = CGameManager::GetInstance()->Get_PickingPos();
-        if(nullptr != pPickingPos)
-        {
-            m_vPosition.x = pPickingPos->x;
-            m_vPosition.y = pPickingPos->y;
-            m_vPosition.z = pPickingPos->z;
-        }
+        XMStoreFloat3(&m_vPosition, CGameManager::GetInstance()->Get_PickingPos());
     }
 
     ImGui::Text(m_pGameInstance->WstringToUtf8(m_strPrototypeTag).c_str());

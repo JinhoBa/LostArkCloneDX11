@@ -274,6 +274,15 @@
     <Filter Include="02.GameObject\Character\Kamen\State">
       <UniqueIdentifier>{5d49de0a-5bf5-4296-9beb-1cb3f6ea0e7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Level\Boss">
+      <UniqueIdentifier>{fb2f1120-0878-411e-be03-0b00499fd8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Sky\Dynamic">
+      <UniqueIdentifier>{36318091-3632-4108-abc7-11ec78fc6fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\JUMP">
+      <UniqueIdentifier>{26b5cd47-25b6-476c-9e58-877347c9b9c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -534,6 +543,15 @@
     <ClInclude Include="..\public\Body_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Level_Boss.h">
+      <Filter>01.Level\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dynamic_SkyBox.h">
+      <Filter>02.GameObject\Sky\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_Jump.h">
+      <Filter>02.GameObject\Character\Player\States\JUMP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -788,6 +806,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Body_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Boss.cpp">
+      <Filter>01.Level\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dynamic_SkyBox.cpp">
+      <Filter>02.GameObject\Sky\Dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Jump.cpp">
+      <Filter>02.GameObject\Character\Player\States\JUMP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
