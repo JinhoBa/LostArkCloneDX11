@@ -172,7 +172,7 @@ _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPe
     return true;
 }
 
-_bool CTransform::Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget, _float fSpeedPersec)
+_bool CTransform::Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget, _float fSpeedPersec, CNavigation* pNavigation)
 {
     _vector vPosition = Get_State(STATE::POSITION);
 
@@ -190,10 +190,13 @@ _bool CTransform::Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget
             Turn(Get_State(STATE::UP), fTimeDelta);
     }
 
-
     vPosition += XMVector3Normalize(vDirection) * fSpeedPersec * fTimeDelta;
 
-    Set_State(STATE::POSITION, vPosition);
+    if (pNavigation->isMove(vPosition))
+        Set_State(STATE::POSITION, vPosition);
+    else
+        return false;
+    
 
     return true;
 }

@@ -54,6 +54,8 @@ void CMonster_Named::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 
 	m_pStateMachineCom->Upadte(fTimeDelta);
+
+	Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
 }
 
 void CMonster_Named::Late_Update(_float fTimeDelta)
@@ -72,6 +74,15 @@ HRESULT CMonster_Named::Ready_Components()
 	/* StateMachine */
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_StateMachine"),
 		TEXT("Com_StateMachine"), reinterpret_cast<CComponent**>(&m_pStateMachineCom))))
+		return E_FAIL;
+
+	CNavigation::NAVIGATION_DESC Desc = {};
+
+	Desc.iCurrentIndex = 0;
+
+	/* StateMachine */
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Trision"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
 		return E_FAIL;
 
 	return S_OK;

@@ -19,13 +19,13 @@ public:
 	{
 		_uint iMonsterID{};
 		_uint iNumAttack{};
-		_float fMaxHp;
-		_float fHp;
-		_float fAttack;
-		_float fDetectDistance;
-		_float fAttackRange;
-		_float4 vPosition;
-		_wstring strModelPrototypeTag;
+		_float fMaxHp{};
+		_float fHp{};
+		_float fAttack{};
+		_float fDetectDistance{};
+		_float fAttackRange{};
+		_float4 vPosition{};
+		_wstring strModelPrototypeTag{};
 	}MONSTER_DESC;
 
 protected:
@@ -69,9 +69,12 @@ protected:
 	MONSTER				m_eType = {};
 	MONSTER_INFO		m_MonsterInfo = {};
 
+	const _float4x4*	m_pRootBoneMatrix = { nullptr };
+
 	CStateMachine*		m_pStateMachineCom = { nullptr };
 	CState*				m_States[STATE_END] = {};
 	CTransform*			m_pPlayerTransformCom = { nullptr };
+	CNavigation*		m_pNavigationCom = {nullptr};
 	
 protected:
 	HRESULT			Ready_PartObjects(_wstring& strModelPrototypeTag);

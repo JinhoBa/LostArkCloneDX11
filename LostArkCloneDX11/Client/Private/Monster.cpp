@@ -37,7 +37,7 @@ void CMonster::Chase(_float fTimeDelta)
 	list<CGameObject*> Monsters = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Monster"));
 
 	_vector vOwnPositon = m_pTransformCom->Get_Position();
-	_vector vSepration = {};
+	_vector vSepration = XMVectorSet(0.f, 0.f, 0.f, 0.f);
 	_vector vCohesion = vOwnPositon;
 	
 	for (auto& pMonster : Monsters)
@@ -61,13 +61,23 @@ void CMonster::Chase(_float fTimeDelta)
 		/* Cohesion */
 		vCohesion += vNeighborPositon;
 	}
-	vCohesion = (vCohesion / (_float)(iNumMonster + 1)) - vOwnPositon;
-	vSepration = vSepration / (_float)iNumMonster;
 
-	_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.3f +
-		vSepration * 1.5f + vCohesion * 0.3f;
+	if(0 != iNumMonster)
+	{
+		vCohesion = (vCohesion / (_float)(iNumMonster + 1)) - vOwnPositon;
+		vSepration = vSepration / (_float)iNumMonster;
 
-	m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed);
+		_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.3f +
+			vSepration * 1.f + vCohesion * 0.3f;
+
+
+		m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed, m_pNavigationCom);
+	}
+	else
+	{
+		_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position());
+		m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed, m_pNavigationCom);
+	}
 }
 
 HRESULT CMonster::Initialize_Prototype()
@@ -77,7 +87,6 @@ HRESULT CMonster::Initialize_Prototype()
 
 HRESULT CMonster::Initialize(void* pArg)
 {		
-
 	m_fSpeed = 1.5f;
 
 	MONSTER_DESC* pDesc = static_cast<MONSTER_DESC*>(pArg);
@@ -107,6 +116,11 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	m_pTransformCom->Set_State(Engine::STATE::POSITION, XMLoadFloat4(&pDesc->vPosition));
 
+	m_pRootBoneMatrix = dynamic_cast<CBody_Monster*>(Find_PartObject(TEXT("Body_Monster")))->Get_BoneMatrixPtr("b_root");
+
+	if (nullptr == m_pRootBoneMatrix)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -131,9 +145,6 @@ void CMonster::Late_Update(_float fTimeDelta)
 
 HRESULT CMonster::Render()
 {
-
-
-
 	return S_OK;
 }
 
@@ -172,5 +183,5 @@ void CMonster::Free()
 
 	Safe_Release(m_pPlayerTransformCom);
 	Safe_Release(m_pStateMachineCom);
-
+	Safe_Release(m_pNavigationCom);
 }
