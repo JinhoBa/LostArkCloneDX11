@@ -41,6 +41,18 @@ HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 	return S_OK;
 }
 
+void CObject_Manager::Update_Level(_uint iLevelIndex, _float fTimeDelta)
+{
+	for (auto& Pair : m_pLayers[iLevelIndex])
+		Pair.second->Priority_Update(fTimeDelta);
+
+	for (auto& Pair : m_pLayers[iLevelIndex])
+		Pair.second->Update(fTimeDelta);
+
+	for (auto& Pair : m_pLayers[iLevelIndex])
+		Pair.second->Late_Update(fTimeDelta);
+}
+
 HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg)
 {
 	CGameObject*	pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iPrototypeLevelIndex, strPrototypeTag, pArg));

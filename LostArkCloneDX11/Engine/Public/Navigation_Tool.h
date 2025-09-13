@@ -22,6 +22,7 @@ public:
 	HRESULT	Add_Sell(const _float3* pPoints);
 	void Remove_Sell();
 	HRESULT Save_File(const _char* pNavigationFilePath);
+	HRESULT LoadFile(const _char* pNavigationFilePath);
 
 
 public:

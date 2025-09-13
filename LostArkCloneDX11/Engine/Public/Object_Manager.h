@@ -23,6 +23,7 @@ public:
 	void Late_Update(_float fTimeDelta);	
 
 public:
+	void	Update_Level(_uint iLevelIndex, _float fTimeDelta);
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg);
 	
 	void Clear(_uint iLevelIndex);

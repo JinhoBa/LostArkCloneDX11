@@ -68,6 +68,8 @@ HRESULT CNavigation_Tool::Add_Sell(const _float3* pPoints)
 	m_Cells.push_back(pCell);
 
 	++m_iNumCells;
+
+	return S_OK;
 }
 
 void CNavigation_Tool::Remove_Sell()
@@ -99,6 +101,37 @@ HRESULT CNavigation_Tool::Save_File(const _char* pNavigationFilePath)
 	}
 
 	out.close();
+
+	return S_OK;
+}
+
+HRESULT CNavigation_Tool::LoadFile(const _char* pNavigationFilePath)
+{
+	ifstream in(pNavigationFilePath, ios::binary);
+
+	if (false == in.is_open())
+	{
+		MSG_BOX("Failed to Load Navigation Binanry File");
+		return E_FAIL;
+	}
+
+	while (true)
+	{
+		if (true == in.eof())
+			break;
+
+		_float3 Points[CCell::POINT::POINT_END] = {};
+		in.read(reinterpret_cast<_char*>(&Points), sizeof(_float3) * CCell::POINT::POINT_END);
+
+		CCell* pCell = CCell::Create(m_pDevice, m_pContext, (_uint)m_Cells.size(), Points);
+
+		if (nullptr == pCell)
+			return E_FAIL;
+
+		m_Cells.push_back(pCell);
+	}
+
+	return S_OK;
 }
 
 HRESULT CNavigation_Tool::Render()

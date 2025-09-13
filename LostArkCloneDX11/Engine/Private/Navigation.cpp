@@ -26,6 +26,14 @@ CNavigation::CNavigation(const CNavigation& Prototype)
 #endif
 }
 
+void CNavigation::Set_Current_CellIndex(_int iIndex)
+{
+	if (iIndex >= (_int)m_Cells.size())
+		return;
+
+	m_iCurrentIndex = iIndex;
+}
+
 _bool CNavigation::isMove(_fvector vPosition)
 {
 	_int iNeighborIndex = { -1 };

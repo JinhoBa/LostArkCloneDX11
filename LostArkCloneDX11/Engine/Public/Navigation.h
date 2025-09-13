@@ -16,8 +16,9 @@ private:
 	virtual ~CNavigation() = default;
 
 public:
-	_bool isMove(_fvector vPosition);
-	void SnapToNavMesh(class CTransform* pTransform);
+	void	Set_Current_CellIndex(_int iIndex);
+	_bool	isMove(_fvector vPosition);
+	void	SnapToNavMesh(class CTransform* pTransform);
 
 public:
 	virtual HRESULT Initialize_Prototype(const _char* pNavigaitonFilePath);

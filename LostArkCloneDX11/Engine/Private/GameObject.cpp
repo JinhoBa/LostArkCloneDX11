@@ -94,6 +94,31 @@ HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring& s
 	return S_OK;
 }
 
+HRESULT CGameObject::Change_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg)
+{
+	CComponent* pPreComponent = Find_Component(strComponentTag);
+
+	if (nullptr == pPreComponent)
+		return E_FAIL;
+
+	Safe_Release(pPreComponent);
+	Safe_Release(pPreComponent);
+
+	m_Components.erase(strComponentTag);
+
+	CComponent* pComponent = dynamic_cast<CComponent*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, iPrototypeLevelIndex, strPrototypeTag, pArg));
+	if (nullptr == pComponent)
+		return E_FAIL;
+
+	m_Components.emplace(strComponentTag, pComponent);
+
+	*ppOut = pComponent;
+
+	Safe_AddRef(pComponent);
+
+	return S_OK;
+}
+
 void CGameObject::Free()
 {
 	__super::Free();
