@@ -15,7 +15,9 @@ const LIGHT_DESC& CLight_Manager::Get_Desc(_uint iLightIndex)
 		iter++;
 	}
 	
-	return (*iter)->Get_LightDesc();
+	/*return (*iter)->Get_LightDesc();*/
+
+	return m_Lights.back()->Get_LightDesc();
 }
 
 HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)

@@ -128,6 +128,9 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 
 	getline(file, strText);
 
+	if (!strcmp(strText.c_str(), "none"))
+		return S_OK;
+
 	while (file)
 	{
 		if (2 < iDataIndex)
