@@ -45,6 +45,8 @@ void CPlayer_Move::Update(_float fTimeDelta)
 		return;
 	}
 
+	m_pPlayer->Check_Navi();
+
 	if (m_pGameInstance->Get_KeyDown(DIK_Z))
 	{
 		m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::CHANGE_STANCE), nullptr);

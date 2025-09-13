@@ -39,6 +39,8 @@ void CPlayer_Idle::Enter(void* pArg)
 
 void CPlayer_Idle::Update(_float fTimeDelta)
 {
+	m_pPlayer->Check_Navi();
+
 	if(__super::Check_Dash())
 	{
 		m_pPlayer->TurnToCursor();

@@ -142,11 +142,11 @@ void CTransform::Go_Backward_World(_float fTimeDelta)
 _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec, CNavigation* pNavigation)
 {
     _vector vPosition = Get_State(STATE::POSITION);
-    _vector vDirection = vTargetPos - vPosition;
+    _vector vDirection = XMVectorSetY((vTargetPos - vPosition), 0.f);
 
-    if (0.1f >= XMVectorGetX(XMVector3Length(vDirection)))
+    if (0.1f >=  XMVectorGetX(XMVector3Length(vDirection)))
     {
-        Set_State(STATE::POSITION, vTargetPos);
+        Set_State(STATE::POSITION, XMVectorSetY(vTargetPos, pNavigation->SnapToNavMesh(vTargetPos)));
         return false;
     }
     _float3 vDot = {};
@@ -193,7 +193,7 @@ _bool CTransform::Chase(_float fTimeDelta, _fvector vDirection, _fvector vTarget
     vPosition += XMVector3Normalize(vDirection) * fSpeedPersec * fTimeDelta;
 
     if (pNavigation->isMove(vPosition))
-        Set_State(STATE::POSITION, vPosition);
+        Set_State(STATE::POSITION, XMVectorSetY(vPosition, pNavigation->SnapToNavMesh(vPosition)));
     else
         return false;
     

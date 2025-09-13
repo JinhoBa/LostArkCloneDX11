@@ -77,7 +77,6 @@ _bool CPlayer::Jump(_fvector vTargetPosition, _float fTimeDelta, _float fRatio, 
 
     if (1.f <= fRatio)
     {
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 30.f, 1.f));
         m_pNavigationCom->Set_Current_CellIndex(0.f);
         return true;
     }
