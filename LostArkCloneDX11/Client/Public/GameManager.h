@@ -17,11 +17,12 @@ private:
 	virtual ~CGameManager() = default;
 
 public:
-	_float3* Get_PickingPos() { return &m_PickingPos; }
+	_vector Get_PickingPos() { return XMVectorSetW(XMLoadFloat3(&m_PickingPos),1.f); }
 	CCamera* Get_Camera() { return m_pCamera; }
 
 	void Set_Camera(CCamera* pCamera);
 	void Set_Level(LEVEL eLevel) { m_eCurLevel = eLevel; }
+	LEVEL Get_CurrentLevel() const { return m_eCurLevel; }
 public:
 	HRESULT Initialize_Manager();
 
@@ -43,8 +44,6 @@ public:
 	HRESULT				Load_AnimationData(const _char* pFilePath);
 #pragma endregion
 
-	
-
 
 #pragma region SKILL_MANAGER
 	void		Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
@@ -65,6 +64,7 @@ public:
 	
 
 private:
+	_bool					m_bPicked = {};
 	_float3					m_PickingPos = {};
 	LEVEL					m_eCurLevel = {};
 

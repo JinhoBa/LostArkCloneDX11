@@ -156,9 +156,10 @@ _vector CGameManager::Picking_Terrains()
 	const list<CGameObject*>& Terrains = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(m_eCurLevel), TEXT("Layer_Terrain"));
 
 	if (Terrains.empty())
+	{
+		m_bPicked = false;
 		return XMVectorSet(0.f, 0.f, 0.f, 1.f);
-
-	_float3 vPickingPosition = {};
+	}
 
 	for (auto iter = Terrains.begin(); iter != Terrains.end(); iter++)
 	{
@@ -166,14 +167,18 @@ _vector CGameManager::Picking_Terrains()
 
 		if (dynamic_cast<CTerrain*>(*iter)->Picking(&vPosition))
 		{
-			if (distance >= XMVector3Length(XMLoadFloat3(&vPosition) - vCameraPosition).m128_f32[0])
-				vPickingPosition = vPosition;
+			_float fDist = XMVectorGetX(XMVector3Length(XMLoadFloat3(&vPosition) - vCameraPosition));
+			if (distance >= fDist)
+			{
+				distance = fDist;
+				m_PickingPos = vPosition;
+			}
 		}
 	}
 
-	m_PickingPos = vPickingPosition;
+	m_PickingPos;
 
-	return XMVectorSetW(XMLoadFloat3(&vPickingPosition), 1.f);
+	return XMVectorSetW(XMLoadFloat3(&m_PickingPos), 1.f);
 }
 
 void CGameManager::Free()

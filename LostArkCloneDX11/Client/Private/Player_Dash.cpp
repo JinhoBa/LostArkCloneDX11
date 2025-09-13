@@ -32,6 +32,8 @@ void CPlayer_Dash::Enter(void* pArg)
 
 void CPlayer_Dash::Update(_float fTimeDelta)
 {
+	m_pPlayer->Check_Navi();
+
 	if (m_pGameInstance->Get_KeyDown(DIK_Z) && false == m_bChangeStance)
 	{
 		m_pPlayer->Change_Stance();

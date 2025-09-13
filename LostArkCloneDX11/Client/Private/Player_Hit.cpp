@@ -22,6 +22,7 @@ HRESULT CPlayer_Hit::Initilize(CStateMachine* pStateMachine, STANCE* pStance, CP
 
 void CPlayer_Hit::Enter(void* pArg)
 {
+	m_pPlayer->Check_Navi();
 	// 피격 종류 받아와서 처리
 	// 피격마다 애니메이션 횟수가 다를 예정
 

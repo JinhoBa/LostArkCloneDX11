@@ -24,6 +24,7 @@
 #include "Player_ChangeStance.h"
 #include "Player_Dash.h"
 #include "Player_Hit.h"
+#include "Player_Jump.h"
 #pragma endregion
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -53,12 +54,45 @@ _bool CPlayer::isAnimationFinish()
     return static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->isAnimationFinish();
 }
 
+HRESULT CPlayer::Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag)
+{
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, vPositon);
+
+    CNavigation::NAVIGATION_DESC NavDesc = {};
+
+    NavDesc.iCurrentIndex = 1;
+
+    if (FAILED(__super::Change_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), pNavigationPrototypeTag,
+        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NavDesc)))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+_bool CPlayer::Jump(_fvector vTargetPosition, _float fTimeDelta, _float fRatio, _float fHeight)
+{
+    _vector vPosition = XMVectorLerp(m_pTransformCom->Get_Position(), vTargetPosition, fRatio);
+
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSetY(vPosition, fHeight));
+
+    if (1.f <= fRatio)
+    {
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 30.f, 1.f));
+        m_pNavigationCom->Set_Current_CellIndex(0.f);
+        return true;
+    }
+
+    return false;
+}
+
 _bool CPlayer::Move(_float fTimeDelta)
 {
-    if (nullptr == m_pGameManager->Get_PickingPos())
+    _vector vPositon = m_pGameManager->Get_PickingPos();
+
+    if (0.f >= XMVectorGetX(vPositon))
         return false;
 
-    return m_pTransformCom->MoveTo(fTimeDelta, XMVectorSetW(XMLoadFloat3(m_pGameManager->Get_PickingPos()), 1.f), m_PlayerInfo.fMoveSpeed, m_pNavigationCom);
+    return m_pTransformCom->MoveTo(fTimeDelta, vPositon, m_PlayerInfo.fMoveSpeed, m_pNavigationCom);
 }
 
 void CPlayer::TurnToCursor()
@@ -116,7 +150,7 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameManager->Set_PlayerInfoPrt(&m_PlayerInfo);
 
     m_pRootBoneMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_root");
-    m_PreRootBonePosition = _float4(0.f, 0.f, 0.f, 1.f);
+
 
 
     Add_Buff(1);
@@ -149,22 +183,17 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
-    
+#pragma region JUMP_TEST
+    if (m_pGameInstance->Get_KeyDown(DIK_G))
+    {
+        m_pStateMachineCom->Change_State(Get_State(CPlayer::STATE::JUMP), nullptr);
+    }
+#pragma endregion
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-    _vector vRootBonePosition = XMVector3TransformCoord(
-        XMVectorSet(m_pRootBoneMatrix->_41, m_pRootBoneMatrix->_42, m_pRootBoneMatrix->_43, 1.f),
-        XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
-
-    _vector vDist = XMLoadFloat4(&m_PreRootBonePosition) - vRootBonePosition;
-
-    if (false == m_pNavigationCom->isMove(vRootBonePosition))
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + XMVectorSetY(vDist,0.f));
-    else
-        XMStoreFloat4(&m_PreRootBonePosition, vRootBonePosition);
-
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 
     __super::Late_Update(fTimeDelta);
@@ -184,7 +213,7 @@ HRESULT CPlayer::Ready_Components()
     NavDesc.iCurrentIndex = 0;
 
     /* Navigation */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation"),
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Trision"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
         return E_FAIL;
 
@@ -239,6 +268,7 @@ HRESULT CPlayer::Ready_States()
     m_States[DASH] = CPlayer_Dash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[JUMP] = CPlayer_Jump::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }

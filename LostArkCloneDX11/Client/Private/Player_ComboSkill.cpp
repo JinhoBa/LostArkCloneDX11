@@ -38,6 +38,9 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 void CPlayer_ComboSkill::Update(_float fTimeDelta)
 {
 	// 피격 체크 추가
+
+	m_pPlayer->Check_Navi();
+
 	m_fTimeAcc += fTimeDelta;
 
 	if (m_pPlayer->isAnimationFinish())

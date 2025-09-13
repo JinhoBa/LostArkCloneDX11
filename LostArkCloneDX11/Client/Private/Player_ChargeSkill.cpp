@@ -52,6 +52,8 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 
 void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 {
+	m_pPlayer->Check_Navi();
+
 	m_fChargeTime += fTimeDelta;
 	// 피격 체크 추가
 

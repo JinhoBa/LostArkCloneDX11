@@ -34,6 +34,8 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 
 void CPlayer_NormalSkill::Update(_float fTimeDelta)
 {
+	m_pPlayer->Check_Navi();
+
 	// 피격 체크 추가
 	
 	if (m_pPlayer->isAnimationFinish())

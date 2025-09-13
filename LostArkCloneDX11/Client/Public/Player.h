@@ -15,7 +15,11 @@ NS_BEGIN(Client)
 class CPlayer final : public CCharacter
 {
 public:
-	enum STATE {IDLE, MOVE, NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE, HIT, STATE_END};
+	enum STATE {
+		IDLE, MOVE, 
+		NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE,
+		HIT, JUMP,
+		STATE_END};
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -25,12 +29,15 @@ private:
 public:
 	const STANCE	Get_Stance() const { return m_PlayerInfo.eStance; }
 	PLAYER_INFO*	Get_Info() { return &m_PlayerInfo; }
+	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	const list<class CBuff*>& Get_BuffList() { return m_Buffs; }
 	const CHARGE_SKILL_DESC* Get_ChargeSkill_Desc() { return &m_ChargeSkill_Desc; }
+
 	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);
-	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
+	
 	_bool			isAnimationFinish();
+	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
 	
 
 public:
@@ -42,6 +49,8 @@ public:
 	virtual HRESULT		Render() override;
 
 public:
+	_bool	Jump(_fvector vTargetPosition, _float fTimeDelta, _float fRatio, _float fHeight);
+	void	Check_Navi() { Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix); }
 	_bool	Move(_float fTimeDelta);
 	void	TurnToCursor();
 	void	Change_Stance();
@@ -59,7 +68,7 @@ private:
 	CState*					m_States[STATE_END] = {};
 	CNavigation*			m_pNavigationCom = { nullptr };
 
-	_float4					m_PreRootBonePosition = {};
+
 
 	const _float4x4*		m_pRootBoneMatrix = { nullptr };
 

@@ -7,6 +7,7 @@ class CModel;
 class CShader;
 class CStateMachine;
 class CState;
+class CNavigation;
 NS_END
 
 NS_BEGIN(Client)
@@ -26,8 +27,11 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
+	virtual void		Check_Navigation(class CNavigation* pNavigation, const _float4x4* pRootBoneMatrix);
+
 protected:
 	class CGameManager*		m_pGameManager = { nullptr };
+	_float4					m_PreRootBonePosition = {};
 
 public:
 	virtual CGameObject* Clone(void* pArg) PURE;

@@ -12,10 +12,10 @@ namespace Client
 	const unsigned int g_iWinSizeX = 1280;
 	const unsigned int g_iWinSizeY = 720;
 
-	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, TUTORIAL, MAP_EDITOR, END};
+	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, TUTORIAL, BOSS, MAP_EDITOR, END};
 	enum class STANCE {FLURRY, FOCUS, IDEN_END};
 	enum class MONSTER { NORMAL, NAMED, BOSS };
-	enum class CAMERA_ANIM { IDLE, SHAKE, ZOOMOUT };
+	enum class CAMERA_ANIM { IDLE, SHAKE, ZOOMOUT, INTOR_BOSS };
 
 	enum class ATTACK_TYPE {NORMAL, HEAD, BACK};
 	enum class HIT_TYPE { NORMAL, PUSH, FLOAT };
