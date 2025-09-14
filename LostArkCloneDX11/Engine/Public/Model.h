@@ -22,7 +22,7 @@ public:
 	_matrix Get_BoneMatirx(_uint iBoneIndex);
 	const _float4x4* Get_BoneMatrixPrt(const _char* pBoneName);
 
-	void	Set_AnimationIndex(class CTransform* pTransform, _uint iIndex, _bool bLoop = false, _float fChangeTime = 0.1f);
+	void	Set_AnimationIndex(class CTransform* pTransform, _uint iIndex, _bool bLoop = false, _float fChangeTime = 0.2f, _float Offset = 1.f);
 
 public:
 	virtual HRESULT Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
@@ -53,6 +53,7 @@ private:
 
 	_float						m_fInterpolationTime = {};
 	_float						m_fMaxInterpolationTime = {};
+	_float						m_fAnimDuration_Offset = {};
 
 	_float3*					m_pCameraBonePosition = {};
 

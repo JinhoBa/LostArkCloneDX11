@@ -484,6 +484,66 @@ ANIMATION_DESC& CData_Manager::Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLO
     return m_AnimationData[iMonsterID][ENUM_TO_INT(eSlot)];
 }
 
+const vector<KAMEN_SKILL_DESC>& CData_Manager::Get_KamenData(_uint iPhase)
+{
+    if (iPhase >= (_uint)m_KamenData.size())
+        return m_KamenData[0].Skills;
+
+    return m_KamenData[iPhase].Skills;
+}
+
+HRESULT CData_Manager::Load_KamenData(const _char* pFilePath)
+{
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("Kamen");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+    for (auto* Phase = root->FirstChildElement("Phase"); Phase; Phase = Phase->NextSiblingElement("Phase"))
+    {
+        KAMEN_PHASE_DESC Keman_Pase = {};
+
+        Phase->QueryUnsignedAttribute("ID", &Keman_Pase.iPhaseID);
+
+        Phase->QueryUnsignedAttribute("skillcount", &Keman_Pase.iNumSkill);
+
+        Phase->QueryFloatAttribute("conditionvalue", &Keman_Pase.fConditionValue);
+
+        Keman_Pase.Skills.reserve(Keman_Pase.iNumSkill);
+
+        for (auto* Skill = Phase->FirstChildElement("Skill"); Skill; Skill = Skill->NextSiblingElement("Skill"))
+        {
+            KAMEN_SKILL_DESC Skill_Desc = {};
+
+            Skill->QueryUnsignedAttribute("count", &Skill_Desc.iNumAnimation);
+
+            Skill->QueryIntAttribute("start", &Skill_Desc.iAnimationIndexStart);
+
+            Skill->QueryIntAttribute("loop", &Skill_Desc.iAnimationIndexLoop);
+
+            Skill->QueryIntAttribute("end", &Skill_Desc.iAnimationIndexEnd);
+
+            Skill->QueryFloatAttribute("fLoopTime", &Skill_Desc.fLoopTime);
+
+            Skill->QueryFloatAttribute("damage", &Skill_Desc.fDamage);
+           
+            Keman_Pase.Skills.push_back(Skill_Desc);
+        }
+
+        m_KamenData.push_back(Keman_Pase);
+    }
+
+    return S_OK;
+}
+
 CData_Manager* CData_Manager::Create()
 {
     return new CData_Manager();

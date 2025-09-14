@@ -43,6 +43,7 @@ HRESULT CLevel_Boss::Initialize()
 
 void CLevel_Boss::Update(_float fTimeDelta)
 {
+
 }
 
 HRESULT CLevel_Boss::Render()
@@ -69,9 +70,9 @@ HRESULT CLevel_Boss::Ready_Light()
 
 HRESULT CLevel_Boss::Ready_Camera()
 {
-    dynamic_cast<CCamera_Fix*>(
-        m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-        ->Set_State(CAMERA_ANIM::INTOR_BOSS);
+    //dynamic_cast<CCamera_Fix*>(
+    //    m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
+    //    ->Set_State(CAMERA_ANIM::INTOR_BOSS);
 
     return S_OK;
 }
@@ -108,6 +109,11 @@ HRESULT CLevel_Boss::Ready_Layer_Kamen(const _wstring& strLayerTag)
 
 HRESULT CLevel_Boss::Ready_Layer_Monster(const _wstring& strLayerTag)
 {
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
+       ENUM_TO_INT(LEVEL::BOSS), strLayerTag)))
+       return E_FAIL;
+
+
     //CMonster::MONSTER_DESC Desc = {};
 
     //Desc.iMonsterID = 0;

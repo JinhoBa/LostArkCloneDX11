@@ -67,23 +67,23 @@ void CBody_Kamen::Late_Update(_float fTimeDelta)
 
 HRESULT CBody_Kamen::Render()
 {
-//#pragma region ANIMATION_TEST
-//    ImGui::InputFloat3("Pos", m_Pos, "%.2f");
-//    ImGui::InputInt("Animation", &m_iAnimIndex);
-//    _int iIndex = {};
-//    for (auto pName : m_pModelCom->Get_AnimationNames())
-//    {
-//        if (ImGui::Button(to_string(iIndex).c_str()))
-//        {
-//            m_iAnimIndex = iIndex;
-//            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-//
-//        }
-//        ++iIndex;
-//        ImGui::SameLine();
-//        ImGui::Text(pName);
-//    }
-//#pragma endregion
+#pragma region ANIMATION_TEST
+    ImGui::InputFloat3("Pos", m_Pos, "%.2f");
+    ImGui::InputInt("Animation", &m_iAnimIndex);
+    _int iIndex = {};
+    for (auto pName : m_pModelCom->Get_AnimationNames())
+    {
+        if (ImGui::Button(to_string(iIndex).c_str()))
+        {
+            m_iAnimIndex = iIndex;
+            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, false);
+            m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.f, 60.f, 1.f));
+        }
+        ++iIndex;
+        ImGui::SameLine();
+        ImGui::Text(pName);
+    }
+#pragma endregion
 
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;

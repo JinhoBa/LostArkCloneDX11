@@ -16,6 +16,7 @@ namespace Client
 	enum class STANCE {FLURRY, FOCUS, IDEN_END};
 	enum class MONSTER { NORMAL, NAMED, BOSS };
 	enum class CAMERA_ANIM { IDLE, SHAKE, ZOOMOUT, INTOR_BOSS };
+	enum class PHASE { INTRO, PHASE1, PHASE2, PHASE3, END };
 
 	enum class ATTACK_TYPE {NORMAL, HEAD, BACK};
 	enum class HIT_TYPE { NORMAL, PUSH, FLOAT };

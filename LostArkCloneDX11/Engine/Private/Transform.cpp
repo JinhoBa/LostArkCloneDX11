@@ -255,8 +255,9 @@ void CTransform::LookAt(_fvector vTarget)
     Set_State(STATE::RIGHT, XMVector3Normalize(vRight)* vScale.x);
     Set_State(STATE::UP, XMVector3Normalize(vUp) * vScale.y);
     Set_State(STATE::LOOK, XMVector3Normalize(vLook) * vScale.z);
-
 }
+
+
 
 void CTransform::BillBoard(_fvector vCameraLook)
 {

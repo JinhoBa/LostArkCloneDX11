@@ -75,7 +75,6 @@ namespace Client
 		_float	fChargingTime;
 	}CHARGE_SKILL_DESC;
 
-
 	typedef struct tagMapData
 	{
 		_wstring strPrototypeTag;
@@ -98,4 +97,27 @@ namespace Client
 		_bool bLoop;
 		_float fLerpTime;
 	}ANIMATION_DESC;
+
+	typedef struct tagKamenSkillDesc
+	{
+		_uint iNumAnimation;
+
+		_int iAnimationIndexStart;
+		_int iAnimationIndexLoop;
+		_int iAnimationIndexEnd;
+
+		_float fDamage;
+		_float fLoopTime;
+
+	}KAMEN_SKILL_DESC;
+
+	typedef struct tagKamenPhaseDesc
+	{
+		_uint	iPhaseID;
+		_uint	iNumSkill;
+		_float	fConditionValue;
+		vector<KAMEN_SKILL_DESC> Skills;
+	}KAMEN_PHASE_DESC;
+
+	
 }

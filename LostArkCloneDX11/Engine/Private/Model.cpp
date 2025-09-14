@@ -25,7 +25,7 @@ CModel::CModel(CModel& Prototype)
     m_PreTransformMatrix{ Prototype.m_PreTransformMatrix },
     m_fInterpolationTime{0.f},
     m_fMaxInterpolationTime{ 0.f },
-    m_isLoop{false}
+    m_isLoop{ false }, m_fAnimDuration_Offset{1.f}
 {
     for (auto& PrototypeBone : Prototype.m_Bones)
         m_Bones.push_back(PrototypeBone->Clone());
@@ -84,14 +84,14 @@ const _float4x4* CModel::Get_BoneMatrixPrt(const _char* pBoneName)
     return (*iter)->Get_CombinedTransformationMatrixPrt();
 }
 
-void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoop, _float fChangeTime)
+void CModel::Set_AnimationIndex(CTransform* pTransform, _uint iIndex, _bool bLoop, _float fChangeTime, _float Offset)
 {
     m_isLoop = bLoop;
-    
+    m_fAnimDuration_Offset = Offset;
     if(m_iCurrentAnimIndex != iIndex)
     {
         pTransform->Set_State(STATE::POSITION, XMVector3TransformCoord(m_pRootBone->Get_CombinedTransformationMatrix().r[3], XMLoadFloat4x4(&pTransform->Get_WorldMatrix())));
-        
+
         Update_PreAnimationKeyFrames(pTransform);
         m_fMaxInterpolationTime = fChangeTime;
         m_fInterpolationTime = 0.f;
@@ -310,7 +310,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
                 m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
         }
         else
-            isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished(0.8f);
+            isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished(m_fAnimDuration_Offset);
     }
 
     for (auto& pBone : m_Bones)

@@ -44,6 +44,12 @@ public:
 	HRESULT				Load_AnimationData(const _char* pFilePath);
 #pragma endregion
 
+#pragma region KAMEN_DATA
+	const vector<KAMEN_SKILL_DESC>& Get_KamenData(_uint iPhase);
+
+	HRESULT			Load_KamenData(const _char* pFilePath);
+#pragma endregion
+
 
 #pragma region SKILL_MANAGER
 	void		Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);

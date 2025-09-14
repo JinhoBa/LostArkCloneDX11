@@ -280,11 +280,29 @@
     <Filter Include="02.GameObject\Sky\Dynamic">
       <UniqueIdentifier>{36318091-3632-4108-abc7-11ec78fc6fab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\JUMP">
-      <UniqueIdentifier>{26b5cd47-25b6-476c-9e58-877347c9b9c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Kamen\Weapon">
       <UniqueIdentifier>{e76fd810-d4db-411f-86d2-ac575438fbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\IDLE">
+      <UniqueIdentifier>{23943a66-2841-4c95-95bc-aae7ed81b7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\INTRO">
+      <UniqueIdentifier>{58344d17-d225-40c5-ae12-7f350ab96f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Kamen_Sword">
+      <UniqueIdentifier>{a6199e67-b16e-4884-b788-5712a856d9c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK">
+      <UniqueIdentifier>{09fefe8a-cb19-45da-aaa2-2f05dd293a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_CHARGE">
+      <UniqueIdentifier>{b5baac9f-8715-4d20-b10f-e4e0217c41f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_COMBO">
+      <UniqueIdentifier>{e007c314-0a5d-4e0d-aa8b-7fd63e7aeb57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL">
+      <UniqueIdentifier>{436edba2-b74d-4104-9d20-72d3af988966}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -552,11 +570,32 @@
     <ClInclude Include="..\public\Dynamic_SkyBox.h">
       <Filter>02.GameObject\Sky\Dynamic</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Player_Jump.h">
-      <Filter>02.GameObject\Character\Player\States\JUMP</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Weapon_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\State_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Idle_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\IDLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Intro_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\INTRO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Kamen_Sword.h">
+      <Filter>02.GameObject\Kamen_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Attack_Normal_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Attack_Combo_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_COMBO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Attack_Charge_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_CHARGE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Attack_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -819,11 +858,32 @@
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp">
       <Filter>02.GameObject\Sky\Dynamic</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Player_Jump.cpp">
-      <Filter>02.GameObject\Character\Player\States\JUMP</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Weapon_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\State_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Idle_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\IDLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Intro_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\INTRO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Kamen_Sword.cpp">
+      <Filter>02.GameObject\Kamen_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Attack_Normal_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Attack_Combo_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_COMBO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Attack_Charge_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_CHARGE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Attack_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

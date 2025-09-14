@@ -43,6 +43,7 @@
 #include "MapObject.h"
 #include "SkySphere.h"
 #include "Dynamic_SkyBox.h"
+#include "Kamen_Sword.h"
 #pragma endregion
 
 
@@ -755,12 +756,26 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
 		return E_FAIL;
 
+	if (FAILED(CGameManager::GetInstance()->Load_KamenData("../Bin/Resources/Data/Kamen/Kamen_Data.xml")))
+		return E_FAIL;
+
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
-	/* For.Prototype_Component_Texture_LogoBackGround */
+	/* For.Prototype_Component_Texture_skybox_eclipse */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_skybox_eclipse"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/SkyBox/Texture2D/lv_skybox_eclipse_01_d.dds"), 1))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Sword_Kamen_Diffuse */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_Sword_Kamen_Diffuse"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Kamen_Sword/Texture2D/wp_mn_cdkcn_01_d.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Sword_Kamen_Emissive */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_Sword_Kamen_Emissive"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Kamen_Sword/Texture2D/wp_mn_cdkcn_01_e.dds"), 1))))
+		return E_FAIL;
+	
 #pragma endregion
 
 #pragma region UI_TEXTURE
@@ -774,8 +789,13 @@ HRESULT CLoader::Loading_For_Boss()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/SkyBox/Sky_Model.fbx"))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Kamen_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_Sword"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen_Sword/Kamen_Sword.fbx"))))
+		return E_FAIL;
+
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
-#pragma region KAMEN
+#pragma region KAMEN_MAP
 	/* For.Prototype_Component_Model_Kamen_chair01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_chair01"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01.bin"))))
@@ -1063,6 +1083,11 @@ HRESULT CLoader::Loading_For_Boss()
 	/*For Prototype_Component_Navigation*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Dynamic_SkyBox"),
 		CDynamic_SkyBox::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Navigation*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
+		CKamen_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

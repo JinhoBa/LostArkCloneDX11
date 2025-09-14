@@ -4,7 +4,12 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
-#include "Skill.h"
+#include "Idle_Kamen.h"
+#include "Intro_Kamen.h"
+#include "Attack_Normal_Kamen.h"
+#include "Attack_Combo_Kamen.h"
+#include "Attack_Charge_Kamen.h"
+
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
 
@@ -16,6 +21,42 @@ CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CKamen::CKamen(const CKamen& Prototype)
     :CCharacter{ Prototype }
 {
+}
+
+_bool CKamen::isAnimationFinish()
+{
+    return static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->isAnimationFinish();
+}
+
+void CKamen::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
+{
+    static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Set_Animation(iIndex, bLoop, fLerpTime);
+}
+
+void CKamen::Change_Phase(PHASE ePhase)
+{
+    m_ePhase = ePhase;
+
+    CAttack_Kamen::ATTACK_KAMEN_DESC Desc = {};
+
+    switch (ePhase)
+    {
+    case Client::PHASE::PHASE1:
+
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
+        m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+        break;
+
+    case Client::PHASE::PHASE2:
+        break;
+    case Client::PHASE::PHASE3:
+        break;
+    case Client::PHASE::END:
+        break;
+    default:
+        break;
+    }
+
 }
 
 HRESULT CKamen::Initialize_Prototype()
@@ -43,6 +84,11 @@ HRESULT CKamen::Initialize(void* pArg)
 
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
     m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
+
+    m_ePhase = PHASE::INTRO;
+
+    m_pStateMachineCom->Start_State(m_States[ENUM_TO_INT(KAMENSTATE::INTRO)]);
+
     return S_OK;
 }
 
@@ -53,9 +99,9 @@ void CKamen::Priority_Update(_float fTimeDelta)
 
 void CKamen::Update(_float fTimeDelta)
 {
+    m_pStateMachineCom->Upadte(fTimeDelta);
 
     __super::Update(fTimeDelta);
-
 }
 
 void CKamen::Late_Update(_float fTimeDelta)
@@ -81,15 +127,18 @@ HRESULT CKamen::Reay_Component()
 
 HRESULT CKamen::Reay_States()
 {
+    CState_Kamen::STATE_KAMEN_DESC Desc = {};
 
-  /*  m_States[IDLE] = CPlayer_Idle::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[MOVE] = CPlayer_Move::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[NORMAL_SKILL] = CPlayer_NormalSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[CHARGE_SKILL] = CPlayer_ChargeSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[COMBO_SKILL] = CPlayer_ComboSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[DASH] = CPlayer_Dash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);*/
+    Desc.pKamen = this;
+    Desc.pPhase = &m_ePhase;
+    Desc.pStateMachine = m_pStateMachineCom;
+
+    m_States[ENUM_TO_INT(KAMENSTATE::INTRO)] = CIntro_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::IDLE)] = CIdle_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_NORMAL)] = CAttack_Normal_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_COMBO)] = CAttack_Combo_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_CHARGE)] = CAttack_Charge_Kamen::Create(&Desc);
+
 
     return S_OK;
 }
@@ -101,7 +150,6 @@ HRESULT CKamen::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), 
         TEXT("Prototype_GameObject_Body_Kamen"), TEXT("Body_Kamen"), &Body_Desc)))
         return E_FAIL;
-
 
     CWeapon_Kamen::WEAPON_KAMEN_DESC Weapon_Desc = {};
     Weapon_Desc.pParentTransform = m_pTransformCom;

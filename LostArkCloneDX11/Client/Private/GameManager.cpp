@@ -124,6 +124,17 @@ HRESULT	CGameManager::Load_AnimationData(const _char* pFilePath)
 }
 #pragma endregion
 
+#pragma region KAMEN_DATA
+const vector<KAMEN_SKILL_DESC>& CGameManager::Get_KamenData(_uint iPhase)
+{
+	return m_pData_Manager->Get_KamenData(iPhase);
+}
+
+HRESULT	CGameManager::Load_KamenData(const _char* pFilePath)
+{
+	return m_pData_Manager->Load_KamenData(pFilePath);
+}
+#pragma endregion
 
 #pragma region BUFF_MANAGER
 

@@ -12,12 +12,22 @@ NS_BEGIN(Client)
 class CKamen final : public CCharacter
 {
 public:
-	enum class KAMENSTATE {IDLE, ATTACK, DEAD, END };
+	enum class KAMENSTATE {INTRO, IDLE, 
+		ATTACK_NORMAL, ATTACK_COMBO, ATTACK_CHARGE,
+		DEAD, END };
 
 private:
 	CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CKamen(const CKamen& Prototype);
 	virtual ~CKamen() = default;
+
+public:
+	_bool	isAnimationFinish();
+	CState* Get_State(KAMENSTATE eState) const {
+		return m_States[ENUM_TO_INT(eState)];
+	}
+	void	Set_Animation(_uint iIndex, _bool bLoop = false, _float fLerpTime = 0.2f);
+	void	Change_Phase(PHASE ePhase);
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -28,6 +38,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	PHASE				m_ePhase = { PHASE::END };
 	CStateMachine*		m_pStateMachineCom = { nullptr };
 	CState*				m_States[ENUM_TO_INT(KAMENSTATE::END)] = {};
 

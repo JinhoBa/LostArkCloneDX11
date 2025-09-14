@@ -34,15 +34,22 @@ public:
 	ANIMATION_DESC&				Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLOT eSlot);
 #pragma endregion
 
+#pragma region KAMEN_DATA
+	const vector<KAMEN_SKILL_DESC>& Get_KamenData(_uint iPhase);
+
+	HRESULT Load_KamenData(const _char* pFilePath);
+#pragma endregion
+
 
 private:
-	CGameInstance*				m_pGameInstance = { nullptr };
+	CGameInstance*						m_pGameInstance = { nullptr };
 
-	vector<TERRAIN_DATA>		m_TerrainDatas;
-	vector<MAP_DATA>			m_MapDatas;
-	vector<_wstring>			m_MapPreviewFileNames;
-	vector<SKILL_INFO>			m_SkillDatas;
-	vector<vector<ANIMATION_DESC>>	m_AnimationData;
+	vector<TERRAIN_DATA>				m_TerrainDatas;
+	vector<MAP_DATA>					m_MapDatas;
+	vector<_wstring>					m_MapPreviewFileNames;
+	vector<SKILL_INFO>					m_SkillDatas;
+	vector<vector<ANIMATION_DESC>>		m_AnimationData;
+	vector<KAMEN_PHASE_DESC> 			m_KamenData;
 	
 public:
 	static CData_Manager* Create();

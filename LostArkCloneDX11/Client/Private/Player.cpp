@@ -24,7 +24,6 @@
 #include "Player_ChangeStance.h"
 #include "Player_Dash.h"
 #include "Player_Hit.h"
-#include "Player_Jump.h"
 #pragma endregion
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -67,21 +66,6 @@ HRESULT CPlayer::Change_Level(_fvector vPositon, const _tchar* pNavigationProtot
         return E_FAIL;
 
     return S_OK;
-}
-
-_bool CPlayer::Jump(_fvector vTargetPosition, _float fTimeDelta, _float fRatio, _float fHeight)
-{
-    _vector vPosition = XMVectorLerp(m_pTransformCom->Get_Position(), vTargetPosition, fRatio);
-
-    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSetY(vPosition, fHeight));
-
-    if (1.f <= fRatio)
-    {
-        m_pNavigationCom->Set_Current_CellIndex(0.f);
-        return true;
-    }
-
-    return false;
 }
 
 _bool CPlayer::Move(_float fTimeDelta)
@@ -150,8 +134,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     m_pRootBoneMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_root");
 
-
-
     Add_Buff(1);
 
     return S_OK;
@@ -191,19 +173,25 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
-#pragma region JUMP_TEST
+#pragma region TEST_CODE
     if (m_pGameInstance->Get_KeyDown(DIK_G))
     {
-        m_pStateMachineCom->Change_State(Get_State(CPlayer::STATE::JUMP), nullptr);
+        if(2.f >= XMVectorGetX(XMVector3Length(XMVectorSet(37.f, 13.9f, 12.5f, 1.f) - m_pTransformCom->Get_Position())))
+        {
+            dynamic_cast<CCamera_Fix*>(
+                m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
+                ->Set_State(CAMERA_ANIM::INTOR_BOSS);
+            m_pNavigationCom->Set_Current_CellIndex(0);
+            m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
+        }
     }
 #pragma endregion
-
-   // m_pNavigationCom->SnapToNavMesh(m_pTransformCom);
 
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+    /* TEST */
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 
     __super::Late_Update(fTimeDelta);
@@ -211,6 +199,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+    /* TEST */
     m_pNavigationCom->Render();
 
     return S_OK;
@@ -278,7 +267,6 @@ HRESULT CPlayer::Ready_States()
     m_States[DASH] = CPlayer_Dash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
-    m_States[JUMP] = CPlayer_Jump::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }
@@ -339,10 +327,6 @@ void CPlayer::Change_Stance()
 
 void CPlayer::Add_Buff(_uint iBuffID)
 {
-   /* auto iter = find_if(m_Buffs.begin(), m_Buffs.end(), [&](CBuff* pBuff)->_bool {
-        return (pBuff->Get_BuffID() == iBuffID);
-        });*/
-
     auto iter = m_Buffs.begin();
 
     for (; iter != m_Buffs.end();)

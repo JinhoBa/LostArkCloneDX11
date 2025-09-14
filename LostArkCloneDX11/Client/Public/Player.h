@@ -49,7 +49,6 @@ public:
 	virtual HRESULT		Render() override;
 
 public:
-	_bool	Jump(_fvector vTargetPosition, _float fTimeDelta, _float fRatio, _float fHeight);
 	void	Check_Navi() { Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix); }
 	_bool	Move(_float fTimeDelta);
 	void	TurnToCursor();
