@@ -59,6 +59,13 @@ void CKamen::Change_Phase(PHASE ePhase)
 
 }
 
+void CKamen::Chase(_float fTimeDelta)
+{
+    _vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position());
+
+    m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), m_pTransformCom->Get_Position() + vToTarget, 3.f, m_pNavigationCom);
+}
+
 HRESULT CKamen::Initialize_Prototype()
 {
     return S_OK;
@@ -82,11 +89,18 @@ HRESULT CKamen::Initialize(void* pArg)
     if (FAILED(Ready_PartObjects()))
         return E_FAIL;
 
-    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
-    m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
-
     m_ePhase = PHASE::INTRO;
 
+    m_pInfo.fAttack = 600.f;
+    m_pInfo.fAttackRange = 3.f;
+    m_pInfo.fDetectDistance = 5.f;
+    m_pInfo.fHp = m_pInfo.fMaxHp = 500000.f;
+
+    m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
+    m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
     m_pStateMachineCom->Start_State(m_States[ENUM_TO_INT(KAMENSTATE::INTRO)]);
 
     return S_OK;
@@ -120,6 +134,15 @@ HRESULT CKamen::Reay_Component()
     /* StateMachine */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_StateMachine"),
         TEXT("Com_StateMachine"), reinterpret_cast<CComponent**>(&m_pStateMachineCom))))
+        return E_FAIL;
+
+    CNavigation::NAVIGATION_DESC Navi_Desc = {};
+
+    Navi_Desc.iCurrentIndex = 0;
+
+    /* Navigation */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Kamen"),
+        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Navi_Desc)))
         return E_FAIL;
 
     return S_OK;

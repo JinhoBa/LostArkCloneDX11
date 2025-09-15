@@ -22,12 +22,13 @@ private:
 	virtual ~CKamen() = default;
 
 public:
-	_bool	isAnimationFinish();
 	CState* Get_State(KAMENSTATE eState) const {
 		return m_States[ENUM_TO_INT(eState)];
 	}
+	_bool	isAnimationFinish();
 	void	Set_Animation(_uint iIndex, _bool bLoop = false, _float fLerpTime = 0.2f);
 	void	Change_Phase(PHASE ePhase);
+	void	Chase(_float fTimeDelta);
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -39,8 +40,16 @@ public:
 
 private:
 	PHASE				m_ePhase = { PHASE::END };
+
+	MONSTER_INFO		m_pInfo = {};
+
 	CStateMachine*		m_pStateMachineCom = { nullptr };
+	CNavigation*		m_pNavigationCom = { nullptr };
+
 	CState*				m_States[ENUM_TO_INT(KAMENSTATE::END)] = {};
+
+	CTransform*			m_pPlayerTransformCom = { nullptr };
+
 
 private:
 	HRESULT			Reay_Component();

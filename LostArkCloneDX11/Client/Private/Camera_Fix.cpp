@@ -148,7 +148,7 @@ void CCamera_Fix::Change_State()
         case CAMERA_ANIM::IDLE:
             m_fTimeAcc = 0.f;
             m_fFovy = XMConvertToRadians(60.f);
-            m_vDistance = m_Default_Direction = _float3(0.f, 5.f, 5.f);;
+            m_vDistance = m_Default_Direction;
             break;
 
         case CAMERA_ANIM::INTOR_BOSS:

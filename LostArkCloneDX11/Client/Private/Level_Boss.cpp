@@ -70,9 +70,9 @@ HRESULT CLevel_Boss::Ready_Light()
 
 HRESULT CLevel_Boss::Ready_Camera()
 {
-    //dynamic_cast<CCamera_Fix*>(
-    //    m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-    //    ->Set_State(CAMERA_ANIM::INTOR_BOSS);
+    dynamic_cast<CCamera_Fix*>(
+        m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
+        ->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
 
     return S_OK;
 }

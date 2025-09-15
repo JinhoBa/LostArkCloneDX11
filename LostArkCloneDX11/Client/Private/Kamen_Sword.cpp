@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Kamen.h"
+#include "Camera_Fix.h"
 
 CKamen_Sword::CKamen_Sword(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CGameObject{ pDevice, pContext }
@@ -57,6 +58,14 @@ void CKamen_Sword::Update(_float fTimeDelta)
 				m_isDead = true;
 				dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
 					ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Change_Phase(PHASE::PHASE1);
+
+				dynamic_cast<CCamera_Fix*>(
+					m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
+					->Set_State(CAMERA_ANIM::IDLE);
+
+				dynamic_cast<CCamera_Fix*>(
+					m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
+					->Set_LookDircetion(XMVectorSet(0.f, 7.f, -7.f, 1.f));
 				
 			}
 		}
