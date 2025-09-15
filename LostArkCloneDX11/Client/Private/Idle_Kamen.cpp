@@ -17,7 +17,7 @@ HRESULT CIdle_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 	if (FAILED(__super::Initilize(pDesc)))
 		return E_FAIL;
 
-	m_iSkillID = 0.f;
+	m_iSkillID = 0;
 
 	return S_OK;
 }

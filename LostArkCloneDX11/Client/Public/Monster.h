@@ -7,6 +7,7 @@
 NS_BEGIN(Engine)
 class CTexture;
 class CVIBuffer_Rect;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -75,7 +76,8 @@ protected:
 	CState*				m_States[STATE_END] = {};
 	CTransform*			m_pPlayerTransformCom = { nullptr };
 	CNavigation*		m_pNavigationCom = {nullptr};
-	
+	CCollider*			m_pColliderCom = { nullptr };
+
 protected:
 	HRESULT			Ready_PartObjects(_wstring& strModelPrototypeTag);
 	void			Detect_Player();

@@ -11,15 +11,23 @@
 
 #include "DirectXTM/DDSTextureLoader.h"
 #include "DirectXTM/WICTextureLoader.h"
+
+#include "DirectXTM/VertexTypes.h"
+#include "DirectXTM/PrimitiveBatch.h"
+#include "DirectXTM/Effects.h"
+
 #include "DirectXTM/SpriteBatch.h"
 #include "DirectXTM/SpriteFont.h"
-#include "DirectXTM/GeometricPrimitive.h"
+
 #include "FX11/d3dx11effect.h"
+
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "assimp/Importer.hpp"
+
 #include "FMOD/fmod.hpp"
 #include "FMOD/fmod_errors.h"
+
 using namespace DirectX;
 
 #include <vector>
@@ -40,6 +48,7 @@ namespace Engine
 {
 	const static wstring strTransformTag = { TEXT("Com_Transform") };
 }
+
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"
 #include "Engine_Struct.h"

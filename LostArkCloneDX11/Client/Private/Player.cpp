@@ -40,7 +40,6 @@ void CPlayer::Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime)
 {
     m_ChargeSkill_Desc.isUsing = isUsing;
     m_ChargeSkill_Desc.fChargingTime = fChargingTime;
-
 }
 
 void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
@@ -147,6 +146,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
         m_pGameManager->Picking_Terrains();
 
     Update_Buff(fTimeDelta);
+
+    m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -173,6 +174,8 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
+    m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
 #pragma region TEST_CODE
     if (m_pGameInstance->Get_KeyDown(DIK_G))
     {
@@ -187,6 +190,7 @@ void CPlayer::Update(_float fTimeDelta)
     }
 #pragma endregion
 
+    m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -199,6 +203,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+    m_pColliderCom->Render();
     /* TEST */
     m_pNavigationCom->Render();
 
@@ -215,6 +220,18 @@ HRESULT CPlayer::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Trision"),
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
         return E_FAIL;
+
+    /* Collider */
+    CBounding_AABB::BOUNDING_AABB_DESC AABB_Desc = {};
+    AABB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+    AABB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
+
+
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
+        TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
+        return E_FAIL;
+
+    m_pColliderCom->Set_OnCollisionEnter([&]() {m_PlayerInfo.fHp -= 100.f; });
 
     return S_OK;
 }

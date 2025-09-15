@@ -8,6 +8,7 @@ NS_BEGIN(Engine)
 class CStateMachine;
 class CState;
 class CNavigation;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -66,7 +67,7 @@ private:
 	CStateMachine*			m_pStateMachineCom = { nullptr };
 	CState*					m_States[STATE_END] = {};
 	CNavigation*			m_pNavigationCom = { nullptr };
-
+	CCollider*				m_pColliderCom = { nullptr };
 
 
 	const _float4x4*		m_pRootBoneMatrix = { nullptr };

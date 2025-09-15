@@ -12,6 +12,7 @@
 #include "Picking.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
+#include "Collider_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -71,6 +72,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
 
+	m_pCollider_Manager = CCollider_Manager::Create();
+	if (nullptr == m_pCollider_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -86,11 +91,15 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pObject_Manager->Update(fTimeDelta);
 
+	m_pCollider_Manager->Update_Collider();
+
 	m_pObject_Manager->Late_Update(fTimeDelta);
 
 	m_pObject_Manager->Clear_DeadObj();
 
 	m_pLevel_Manager->Update(fTimeDelta);
+
+	m_pCollider_Manager->Clear_Collider();
 }
 
 HRESULT CGameInstance::Draw()
@@ -411,10 +420,22 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 
 #pragma endregion
 
+#pragma region COLLIDER_MANGER
+void CGameInstance::Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag)
+{
+	m_pCollider_Manager->Check_Collider(pColldier, pDestLayerTag);
+}
+void CGameInstance::Add_Collider(const _tchar* pLayerTag, class CCollider* pCollider)
+{
+	m_pCollider_Manager->Add_Collider(pLayerTag, pCollider);
+}
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pCollider_Manager);
 	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pPicking);

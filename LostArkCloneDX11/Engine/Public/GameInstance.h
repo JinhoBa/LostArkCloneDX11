@@ -108,6 +108,11 @@ public:
 	HRESULT				Add_Light(const LIGHT_DESC& LightDesc);
 #pragma endregion
 
+#pragma region COLLIDER_MANGER
+	void	Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag);
+	void	Add_Collider(const _tchar* pLayerTag, class CCollider* pCollider);
+#pragma endregion
+
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
@@ -122,6 +127,7 @@ private:
 	class CPipeLine*				m_pPipeLine = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
+	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 
 	_float2							m_vWinSize = {};
 	

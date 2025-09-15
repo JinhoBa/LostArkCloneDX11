@@ -99,10 +99,10 @@ HRESULT CLevel_Boss::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Boss::Ready_Layer_Kamen(const _wstring& strLayerTag)
 {
-    ///* Kamen */
-    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
-    //    ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-    //    return E_FAIL;
+    /* Kamen */
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
 
     return S_OK;
 }

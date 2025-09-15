@@ -47,6 +47,8 @@ HRESULT CMonster_Named::Initialize(void* pArg)
 void CMonster_Named::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
+
+	m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 }
 
 void CMonster_Named::Update(_float fTimeDelta)
@@ -56,6 +58,8 @@ void CMonster_Named::Update(_float fTimeDelta)
 	m_pStateMachineCom->Upadte(fTimeDelta);
 
 	Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
+
+	m_pColliderCom->Update(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 }
 
 void CMonster_Named::Late_Update(_float fTimeDelta)
@@ -67,6 +71,8 @@ void CMonster_Named::Late_Update(_float fTimeDelta)
 
 HRESULT CMonster_Named::Render()
 {
+	m_pColliderCom->Render();
+
 	return S_OK;
 }
 HRESULT CMonster_Named::Ready_Components()
@@ -83,6 +89,16 @@ HRESULT CMonster_Named::Ready_Components()
 	/* StateMachine */
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Trision"),
 		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Desc)))
+		return E_FAIL;
+
+	/* Collider */
+	CBounding_AABB::BOUNDING_AABB_DESC AABB_Desc = {};
+	AABB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+	AABB_Desc.vExtents = _float3(0.5f, 0.5f, 0.5f);
+
+
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
+		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -130,4 +146,6 @@ CGameObject* CMonster_Named::Clone(void* pArg)
 void CMonster_Named::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pColliderCom);
 }

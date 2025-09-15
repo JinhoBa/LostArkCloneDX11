@@ -29,6 +29,7 @@
 
 #pragma region GAMEOBJECT
 #include "Terrain.h"
+#include "Collider.h"
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Body_Player.h"
@@ -390,6 +391,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/*For Prototype_Component_Navigation*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Trision"),
 		CNavigation::Create(m_pDevice, m_pContext, "../Bin/Resources/Data/Navigtion/Trision_Navigation.bin"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Collider_AABB*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
+		CCollider::Create(m_pDevice, m_pContext, COLLIDER::AABB))))
 		return E_FAIL;
 
 	/*For Prototype_Component_VIBuffer_Terrain_Trision_Floor*/

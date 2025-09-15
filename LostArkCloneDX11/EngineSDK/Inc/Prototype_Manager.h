@@ -13,6 +13,7 @@
 #include "Model.h"
 #include "Mesh.h"
 #include "StateMachine.h"
+#include "Collider.h"
 
 NS_BEGIN(Engine)
 
