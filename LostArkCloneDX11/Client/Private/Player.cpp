@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "Hit_Manager.h"
 
 #include "Skill.h"
 
@@ -36,6 +37,11 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 {
 }
 
+_float CPlayer::Get_TrackPositon()
+{
+    return static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_TrackPoisiton();
+}
+
 void CPlayer::Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime)
 {
     m_ChargeSkill_Desc.isUsing = isUsing;
@@ -45,6 +51,12 @@ void CPlayer::Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime)
 void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
 {
     static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Set_Animation(iIndex, bLoop, fLerpTime);
+}
+
+void CPlayer::Set_HitBox(_float3& vCenter, _float3& vExtends)
+{
+    m_pColliderCom->Set_ColliderDesc(vCenter, vExtends);
+    //m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
 }
 
 _bool CPlayer::isAnimationFinish()
@@ -147,7 +159,10 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     Update_Buff(fTimeDelta);
 
-    m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
+
+#ifdef _DEBUG
+    isCollUpdate = false;
+#endif // _DEBUG
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -174,7 +189,9 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
-    m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+    if (isCollUpdate)
+        m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
+   // Update_HitBox();
 
 #pragma region TEST_CODE
     if (m_pGameInstance->Get_KeyDown(DIK_G))
@@ -190,24 +207,51 @@ void CPlayer::Update(_float fTimeDelta)
     }
 #pragma endregion
 
-    m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     /* TEST */
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
-
+ 
     __super::Late_Update(fTimeDelta);
 }
 
 HRESULT CPlayer::Render()
 {
-    m_pColliderCom->Render();
+#ifdef _DEBUG
+    if (isCollUpdate)
+        m_pColliderCom->Render();
     /* TEST */
+    ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
+    ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);
+
+    //m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
     m_pNavigationCom->Render();
 
+#endif // _DEBUG
+
+  
+
     return S_OK;
+}
+
+void CPlayer::OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)
+{
+    m_PlayerInfo.fHp -= fDamage;
+
+    switch (eHitType)
+    {
+    case Client::HIT_TYPE::NORMAL:
+        break;
+
+    case Client::HIT_TYPE::PUSH:
+        break;
+
+    case Client::HIT_TYPE::FLOAT:
+        break;
+    }
 }
 
 HRESULT CPlayer::Ready_Components()
@@ -222,16 +266,27 @@ HRESULT CPlayer::Ready_Components()
         return E_FAIL;
 
     /* Collider */
-    CBounding_AABB::BOUNDING_AABB_DESC AABB_Desc = {};
-    AABB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
-    AABB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
-    AABB_Desc.pOwner = this;
+    CBounding_OBB::BOUNDING_OBB_DESC OBB_Desc = {};
+    OBB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+    OBB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
+    OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
+    OBB_Desc.pOwner = this;
 
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
-        TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
         return E_FAIL;
 
-    m_pColliderCom->Set_OnCollisionEnter([&]() {m_PlayerInfo.fHp -= 100.f; });
+
+    m_pColliderCom->Set_OnCollisionEnter([&]() {
+        CHit_Manager::HIT_DESC Desc = {};
+        Desc.eType = CHARACTER::PLAYER;
+        Desc.fBaseDamage = m_PlayerInfo.fAttack;
+        Desc.iHitIndex = m_iCurHitIndex;
+        Desc.iSkillID = m_iCurSkillID;
+        Desc.pHitObject = static_cast<CCharacter*>(m_pColliderCom->Get_HitBoxDesc().pHitObject);
+
+        m_pGameManager->Add_HitDesc(&Desc);
+        });
 
     return S_OK;
 }
@@ -243,7 +298,6 @@ HRESULT CPlayer::Ready_PartObjects()
     Body_Desc.pAttackSpeed = &m_PlayerInfo.fAttackSpeed;
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Body_Desc)))
         return E_FAIL;
-
 
 
     CWeapon_Player::WEAPON_DESC Weapon_Desc = {};
@@ -365,6 +419,15 @@ void CPlayer::Add_Buff(_uint iBuffID)
 void CPlayer::Play_CameraAnimation(CAMERA_ANIM eState)
 {
     dynamic_cast<CCamera_Fix*>(CGameManager::GetInstance()->Get_Camera())->Set_State(eState);
+}
+
+void CPlayer::Update_HitBox(_uint iSkillID, _uint iHitIndex)
+{
+    isCollUpdate = true;
+    m_iCurSkillID = iSkillID;
+    m_iCurHitIndex = iHitIndex;
+    m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+    m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

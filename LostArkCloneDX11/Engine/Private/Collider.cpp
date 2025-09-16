@@ -36,11 +36,11 @@ void CCollider::Hurt(CCollider* pCollider)
 {
 	m_isColl = true;
 
-	m_HitBox_Desc.pHitObject = pCollider->m_HitBox_Desc.pOwner;
-	memcpy(&m_HitBox_Desc.vCollPosition, &m_pBounding->Get_WorldPosition(), sizeof(_float3));
+	m_Collider_Desc.pHitObject = pCollider->m_Collider_Desc.pOwner;
+	memcpy(&m_Collider_Desc.vCollPosition, &m_pBounding->Get_WorldPosition(), sizeof(_float3));
 
-	XMStoreFloat3(&m_HitBox_Desc.vCollNormal,
-		XMLoadFloat3(&pCollider->m_pBounding->Get_WorldPosition()) - XMLoadFloat3(&m_HitBox_Desc.vCollPosition));
+	XMStoreFloat3(&m_Collider_Desc.vCollNormal,
+		XMLoadFloat3(&pCollider->m_pBounding->Get_WorldPosition()) - XMLoadFloat3(&m_Collider_Desc.vCollPosition));
 }
 
 HRESULT CCollider::Initialize_Prototype(COLLIDER eType)
@@ -73,10 +73,10 @@ HRESULT CCollider::Initialize(void* pArg)
 {
 	CBounding::BOUNDING_DESC* pDesc = static_cast<CBounding::BOUNDING_DESC*>(pArg);
 
-	m_HitBox_Desc.pOwner = pDesc->pOwner;
-	m_HitBox_Desc.pHitObject = nullptr;
-	m_HitBox_Desc.vCollPosition = _float3(0.f, 0.f, 0.f);
-	m_HitBox_Desc.vCollNormal = _float3(0.f, 0.f, 0.f);
+	m_Collider_Desc.pOwner = pDesc->pOwner;
+	m_Collider_Desc.pHitObject = nullptr;
+	m_Collider_Desc.vCollPosition = _float3(0.f, 0.f, 0.f);
+	m_Collider_Desc.vCollNormal = _float3(0.f, 0.f, 0.f);
 
 	switch (m_eType)
 	{
@@ -133,7 +133,26 @@ void CCollider::Update_OnCollision()
 	m_PreisColl = m_isColl;
 }
 
+void CCollider::Set_ColliderDesc(_float3& vCenter, _float3& vExtents, _float3 vOrientation)
+{
+	switch (m_eType)
+	{
+	case Engine::COLLIDER::AABB:
+		static_cast<CBounding_AABB*>(m_pBounding)->Set_Desc(vCenter, vExtents);
+		break;
+
+	case Engine::COLLIDER::OBB:
+		static_cast<CBounding_OBB*>(m_pBounding)->Set_Desc(vCenter, vExtents, vOrientation);
+		break;
+
+	case Engine::COLLIDER::SPHERE:
+		static_cast<CBounding_Sphere*>(m_pBounding)->Set_Desc(vCenter, vExtents.x);
+		break;
+	}
+}
+
 #ifdef _DEBUG
+
 HRESULT CCollider::Render()
 {
 	m_pEffect->SetWorld(XMMatrixIdentity());

@@ -25,6 +25,12 @@ public:
 
 private:
 	SKILL_INFO*		m_pSkillInfo = { nullptr };
+	
+	_bool			m_bStartHit = {};
+	_bool			m_isActive = {};
+	_uint			m_iNumAttack = {};
+	_float			m_fTimeAcc = {};
+
 
 public:
 	static CPlayer_NormalSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);

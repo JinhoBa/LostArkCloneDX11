@@ -13,6 +13,7 @@ public:
 
 public:
 	BoundingBox* Get_Desc() const { return m_pDesc; }
+	virtual void Set_Desc(_float3& vCenter, _float3& vExtents);
 	virtual _float3& Get_WorldPosition() override { return m_pDesc->Center; }
 
 private:

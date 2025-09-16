@@ -18,6 +18,7 @@ protected:
 
 public:
 	virtual _float3& Get_WorldPosition() PURE;
+	
 
 public:
 	HRESULT			Initialize();

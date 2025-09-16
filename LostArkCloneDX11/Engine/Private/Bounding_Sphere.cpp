@@ -4,6 +4,12 @@
 
 #include "DebugDraw.h"
 
+void CBounding_Sphere::Set_Desc(_float3& vCenter, _float fRadius)
+{
+	m_pOriginal_Desc->Center = vCenter;
+	m_pOriginal_Desc->Radius = fRadius;
+}
+
 CBounding_Sphere::CBounding_Sphere(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CBounding{ pDevice, pContext }
 {

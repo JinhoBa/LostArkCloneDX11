@@ -129,6 +129,21 @@ HRESULT CKamen::Render()
     return S_OK;
 }
 
+void CKamen::OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)
+{
+    m_pInfo.fHp -= fDamage;
+
+    switch (eAttackType)
+    {
+    case Client::ATTACK_TYPE::NORMAL:
+        break;
+    case Client::ATTACK_TYPE::HEAD:
+        break;
+    case Client::ATTACK_TYPE::BACK:
+        break;
+    }
+}
+
 HRESULT CKamen::Reay_Component()
 {
     /* StateMachine */

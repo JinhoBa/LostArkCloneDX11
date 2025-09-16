@@ -9,11 +9,22 @@ CBounding_OBB::CBounding_OBB(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 {
 }
 
+void CBounding_OBB::Set_Desc(_float3& vCenter, _float3& vExtents, _float3 vOrientation)
+{
+	m_pOriginal_Desc->Center = vCenter;
+	m_pOriginal_Desc->Extents = vExtents;
+
+	XMStoreFloat4(&m_pOriginal_Desc->Orientation, XMQuaternionRotationRollPitchYaw(vOrientation.x, vOrientation.y, vOrientation.z));
+}
+
 HRESULT CBounding_OBB::Initialize(const void* pArg)
 {
 	const BOUNDING_OBB_DESC* pDesc = static_cast<const BOUNDING_OBB_DESC*>(pArg);
 
-	m_pOriginal_Desc = new BoundingOrientedBox(pDesc->vCenter, pDesc->vExtents, pDesc->vOrientation);
+	_float4 vOrientation = {};
+	XMStoreFloat4(&vOrientation,XMQuaternionRotationRollPitchYaw(pDesc->vOrientation.x, pDesc->vOrientation.y, pDesc->vOrientation.z));
+
+	m_pOriginal_Desc = new BoundingOrientedBox(pDesc->vCenter, pDesc->vExtents, vOrientation);
 	m_pDesc = new BoundingOrientedBox(*m_pOriginal_Desc);
 
 	return S_OK;

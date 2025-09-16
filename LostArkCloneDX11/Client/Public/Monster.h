@@ -50,6 +50,7 @@ public:
 	CState*		Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
 	void		Set_Animation(ANIMATIONSLOT eAnim);
 	void		Chase(_float fTimeDelta);
+	
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -58,7 +59,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
+	virtual void		OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType) override;
 protected:
 	_bool				m_bInBattle = {};
 	_float				m_fSpeed = {};

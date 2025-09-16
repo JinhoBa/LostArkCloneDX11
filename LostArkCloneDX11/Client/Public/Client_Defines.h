@@ -18,6 +18,8 @@ namespace Client
 	enum class CAMERA_ANIM { IDLE, SHAKE, ZOOMOUT, INTOR_BOSS };
 	enum class PHASE { INTRO, PHASE1, PHASE2, PHASE3, END };
 
+	enum class CHARACTER {PLAYER, MONSTER, BOSS, END};
+
 	enum class ATTACK_TYPE {NORMAL, HEAD, BACK};
 	enum class HIT_TYPE { NORMAL, PUSH, FLOAT };
 

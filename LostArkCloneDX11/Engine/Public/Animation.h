@@ -15,6 +15,7 @@ public:
 	_bool IsAnimationFinished() { return m_fCurrentTrackPosition > m_fDuration; }
 	_bool IsAnimationFinished(_float fOffSet) { return m_fCurrentTrackPosition > (m_fDuration * fOffSet); }
 	_char* GetAnimationName() { return m_szName; }
+	_float Get_TrackPosition() const { return m_fCurrentTrackPosition; }
 
 
 public:

@@ -399,6 +399,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::AABB))))
 		return E_FAIL;
 
+	/*For Prototype_Component_Collider_OBB*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+		CCollider::Create(m_pDevice, m_pContext, COLLIDER::OBB))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Collider_Sphere*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
+		CCollider::Create(m_pDevice, m_pContext, COLLIDER::SPHERE))))
+		return E_FAIL;
+
 	/*For Prototype_Component_VIBuffer_Terrain_Trision_Floor*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain_Trision_Floor"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, "../Bin/Resources/HeightMap/Terrision_Floor.bin", 50, 50))))
@@ -581,7 +591,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 HRESULT CLoader::Loading_For_Tutorial()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision0823.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Trision.xml")))
 		return E_FAIL;
 
 	if (FAILED(Loading_For_GamePlay()))
@@ -758,9 +768,9 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 HRESULT CLoader::Loading_For_Boss()
 {
-	//if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/KamenMap.xml")))
-	//	return E_FAIL;
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
+
+	m_strMessage = TEXT("데이터를(을) 로딩 중 입니다.");
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen.xml")))
 		return E_FAIL;
 
 	if (FAILED(CGameManager::GetInstance()->Load_KamenData("../Bin/Resources/Data/Kamen/Kamen_Data.xml")))
@@ -817,7 +827,7 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_chair01b"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01b.bin"))))
 		return E_FAIL;
-
+	m_fLoadProgress = 40.f;
 #pragma region FLOOR
 
 	/* For.Prototype_Component_Model_Kamen_floar01 */
@@ -990,7 +1000,7 @@ HRESULT CLoader::Loading_For_Boss()
 		return E_FAIL;
 
 #pragma endregion
-
+	m_fLoadProgress = 60.f;
 #pragma region PILLAR
 	/* For.Prototype_Component_Model_Kamen_pillar01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar01"),
@@ -1068,16 +1078,16 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_gate01"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_gate01.bin"))))
 		return E_FAIL;
-
-
-#pragma endregion
+	m_fLoadProgress = 80.f;
 
 #pragma endregion
 
-	m_fLoadProgress = 40.f;
+#pragma endregion
+
+	
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
 
-	m_fLoadProgress = 60.f;
+	
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
 
 	/*For Prototype_Component_Navigation*/
@@ -1085,7 +1095,7 @@ HRESULT CLoader::Loading_For_Boss()
 		CNavigation::Create(m_pDevice, m_pContext, "../Bin/Resources/Data/Navigtion/Kamen_Navigation.bin"))))
 		return E_FAIL;
 
-	m_fLoadProgress = 80.f;
+	
 #pragma region GAEMOBJCET_PROTOTYPE
 	/*For Prototype_Component_Navigation*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Dynamic_SkyBox"),
@@ -1114,11 +1124,11 @@ HRESULT CLoader::Loading_For_Boss()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision0823.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Trision.xml")))
 		return E_FAIL;
 
-	//if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
-	//	return E_FAIL;
+	/*if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen.xml")))
+		return E_FAIL;*/
 
 	if (FAILED(Loading_For_GamePlay()))
 		return E_FAIL;

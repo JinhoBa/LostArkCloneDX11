@@ -6,6 +6,7 @@
 #include "Data_Manager.h"
 #include "Skill_Manager.h"
 #include "Buff_Manager.h"
+#include "Hit_Manager.h"
 
 #include "UIObject.h"
 #include "Camera_Fix.h"
@@ -35,7 +36,7 @@ HRESULT CGameManager::Initialize_Manager()
 	if (nullptr == m_pData_Manager)
 		return E_FAIL;
 
-	if (FAILED(m_pData_Manager->Load_SkillData("../Bin/Resources/Data/Skill_Data.xml")))
+	if (FAILED(m_pData_Manager->Load_SkillData("../Bin/Resources/Data/Skill_Data_V2.xml")))
 		return E_FAIL;
 
 	m_pSkill_Manager = CSkill_Manager::Create();
@@ -44,6 +45,10 @@ HRESULT CGameManager::Initialize_Manager()
 
 	m_pBuff_Manager = CBuff_Manager::Create();
 	if (nullptr == m_pBuff_Manager)
+		return E_FAIL;
+
+	m_pHit_Manager = CHit_Manager::Create();
+	if (nullptr == m_pHit_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -150,6 +155,16 @@ void CGameManager::Remove_Buff(CBuff* pBuff)
 
 #pragma endregion
 
+#pragma region HIT_MANAGER
+void CGameManager::Add_HitDesc(void* pDesc)
+{
+	m_pHit_Manager->Add_HitDesc(pDesc);
+}
+void CGameManager::Update_HitData()
+{
+	m_pHit_Manager->Update_HitData();
+}
+#pragma endregion
 
 void CGameManager::Bind_PickingPos(_float3* pPickingPos)
 {
@@ -198,6 +213,7 @@ void CGameManager::Free()
 
 	Safe_Release(m_pCamera);
 
+	Safe_Release(m_pHit_Manager);
 	Safe_Release(m_pBuff_Manager);
 	Safe_Release(m_pSkill_Manager);
 	Safe_Release(m_pData_Manager);

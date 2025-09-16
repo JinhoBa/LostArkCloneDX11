@@ -28,6 +28,7 @@ public:
 	const _bool isAnimationFinish() const { 
 		return m_isAnimationFinish; }
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
+	_float Get_TrackPoisiton();
 	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.1f);
 
 public:

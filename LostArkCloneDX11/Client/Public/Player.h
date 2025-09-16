@@ -33,10 +33,12 @@ public:
 	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	const list<class CBuff*>& Get_BuffList() { return m_Buffs; }
 	const CHARGE_SKILL_DESC* Get_ChargeSkill_Desc() { return &m_ChargeSkill_Desc; }
+	_float Get_TrackPositon();
 
 	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
-	
+	void			Set_HitBox(_float3& vCenter, _float3& vExtends);
+
 	_bool			isAnimationFinish();
 	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
 	
@@ -48,7 +50,7 @@ public:
 	virtual void		Update(_float fTimeDelta) override;
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
-
+	virtual void		OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)override;
 public:
 	void	Check_Navi() { Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix); }
 	_bool	Move(_float fTimeDelta);
@@ -56,11 +58,15 @@ public:
 	void	Change_Stance();
 	void	Add_Buff(_uint iBuffID);
 	void	Play_CameraAnimation(CAMERA_ANIM eState);
+	void    Update_HitBox(_uint iSkillID, _uint iHitIndex);
 
 private:
 	PLAYER_INFO				m_DefaultInfo = {};
 	PLAYER_INFO				m_PlayerInfo = {};
 	
+	_uint					m_iCurSkillID = {};
+	_uint					m_iCurHitIndex = {};
+
 	BUFFSTAT				m_BuffStat = {};
 	CHARGE_SKILL_DESC		m_ChargeSkill_Desc = {};
 
@@ -68,6 +74,12 @@ private:
 	CState*					m_States[STATE_END] = {};
 	CNavigation*			m_pNavigationCom = { nullptr };
 	CCollider*				m_pColliderCom = { nullptr };
+
+#ifdef _DEBUG
+	_bool isCollUpdate = {false};
+	_float3 m_vHitBoxCenter = {};
+	_float3 m_vHitBoxExtents = {};
+#endif // _DEBUG
 
 
 	const _float4x4*		m_pRootBoneMatrix = { nullptr };

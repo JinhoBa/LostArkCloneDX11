@@ -9,11 +9,12 @@ public:
 	typedef struct tagBoundingOBBesc : public BOUNDING_DESC
 	{
 		_float3		vExtents;
-		_float4		vOrientation;
+		_float3		vOrientation;
 	}BOUNDING_OBB_DESC;
 
 public:
 	BoundingOrientedBox* Get_Desc() const { return m_pDesc; }
+	virtual void Set_Desc(_float3& vCenter, _float3& vExtents, _float3 vOrientation);
 	virtual _float3& Get_WorldPosition() override { return m_pDesc->Center; }
 
 private:

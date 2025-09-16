@@ -20,6 +20,7 @@ public:
 
 	_int	Get_BoneIndex(const _char* pBoneName) const;
 	_matrix Get_BoneMatirx(_uint iBoneIndex);
+	_float Get_TrackPosition();
 	const _float4x4* Get_BoneMatrixPrt(const _char* pBoneName);
 
 	void	Set_AnimationIndex(class CTransform* pTransform, _uint iIndex, _bool bLoop = false, _float fChangeTime = 0.2f, _float Offset = 1.f);

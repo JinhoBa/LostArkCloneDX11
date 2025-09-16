@@ -304,6 +304,9 @@
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL">
       <UniqueIdentifier>{436edba2-b74d-4104-9d20-72d3af988966}</UniqueIdentifier>
     </Filter>
+    <Filter Include="93.Hit_Manager">
+      <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -597,6 +600,9 @@
     <ClInclude Include="..\public\Attack_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hit_Manager.h">
+      <Filter>93.Hit_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -884,6 +890,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Attack_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hit_Manager.cpp">
+      <Filter>93.Hit_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

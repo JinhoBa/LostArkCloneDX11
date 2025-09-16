@@ -47,7 +47,7 @@ private:
 	vector<TERRAIN_DATA>				m_TerrainDatas;
 	vector<MAP_DATA>					m_MapDatas;
 	vector<_wstring>					m_MapPreviewFileNames;
-	vector<SKILL_INFO>					m_SkillDatas;
+	vector<SKILL_INFO>					m_Skill_Data;
 	vector<vector<ANIMATION_DESC>>		m_AnimationData;
 	vector<KAMEN_PHASE_DESC> 			m_KamenData;
 	

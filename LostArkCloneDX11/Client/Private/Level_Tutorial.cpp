@@ -49,6 +49,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
         m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::BOSS));
     }
 
+    CGameManager::GetInstance()->Update_HitData();
 }
 
 HRESULT CLevel_Tutorial::Render()

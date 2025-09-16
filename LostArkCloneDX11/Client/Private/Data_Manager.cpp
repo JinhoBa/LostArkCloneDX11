@@ -337,6 +337,28 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
             Skill_Info.eSuperArmour = SUPRE_ARMOUR_ALL;
         else
             return E_FAIL;
+        /*Hit Box */
+        HITBOX_DESC HitBox_Desc = {};
+
+        tinyxml2::XMLElement* HitBox = skill->FirstChildElement("HitBox");
+
+        HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
+        HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
+        HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
+
+        tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
+
+        Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
+        Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
+        Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
+
+        tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
+
+        Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
+        Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
+        Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+        memcpy(&Skill_Info.HitBoxDesc, &HitBox_Desc, sizeof(HITBOX_DESC));
 
         /*Skill Damage */
         tinyxml2::XMLElement* Hits = skill->FirstChildElement("Hit");
@@ -350,7 +372,7 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
             Skill_Info.Damages.push_back(fDamage);
         }
 
-        m_SkillDatas.push_back(Skill_Info);
+        m_Skill_Data.push_back(Skill_Info);
     }
 
     return S_OK;
@@ -358,10 +380,10 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
 
 SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
 {
-    if(m_SkillDatas.size() <= iSkillID)
+    if(m_Skill_Data.size() <= iSkillID)
         return nullptr;
 
-    return &m_SkillDatas[iSkillID];
+    return &m_Skill_Data[iSkillID];
 }
 
 HRESULT CData_Manager::Load_AnimationData(const _char* pFilePath)

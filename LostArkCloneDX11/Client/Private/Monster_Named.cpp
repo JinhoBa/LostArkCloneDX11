@@ -65,7 +65,7 @@ void CMonster_Named::Update(_float fTimeDelta)
 void CMonster_Named::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
-
+	m_pColliderCom->Update_OnCollision();
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -100,6 +100,9 @@ HRESULT CMonster_Named::Ready_Components()
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
 		return E_FAIL;
+
+	//m_pColliderCom->Set_OnCollisionEnter([&]() {m_MonsterInfo.fHp -= 1000.f; });
+
 
 	return S_OK;
 }

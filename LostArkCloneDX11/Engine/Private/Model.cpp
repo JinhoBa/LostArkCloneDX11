@@ -68,6 +68,11 @@ _matrix CModel::Get_BoneMatirx(_uint iBoneIndex)
     return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
 }
 
+_float CModel::Get_TrackPosition()
+{
+    return m_Animations[m_iCurrentAnimIndex]->Get_TrackPosition();
+}
+
 const _float4x4* CModel::Get_BoneMatrixPrt(const _char* pBoneName)
 {
     auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool

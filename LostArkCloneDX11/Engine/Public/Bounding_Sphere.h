@@ -13,6 +13,7 @@ public:
 
 public:
 	BoundingSphere* Get_Desc() const { return m_pDesc; }
+	virtual void Set_Desc(_float3& vCenter, _float fRadius);
 	virtual _float3& Get_WorldPosition() override { return m_pDesc->Center; }
 
 private:

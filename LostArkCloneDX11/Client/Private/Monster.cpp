@@ -148,6 +148,12 @@ HRESULT CMonster::Render()
 	return S_OK;
 }
 
+void CMonster::OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)
+{
+	m_MonsterInfo.fHp -= fDamage;
+	
+}
+
 HRESULT CMonster::Ready_PartObjects(_wstring& strModelPrototypeTag)
 {
 	CBody_Monster::BODYMONSTER_DESC Body_Desc = {};

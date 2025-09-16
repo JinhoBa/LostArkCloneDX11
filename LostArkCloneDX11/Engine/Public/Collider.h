@@ -10,13 +10,13 @@ NS_BEGIN(Engine)
 class ENGINE_DLL CCollider : public CComponent
 {
 public:
-	typedef struct HitBox_Desc
+	typedef struct COLLIDER_Desc
 	{
 		class CGameObject* pOwner = { nullptr };
 		class CGameObject* pHitObject = { nullptr };
 		_float3			   vCollPosition = {};
 		_float3			   vCollNormal = {};
-	}HITBOX_DESC;
+	}COLLIDER_DESC;
 
 private:
 	CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -24,7 +24,7 @@ private:
 	virtual ~CCollider() = default;
 
 public:
-	HitBox_Desc& Get_HitBoxDesc() { return m_HitBox_Desc; }
+	COLLIDER_DESC& Get_HitBoxDesc() { return m_Collider_Desc; }
 
 	void Set_OnCollisionEnter(function<void()>Event) {
 		m_OnCollisionEnter_Event = Event;
@@ -46,9 +46,11 @@ public:
 	_bool				Intersect(CCollider* pTarget);
 	void				Update_OnCollision();
 
+	void				Set_ColliderDesc(_float3& vCenter, _float3& vExtents, _float3 vOrientation = _float3(0.f, 0.f, 0.f));
 
 #ifdef _DEBUG
 public:
+	
 	virtual HRESULT	Render();
 #endif 
 
@@ -59,7 +61,7 @@ private:
 
 	class CBounding*		m_pBounding = { nullptr };
 	
-	HITBOX_DESC				m_HitBox_Desc = {};
+	COLLIDER_DESC			m_Collider_Desc = {};
 
 	function<void()>		m_OnCollisionEnter_Event = { nullptr };
 	function<void()>		m_OnCollisionStay_Event = { nullptr };

@@ -4,6 +4,12 @@
 
 #include "DebugDraw.h"
 
+void CBounding_AABB::Set_Desc(_float3& vCenter, _float3& vExtents)
+{
+	m_pOriginal_Desc->Center = vCenter;
+	m_pOriginal_Desc->Extents = vExtents;
+}
+
 CBounding_AABB::CBounding_AABB(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CBounding{pDevice, pContext}
 {

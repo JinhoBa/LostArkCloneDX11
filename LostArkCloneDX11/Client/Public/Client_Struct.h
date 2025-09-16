@@ -4,6 +4,15 @@
 
 namespace Client
 {
+	typedef struct tagHitBoxDesc
+	{
+		_float fStartTime;
+		_float fDuration;
+		_float fInterval;
+		_float3 vOffset;
+		_float3 vExtends;
+	}HITBOX_DESC;
+
 	typedef struct tagSkill_Info
 	{
 		_bool			bCountAttack;
@@ -13,6 +22,7 @@ namespace Client
 		PART_BREAKER	ePartbreaker; // 부위 파괴
 		STAGGER			eStaggerLevel; // 무력화
 		ATTACK_TYPE		eAttackType;
+		HIT_TYPE		eHitType;
 		SUPER_ARMOUR	eSuperArmour; // 슈퍼 아머
 
 		STANCE			eStance;
@@ -23,25 +33,25 @@ namespace Client
 		_float			fCoolTime;
 		_float			fIdenGauge; // 아덴 수급량
 
+		HITBOX_DESC     HitBoxDesc;
+
 		string			strSkillName;
 		wstring			strSkillNameKR;
 		vector<_float>	Damages;
 	}SKILL_INFO;
 
-	typedef struct tagHit_Info
+	typedef struct tagCharacter_Info
 	{
-		_float fDamage;
-		_uint iHitType;
-	}HIT_INFO;
+		_float fMaxHp;
+		_float fHp;
+		_float fAttack;
+	}CHARACTER_INFO;
 
-	typedef struct tagPlayer_Info
+	typedef struct tagPlayer_Info : public CHARACTER_INFO
 	{
 		STANCE eStance;
-		_float fMaxHp;
 		_float fMaxMp;
-		_float fHp;
 		_float fMp;
-		_float fAttack;
 		_float fIdentity;
 		_float Critical_Probability;
 		_float Critical_Damage;
@@ -49,11 +59,8 @@ namespace Client
 		_float fMoveSpeed;
 	}PLAYER_INFO;
 
-	typedef struct tagMonster_Info
+	typedef struct tagMonster_Info : public CHARACTER_INFO
 	{
-		_float fMaxHp;
-		_float fHp;
-		_float fAttack;
 		_float fDetectDistance;
 		_float fAttackRange;
 	}MONSTER_INFO;

@@ -64,6 +64,11 @@ public:
 	void Remove_Buff(class CBuff* pBuff);
 #pragma endregion
 
+#pragma region HIT_MANAGER
+	void Add_HitDesc(void* pDesc);
+	void Update_HitData();
+#pragma endregion
+
 
 	void Bind_PickingPos(_float3* pPickingPos);
 	_vector Picking_Terrains();
@@ -80,6 +85,7 @@ private:
 	class CData_Manager*	m_pData_Manager = { nullptr };
 	class CSkill_Manager*	m_pSkill_Manager = { nullptr };
 	class CBuff_Manager*	m_pBuff_Manager = { nullptr };
+	class CHit_Manager*		m_pHit_Manager = { nullptr };
 
 public:
 	virtual void Free() override;
