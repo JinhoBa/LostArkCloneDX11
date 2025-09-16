@@ -1,8 +1,8 @@
 #include "Collider.h"
 
 #include "GameInstance.h"
-
-
+#include "GameObject.h"
+#include "Bounding.h"
 
 CCollider::CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CComponent{ pDevice, pContext }
@@ -27,9 +27,27 @@ CCollider::CCollider(const CCollider& Prototype)
 
 }
 
+void CCollider::Hit(_bool isColl)
+{
+	m_isColl = isColl;
+}
+
+void CCollider::Hurt(CCollider* pCollider)
+{
+	m_isColl = true;
+
+	m_HitBox_Desc.pHitObject = pCollider->m_HitBox_Desc.pOwner;
+	memcpy(&m_HitBox_Desc.vCollPosition, &m_pBounding->Get_WorldPosition(), sizeof(_float3));
+
+	XMStoreFloat3(&m_HitBox_Desc.vCollNormal,
+		XMLoadFloat3(&pCollider->m_pBounding->Get_WorldPosition()) - XMLoadFloat3(&m_HitBox_Desc.vCollPosition));
+}
+
 HRESULT CCollider::Initialize_Prototype(COLLIDER eType)
 {
 	m_eType = eType;
+
+
 
 #ifdef _DEBUG
 	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pContext);
@@ -53,6 +71,13 @@ HRESULT CCollider::Initialize_Prototype(COLLIDER eType)
 
 HRESULT CCollider::Initialize(void* pArg)
 {
+	CBounding::BOUNDING_DESC* pDesc = static_cast<CBounding::BOUNDING_DESC*>(pArg);
+
+	m_HitBox_Desc.pOwner = pDesc->pOwner;
+	m_HitBox_Desc.pHitObject = nullptr;
+	m_HitBox_Desc.vCollPosition = _float3(0.f, 0.f, 0.f);
+	m_HitBox_Desc.vCollNormal = _float3(0.f, 0.f, 0.f);
+
 	switch (m_eType)
 	{
 	case Engine::COLLIDER::AABB:

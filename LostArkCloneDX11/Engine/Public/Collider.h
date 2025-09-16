@@ -9,12 +9,23 @@ NS_BEGIN(Engine)
 
 class ENGINE_DLL CCollider : public CComponent
 {
+public:
+	typedef struct HitBox_Desc
+	{
+		class CGameObject* pOwner = { nullptr };
+		class CGameObject* pHitObject = { nullptr };
+		_float3			   vCollPosition = {};
+		_float3			   vCollNormal = {};
+	}HITBOX_DESC;
+
 private:
 	CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCollider(const CCollider& Prototype);
 	virtual ~CCollider() = default;
 
 public:
+	HitBox_Desc& Get_HitBoxDesc() { return m_HitBox_Desc; }
+
 	void Set_OnCollisionEnter(function<void()>Event) {
 		m_OnCollisionEnter_Event = Event;
 	}
@@ -24,8 +35,8 @@ public:
 	void Set_OnCollisionExit(function<void()>Event) {
 		m_OnCollisionExit_Event = Event;
 	}
-	void Hit() { m_isColl = true; };
-
+	void Hit(_bool isColl);
+	void Hurt(CCollider* pCollider);
 
 public:
 	virtual HRESULT		Initialize_Prototype(COLLIDER eType);
@@ -42,15 +53,17 @@ public:
 #endif 
 
 private:
-	_bool				m_PreisColl = { false };
-	_bool				m_isColl = { false };
-	COLLIDER			m_eType = { COLLIDER::END };
+	_bool					m_PreisColl = { false };
+	_bool					m_isColl = { false };
+	COLLIDER				m_eType = { COLLIDER::END };
 
-	class CBounding*	m_pBounding = { nullptr };
+	class CBounding*		m_pBounding = { nullptr };
+	
+	HITBOX_DESC				m_HitBox_Desc = {};
 
-	function<void()>	m_OnCollisionEnter_Event = { nullptr };
-	function<void()>	m_OnCollisionStay_Event = { nullptr };
-	function<void()>	m_OnCollisionExit_Event = { nullptr };
+	function<void()>		m_OnCollisionEnter_Event = { nullptr };
+	function<void()>		m_OnCollisionStay_Event = { nullptr };
+	function<void()>		m_OnCollisionExit_Event = { nullptr };
 
 #ifdef _DEBUG
 public:

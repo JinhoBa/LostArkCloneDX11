@@ -9,6 +9,7 @@ public:
 	typedef struct tagBoundingDesc
 	{
 		_float3		vCenter;
+		class CGameObject* pOwner;
 	}BOUNDING_DESC;
 
 protected:
@@ -16,9 +17,12 @@ protected:
 	virtual ~CBounding() = default;
 
 public:
-	HRESULT Initialize();
-	virtual void Update(_fmatrix WorldMatrix) PURE;
-	virtual _bool Intersect(COLLIDER eType, class CBounding* pTarget) PURE;
+	virtual _float3& Get_WorldPosition() PURE;
+
+public:
+	HRESULT			Initialize();
+	virtual void	Update(_fmatrix WorldMatrix) PURE;
+	virtual _bool	Intersect(COLLIDER eType, class CBounding* pTarget) PURE;
 
 #ifdef _DEBUG
 public:
@@ -26,8 +30,8 @@ public:
 #endif
 
 protected:
-	ID3D11Device* m_pDevice = { nullptr };
-	ID3D11DeviceContext* m_pContext = { nullptr };
+	ID3D11Device*			m_pDevice = { nullptr };
+	ID3D11DeviceContext*	m_pContext = { nullptr };
 
 public:
 	virtual void Free();

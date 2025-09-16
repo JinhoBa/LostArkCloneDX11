@@ -14,6 +14,7 @@ public:
 
 public:
 	BoundingOrientedBox* Get_Desc() const { return m_pDesc; }
+	virtual _float3& Get_WorldPosition() override { return m_pDesc->Center; }
 
 private:
 	CBounding_OBB(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -13,6 +13,7 @@ public:
 
 public:
 	BoundingSphere* Get_Desc() const { return m_pDesc; }
+	virtual _float3& Get_WorldPosition() override { return m_pDesc->Center; }
 
 private:
 	CBounding_Sphere(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

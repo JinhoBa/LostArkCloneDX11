@@ -27,10 +27,11 @@ _bool CCollider_Manager::Check_Collider(CCollider* pColldier, const _tchar* pSrc
 		if (true == pColldier->Intersect(pSrcColldier))
 		{
 			isColl = true;
-			pColldier->Hit();
-			pSrcColldier->Hit();
+			
+			pSrcColldier->Hurt(pColldier);
 		}
 	}
+	pColldier->Hit(isColl);
 
 	return isColl;
 }

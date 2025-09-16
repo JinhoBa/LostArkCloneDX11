@@ -95,7 +95,7 @@ HRESULT CMonster_Named::Ready_Components()
 	CBounding_AABB::BOUNDING_AABB_DESC AABB_Desc = {};
 	AABB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
 	AABB_Desc.vExtents = _float3(0.5f, 0.5f, 0.5f);
-
+	AABB_Desc.pOwner = this;
 
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
