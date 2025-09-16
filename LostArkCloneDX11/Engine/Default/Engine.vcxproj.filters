@@ -565,6 +565,9 @@
     <None Include="..\Public\FMOD\fmod_errors.cs">
       <Filter>01.Utility\06.Sound\FMOD</Filter>
     </None>
+    <None Include="..\Bin\ShaderFiles\Engine_Shader_Define.hlsli">
+      <Filter>98.ShaderFiles</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Public\FMOD\fmod_vc.lib">

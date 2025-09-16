@@ -280,6 +280,7 @@
     <ClCompile Include="..\Private\VIBuffer_Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Bin\ShaderFiles\Engine_Shader_Define.hlsli" />
     <None Include="..\Public\FMOD\fmod.cs" />
     <None Include="..\Public\FMOD\fmod_dsp.cs" />
     <None Include="..\Public\FMOD\fmod_errors.cs" />

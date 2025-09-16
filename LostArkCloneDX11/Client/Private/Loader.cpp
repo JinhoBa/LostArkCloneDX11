@@ -393,6 +393,7 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CNavigation::Create(m_pDevice, m_pContext, "../Bin/Resources/Data/Navigtion/Trision_Navigation.bin"))))
 		return E_FAIL;
 
+
 	/*For Prototype_Component_Collider_AABB*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, COLLIDER::AABB))))
@@ -1113,11 +1114,11 @@ HRESULT CLoader::Loading_For_Boss()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	//if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision0823.xml")))
-	//	return E_FAIL;
-
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Trision0823.xml")))
 		return E_FAIL;
+
+	//if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/Kamen0913.xml")))
+	//	return E_FAIL;
 
 	if (FAILED(Loading_For_GamePlay()))
 		return E_FAIL;

@@ -104,8 +104,8 @@ void CTerrain::Update(_float fTimeDelta)
 
 void CTerrain::Late_Update(_float fTimeDelta)
 {
-    if(m_bVisible)
-        m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //if(m_bVisible)
+    //    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CTerrain::Render()
