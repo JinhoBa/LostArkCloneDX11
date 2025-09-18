@@ -324,6 +324,18 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
         else
             return E_FAIL;
 
+        const char* pHitkType;
+        Meta->QueryStringAttribute("hitType", &pAttackType);
+
+        if (!strcmp(pAttackType, "normal"))
+            Skill_Info.eHitType = HIT_TYPE::NORMAL;
+        else if (!strcmp(pAttackType, "push"))
+            Skill_Info.eHitType = HIT_TYPE::PUSH;
+        else if (!strcmp(pAttackType, "float"))
+            Skill_Info.eHitType = HIT_TYPE::FLOAT;
+        else
+            return E_FAIL;
+
         const char* pSuperArmour;
         Meta->QueryStringAttribute("superArmour", &pSuperArmour);
 
@@ -475,6 +487,8 @@ HRESULT CData_Manager::Load_AnimationData(const _char* pFilePath)
                 Anim_Desc.eSlot = ANIMATIONSLOT::TWIST_KNOCKDOWN;
             else if (!strcmp(pType, "twist_knockdown_land"))
                 Anim_Desc.eSlot = ANIMATIONSLOT::TWIST_KNOCKDOWN_LAND;
+            else if (!strcmp(pType, "dmg_idle_1"))
+                Anim_Desc.eSlot = ANIMATIONSLOT::DMG;
             else
                 return E_FAIL;
 #pragma endregion

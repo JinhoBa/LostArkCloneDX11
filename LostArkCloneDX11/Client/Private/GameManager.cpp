@@ -6,7 +6,7 @@
 #include "Data_Manager.h"
 #include "Skill_Manager.h"
 #include "Buff_Manager.h"
-#include "Hit_Manager.h"
+#include "DamageFont_Manager.h"
 
 #include "UIObject.h"
 #include "Camera_Fix.h"
@@ -47,8 +47,8 @@ HRESULT CGameManager::Initialize_Manager()
 	if (nullptr == m_pBuff_Manager)
 		return E_FAIL;
 
-	m_pHit_Manager = CHit_Manager::Create();
-	if (nullptr == m_pHit_Manager)
+	m_pDamageFont_Manager = CDamageFont_Manager::Create();
+	if (nullptr == m_pDamageFont_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -155,14 +155,15 @@ void CGameManager::Remove_Buff(CBuff* pBuff)
 
 #pragma endregion
 
-#pragma region HIT_MANAGER
-void CGameManager::Add_HitDesc(void* pDesc)
+#pragma region DAMAGEFONT_MANAGER
+void CGameManager::Add_DamageFont(DAMAGEFONT eType, _float fDamage, _float3& vPostion)
 {
-	m_pHit_Manager->Add_HitDesc(pDesc);
+	m_pDamageFont_Manager->Add_DamageFont(eType, fDamage, vPostion);
 }
-void CGameManager::Update_HitData()
+
+void CGameManager::Update_DamageFont(_float fTimeDelta)
 {
-	m_pHit_Manager->Update_HitData();
+	m_pDamageFont_Manager->Update_DamageFont(fTimeDelta);
 }
 #pragma endregion
 
@@ -213,7 +214,7 @@ void CGameManager::Free()
 
 	Safe_Release(m_pCamera);
 
-	Safe_Release(m_pHit_Manager);
+	Safe_Release(m_pDamageFont_Manager);
 	Safe_Release(m_pBuff_Manager);
 	Safe_Release(m_pSkill_Manager);
 	Safe_Release(m_pData_Manager);

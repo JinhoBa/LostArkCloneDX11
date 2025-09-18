@@ -101,6 +101,7 @@ HRESULT CCollider::Initialize(void* pArg)
 
 void CCollider::Update(_fmatrix WorldMatrix)
 {
+	m_PreisColl = m_isColl;
 	m_isColl = false;
 
 	m_pBounding->Update(WorldMatrix);
@@ -111,6 +112,12 @@ _bool CCollider::Intersect(CCollider* pTarget)
 	_bool bColl = {false};
 
 	bColl = m_pBounding->Intersect(pTarget->m_eType, pTarget->m_pBounding);
+
+	if (bColl)
+	{
+		m_HitObjects.push_back(pTarget->m_Collider_Desc.pOwner);
+		Safe_AddRef(pTarget->m_Collider_Desc.pOwner);
+	}
 
 	return bColl;
 }
@@ -129,8 +136,12 @@ void CCollider::Update_OnCollision()
 		if (true == m_PreisColl && m_OnCollisionEnter_Event)
 			m_OnCollisionEnter_Event();
 	}
-
-	m_PreisColl = m_isColl;
+	
+	for (auto& pObject : m_HitObjects)
+	{
+		Safe_Release(pObject);
+	}
+	m_HitObjects.clear();
 }
 
 void CCollider::Set_ColliderDesc(_float3& vCenter, _float3& vExtents, _float3 vOrientation)

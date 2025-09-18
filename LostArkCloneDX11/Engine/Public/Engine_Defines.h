@@ -31,6 +31,7 @@
 using namespace DirectX;
 
 #include <vector>
+#include <deque>
 #include <list>
 #include <map>
 #include <algorithm>

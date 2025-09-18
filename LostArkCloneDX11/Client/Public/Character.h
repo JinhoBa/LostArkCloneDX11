@@ -28,7 +28,7 @@ public:
 	virtual HRESULT		Render() override;
 
 	virtual void		Check_Navigation(class CNavigation* pNavigation, const _float4x4* pRootBoneMatrix);
-	virtual void		OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)PURE;
+	virtual void		OnHit(const ATTACK_DESC& Attack_Desc);
 
 protected:
 	class CGameManager*		m_pGameManager = { nullptr };

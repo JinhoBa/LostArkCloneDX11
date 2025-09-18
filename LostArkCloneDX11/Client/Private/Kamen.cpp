@@ -14,12 +14,12 @@
 #include "Weapon_Kamen.h"
 
 CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CCharacter{ pDevice, pContext }
+    :CEnemy{ pDevice, pContext }
 {
 }
 
 CKamen::CKamen(const CKamen& Prototype)
-    :CCharacter{ Prototype }
+    :CEnemy{ Prototype }
 {
 }
 
@@ -43,7 +43,7 @@ void CKamen::Change_Phase(PHASE ePhase)
     {
     case Client::PHASE::PHASE1:
 
-        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
         m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
         break;
 
@@ -91,10 +91,10 @@ HRESULT CKamen::Initialize(void* pArg)
 
     m_ePhase = PHASE::INTRO;
 
-    m_pInfo.fAttack = 600.f;
-    m_pInfo.fAttackRange = 3.f;
-    m_pInfo.fDetectDistance = 5.f;
-    m_pInfo.fHp = m_pInfo.fMaxHp = 500000.f;
+    m_EnemyInfo.fAttack = 600.f;
+    m_EnemyInfo.fAttackRange = 3.f;
+    m_EnemyInfo.fDetectDistance = 5.f;
+    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 500000.f;
 
     m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
@@ -129,19 +129,11 @@ HRESULT CKamen::Render()
     return S_OK;
 }
 
-void CKamen::OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)
+void CKamen::OnHit(const ATTACK_DESC& Attack_Desc)
 {
-    m_pInfo.fHp -= fDamage;
+    m_EnemyInfo.fHp -= Attack_Desc.fDamage;
 
-    switch (eAttackType)
-    {
-    case Client::ATTACK_TYPE::NORMAL:
-        break;
-    case Client::ATTACK_TYPE::HEAD:
-        break;
-    case Client::ATTACK_TYPE::BACK:
-        break;
-    }
+  
 }
 
 HRESULT CKamen::Reay_Component()

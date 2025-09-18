@@ -25,6 +25,7 @@ private:
 
 public:
 	COLLIDER_DESC& Get_HitBoxDesc() { return m_Collider_Desc; }
+	deque<class CGameObject*>& Get_HitObjects() { return m_HitObjects; }
 
 	void Set_OnCollisionEnter(function<void()>Event) {
 		m_OnCollisionEnter_Event = Event;
@@ -55,17 +56,18 @@ public:
 #endif 
 
 private:
-	_bool					m_PreisColl = { false };
-	_bool					m_isColl = { false };
-	COLLIDER				m_eType = { COLLIDER::END };
+	_bool						m_PreisColl = { false };
+	_bool						m_isColl = { false };
+	COLLIDER					m_eType = { COLLIDER::END };
 
-	class CBounding*		m_pBounding = { nullptr };
+	class CBounding*			m_pBounding = { nullptr };
 	
-	COLLIDER_DESC			m_Collider_Desc = {};
+	COLLIDER_DESC				m_Collider_Desc = {};
+	deque<class CGameObject*>	m_HitObjects;
 
-	function<void()>		m_OnCollisionEnter_Event = { nullptr };
-	function<void()>		m_OnCollisionStay_Event = { nullptr };
-	function<void()>		m_OnCollisionExit_Event = { nullptr };
+	function<void()>			m_OnCollisionEnter_Event = { nullptr };
+	function<void()>			m_OnCollisionStay_Event = { nullptr };
+	function<void()>			m_OnCollisionExit_Event = { nullptr };
 
 #ifdef _DEBUG
 public:

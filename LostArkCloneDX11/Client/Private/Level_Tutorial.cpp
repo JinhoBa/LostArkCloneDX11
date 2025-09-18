@@ -48,8 +48,6 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
     {
         m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::BOSS));
     }
-
-    CGameManager::GetInstance()->Update_HitData();
 }
 
 HRESULT CLevel_Tutorial::Render()
@@ -114,7 +112,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.fAttack = 500.f;
     Desc.fAttackRange = 1.5f;
     Desc.fDetectDistance = 3.f;
-    Desc.fMaxHp = Desc.fHp = 10000.f;
+    Desc.fMaxHp = Desc.fHp = 1000000.f;
     Desc.fSpeedPersec = 3.f;
     Desc.fRotatePersec = 5.f;
     Desc.vPosition = _float4(50.f, 0.f, 50.f, 1.f);
@@ -127,7 +125,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
 
     Desc.iMonsterID = 1;
     Desc.iNumAttack = 2;
-    Desc.fMaxHp = Desc.fHp = 5000.f;
+    Desc.fMaxHp = Desc.fHp = 1000000.f;
     Desc.fAttackRange = 2.f;
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
 

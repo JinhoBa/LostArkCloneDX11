@@ -1,6 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Character.h"
+#include "Enemy.h"
 
 NS_BEGIN(Engine)
 class CStateMachine;
@@ -9,7 +9,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CKamen final : public CCharacter
+class CKamen final : public CEnemy
 {
 public:
 	enum class KAMENSTATE {INTRO, IDLE, 
@@ -37,12 +37,10 @@ public:
 	virtual void		Update(_float fTimeDelta) override;
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
-	virtual void		OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)override;
+	virtual void		OnHit(const ATTACK_DESC& Attack_Desc)override;
 
 private:
 	PHASE				m_ePhase = { PHASE::END };
-
-	MONSTER_INFO		m_pInfo = {};
 
 	CStateMachine*		m_pStateMachineCom = { nullptr };
 	CNavigation*		m_pNavigationCom = { nullptr };

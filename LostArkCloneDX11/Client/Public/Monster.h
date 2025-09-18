@@ -2,7 +2,7 @@
 #include "Client_Defines.h"
 #include "Client_Struct.h"
 
-#include "Character.h"
+#include "Enemy.h"
 
 NS_BEGIN(Engine)
 class CTexture;
@@ -11,10 +11,10 @@ class CCollider;
 NS_END
 
 NS_BEGIN(Client)
-class CMonster abstract : public CCharacter
+class CMonster abstract : public CEnemy
 {
 public:
-	enum STATE {IDLE, ATTACK, TURN, RUN, DEAD, STATE_END};
+	enum STATE {IDLE, ATTACK, TURN, RUN, HIT, DEAD, STATE_END};
 public:
 	typedef struct Monster_Desc : public GAMEOBJECT_DESC
 	{
@@ -36,7 +36,7 @@ protected:
 
 public:
 	const _bool isInAttackRange()const {
-		return m_fDistToPlayer <= m_MonsterInfo.fAttackRange; 
+		return m_fDistToPlayer <= m_EnemyInfo.fAttackRange;
 	}
 	_vector Get_Position() {
 		return m_pTransformCom->Get_State(Engine::STATE::POSITION);
@@ -45,6 +45,7 @@ public:
 		return m_pTransformCom->TurnLerp(m_pPlayerTransformCom->Get_Position(), fTimeDelta);
 	}
 
+	HIT_TYPE	Get_HitType();
 	const _bool isInBattle() const { return m_bInBattle; }
 	const _bool isAnimationFinish();
 	CState*		Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
@@ -59,8 +60,9 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual void		OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType) override;
+
 protected:
+	_bool				m_isHit = {};
 	_bool				m_bInBattle = {};
 	_float				m_fSpeed = {};
 	_uint				m_iMonsetrID = {};
@@ -69,7 +71,6 @@ protected:
 	_float				m_fDistToPlayer = {};
 
 	MONSTER				m_eType = {};
-	MONSTER_INFO		m_MonsterInfo = {};
 
 	const _float4x4*	m_pRootBoneMatrix = { nullptr };
 

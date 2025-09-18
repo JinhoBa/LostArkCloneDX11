@@ -8,7 +8,6 @@ constexpr float MAX_IDENTITY = 120.f;
 
 namespace Client
 {
-
 	const unsigned int g_iWinSizeX = 1280;
 	const unsigned int g_iWinSizeY = 720;
 
@@ -21,7 +20,7 @@ namespace Client
 	enum class CHARACTER {PLAYER, MONSTER, BOSS, END};
 
 	enum class ATTACK_TYPE {NORMAL, HEAD, BACK};
-	enum class HIT_TYPE { NORMAL, PUSH, FLOAT };
+	enum class HIT_TYPE { NORMAL, PUSH, FLOAT, END };
 
 	enum SKILL_TYPE { SKILL_NORAML, SKILL_COMBO, SKILL_POINT, SKILL_CHARGE };
 	enum STAGGER { STAGGER_NONE, STAGGER_LOW, STAGGER_MIDDLE, STAGGER_HIGH };
@@ -40,10 +39,13 @@ namespace Client
 		DEAD, DEAD_LOOP,
 		ATTACK_1, ATTACK_2, ATTACK_3, ATTACK_4, ATTACK_5,
 		CRITICAL_START, CRITICAL_LOOP, CRITICAL_END,
+		DMG,
 		BOUND, BOUND_HIT, BOUND_LAND, GROUND,
 		STANDUP, KNOKDOWN, KNOKDOWN_LAND, TWIST_KNOCKDOWN, TWIST_KNOCKDOWN_LAND,
 		END
 	};
+
+	enum class DAMAGEFONT {NORMAL, CRITICAL, PLAYER_HURT};
 }
 
 using namespace Client;

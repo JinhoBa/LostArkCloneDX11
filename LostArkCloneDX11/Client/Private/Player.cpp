@@ -3,7 +3,6 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
-#include "Hit_Manager.h"
 
 #include "Skill.h"
 
@@ -13,6 +12,7 @@
 #include "HpBar_Player.h"
 #include "Buff.h"
 #include "Camera_Fix.h"
+#include "Enemy.h"
 
 #pragma region STATE
 #include "StateMachine.h"
@@ -189,6 +189,8 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
+    m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
     if (isCollUpdate)
         m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
    // Update_HitBox();
@@ -237,21 +239,9 @@ HRESULT CPlayer::Render()
     return S_OK;
 }
 
-void CPlayer::OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)
+void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
 {
-    m_PlayerInfo.fHp -= fDamage;
-
-    switch (eHitType)
-    {
-    case Client::HIT_TYPE::NORMAL:
-        break;
-
-    case Client::HIT_TYPE::PUSH:
-        break;
-
-    case Client::HIT_TYPE::FLOAT:
-        break;
-    }
+    
 }
 
 HRESULT CPlayer::Ready_Components()
@@ -278,14 +268,42 @@ HRESULT CPlayer::Ready_Components()
 
 
     m_pColliderCom->Set_OnCollisionEnter([&]() {
-        CHit_Manager::HIT_DESC Desc = {};
-        Desc.eType = CHARACTER::PLAYER;
-        Desc.fBaseDamage = m_PlayerInfo.fAttack;
-        Desc.iHitIndex = m_iCurHitIndex;
-        Desc.iSkillID = m_iCurSkillID;
-        Desc.pHitObject = static_cast<CCharacter*>(m_pColliderCom->Get_HitBoxDesc().pHitObject);
 
-        m_pGameManager->Add_HitDesc(&Desc);
+        deque<CGameObject*>& Objects = m_pColliderCom->Get_HitObjects();
+
+        SKILL_INFO* pSkill = m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID);
+
+        ATTACK_DESC Desc = {};
+        Desc.eAttackType = pSkill->eAttackType;
+        Desc.eHitType = pSkill->eHitType;
+
+        _float fDamage = pSkill->Damages[m_iCurHitIndex];
+
+        m_PlayerInfo.fIdentity = min(MAX_IDENTITY, m_PlayerInfo.fIdentity + 30.f);
+
+        while (!Objects.empty())
+        {
+            if (m_PlayerInfo.Critical_Probability > m_pGameInstance->Random_Normal())
+            {
+                Desc.isCritial = true;
+                Desc.fDamage = m_PlayerInfo.Critical_Damage * (fDamage + m_PlayerInfo.fAttack);
+
+            }
+            else
+            {
+                Desc.isCritial = false;
+                Desc.fDamage = fDamage + m_PlayerInfo.fAttack;
+            }
+            DAMAGEFONT eDamageType = Desc.isCritial == true ? DAMAGEFONT::CRITICAL : DAMAGEFONT::NORMAL;
+            _float fFontDamage = Desc.fDamage;
+            _float3 vPosition;
+            XMStoreFloat3(&vPosition, Objects.front()->Get_Transform()->Get_Position());
+
+            m_pGameManager->Add_DamageFont(eDamageType, fFontDamage, vPosition);
+            dynamic_cast<CEnemy*>(Objects.front())->OnHit(Desc);
+            Objects.pop_front();
+        }
+        
         });
 
     return S_OK;
@@ -426,7 +444,7 @@ void CPlayer::Update_HitBox(_uint iSkillID, _uint iHitIndex)
     isCollUpdate = true;
     m_iCurSkillID = iSkillID;
     m_iCurHitIndex = iHitIndex;
-    m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+  
     m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
 }
 

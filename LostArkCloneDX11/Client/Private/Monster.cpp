@@ -8,14 +8,26 @@
 #include "HpBar_Monster.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CCharacter{ pDevice, pContext }
+	: CEnemy{ pDevice, pContext }
 {
 	Safe_AddRef(m_pGameManager);
 }
 
 CMonster::CMonster(const CMonster& Prototype) 
-	: CCharacter{ Prototype }
+	: CEnemy{ Prototype }
 {
+}
+
+HIT_TYPE CMonster::Get_HitType()
+{
+	if (m_HitTypes.empty())
+		return HIT_TYPE::END;
+
+	HIT_TYPE eHitType = m_HitTypes.front();
+
+	m_HitTypes.clear();
+
+	return eHitType;
 }
 
 const _bool CMonster::isAnimationFinish()
@@ -94,11 +106,11 @@ HRESULT CMonster::Initialize(void* pArg)
 	m_iMonsetrID = pDesc->iMonsterID;
 	m_iNumAttack = pDesc->iNumAttack;
 
-	m_MonsterInfo.fAttack = pDesc->fAttack;
-	m_MonsterInfo.fAttackRange = pDesc->fAttackRange;
-	m_MonsterInfo.fDetectDistance = pDesc->fDetectDistance;
-	m_MonsterInfo.fHp = pDesc->fHp;
-	m_MonsterInfo.fMaxHp = pDesc->fMaxHp;
+	m_EnemyInfo.fAttack = pDesc->fAttack;
+	m_EnemyInfo.fAttackRange = pDesc->fAttackRange;
+	m_EnemyInfo.fDetectDistance = pDesc->fDetectDistance;
+	m_EnemyInfo.fHp = pDesc->fHp;
+	m_EnemyInfo.fMaxHp = pDesc->fMaxHp;
 	
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -133,6 +145,9 @@ void CMonster::Update(_float fTimeDelta)
 {
 	Detect_Player();
 
+
+
+
 	__super::Update(fTimeDelta);
 }
 
@@ -148,12 +163,6 @@ HRESULT CMonster::Render()
 	return S_OK;
 }
 
-void CMonster::OnHit(_float fDamage, ATTACK_TYPE eAttackType, HIT_TYPE eHitType)
-{
-	m_MonsterInfo.fHp -= fDamage;
-	
-}
-
 HRESULT CMonster::Ready_PartObjects(_wstring& strModelPrototypeTag)
 {
 	CBody_Monster::BODYMONSTER_DESC Body_Desc = {};
@@ -163,7 +172,7 @@ HRESULT CMonster::Ready_PartObjects(_wstring& strModelPrototypeTag)
 		return E_FAIL;
 
 	CHpBar_Monster::HPBAR_MONSTER_DESC  HpBar_Desc = {};
-	HpBar_Desc.pMonsterInfo = &m_MonsterInfo;
+	HpBar_Desc.pMonsterInfo = &m_EnemyInfo;
 	HpBar_Desc.pParentTransform = m_pTransformCom;
 	HpBar_Desc.pSocketMatrix = dynamic_cast<CBody_Monster*>(Find_PartObject(TEXT("Body_Monster")))->Get_BoneMatrixPtr("b_effectname");
 	if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Monster"), TEXT("HPBar_Monster"), &HpBar_Desc)))
@@ -178,7 +187,7 @@ void CMonster::Detect_Player()
 
 	if(false == m_bInBattle)
 	{
-		if (m_MonsterInfo.fDetectDistance >= m_fDistToPlayer)
+		if (m_EnemyInfo.fDetectDistance >= m_fDistToPlayer)
 			m_bInBattle = true;
 	}
 }
