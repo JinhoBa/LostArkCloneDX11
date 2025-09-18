@@ -13,9 +13,9 @@ CMonster_Idle::CMonster_Idle()
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CMonster_Idle::Initilize(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+HRESULT CMonster_Idle::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
-	if (FAILED(__super::Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(__super::Initilize(pStateMachine, pInfo, pMonster)))
 		return E_FAIL;
 
 	return S_OK;
@@ -31,6 +31,9 @@ void CMonster_Idle::Enter(void* pArg)
 
 void CMonster_Idle::Update(_float fTimeDelta)
 {
+	if (Check_Hit())
+		return;
+
 	if (true == m_pMonster->isInBattle())
 	{
 		if (m_pMonster->isInAttackRange())
@@ -52,11 +55,11 @@ void CMonster_Idle::Exit()
 
 }
 
-CMonster_Idle* CMonster_Idle::Create(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+CMonster_Idle* CMonster_Idle::Create(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
 	CMonster_Idle* pInstance = new CMonster_Idle();
 
-	if (FAILED(pInstance->Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(pInstance->Initilize(pStateMachine, pInfo, pMonster)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CMonster_Idle");

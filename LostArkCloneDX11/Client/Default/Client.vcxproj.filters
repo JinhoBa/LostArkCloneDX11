@@ -304,7 +304,13 @@
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL">
       <UniqueIdentifier>{436edba2-b74d-4104-9d20-72d3af988966}</UniqueIdentifier>
     </Filter>
-    <Filter Include="93.Hit_Manager">
+    <Filter Include="02.GameObject\Character\Enemy">
+      <UniqueIdentifier>{fa24e2ee-50d7-4886-9b24-8f75f431da24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\HIT">
+      <UniqueIdentifier>{fa544004-144e-45bc-9e8b-49c7e32dcef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="93.DamageFont_Manager">
       <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -600,8 +606,14 @@
     <ClInclude Include="..\public\Attack_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Hit_Manager.h">
-      <Filter>93.Hit_Manager</Filter>
+    <ClInclude Include="..\public\DamageFont_Manager.h">
+      <Filter>93.DamageFont_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Enemy.h">
+      <Filter>02.GameObject\Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Monster_Hit.h">
+      <Filter>02.GameObject\Character\Monster\States\HIT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -891,8 +903,14 @@
     <ClCompile Include="..\private\Attack_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Hit_Manager.cpp">
-      <Filter>93.Hit_Manager</Filter>
+    <ClCompile Include="..\private\DamageFont_Manager.cpp">
+      <Filter>93.DamageFont_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Enemy.cpp">
+      <Filter>02.GameObject\Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_Hit.cpp">
+      <Filter>02.GameObject\Character\Monster\States\HIT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

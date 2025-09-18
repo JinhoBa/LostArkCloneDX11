@@ -11,7 +11,7 @@ private:
 	virtual ~CMonster_Attack() = default;
 
 public:
-	virtual HRESULT Initilize(class CStateMachine* pStateMachine, MONSTER* pType, class CMonster* pMonster, _uint iNumAttackAnimation);
+	virtual HRESULT Initilize(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster, _uint iNumAttackAnimation);
 	virtual void Enter(void* pArg)override;
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
@@ -21,7 +21,7 @@ private:
 	_uint					m_iNumAttackAnimation = {};
 
 public:
-	static CMonster_Attack* Create(class CStateMachine* pStateMachine, MONSTER* pType, class CMonster* pMonster, _uint iNumAttackAnimation);
+	static CMonster_Attack* Create(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster, _uint iNumAttackAnimation);
 	virtual void Free() override;
 };
 

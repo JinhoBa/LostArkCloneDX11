@@ -14,9 +14,9 @@ CMonster_Run::CMonster_Run()
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CMonster_Run::Initilize(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+HRESULT CMonster_Run::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
-	if (FAILED(__super::Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(__super::Initilize(pStateMachine, pInfo, pMonster)))
 		return E_FAIL;
 
 	return S_OK;
@@ -32,6 +32,9 @@ void CMonster_Run::Enter(void* pArg)
 
 void CMonster_Run::Update(_float fTimeDelta)
 {
+	if (Check_Hit())
+		return;
+
 	m_pMonster->Chase(fTimeDelta);
 
 	if (true == m_pMonster->isInBattle())
@@ -52,11 +55,11 @@ void CMonster_Run::Exit()
 
 }
 
-CMonster_Run* CMonster_Run::Create(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+CMonster_Run* CMonster_Run::Create(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
 	CMonster_Run* pInstance = new CMonster_Run();
 
-	if (FAILED(pInstance->Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(pInstance->Initilize(pStateMachine, pInfo, pMonster)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CMonster_Run");

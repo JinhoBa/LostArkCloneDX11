@@ -13,9 +13,9 @@ CMonster_Turn::CMonster_Turn()
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CMonster_Turn::Initilize(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+HRESULT CMonster_Turn::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
-	if (FAILED(__super::Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(__super::Initilize(pStateMachine, pInfo, pMonster)))
 		return E_FAIL;
 
 	return S_OK;
@@ -43,6 +43,9 @@ void CMonster_Turn::Enter(void* pArg)
 
 void CMonster_Turn::Update(_float fTimeDelta)
 {
+	if (Check_Hit())
+		return;
+
 	if (false == m_pMonster->Turn(fTimeDelta))
 	{
 		m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::ATTACK), nullptr);
@@ -54,11 +57,11 @@ void CMonster_Turn::Exit()
 
 }
 
-CMonster_Turn* CMonster_Turn::Create(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+CMonster_Turn* CMonster_Turn::Create(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
 	CMonster_Turn* pInstance = new CMonster_Turn();
 
-	if (FAILED(pInstance->Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(pInstance->Initilize(pStateMachine, pInfo, pMonster)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CMonster_Turn");

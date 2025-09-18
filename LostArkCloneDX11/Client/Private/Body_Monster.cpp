@@ -69,6 +69,22 @@ HRESULT CBody_Monster::Render()
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
   
+#pragma region ANIMATION_TEST
+    ImGui::InputInt("Animation", &m_iAnimIndex);
+    _int iIndex = {};
+    for (auto pName : m_pModelCom->Get_AnimationNames())
+    {
+        if (ImGui::Button(to_string(iIndex).c_str()))
+        {
+            m_iAnimIndex = iIndex;
+            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+        }
+        ++iIndex;
+        ImGui::SameLine();
+        ImGui::Text(pName);
+    }
+#pragma endregion
+
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
         if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))

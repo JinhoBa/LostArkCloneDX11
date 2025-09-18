@@ -8,6 +8,7 @@
 #include "Monster_Turn.h"
 #include "Monster_Run.h"
 #include "Monster_Dead.h"
+#include "Monster_Hit.h"
 
 CMonster_Named::CMonster_Named(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -60,6 +61,9 @@ void CMonster_Named::Update(_float fTimeDelta)
 	Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
+	if (!m_HitTypes.empty())
+		m_pStateMachineCom->Change_State(Get_State(CMonster::STATE::HIT), nullptr);
 }
 
 void CMonster_Named::Late_Update(_float fTimeDelta)
@@ -101,7 +105,9 @@ HRESULT CMonster_Named::Ready_Components()
 		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
 		return E_FAIL;
 
-	//m_pColliderCom->Set_OnCollisionEnter([&]() {m_MonsterInfo.fHp -= 1000.f; });
+	m_pColliderCom->Set_OnCollisionEnter([&]() { 
+		//m_pTransformCom->TurnTo(m_pColliderCom->Get_HitBoxDesc().pHitObject->Get_Transform()->Get_Position());
+		});
 
 
 	return S_OK;
@@ -109,11 +115,12 @@ HRESULT CMonster_Named::Ready_Components()
 
 HRESULT CMonster_Named::Ready_States()
 {
-	m_States[IDLE] = CMonster_Idle::Create(m_pStateMachineCom, &m_eType, this);
-	m_States[ATTACK] = CMonster_Attack::Create(m_pStateMachineCom, &m_eType, this, m_iNumAttack);
-	m_States[TURN] = CMonster_Turn::Create(m_pStateMachineCom, &m_eType, this);
-	m_States[RUN] = CMonster_Run::Create(m_pStateMachineCom, &m_eType, this);
-	m_States[DEAD] = CMonster_Dead::Create(m_pStateMachineCom, &m_eType, this);
+	m_States[IDLE] = CMonster_Idle::Create(m_pStateMachineCom, &m_EnemyInfo, this);
+	m_States[ATTACK] = CMonster_Attack::Create(m_pStateMachineCom, &m_EnemyInfo, this, m_iNumAttack);
+	m_States[TURN] = CMonster_Turn::Create(m_pStateMachineCom, &m_EnemyInfo, this);
+	m_States[RUN] = CMonster_Run::Create(m_pStateMachineCom, &m_EnemyInfo, this);
+	m_States[DEAD] = CMonster_Dead::Create(m_pStateMachineCom, &m_EnemyInfo, this);
+	m_States[HIT] = CMonster_Hit::Create(m_pStateMachineCom, &m_EnemyInfo, this);
 
 	return S_OK;
 }

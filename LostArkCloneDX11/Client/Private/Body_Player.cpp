@@ -90,21 +90,21 @@ void CBody_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CBody_Player::Render()
 {
-#pragma region ANIMATION_TEST
-    ImGui::InputInt("Animation", &m_iAnimIndex);
-    _int iIndex = {};
-    for (auto pName : m_pModelCom->Get_AnimationNames())
-    {
-        if (ImGui::Button(to_string(iIndex).c_str()))
-        {
-            m_iAnimIndex = iIndex;
-            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-        }
-        ++iIndex;
-        ImGui::SameLine();
-        ImGui::Text(pName);
-    }
-#pragma endregion
+//#pragma region ANIMATION_TEST
+//    ImGui::InputInt("Animation", &m_iAnimIndex);
+//    _int iIndex = {};
+//    for (auto pName : m_pModelCom->Get_AnimationNames())
+//    {
+//        if (ImGui::Button(to_string(iIndex).c_str()))
+//        {
+//            m_iAnimIndex = iIndex;
+//            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+//        }
+//        ++iIndex;
+//        ImGui::SameLine();
+//        ImGui::Text(pName);
+//    }
+//#pragma endregion
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
         return E_FAIL;

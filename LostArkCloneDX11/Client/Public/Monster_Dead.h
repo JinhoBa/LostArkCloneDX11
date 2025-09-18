@@ -11,13 +11,13 @@ private:
 	virtual ~CMonster_Dead() = default;
 
 public:
-	virtual HRESULT Initilize(class CStateMachine* pStateMachine, MONSTER* pType, class CMonster* pMonster);
+	virtual HRESULT Initilize(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster);
 	virtual void Enter(void* pArg)override;
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
 
 public:
-	static CMonster_Dead* Create(class CStateMachine* pStateMachine, MONSTER* pType, class CMonster* pMonster);
+	static CMonster_Dead* Create(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster);
 	virtual void Free() override;
 };
 

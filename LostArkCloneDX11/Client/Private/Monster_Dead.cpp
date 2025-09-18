@@ -13,9 +13,9 @@ CMonster_Dead::CMonster_Dead()
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CMonster_Dead::Initilize(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+HRESULT CMonster_Dead::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
-	if (FAILED(__super::Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(__super::Initilize(pStateMachine, pInfo, pMonster)))
 		return E_FAIL;
 
 	return S_OK;
@@ -24,14 +24,12 @@ HRESULT CMonster_Dead::Initilize(CStateMachine* pStateMachine, MONSTER* pType, C
 void CMonster_Dead::Enter(void* pArg)
 {
 	/* Dead Anim*/
-	m_pMonster->Set_Animation(ANIMATIONSLOT::DEAD);
+	m_pMonster->Set_Animation(ANIMATIONSLOT::DEAD_LOOP);
 }
 
 void CMonster_Dead::Update(_float fTimeDelta)
 {
-	/* Dead Loop Anim*/
-	if (m_pMonster->isAnimationFinish())
-		m_pMonster->Set_Animation(ANIMATIONSLOT::DEAD_LOOP);
+	
 }
 
 void CMonster_Dead::Exit()
@@ -39,11 +37,11 @@ void CMonster_Dead::Exit()
 
 }
 
-CMonster_Dead* CMonster_Dead::Create(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster)
+CMonster_Dead* CMonster_Dead::Create(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
 {
 	CMonster_Dead* pInstance = new CMonster_Dead();
 
-	if (FAILED(pInstance->Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(pInstance->Initilize(pStateMachine, pInfo, pMonster)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CMonster_Dead");

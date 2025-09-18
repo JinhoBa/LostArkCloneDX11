@@ -39,6 +39,9 @@ void CStateMachine::Change_State(CState* pState, void* pArg)
 		m_pState->Exit();
 	}
 
+	if (m_pState == pState)
+		return;
+
 	m_pState = pState;
 
 	m_pState->Enter(pArg);

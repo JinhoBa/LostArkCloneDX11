@@ -11,7 +11,7 @@ protected:
 	virtual ~CMonster_State() = default;
 
 public:
-	virtual HRESULT Initilize(class CStateMachine* pStateMachine, MONSTER* pType, class CMonster* pMonster);
+	virtual HRESULT Initilize(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster);
 	virtual void Enter(void* pArg)override;
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
@@ -20,6 +20,10 @@ protected:
 	MONSTER*				m_pType = { nullptr };
 	class CGameManager*		m_pGameManager = { nullptr };
 	class CMonster*			m_pMonster = { nullptr };
+	ENEMY_INFO*				m_pInfo = { nullptr };
+
+protected:
+	_bool Check_Hit();
 
 public:
 	virtual void Free() override;

@@ -6,6 +6,7 @@
 NS_BEGIN(Client)
 class CMonster_Named final : public CMonster
 {
+
 private:
 	CMonster_Named(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster_Named(const CMonster_Named& Prototype);

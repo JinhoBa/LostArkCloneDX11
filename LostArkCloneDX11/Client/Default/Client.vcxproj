@@ -169,7 +169,8 @@
     <ClInclude Include="..\public\Body_Monster.h" />
     <ClInclude Include="..\public\Body_Player.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
-    <ClInclude Include="..\public\Hit_Manager.h" />
+    <ClInclude Include="..\public\Enemy.h" />
+    <ClInclude Include="..\public\DamageFont_Manager.h" />
     <ClInclude Include="..\public\Idle_Kamen.h" />
     <ClInclude Include="..\public\Intro_Kamen.h" />
     <ClInclude Include="..\public\Kamen.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\public\Monster_Attack.h" />
     <ClInclude Include="..\public\Monster_Dead.h" />
+    <ClInclude Include="..\public\Monster_Hit.h" />
     <ClInclude Include="..\public\Monster_Idle.h" />
     <ClInclude Include="..\public\Monster_Named.h" />
     <ClInclude Include="..\public\Monster_Run.h" />
@@ -276,7 +278,8 @@
     <ClCompile Include="..\private\Body_Monster.cpp" />
     <ClCompile Include="..\private\Body_Player.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
-    <ClCompile Include="..\private\Hit_Manager.cpp" />
+    <ClCompile Include="..\private\Enemy.cpp" />
+    <ClCompile Include="..\private\DamageFont_Manager.cpp" />
     <ClCompile Include="..\private\Idle_Kamen.cpp" />
     <ClCompile Include="..\private\Intro_Kamen.cpp" />
     <ClCompile Include="..\private\Kamen.cpp" />
@@ -341,6 +344,7 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\private\Monster_Attack.cpp" />
     <ClCompile Include="..\private\Monster_Dead.cpp" />
+    <ClCompile Include="..\private\Monster_Hit.cpp" />
     <ClCompile Include="..\private\Monster_Idle.cpp" />
     <ClCompile Include="..\private\Monster_Named.cpp" />
     <ClCompile Include="..\private\Monster_Run.cpp" />

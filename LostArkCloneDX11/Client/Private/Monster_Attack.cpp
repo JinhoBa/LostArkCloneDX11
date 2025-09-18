@@ -13,9 +13,9 @@ CMonster_Attack::CMonster_Attack()
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CMonster_Attack::Initilize(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster, _uint iNumAttackAnimation)
+HRESULT CMonster_Attack::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster, _uint iNumAttackAnimation)
 {
-	if (FAILED(__super::Initilize(pStateMachine, pType, pMonster)))
+	if (FAILED(__super::Initilize(pStateMachine, pInfo, pMonster)))
 		return E_FAIL;
 
 	m_iNumAttackAnimation = iNumAttackAnimation;
@@ -33,6 +33,9 @@ void CMonster_Attack::Enter(void* pArg)
 
 void CMonster_Attack::Update(_float fTimeDelta)
 {
+	if (Check_Hit())
+		return;
+
 	if (m_pMonster->isAnimationFinish())
 	{
 		m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::IDLE), nullptr);
@@ -48,11 +51,11 @@ void CMonster_Attack::Exit()
 }
 
 
-CMonster_Attack* CMonster_Attack::Create(CStateMachine* pStateMachine, MONSTER* pType, CMonster* pMonster, _uint iNumAttackAnimation)
+CMonster_Attack* CMonster_Attack::Create(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster, _uint iNumAttackAnimation)
 {
 	CMonster_Attack* pInstance = new CMonster_Attack();
 
-	if (FAILED(pInstance->Initilize(pStateMachine, pType, pMonster, iNumAttackAnimation)))
+	if (FAILED(pInstance->Initilize(pStateMachine, pInfo, pMonster, iNumAttackAnimation)))
 	{
 		Safe_Release(pInstance);
 		MSG_BOX("Failed to Create : CMonster_Attack");

@@ -53,6 +53,11 @@ HRESULT CCharacter::Render()
 	return S_OK;
 }
 
+void CCharacter::OnHit(const ATTACK_DESC& Attack_Desc)
+{
+
+}
+
 void CCharacter::Check_Navigation(CNavigation* pNavigation,const _float4x4* pRootBoneMatrix)
 {
 	_vector vRootBonePosition = XMVector3TransformCoord(
