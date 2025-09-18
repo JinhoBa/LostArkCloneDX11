@@ -156,7 +156,7 @@ HRESULT CBackground_Logo::Add_Buttons()
 void CBackground_Logo::Add_Fonts()
 {
 	m_Font_Exit.strWord = wstring(L"게임종료");
-	m_Font_Exit.vPositon = _float4(66.f, 678.f, 1.f, 1.f);
+	m_Font_Exit.vPositon = _float2(66.f, 678.f);
 	m_Font_Exit.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_Font_Exit.fScale = 0.32f;
 }

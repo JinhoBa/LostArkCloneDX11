@@ -15,7 +15,7 @@ namespace Engine
 	typedef struct tagFontDesc
 	{
 		wstring strWord;
-		XMFLOAT4 vPositon;
+		XMFLOAT2 vPositon;
 		XMFLOAT4 vColor;
 		float fScale;
 	}FONT_DESC;

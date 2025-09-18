@@ -11,7 +11,7 @@ CBuffUI::CBuffUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 }
 
 CBuffUI::CBuffUI(const CBuffUI& Prototype)
-	: CHUD{ Prototype }
+	: CHUD(Prototype)
 {
 }
 
@@ -80,7 +80,7 @@ void CBuffUI::Update(_float fTimeDelta)
 			{
 				m_CoolTimeFont.strWord = L" " + to_wstring(fTime + 1.f).substr(0, 1) + L"ÃÊ";
 			}
-			m_CoolTimeFont.vPositon = _float4(m_DefaultFontPosition.x - (_float)iIndex * 27.f, m_DefaultFontPosition.y, 1.f, 1.f);
+			m_CoolTimeFont.vPositon = _float2(m_DefaultFontPosition.x - (_float)iIndex * 27.f, m_DefaultFontPosition.y);
 			m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_CoolTimeFont);
 		}
 		++iIndex;
@@ -185,7 +185,7 @@ HRESULT CBuffUI::Ready_Font()
 {
 	m_CoolTimeFont.vColor = _float4(0.5f, 0.8f, 0.5f, 1.f);
 	m_CoolTimeFont.strWord = L"";
-	m_CoolTimeFont.vPositon = _float4(m_DefaultFontPosition.x, m_DefaultFontPosition.y, 1.f, 1.f);
+	m_CoolTimeFont.vPositon = _float2(m_DefaultFontPosition.x, m_DefaultFontPosition.y);
 	m_CoolTimeFont.fScale = 0.25f;
 
 	return S_OK;

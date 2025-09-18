@@ -149,7 +149,7 @@ HRESULT CHpBar_Player::Add_Components()
 HRESULT CHpBar_Player::Ready_Font()
 {
     m_PlayerNameFont.strWord = L"  NULL";
-    m_PlayerNameFont.vPositon = _float4(0.f, 0.f, 1.f, 1.f);
+    m_PlayerNameFont.vPositon = _float2(0.f, 0.f);
     m_PlayerNameFont.vColor = _float4(0.9f, 0.9f, 0.7f, 1.f);
     m_PlayerNameFont.fScale = 0.36f;
 

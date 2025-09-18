@@ -21,7 +21,7 @@ HRESULT CFont::Draw_Font(SpriteBatch* pBatch)
 {
 	for (auto& Font : m_DrawFonts)
 	{
-		m_pFont->DrawString(pBatch, (Font.strWord).c_str(), XMLoadFloat4(&Font.vPositon), XMLoadFloat4(&Font.vColor), 0.f, g_XMZero, Font.fScale);
+		m_pFont->DrawString(pBatch, (Font.strWord).c_str(), XMLoadFloat2(&Font.vPositon), XMLoadFloat4(&Font.vColor), 0.f, g_XMZero, Font.fScale);
 	}
 	m_DrawFonts.clear();
 
@@ -33,7 +33,7 @@ void CFont::Add_FontDesc(FONT_DESC* FontDesc)
 	FONT_DESC Desc = {};
 	Desc.fScale = FontDesc->fScale;
 	memcpy(&Desc.vColor, &FontDesc->vColor, sizeof(_float4));
-	memcpy(&Desc.vPositon, &FontDesc->vPositon, sizeof(_float4));
+	memcpy(&Desc.vPositon, &FontDesc->vPositon, sizeof(_float2));
 	Desc.strWord = FontDesc->strWord;
 
 	m_DrawFonts.push_back(Desc);

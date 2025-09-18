@@ -128,12 +128,12 @@ HRESULT CHoldingSkillUI::Add_Components()
 HRESULT CHoldingSkillUI::Ready_Font()
 {
 	m_SkillName_Font.strWord = L"적령포";
-	m_SkillName_Font.vPositon = _float4(m_fX, m_fY, 1.f, 1.f);
+	m_SkillName_Font.vPositon = _float2(m_fX, m_fY);
 	m_SkillName_Font.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_SkillName_Font.fScale = 0.35f;
 
 	m_ChargeTime_Font.strWord = L"0초";
-	m_ChargeTime_Font.vPositon = _float4(m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f, 1.f, 1.f);
+	m_ChargeTime_Font.vPositon = _float2(m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
 	m_ChargeTime_Font.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_ChargeTime_Font.fScale = 0.23f;
 

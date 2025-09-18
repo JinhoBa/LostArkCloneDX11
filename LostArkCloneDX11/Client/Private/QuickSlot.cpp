@@ -11,7 +11,7 @@ CQuickSlot::CQuickSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 }
 
 CQuickSlot::CQuickSlot(const CQuickSlot& Prototype)
-	: CHUD{ Prototype }, m_pGameManager{Prototype.m_pGameManager}
+	: CHUD(Prototype), m_pGameManager{Prototype.m_pGameManager}
 {
 	Safe_AddRef(m_pGameManager);
 }
@@ -143,12 +143,12 @@ HRESULT CQuickSlot::Render_SlotFront()
 HRESULT CQuickSlot::Ready_Font()
 {
 	m_Font_Key.strWord = wstring(m_pKey);
-	m_Font_Key.vPositon = _float4(m_fX - 5.f, m_fY + 8.f, 1.f, 1.f);
+	m_Font_Key.vPositon = _float2(m_fX - 5.f, m_fY + 8.f);
 	m_Font_Key.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_Font_Key.fScale = 0.25f;
 
 	m_Font_CoolTime.strWord = L"";
-	m_Font_CoolTime.vPositon = _float4(m_fX - 15.f, m_fY - 9.f, 1.f, 1.f);
+	m_Font_CoolTime.vPositon = _float2(m_fX - 15.f, m_fY - 9.f);
 	m_Font_CoolTime.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_Font_CoolTime.fScale = 0.4f;
 

@@ -1,10 +1,12 @@
 #pragma once
 #include "Client_Defines.h"
+#include "Client_Struct.h"
 #include "Base.h"
 
 NS_BEGIN(Engine)
 class CCamera;
 class CGameInstance;
+class CGameObject;
 NS_END
 
 NS_BEGIN(Client)
@@ -64,9 +66,9 @@ public:
 	void Remove_Buff(class CBuff* pBuff);
 #pragma endregion
 
-#pragma region HIT_MANAGER
-	void Add_HitDesc(void* pDesc);
-	void Update_HitData();
+#pragma region DAMAGEFONT_MANAGER
+	void Add_DamageFont(DAMAGEFONT eType, _float fDamage, _float3& vPostion);
+	void Update_DamageFont(_float fTimeDelta);
 #pragma endregion
 
 
@@ -75,17 +77,17 @@ public:
 	
 
 private:
-	_bool					m_bPicked = {};
-	_float3					m_PickingPos = {};
-	LEVEL					m_eCurLevel = {};
+	_bool							m_bPicked = {};
+	_float3							m_PickingPos = {};
+	LEVEL							m_eCurLevel = {};
 
-	CGameInstance*			m_pGameInstance = { nullptr };
-	class CCamera*			m_pCamera = { nullptr };
+	CGameInstance*					m_pGameInstance = { nullptr };
+	class CCamera*					m_pCamera = { nullptr };
 
-	class CData_Manager*	m_pData_Manager = { nullptr };
-	class CSkill_Manager*	m_pSkill_Manager = { nullptr };
-	class CBuff_Manager*	m_pBuff_Manager = { nullptr };
-	class CHit_Manager*		m_pHit_Manager = { nullptr };
+	class CData_Manager*			m_pData_Manager = { nullptr };
+	class CSkill_Manager*			m_pSkill_Manager = { nullptr };
+	class CBuff_Manager*			m_pBuff_Manager = { nullptr };
+	class CDamageFont_Manager*		m_pDamageFont_Manager = { nullptr };
 
 public:
 	virtual void Free() override;

@@ -16,8 +16,8 @@ class CHpBar_Monster final : public CPartObject
 public:
 	typedef struct HPBarMonster_Desc : public PARTOBJECT_DESC
 	{
-		const MONSTER_INFO*	pMonsterInfo;
-		const _float4x4* pSocketMatrix;
+		const ENEMY_INFO*	pMonsterInfo;
+		const _float4x4*	pSocketMatrix;
 	}HPBAR_MONSTER_DESC;
 private:
 	CHpBar_Monster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -36,7 +36,7 @@ private:
 	_float				m_fValue = {};
 
 	const _float4x4*	m_pSocketMatrix = { nullptr };
-	const MONSTER_INFO* m_pMonsterInfo = { nullptr };
+	const ENEMY_INFO*   m_pMonsterInfo = { nullptr };
 
 	CTexture*			m_pTextureCom = { nullptr };
 	CVIBuffer_Rect*		m_pVIBufferCom = { nullptr };

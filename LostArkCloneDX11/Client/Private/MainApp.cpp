@@ -110,7 +110,7 @@ void CMainApp::Update(_float fTimeDelta)
         m_iFrame = 0;
         m_fTimeAcc = 0.f;
     }
-    
+    m_pGameManager->Update_DamageFont(fTimeDelta);
 }
 
 HRESULT CMainApp::Render()

@@ -180,7 +180,7 @@ HRESULT CUtilitySkillSlot::Render_SlotBack()
 HRESULT CUtilitySkillSlot::Ready_Font()
 {
 	m_Font_CoolTime.strWord = L"";
-	m_Font_CoolTime.vPositon = _float4(m_fX - 15.f, m_fY - 9.f, 1.f, 1.f);
+	m_Font_CoolTime.vPositon = _float2(m_fX - 15.f, m_fY - 9.f);
 	m_Font_CoolTime.vColor = _float4(0.9f, 0.9f, 0.9f, 1.f);
 	m_Font_CoolTime.fScale = 0.4f;
 

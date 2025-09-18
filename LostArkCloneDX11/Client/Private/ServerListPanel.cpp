@@ -142,12 +142,12 @@ HRESULT CServerListPanel::Add_Buttons()
 void CServerListPanel::Add_Fonts()
 {
 	m_Font_Title.strWord = wstring(L"서버 선택");
-	m_Font_Title.vPositon = _float4(593.f, 325.f, 1.f, 1.f);
+	m_Font_Title.vPositon = _float2(593.f, 325.f);
 	m_Font_Title.vColor = _float4(0.85f, 0.85f, 0.85f, 1.f);
 	m_Font_Title.fScale = 0.97f;
 
 	m_Font_SubTitle.strWord = wstring(L"서버                         상태                캐릭터");
-	m_Font_SubTitle.vPositon = _float4(525.f, 358.f, 1.f, 1.f);
+	m_Font_SubTitle.vPositon = _float2(525.f, 358.f);
 	m_Font_SubTitle.vColor = _float4(0.75f, 0.61f, 0.42f, 1.f);
 	m_Font_SubTitle.fScale = 0.78f;
 }

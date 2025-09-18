@@ -147,7 +147,7 @@ HRESULT CHpBar_Monster::Add_Components()
 HRESULT CHpBar_Monster::Ready_Font()
 {
     m_NameFont.strWord = L"monster";
-    m_NameFont.vPositon = _float4(0.f, 0.f, 1.f, 1.f);
+    m_NameFont.vPositon = _float2(0.f, 0.f);
     m_NameFont.vColor = _float4(1.f, 0.2f, 0.2f, 1.f);
     m_NameFont.fScale = 0.36f;
 
