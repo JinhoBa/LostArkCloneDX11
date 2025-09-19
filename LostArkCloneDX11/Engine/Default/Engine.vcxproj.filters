@@ -184,6 +184,12 @@
     <Filter Include="01.Utility\03.Components\Collider\Manger">
       <UniqueIdentifier>{81266c43-6d23-4651-9908-6cd12c629293}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Intance">
+      <UniqueIdentifier>{b3652929-2aeb-4fa3-ab03-0e1f374d65e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Intance\Rect">
+      <UniqueIdentifier>{56fa5f17-6fd7-47c4-a5cd-61c38a561599}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -390,6 +396,12 @@
     <ClInclude Include="..\public\Collider_Manager.h">
       <Filter>01.Utility\03.Components\Collider\Manger</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Intance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Rect_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Intance\Rect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -553,6 +565,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Collider_Manager.cpp">
       <Filter>01.Utility\03.Components\Collider\Manger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Instance.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Intance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Rect_Instance.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Intance\Rect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

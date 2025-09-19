@@ -15,8 +15,8 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	HRESULT Bind_Resources();
-	HRESULT Render();
+	virtual HRESULT Bind_Resources();
+	virtual HRESULT Render();
 
 protected:
 	ID3D11Buffer*				m_pVB = { nullptr };
