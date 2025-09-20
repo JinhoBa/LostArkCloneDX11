@@ -185,8 +185,8 @@ CGameObject* CHpBar_Monster::Clone(void* pArg)
 void CHpBar_Monster::Free()
 {
     __super::Free();
+
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom);
-
 }

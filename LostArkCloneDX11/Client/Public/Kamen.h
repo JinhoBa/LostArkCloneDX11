@@ -6,6 +6,7 @@ NS_BEGIN(Engine)
 class CStateMachine;
 class CState;
 class CCollider;
+class CNavigation;
 NS_END
 
 NS_BEGIN(Client)
@@ -15,7 +16,7 @@ class CKamen final : public CEnemy
 public:
 	enum class KAMENSTATE {INTRO, IDLE, 
 		ATTACK_NORMAL, ATTACK_SPIN, ATTACK_COMBO, ATTACK_CHARGE, ATTACK_SWORD,
-		DEAD, END };
+		END };
 
 private:
 	CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -30,6 +31,7 @@ public:
 
 	_bool	isAnimationFinish();
 	void	Set_Animation(_uint iIndex, _bool bLoop = false, _float fLerpTime = 0.2f);
+	void	Set_HitBox(_float3& vCenter, _float3& vExtends);
 	void	Change_Phase(PHASE ePhase);
 	void	Chase(_float fTimeDelta);
 

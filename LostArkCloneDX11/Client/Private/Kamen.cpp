@@ -40,6 +40,11 @@ void CKamen::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
     static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Set_Animation(iIndex, bLoop, fLerpTime);
 }
 
+void	CKamen::Set_HitBox(_float3& vCenter, _float3& vExtends)
+{
+    m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
+}
+
 void CKamen::Change_Phase(PHASE ePhase)
 {
     m_ePhase = ePhase;
@@ -295,7 +300,13 @@ void CKamen::Free()
 {
     __super::Free();
 
+    for (_uint i = 0; i < ENUM_TO_INT(KAMENSTATE::END); i++)
+    {
+        Safe_Release(m_States[i]);
+    }
+
     Safe_Release(m_pStateMachineCom);
+    Safe_Release(m_pNavigationCom);
     Safe_Release(m_pPlayerTransformCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHitBoxCom);

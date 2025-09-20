@@ -43,17 +43,19 @@ void CAttack_Kamen::Exit()
 
 void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 {
-	if (m_pKamen->Get_TrackPositon() <= m_SkillDesc.HitBoxDesc.fStartTime)
-		m_isActiveHitBox = true;
+	if (m_isStartHit ==false && m_pKamen->Get_TrackPositon() <= m_pSkillDesc->HitBoxDesc.fStartTime)
+	{
+		m_isStartHit = m_isActiveHitBox = true;
+	}
 
-	if (m_iAttackCount <= m_SkillDesc.iNumAttack)
+	if (true == m_isStartHit && m_iAttackCount <= m_pSkillDesc->iNumAttack)
 	{
 		if (m_isActiveHitBox)
 		{
 			m_fTimeAcc += fTimeDelta;
 			m_pKamen->Update_HitBox(m_iSkillID, m_iAttackCount);
 
-			if (m_SkillDesc.HitBoxDesc.fDuration <= m_fTimeAcc)
+			if (m_pSkillDesc->HitBoxDesc.fDuration <= m_fTimeAcc)
 			{
 				m_fTimeAcc = 0.f;
 				m_isActiveHitBox = false;
@@ -63,7 +65,7 @@ void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 		else
 		{
 			m_fTimeAcc += fTimeDelta;
-			if (m_SkillDesc.HitBoxDesc.fInterval <= m_fTimeAcc)
+			if (m_pSkillDesc->HitBoxDesc.fInterval <= m_fTimeAcc)
 			{
 				m_isActiveHitBox = true;
 				m_fTimeAcc = 0.f;

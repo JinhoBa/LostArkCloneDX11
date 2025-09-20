@@ -20,10 +20,7 @@ HRESULT CState_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 	m_pStateMachine = pDesc->pStateMachine;
 	m_pKamen = pDesc->pKamen;
 	m_pPhase = pDesc->pPhase;
-
-	Safe_AddRef(m_pStateMachine);
 	
-
 	return S_OK;
 }
 
@@ -44,5 +41,4 @@ void CState_Kamen::Free()
 	__super::Free();
 
 	Safe_Release(m_pGameManager);
-	Safe_Release(m_pStateMachine);
 }

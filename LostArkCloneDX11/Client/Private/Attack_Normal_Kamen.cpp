@@ -23,14 +23,14 @@ HRESULT CAttack_Normal_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 void CAttack_Normal_Kamen::Enter(void* pArg)
 {
 	m_iSkillID = 0;
-	m_isActiveHitBox = false;
+	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
 	m_fTimeAcc = 0.f;
 
-	memcpy(&m_SkillDesc, &m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase))[m_iSkillID], sizeof(MONSTER_SKILL_INFO));
+	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 
 	m_pKamen->Set_Animation(16, false);
-	
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDesc.vOffset, m_pSkillDesc->HitBoxDesc.vExtends);
 }
 
 void CAttack_Normal_Kamen::Update(_float fTimeDelta)

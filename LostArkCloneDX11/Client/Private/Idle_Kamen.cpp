@@ -40,8 +40,6 @@ void CIdle_Kamen::Enter(void* pArg)
 		break;
 	}
 
-	m_iNumSkill = (_uint)m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase)).size();
-
 	++m_iSkillID;
 
 	if (5 < m_iSkillID)

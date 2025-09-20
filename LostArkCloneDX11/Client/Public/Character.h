@@ -6,7 +6,6 @@ NS_BEGIN(Engine)
 class CModel;
 class CShader;
 class CStateMachine;
-class CState;
 class CNavigation;
 NS_END
 

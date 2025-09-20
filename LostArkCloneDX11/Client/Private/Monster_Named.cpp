@@ -12,6 +12,7 @@
 #include "Monster_Hit.h"
 
 #include "Player.h"
+#include "State.h"
 
 CMonster_Named::CMonster_Named(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -211,9 +212,4 @@ CGameObject* CMonster_Named::Clone(void* pArg)
 void CMonster_Named::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pStateMachineCom);
-	Safe_Release(m_pNavigationCom);
-	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pHitBoxCom);
 }

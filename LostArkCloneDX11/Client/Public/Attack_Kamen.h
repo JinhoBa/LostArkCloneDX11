@@ -23,6 +23,7 @@ public:
 	virtual void Exit()override;
 	
 protected:
+	_bool				m_isStartHit = {};
 	_bool				m_isActiveHitBox = {};
 	_uint				m_iSkillID = {};
 	_uint				m_iAttackCount = {};
@@ -30,7 +31,7 @@ protected:
 
 	class CTransform*	m_pPlayerTransform = { nullptr };
 
-	MONSTER_SKILL_INFO	m_SkillDesc = {};
+	MONSTER_SKILL_INFO*	m_pSkillDesc = {};
 
 protected:
 	void Update_HitBox(_float fTimeDelta);

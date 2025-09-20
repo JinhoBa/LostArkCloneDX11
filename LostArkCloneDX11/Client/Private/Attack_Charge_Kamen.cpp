@@ -24,21 +24,19 @@ void CAttack_Charge_Kamen::Enter(void* pArg)
 	ATTACK_KAMEN_DESC* pDesc = static_cast<ATTACK_KAMEN_DESC*>(pArg);
 
 	m_iSkillID = 1;
+	m_isStartHit = m_isActiveHitBox = false;
+	m_iAttackCount = 0;
+	m_fTimeAcc = 0.f;
 
-	memcpy(&m_SkillDesc, &m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase))[m_iSkillID], sizeof(MONSTER_SKILL_INFO));
+	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 
 	m_eState = STATE::START;
 	m_pKamen->Set_Animation(36, false);
-
-	m_isActiveHitBox = false;
-	m_iAttackCount = 0;
-	m_fTimeAcc = 0.f;
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDesc.vOffset, m_pSkillDesc->HitBoxDesc.vExtends);
 }
 
 void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 {
-	Update_HitBox(fTimeDelta);
-
 	switch (m_eState)
 	{
 	case Client::CAttack_Charge_Kamen::STATE::START:
@@ -59,6 +57,7 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 		break;
 
 	case Client::CAttack_Charge_Kamen::STATE::END:
+		Update_HitBox(fTimeDelta);
 		if (m_pKamen->isAnimationFinish())
 		{
 			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);

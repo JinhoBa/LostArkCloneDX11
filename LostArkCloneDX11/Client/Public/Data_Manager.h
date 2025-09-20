@@ -38,7 +38,7 @@ public:
 #pragma endregion
 
 #pragma region KAMEN_DATA
-	const vector<MONSTER_SKILL_INFO>& Get_KamenData(_uint iPhase);
+	MONSTER_SKILL_INFO*			Get_KamenData(_uint iPhase, _uint iSkillID);
 
 	HRESULT Load_KamenData(const _char* pFilePath);
 #pragma endregion

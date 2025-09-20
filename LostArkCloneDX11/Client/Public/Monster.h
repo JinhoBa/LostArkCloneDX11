@@ -8,6 +8,10 @@ NS_BEGIN(Engine)
 class CTexture;
 class CVIBuffer_Rect;
 class CCollider;
+class CStateMachine;
+class CState;
+class CNavigation;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)

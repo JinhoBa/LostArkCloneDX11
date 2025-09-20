@@ -6,6 +6,7 @@
 
 #include "Body_Monster.h"
 #include "HpBar_Monster.h"
+#include "State.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CEnemy{ pDevice, pContext }
@@ -217,7 +218,14 @@ void CMonster::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pPlayerTransformCom);
+	for (_uint i = 0; i < STATE::STATE_END; i++)
+	{
+		Safe_Release(m_States[i]);
+	}
+
 	Safe_Release(m_pStateMachineCom);
+	Safe_Release(m_pPlayerTransformCom);
 	Safe_Release(m_pNavigationCom);
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pHitBoxCom);
 }

@@ -619,12 +619,12 @@ ANIMATION_DESC& CData_Manager::Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLO
     return m_AnimationData[iMonsterID][ENUM_TO_INT(eSlot)];
 }
 
-const vector<MONSTER_SKILL_INFO>& CData_Manager::Get_KamenData(_uint iPhase)
+MONSTER_SKILL_INFO* CData_Manager::Get_KamenData(_uint iPhase, _uint iSkillID)
 {
     if (iPhase >= (_uint)m_KamenData.size())
-        return m_KamenData[0].Skills;
+        return &m_KamenData[0].Skills[0];
 
-    return m_KamenData[iPhase].Skills;
+    return &m_KamenData[iPhase].Skills[iSkillID];
 }
 
 HRESULT CData_Manager::Load_KamenData(const _char* pFilePath)

@@ -185,7 +185,7 @@ void CPlayer::Update(_float fTimeDelta)
 
     __super::Update(fTimeDelta);
 
-    //m_pStateMachineCom->Upadte(fTimeDelta);
+    m_pStateMachineCom->Upadte(fTimeDelta);
 
     m_pGameManager->Update_Skills(fTimeDelta);
 
