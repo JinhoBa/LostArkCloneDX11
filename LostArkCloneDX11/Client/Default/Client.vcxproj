@@ -162,6 +162,8 @@
     <ClInclude Include="..\public\Attack_Combo_Kamen.h" />
     <ClInclude Include="..\public\Attack_Kamen.h" />
     <ClInclude Include="..\public\Attack_Normal_Kamen.h" />
+    <ClInclude Include="..\public\Attack_Spin_Kamen.h" />
+    <ClInclude Include="..\public\Attack_Sword_Kamen.h" />
     <ClInclude Include="..\public\AwakeSlot.h" />
     <ClInclude Include="..\public\Background_Loading.h" />
     <ClInclude Include="..\public\Background_Logo.h" />
@@ -272,6 +274,8 @@
     <ClCompile Include="..\private\Attack_Combo_Kamen.cpp" />
     <ClCompile Include="..\private\Attack_Kamen.cpp" />
     <ClCompile Include="..\private\Attack_Normal_Kamen.cpp" />
+    <ClCompile Include="..\private\Attack_Spin_Kamen.cpp" />
+    <ClCompile Include="..\private\Attack_Sword_Kamen.cpp" />
     <ClCompile Include="..\private\AwakeSlot.cpp" />
     <ClCompile Include="..\private\Background_Loading.cpp" />
     <ClCompile Include="..\private\Background_Logo.cpp" />

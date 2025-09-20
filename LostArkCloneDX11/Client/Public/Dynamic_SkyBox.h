@@ -35,9 +35,6 @@ private:
 	CModel*			m_pModelCom = { nullptr };
 	CTexture*		m_pTextureCom = { nullptr };
 
-
-	ID3D11RasterizerState* m_pRasterState = nullptr;
-
 private:
 	HRESULT Add_Components();
 

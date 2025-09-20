@@ -19,7 +19,7 @@ public:
 	enum STATE {
 		IDLE, MOVE, 
 		NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE,
-		HIT, JUMP,
+		HIT,
 		STATE_END};
 
 private:
@@ -52,14 +52,15 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 	virtual void		OnHit(const ATTACK_DESC& Attack_Desc)override;
+
 public:
-	void	Check_Navi() { Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix); }
-	_bool	Move(_float fTimeDelta);
-	void	TurnToCursor();
-	void	Change_Stance();
-	void	Add_Buff(_uint iBuffID);
-	void	Play_CameraAnimation(CAMERA_ANIM eState);
-	void    Update_HitBox(_uint iSkillID, _uint iHitIndex);
+	void				Check_Navi() { Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix); }
+	_bool				Move(_float fTimeDelta);
+	void				TurnToCursor();
+	void				Change_Stance();
+	void				Add_Buff(_uint iBuffID);
+	void				Play_CameraAnimation(CAMERA_ANIM eState);
+	void				Update_HitBox(_uint iSkillID, _uint iHitIndex);
 
 private:
 	PLAYER_INFO				m_DefaultInfo = {};

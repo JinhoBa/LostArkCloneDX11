@@ -49,6 +49,9 @@ HRESULT CBuffUI::Initialize(void* pArg)
 
 	m_pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back());
 
+	if (nullptr == m_pPlayer)
+		return E_FAIL;
+	Safe_AddRef(m_pPlayer);
 
 	return S_OK;
 }
@@ -220,4 +223,7 @@ CGameObject* CBuffUI::Clone(void* pArg)
 void CBuffUI::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pPlayer);
+	Safe_Release(m_pFrameTextureCom);
 }

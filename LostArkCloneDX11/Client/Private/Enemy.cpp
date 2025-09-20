@@ -48,7 +48,6 @@ void CEnemy::OnHit(const ATTACK_DESC& Attack_Desc)
 {
     m_EnemyInfo.fHp -= Attack_Desc.fDamage;
 
-
     m_HitTypes.push_back(Attack_Desc.eHitType);
 }
 

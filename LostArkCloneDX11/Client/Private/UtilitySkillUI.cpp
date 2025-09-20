@@ -169,4 +169,8 @@ CGameObject* CUtilitySkillUI::Clone(void* pArg)
 void CUtilitySkillUI::Free()
 {
 	__super::Free();
+
+	for (auto& pSlot : m_UtilitySkills)
+		Safe_Release(pSlot);
+	m_UtilitySkills.clear();
 }

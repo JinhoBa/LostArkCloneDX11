@@ -212,5 +212,8 @@ void CMonster_Named::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pStateMachineCom);
+	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pHitBoxCom);
 }

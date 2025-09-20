@@ -84,4 +84,7 @@ CBounding_Sphere* CBounding_Sphere::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 void CBounding_Sphere::Free()
 {
 	__super::Free();
+
+	Safe_Delete(m_pOriginal_Desc);
+	Safe_Delete(m_pDesc);
 }

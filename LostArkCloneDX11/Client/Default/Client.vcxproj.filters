@@ -295,15 +295,6 @@
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK">
       <UniqueIdentifier>{09fefe8a-cb19-45da-aaa2-2f05dd293a52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_CHARGE">
-      <UniqueIdentifier>{b5baac9f-8715-4d20-b10f-e4e0217c41f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_COMBO">
-      <UniqueIdentifier>{e007c314-0a5d-4e0d-aa8b-7fd63e7aeb57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL">
-      <UniqueIdentifier>{436edba2-b74d-4104-9d20-72d3af988966}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Enemy">
       <UniqueIdentifier>{fa24e2ee-50d7-4886-9b24-8f75f431da24}</UniqueIdentifier>
     </Filter>
@@ -315,6 +306,21 @@
     </Filter>
     <Filter Include="02.GameObject\Test_Effect">
       <UniqueIdentifier>{8d280cb7-d8a3-4dd1-8049-c7928dd9a938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\SPIN">
+      <UniqueIdentifier>{aad87f6f-a8ac-4b45-b6b2-0d15cba60fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\NORMAL">
+      <UniqueIdentifier>{436edba2-b74d-4104-9d20-72d3af988966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\CHARGE">
+      <UniqueIdentifier>{b5baac9f-8715-4d20-b10f-e4e0217c41f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\COMBO">
+      <UniqueIdentifier>{e007c314-0a5d-4e0d-aa8b-7fd63e7aeb57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\SWORD">
+      <UniqueIdentifier>{5f449c1f-356b-490a-8f0e-2264c1d16e0e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -598,13 +604,13 @@
       <Filter>02.GameObject\Kamen_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Attack_Normal_Kamen.h">
-      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL</Filter>
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\NORMAL</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Attack_Combo_Kamen.h">
-      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_COMBO</Filter>
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\COMBO</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Attack_Charge_Kamen.h">
-      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_CHARGE</Filter>
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\CHARGE</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Attack_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
@@ -620,6 +626,12 @@
     </ClInclude>
     <ClInclude Include="..\public\Test_Effect.h">
       <Filter>02.GameObject\Test_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Attack_Spin_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\SPIN</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Attack_Sword_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\SWORD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -898,13 +910,13 @@
       <Filter>02.GameObject\Kamen_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Attack_Normal_Kamen.cpp">
-      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_NORMAL</Filter>
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\NORMAL</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Attack_Combo_Kamen.cpp">
-      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_COMBO</Filter>
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\COMBO</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Attack_Charge_Kamen.cpp">
-      <Filter>02.GameObject\Character\Kamen\State\ATTACK\ATTACK_CHARGE</Filter>
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\CHARGE</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Attack_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK</Filter>
@@ -920,6 +932,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Test_Effect.cpp">
       <Filter>02.GameObject\Test_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Attack_Spin_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\SPIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Attack_Sword_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\ATTACK\SWORD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

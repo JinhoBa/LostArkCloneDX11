@@ -16,22 +16,19 @@
 IMPLEMENT_SINGLETON(CGameManager)
 
 CGameManager::CGameManager()
-	: m_pGameInstance{ CGameInstance::GetInstance()}
 {
-	Safe_AddRef(m_pGameInstance);
 }
 
 void CGameManager::Set_Camera(CCamera* pCamera)
 {
-	if (nullptr != m_pCamera)
-		Safe_Release(m_pCamera);
-
 	m_pCamera = pCamera;
-	Safe_AddRef(m_pCamera);
 }
 
 HRESULT CGameManager::Initialize_Manager()
 {
+	m_pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(m_pGameInstance);
+
 	m_pData_Manager = CData_Manager::Create();
 	if (nullptr == m_pData_Manager)
 		return E_FAIL;
@@ -52,6 +49,18 @@ HRESULT CGameManager::Initialize_Manager()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CGameManager::Destory_GameManager()
+{
+	DestroyInstance();
+
+	Safe_Release(m_pDamageFont_Manager);
+	Safe_Release(m_pBuff_Manager);
+	Safe_Release(m_pSkill_Manager);
+	Safe_Release(m_pData_Manager);
+
+	Safe_Release(m_pGameInstance);
 }
 
 
@@ -139,7 +148,7 @@ HRESULT	CGameManager::Load_AnimationData(const _char* pFilePath)
 #pragma endregion
 
 #pragma region KAMEN_DATA
-const vector<KAMEN_SKILL_DESC>& CGameManager::Get_KamenData(_uint iPhase)
+const vector<MONSTER_SKILL_INFO>& CGameManager::Get_KamenData(_uint iPhase)
 {
 	return m_pData_Manager->Get_KamenData(iPhase);
 }
@@ -221,12 +230,4 @@ void CGameManager::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pCamera);
-
-	Safe_Release(m_pDamageFont_Manager);
-	Safe_Release(m_pBuff_Manager);
-	Safe_Release(m_pSkill_Manager);
-	Safe_Release(m_pData_Manager);
-
-	Safe_Release(m_pGameInstance);
 }

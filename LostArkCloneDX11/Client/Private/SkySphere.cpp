@@ -27,13 +27,6 @@ HRESULT CSkySphere::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    D3D11_RASTERIZER_DESC rasterDesc = {};
-    rasterDesc.CullMode = D3D11_CULL_NONE; // or D3D11_CULL_FRONT, D3D11_CULL_NONE
-    rasterDesc.FillMode = D3D11_FILL_SOLID;
-    rasterDesc.FrontCounterClockwise = FALSE;
-
-    m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState);
-    
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
     return S_OK;
@@ -57,8 +50,6 @@ void CSkySphere::Late_Update(_float fTimeDelta)
 
 HRESULT CSkySphere::Render()
 {
-    m_pContext->RSSetState(m_pRasterState);
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
@@ -79,8 +70,6 @@ HRESULT CSkySphere::Render()
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }
-
-    m_pContext->RSSetState(nullptr);
 
     return S_OK;
 }
@@ -134,5 +123,4 @@ void CSkySphere::Free()
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
-    Safe_Release(m_pRasterState);
 }

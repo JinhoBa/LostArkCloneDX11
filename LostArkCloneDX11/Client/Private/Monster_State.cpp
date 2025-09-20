@@ -23,7 +23,6 @@ HRESULT CMonster_State::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInf
 	Safe_AddRef(m_pStateMachine);
 
 	m_pMonster = pMonster;
-	Safe_AddRef(m_pMonster);
 
 	m_pInfo = pInfo;
 
@@ -54,5 +53,4 @@ void CMonster_State::Free()
 
 	Safe_Release(m_pGameManager);
 	Safe_Release(m_pStateMachine);
-	Safe_Release(m_pMonster);
 }

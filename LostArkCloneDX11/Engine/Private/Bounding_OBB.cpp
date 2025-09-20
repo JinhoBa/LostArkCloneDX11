@@ -83,4 +83,7 @@ CBounding_OBB* CBounding_OBB::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 void CBounding_OBB::Free()
 {
 	__super::Free();
+
+	Safe_Delete(m_pOriginal_Desc);
+	Safe_Delete(m_pDesc);
 }

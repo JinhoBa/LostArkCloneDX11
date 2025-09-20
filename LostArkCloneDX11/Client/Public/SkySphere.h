@@ -34,8 +34,6 @@ private:
 	CShader*	m_pShaderCom = { nullptr };
 	CModel*		m_pModelCom = { nullptr };
 
-	ID3D11RasterizerState* m_pRasterState = nullptr;
-
 private:
 	HRESULT Add_Components();
 

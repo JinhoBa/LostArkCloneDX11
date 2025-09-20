@@ -21,8 +21,8 @@ HRESULT CPlayer_State::Initilize(CStateMachine* pStateMachine, STANCE* pStance, 
 	m_pStateMachine = pStateMachine;
 	m_pPlayer = pPlayer;
 
-	Safe_AddRef(m_pStateMachine);
-	Safe_AddRef(m_pPlayer);
+	//Safe_AddRef(m_pStateMachine);
+	//Safe_AddRef(m_pPlayer);
 
 	return S_OK;
 }
@@ -54,6 +54,6 @@ void CPlayer_State::Free()
 	__super::Free();
 
 	Safe_Release(m_pGameManager);
-	Safe_Release(m_pStateMachine);
-	Safe_Release(m_pPlayer);
+	//Safe_Release(m_pStateMachine);
+	//Safe_Release(m_pPlayer);
 }

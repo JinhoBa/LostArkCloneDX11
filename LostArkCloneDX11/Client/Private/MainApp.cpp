@@ -18,12 +18,11 @@
 #include "Mouse.h"
 
 CMainApp::CMainApp()
-    : m_pGameInstance{ CGameInstance::GetInstance() }, 
-    m_pGameManager{ CGameManager::GetInstance() },
+    : m_pGameInstance{ CGameInstance::GetInstance() },
     m_iFps{ 0 }, m_fTimeAcc{ 0.f }, m_iFrame{0}
 {
     Safe_AddRef(m_pGameInstance);
-    Safe_AddRef(m_pGameManager);
+   
 }
 
 HRESULT CMainApp::Initialize()
@@ -35,6 +34,9 @@ HRESULT CMainApp::Initialize()
     EngineDesc.iWinSizeX = g_iWinSizeX;
     EngineDesc.iWinSizeY = g_iWinSizeY;
     EngineDesc.iNumLevels = ENUM_TO_INT(LEVEL::END);
+
+    m_pGameManager = CGameManager::GetInstance();
+    Safe_AddRef(m_pGameManager);
 
     if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
         return E_FAIL;
@@ -302,10 +304,10 @@ void CMainApp::Free()
     Safe_Release(m_pDevice);
     Safe_Release(m_pContext);
 
-    m_pGameInstance->Release_Engine();
-
+    m_pGameManager->Destory_GameManager();
     Safe_Release(m_pGameManager);
     m_pGameManager->DestroyInstance();
-    Safe_Release(m_pGameInstance);
 
+    m_pGameInstance->Release_Engine();
+    Safe_Release(m_pGameInstance);
 }
