@@ -4,12 +4,11 @@
 
 NS_BEGIN(Client)
 
-class CAttack_Combo_Kamen final : public CAttack_Kamen
+class CAttack_Spin_Kamen final : public CAttack_Kamen
 {
-	enum class STATE {READY, START, LOOP, ATTACK, RECOVER, END };
 private:
-	CAttack_Combo_Kamen();
-	virtual ~CAttack_Combo_Kamen() = default;
+	CAttack_Spin_Kamen();
+	virtual ~CAttack_Spin_Kamen() = default;
 
 public:
 	virtual HRESULT Initilize(STATE_KAMEN_DESC* pDesc);
@@ -17,11 +16,8 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
 
-private:
-	STATE m_eState = {};
-
 public:
-	static CAttack_Combo_Kamen* Create(STATE_KAMEN_DESC* pDesc);
+	static CAttack_Spin_Kamen* Create(STATE_KAMEN_DESC* pDesc);
 	virtual void Free() override;
 };
 

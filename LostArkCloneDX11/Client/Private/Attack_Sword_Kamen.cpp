@@ -1,67 +1,63 @@
 #include "pch.h"
-#include "Attack_Normal_Kamen.h"
+#include "Attack_Sword_Kamen.h"
 
 #include "GameInstance.h"
 #include "GameManager.h"
 #include "StateMachine.h"
 #include "Kamen.h"
 
-CAttack_Normal_Kamen::CAttack_Normal_Kamen()
+CAttack_Sword_Kamen::CAttack_Sword_Kamen()
 	:CAttack_Kamen{}
 {
 }
 
-HRESULT CAttack_Normal_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
+HRESULT CAttack_Sword_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 {
 	if (FAILED(__super::Initilize(pDesc)))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
-void CAttack_Normal_Kamen::Enter(void* pArg)
+void CAttack_Sword_Kamen::Enter(void* pArg)
 {
-	m_iSkillID = 0;
+	m_iSkillID = 4;
 	m_isActiveHitBox = false;
 	m_iAttackCount = 0;
 	m_fTimeAcc = 0.f;
 
 	memcpy(&m_SkillDesc, &m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase))[m_iSkillID], sizeof(MONSTER_SKILL_INFO));
 
-	m_pKamen->Set_Animation(16, false);
-	
+	m_pKamen->Set_Animation(20, false);
 }
 
-void CAttack_Normal_Kamen::Update(_float fTimeDelta)
+void CAttack_Sword_Kamen::Update(_float fTimeDelta)
 {
 	Update_HitBox(fTimeDelta);
 
 	if (m_pKamen->isAnimationFinish())
 		m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
-
 }
 
-void CAttack_Normal_Kamen::Exit()
+void CAttack_Sword_Kamen::Exit()
 {
-
 }
 
-CAttack_Normal_Kamen* CAttack_Normal_Kamen::Create(STATE_KAMEN_DESC* pDesc)
+CAttack_Sword_Kamen* CAttack_Sword_Kamen::Create(STATE_KAMEN_DESC* pDesc)
 {
-	CAttack_Normal_Kamen* pInstance = new CAttack_Normal_Kamen();
+	CAttack_Sword_Kamen* pInstance = new CAttack_Sword_Kamen();
 
 	if (FAILED(pInstance->Initilize(pDesc)))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Create : CAttack_Normal_Kamen");
+		MSG_BOX("Failed to Create : CAttack_Sword_Kamen");
 		return nullptr;
 	}
 
 	return pInstance;
 }
 
-void CAttack_Normal_Kamen::Free()
+void CAttack_Sword_Kamen::Free()
 {
 	__super::Free();
 }

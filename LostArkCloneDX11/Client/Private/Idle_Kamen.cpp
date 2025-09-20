@@ -41,34 +41,36 @@ void CIdle_Kamen::Enter(void* pArg)
 	}
 
 	m_iNumSkill = (_uint)m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase)).size();
+
 	++m_iSkillID;
 
-	if (m_iNumSkill <= m_iSkillID)
-		m_iSkillID = 0;
+	if (5 < m_iSkillID)
+		m_iSkillID = 1;
 
-	m_iAttack = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase))[m_iSkillID].iNumAnimation;
 }
 
 void CIdle_Kamen::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
-
 	if (2.f <= m_fTimeAcc)
 	{
-		CAttack_Kamen::ATTACK_KAMEN_DESC Desc = {};
-		Desc.iSkillID = m_iSkillID;
-
-		switch (m_iAttack)
+		switch (m_iSkillID)
 		{
 		case 1:
-			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), &Desc);
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
 			break;
 		case 2:
-			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_COMBO), &Desc);
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_CHARGE), nullptr);
 			break;
 		case 3:
-			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_CHARGE), &Desc);
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_COMBO), nullptr);
+			break;
+		case 4:
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr);
+			break;
+		case 5:
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SPIN), nullptr);
 			break;
 
 		default:
@@ -90,7 +92,6 @@ void CIdle_Kamen::Update(_float fTimeDelta)
 
 void CIdle_Kamen::Exit()
 {
-
 }
 
 CIdle_Kamen* CIdle_Kamen::Create(STATE_KAMEN_DESC* pDesc)

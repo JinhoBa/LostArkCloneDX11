@@ -28,8 +28,9 @@ public:
 	const _bool isAnimationFinish() const {
 		return m_isAnimationFinish;
 	}
-	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
-	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.2f);
+	_float				Get_TrackPoisiton();
+	const _float4x4*	Get_BoneMatrixPtr(const _char* pBoneName) const;
+	void				Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.2f);
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

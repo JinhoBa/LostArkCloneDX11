@@ -27,6 +27,7 @@ public:
 	LEVEL	Get_CurrentLevel() const { return m_eCurLevel; }
 public:
 	HRESULT Initialize_Manager();
+	void Destory_GameManager();
 
 #pragma region MAPDATA
 	const vector<MAP_DATA>&		Get_MapData();
@@ -50,7 +51,7 @@ public:
 #pragma endregion
 
 #pragma region KAMEN_DATA
-	const vector<KAMEN_SKILL_DESC>& Get_KamenData(_uint iPhase);
+	const vector<MONSTER_SKILL_INFO>& Get_KamenData(_uint iPhase);
 
 	HRESULT			Load_KamenData(const _char* pFilePath);
 #pragma endregion

@@ -1,16 +1,17 @@
 #pragma once
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "Enemy.h"
 
 NS_BEGIN(Engine)
 class CModel;
 class CShader;
 class CTexture;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
 
-class CKamen_Sword final : public CGameObject
+class CKamen_Sword final : public CEnemy
 {
 	enum STATE {START, IDEL, HIT, DEAD};
 
@@ -32,14 +33,13 @@ private:
 	STATE			m_eCurState = {};
 	
 	_bool			m_isAnimationFinished = {};
-	_float			m_fMaxHp = {};
-	_float			m_fHp = {};
 
 	_uint			m_iNumMesh = {};
 	CTexture*		m_pDiffuseTextureCom = { nullptr };
 	CTexture*		m_pEmissiveTextureCom = { nullptr };
 	CModel*			m_pModelCom = { nullptr };
 	CShader*		m_pShaderCom = { nullptr };
+	CCollider*		m_pColliderCom = { nullptr };
 
 private:
 	HRESULT Ready_Component();

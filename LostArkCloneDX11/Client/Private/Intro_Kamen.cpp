@@ -32,7 +32,7 @@ void CIntro_Kamen::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
-	if (false == m_bActive && 5.f <= m_fTimeAcc)
+	if (false == m_bActive && 3.f <= m_fTimeAcc)
 	{
 		if(0.5f <= m_pGameInstance->Random(0.f, 1.f))
 			m_pKamen->Set_Animation(182, false);

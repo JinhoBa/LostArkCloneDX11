@@ -9,6 +9,8 @@
 #include "Attack_Normal_Kamen.h"
 #include "Attack_Combo_Kamen.h"
 #include "Attack_Charge_Kamen.h"
+#include "Attack_Sword_Kamen.h"
+#include "Attack_Spin_Kamen.h"
 
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
@@ -21,6 +23,11 @@ CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 CKamen::CKamen(const CKamen& Prototype)
     :CEnemy{ Prototype }
 {
+}
+
+_float CKamen::Get_TrackPositon()
+{
+    return static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_TrackPoisiton();
 }
 
 _bool CKamen::isAnimationFinish()
@@ -43,8 +50,9 @@ void CKamen::Change_Phase(PHASE ePhase)
     {
     case Client::PHASE::PHASE1:
 
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 50.f, 1.f));
         m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+        static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Set_Animation(59, false, 0.2f);
         break;
 
     case Client::PHASE::PHASE2:
@@ -53,6 +61,7 @@ void CKamen::Change_Phase(PHASE ePhase)
         break;
     case Client::PHASE::END:
         break;
+
     default:
         break;
     }
@@ -94,14 +103,15 @@ HRESULT CKamen::Initialize(void* pArg)
     m_EnemyInfo.fAttack = 600.f;
     m_EnemyInfo.fAttackRange = 3.f;
     m_EnemyInfo.fDetectDistance = 5.f;
-    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 500000.f;
+    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 50000000000.f;
 
     m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
-    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
-    m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
     m_pStateMachineCom->Start_State(m_States[ENUM_TO_INT(KAMENSTATE::INTRO)]);
+     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
+    m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
+   
 
     return S_OK;
 }
@@ -109,11 +119,25 @@ HRESULT CKamen::Initialize(void* pArg)
 void CKamen::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
+
+    isCollUpdate = false;
+
+    m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 }
 
 void CKamen::Update(_float fTimeDelta)
 {
     m_pStateMachineCom->Upadte(fTimeDelta);
+
+    Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
+
+    m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
+
+    m_pHitBoxCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+    m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
+    if (isCollUpdate)
+        m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Player"));
 
     __super::Update(fTimeDelta);
 }
@@ -121,19 +145,40 @@ void CKamen::Update(_float fTimeDelta)
 void CKamen::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
+
+    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CKamen::Render()
 {
+#ifdef _DEBUG
+    if (isCollUpdate)
+        m_pHitBoxCom->Render();
 
+    /* TEST */
+   /*ImGui::Begin("Collider");
+   ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
+   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 7.f);
+   ImGui::End();
+   m_pHitBoxCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
+#endif
+    //m_pColliderCom->Render();
     return S_OK;
 }
 
 void CKamen::OnHit(const ATTACK_DESC& Attack_Desc)
 {
     m_EnemyInfo.fHp -= Attack_Desc.fDamage;
-
   
+}
+
+void CKamen::Update_HitBox(_uint iSkillID, _uint iHitIndex)
+{
+    isCollUpdate = true;
+    m_iCurSkillID = iSkillID;
+    m_iCurHitIndex = iHitIndex;
+
+    m_pGameInstance->Add_Collider(TEXT("Kamen_HitBox"), m_pHitBoxCom);
 }
 
 HRESULT CKamen::Reay_Component()
@@ -152,6 +197,27 @@ HRESULT CKamen::Reay_Component()
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Navi_Desc)))
         return E_FAIL;
 
+    /* Collider */
+    CBounding_OBB::BOUNDING_OBB_DESC OBB_Desc = {};
+    OBB_Desc.vCenter = _float3(0.f, 0.5f, -1.41f);
+    OBB_Desc.vExtents = _float3(0.5f, 0.3f, 1.31f);
+    OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
+    OBB_Desc.pOwner = this;
+
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
+        return E_FAIL;
+
+    /* Collider */
+    OBB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+    OBB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
+    OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
+    OBB_Desc.pOwner = this;
+
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_HitBox_OBB"), reinterpret_cast<CComponent**>(&m_pHitBoxCom), &OBB_Desc)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -168,6 +234,8 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_NORMAL)] = CAttack_Normal_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_COMBO)] = CAttack_Combo_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_CHARGE)] = CAttack_Charge_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SWORD)] = CAttack_Sword_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SPIN)] = CAttack_Spin_Kamen::Create(&Desc);
 
 
     return S_OK;
@@ -180,6 +248,8 @@ HRESULT CKamen::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), 
         TEXT("Prototype_GameObject_Body_Kamen"), TEXT("Body_Kamen"), &Body_Desc)))
         return E_FAIL;
+
+    m_pRootBoneMatrix = dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_root");
 
     CWeapon_Kamen::WEAPON_KAMEN_DESC Weapon_Desc = {};
     Weapon_Desc.pParentTransform = m_pTransformCom;
@@ -225,4 +295,8 @@ void CKamen::Free()
 {
     __super::Free();
 
+    Safe_Release(m_pStateMachineCom);
+    Safe_Release(m_pPlayerTransformCom);
+    Safe_Release(m_pColliderCom);
+    Safe_Release(m_pHitBoxCom);
 }

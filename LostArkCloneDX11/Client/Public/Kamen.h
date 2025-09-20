@@ -5,6 +5,7 @@
 NS_BEGIN(Engine)
 class CStateMachine;
 class CState;
+class CCollider;
 NS_END
 
 NS_BEGIN(Client)
@@ -13,7 +14,7 @@ class CKamen final : public CEnemy
 {
 public:
 	enum class KAMENSTATE {INTRO, IDLE, 
-		ATTACK_NORMAL, ATTACK_COMBO, ATTACK_CHARGE,
+		ATTACK_NORMAL, ATTACK_SPIN, ATTACK_COMBO, ATTACK_CHARGE, ATTACK_SWORD,
 		DEAD, END };
 
 private:
@@ -25,6 +26,8 @@ public:
 	CState* Get_State(KAMENSTATE eState) const {
 		return m_States[ENUM_TO_INT(eState)];
 	}
+	_float			Get_TrackPositon();
+
 	_bool	isAnimationFinish();
 	void	Set_Animation(_uint iIndex, _bool bLoop = false, _float fLerpTime = 0.2f);
 	void	Change_Phase(PHASE ePhase);
@@ -39,16 +42,29 @@ public:
 	virtual HRESULT		Render() override;
 	virtual void		OnHit(const ATTACK_DESC& Attack_Desc)override;
 
+	void Update_HitBox(_uint iSkillID, _uint iHitIndex);
+	
+
 private:
+#ifdef _DEBUG
+	_bool isCollUpdate = { false };
+	_float3 m_vHitBoxCenter = {};
+	_float3 m_vHitBoxExtents = {};
+#endif // _DEBUG
 	PHASE				m_ePhase = { PHASE::END };
 
-	CStateMachine*		m_pStateMachineCom = { nullptr };
-	CNavigation*		m_pNavigationCom = { nullptr };
+	_uint				m_iCurSkillID = {};
+	_uint				m_iCurHitIndex = {};
 
+	CStateMachine*		m_pStateMachineCom = { nullptr };
 	CState*				m_States[ENUM_TO_INT(KAMENSTATE::END)] = {};
 
+	CNavigation*		m_pNavigationCom = { nullptr };
 	CTransform*			m_pPlayerTransformCom = { nullptr };
+	CCollider*			m_pColliderCom = { nullptr };
+	CCollider*			m_pHitBoxCom = { nullptr };
 
+	const _float4x4*	m_pRootBoneMatrix = { nullptr };
 
 private:
 	HRESULT			Reay_Component();

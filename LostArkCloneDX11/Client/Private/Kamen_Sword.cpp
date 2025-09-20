@@ -7,12 +7,12 @@
 #include "Camera_Fix.h"
 
 CKamen_Sword::CKamen_Sword(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	:CGameObject{ pDevice, pContext }
+	:CEnemy{ pDevice, pContext }
 {
 }
 
 CKamen_Sword::CKamen_Sword(const CKamen_Sword& Prototype)
-	:CGameObject{ Prototype }, m_isAnimationFinished{ false }
+	:CEnemy{ Prototype }, m_isAnimationFinished{ false }
 {
 }
 
@@ -29,8 +29,16 @@ HRESULT CKamen_Sword::Initialize(void* pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+
+	m_EnemyInfo.fMaxHp = m_EnemyInfo.fHp = 100000.f;
+	m_EnemyInfo.iMonsterID = 3;
+
+#pragma region TEST_CODE
+	m_EnemyInfo.fMaxHp = m_EnemyInfo.fHp = 0.f;
+#pragma endregion
+
 	m_eCurState = m_ePreState = STATE::START;
-	m_fMaxHp = m_fHp = 10000.f;
+	
 
 	m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
@@ -43,11 +51,14 @@ HRESULT CKamen_Sword::Initialize(void* pArg)
 
 void CKamen_Sword::Priority_Update(_float fTimeDelta)
 {
+	m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 }
 
 void CKamen_Sword::Update(_float fTimeDelta)
 {
-	if (0.f >= m_fHp)
+	m_pColliderCom->Update(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
+	if (0.f >= m_EnemyInfo.fHp)
 	{
 		if (STATE::DEAD != m_eCurState)
 			m_eCurState = STATE::DEAD;
@@ -71,14 +82,6 @@ void CKamen_Sword::Update(_float fTimeDelta)
 		}
 		
 	}
-
-#pragma region TEST
-	if (m_pGameInstance->Get_KeyDown(DIK_F2))
-	{
-		m_fHp = 0.f;
-	}
-#pragma endregion
-
 
 	if (STATE::START == m_eCurState && true == m_isAnimationFinished)
 		m_eCurState = STATE::IDEL;
@@ -160,6 +163,16 @@ HRESULT CKamen_Sword::Ready_Component()
 	/* Com_Model */
 	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_Sword"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	/* Collider */
+	CBounding_Sphere::BOUNDING_SPHERE_DESC Sphere_Desc = {};
+	Sphere_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+	Sphere_Desc.fRadius = 1.f;
+	Sphere_Desc.pOwner = this;
+
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_HitBox_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &Sphere_Desc)))
 		return E_FAIL;
 
 	return S_OK;

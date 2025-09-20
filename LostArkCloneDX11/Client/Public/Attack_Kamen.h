@@ -23,8 +23,18 @@ public:
 	virtual void Exit()override;
 	
 protected:
+	_bool				m_isActiveHitBox = {};
 	_uint				m_iSkillID = {};
-	KAMEN_SKILL_DESC	m_SkillDesc = {};
+	_uint				m_iAttackCount = {};
+	_float				m_fTimeAcc = {};
+
+	class CTransform*	m_pPlayerTransform = { nullptr };
+
+	MONSTER_SKILL_INFO	m_SkillDesc = {};
+
+protected:
+	void Update_HitBox(_float fTimeDelta);
+
 public:
 	virtual void Free() override;
 };

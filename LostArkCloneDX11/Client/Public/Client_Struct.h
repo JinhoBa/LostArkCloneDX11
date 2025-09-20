@@ -141,7 +141,7 @@ namespace Client
 		_uint	iPhaseID;
 		_uint	iNumSkill;
 		_float	fConditionValue;
-		vector<KAMEN_SKILL_DESC> Skills;
+		vector<MONSTER_SKILL_INFO> Skills;
 	}KAMEN_PHASE_DESC;
 
 	

@@ -16,7 +16,6 @@ HRESULT CAttack_Charge_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 	if (FAILED(__super::Initilize(pDesc)))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -24,17 +23,21 @@ void CAttack_Charge_Kamen::Enter(void* pArg)
 {
 	ATTACK_KAMEN_DESC* pDesc = static_cast<ATTACK_KAMEN_DESC*>(pArg);
 
-	m_iSkillID = pDesc->iSkillID;
-	m_fTimeAcc = 0.f;
+	m_iSkillID = 1;
 
-	memcpy(&m_SkillDesc, &m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase))[m_iSkillID], sizeof(KAMEN_SKILL_DESC));
+	memcpy(&m_SkillDesc, &m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase))[m_iSkillID], sizeof(MONSTER_SKILL_INFO));
 
 	m_eState = STATE::START;
-	m_pKamen->Set_Animation(m_SkillDesc.iAnimationIndexStart, false);
+	m_pKamen->Set_Animation(36, false);
+
+	m_isActiveHitBox = false;
+	m_iAttackCount = 0;
+	m_fTimeAcc = 0.f;
 }
 
 void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 {
+	Update_HitBox(fTimeDelta);
 
 	switch (m_eState)
 	{
@@ -42,16 +45,16 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 		if (m_pKamen->isAnimationFinish())
 		{
 			m_eState = STATE::LOOP;
-			m_pKamen->Set_Animation(m_SkillDesc.iAnimationIndexLoop, true);
+			m_pKamen->Set_Animation(37, true);
 		}
 		break;
 
 	case Client::CAttack_Charge_Kamen::STATE::LOOP:
 		m_fTimeAcc += fTimeDelta;
-		if (m_fTimeAcc >= m_SkillDesc.fLoopTime)
+		if (m_fTimeAcc >= 1.f)
 		{
 			m_eState = STATE::END;
-			m_pKamen->Set_Animation(m_SkillDesc.iAnimationIndexEnd, false);
+			m_pKamen->Set_Animation(38, false);
 		}
 		break;
 
@@ -65,11 +68,6 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 	default:
 		break;
 	}
-
-	
-
-
-	
 }
 
 void CAttack_Charge_Kamen::Exit()

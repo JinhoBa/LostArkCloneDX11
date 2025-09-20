@@ -619,7 +619,7 @@ ANIMATION_DESC& CData_Manager::Get_AnimationIndex(_uint iMonsterID, ANIMATIONSLO
     return m_AnimationData[iMonsterID][ENUM_TO_INT(eSlot)];
 }
 
-const vector<KAMEN_SKILL_DESC>& CData_Manager::Get_KamenData(_uint iPhase)
+const vector<MONSTER_SKILL_INFO>& CData_Manager::Get_KamenData(_uint iPhase)
 {
     if (iPhase >= (_uint)m_KamenData.size())
         return m_KamenData[0].Skills;
@@ -648,29 +648,67 @@ HRESULT CData_Manager::Load_KamenData(const _char* pFilePath)
 
         Phase->QueryUnsignedAttribute("ID", &Keman_Pase.iPhaseID);
 
-        Phase->QueryUnsignedAttribute("skillcount", &Keman_Pase.iNumSkill);
-
         Phase->QueryFloatAttribute("conditionvalue", &Keman_Pase.fConditionValue);
 
-        Keman_Pase.Skills.reserve(Keman_Pase.iNumSkill);
-
-        for (auto* Skill = Phase->FirstChildElement("Skill"); Skill; Skill = Skill->NextSiblingElement("Skill"))
+        for (auto* skill = Phase->FirstChildElement("Skill"); skill; skill = skill->NextSiblingElement("Skill"))
         {
-            KAMEN_SKILL_DESC Skill_Desc = {};
+            /*Skill 기본 정보 */
+            MONSTER_SKILL_INFO Skill_Info = {};
+            skill->QueryUnsignedAttribute("id", &Skill_Info.iSkillID);
 
-            Skill->QueryUnsignedAttribute("count", &Skill_Desc.iNumAnimation);
+            /*Skill Stats */
+            tinyxml2::XMLElement* Stats = skill->FirstChildElement("Stats");
 
-            Skill->QueryIntAttribute("start", &Skill_Desc.iAnimationIndexStart);
+            Stats->QueryUnsignedAttribute("numAttack", &Skill_Info.iNumAttack);
 
-            Skill->QueryIntAttribute("loop", &Skill_Desc.iAnimationIndexLoop);
+            tinyxml2::XMLElement* Meta = skill->FirstChildElement("Meta");
+            const char* pHitkType;
+            Meta->QueryStringAttribute("hitType", &pHitkType);
 
-            Skill->QueryIntAttribute("end", &Skill_Desc.iAnimationIndexEnd);
+            if (!strcmp(pHitkType, "normal"))
+                Skill_Info.eHitType = HIT_TYPE::NORMAL;
+            else if (!strcmp(pHitkType, "push"))
+                Skill_Info.eHitType = HIT_TYPE::PUSH;
+            else if (!strcmp(pHitkType, "float"))
+                Skill_Info.eHitType = HIT_TYPE::FLOAT;
+            else
+                return E_FAIL;
 
-            Skill->QueryFloatAttribute("fLoopTime", &Skill_Desc.fLoopTime);
+            /*Hit Box */
+            HITBOX_DESC HitBox_Desc = {};
 
-            Skill->QueryFloatAttribute("damage", &Skill_Desc.fDamage);
-           
-            Keman_Pase.Skills.push_back(Skill_Desc);
+            tinyxml2::XMLElement* HitBox = skill->FirstChildElement("HitBox");
+
+            HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
+            HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
+            HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
+
+            tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
+
+            Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
+            Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
+            Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
+
+            tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
+
+            Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
+            Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
+            Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+            memcpy(&Skill_Info.HitBoxDesc, &HitBox_Desc, sizeof(HITBOX_DESC));
+
+            /*Skill Damage */
+            tinyxml2::XMLElement* Hits = skill->FirstChildElement("Hit");
+
+            Skill_Info.Damages.reserve(Skill_Info.iNumAttack);
+
+            for (auto* Hits = skill->FirstChildElement("Hit"); Hits; Hits = Hits->NextSiblingElement("Hit"))
+            {
+                _float fDamage = {};
+                Hits->QueryFloatAttribute("damage", &fDamage);
+                Skill_Info.Damages.push_back(fDamage);
+            }
+            Keman_Pase.Skills.push_back(Skill_Info);
         }
 
         m_KamenData.push_back(Keman_Pase);
