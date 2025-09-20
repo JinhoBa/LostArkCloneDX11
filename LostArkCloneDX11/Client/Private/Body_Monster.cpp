@@ -20,6 +20,11 @@ const _float4x4* CBody_Monster::Get_BoneMatrixPtr(const _char* pBoneName) const
     return m_pModelCom->Get_BoneMatrixPrt(pBoneName);
 }
 
+_float CBody_Monster::Get_TrackPoisiton()
+{
+    return m_pModelCom->Get_TrackPosition();
+}
+
 HRESULT CBody_Monster::Initialize_Prototype()
 {
     return S_OK;

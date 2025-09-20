@@ -78,7 +78,7 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 
 void CPlayer_NormalSkill::Exit()
 {
-
+	m_pPlayer->Set_SkillID(99);
 }
 
 CPlayer_NormalSkill* CPlayer_NormalSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

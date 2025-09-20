@@ -22,31 +22,145 @@ HRESULT CPlayer_Hit::Initilize(CStateMachine* pStateMachine, STANCE* pStance, CP
 
 void CPlayer_Hit::Enter(void* pArg)
 {
-	m_pPlayer->Check_Navi();
+	PLAYER_HIT_DESC* pDesc = static_cast<PLAYER_HIT_DESC*>(pArg);
+
+	m_HitType = pDesc->eType;
+
 	// 피격 종류 받아와서 처리
 	// 피격마다 애니메이션 횟수가 다를 예정
+	switch (m_HitType)
+	{
+	case Client::HIT_TYPE::NORMAL:
+		/* 기본 피격 */
+		if (STANCE::FLURRY == *m_pPlayerStance)
+			m_pPlayer->Set_Animation(23, false, 0.3f);
+		else
+			m_pPlayer->Set_Animation(24, false, 0.3f);
+		break;
 
-	/* 기본 피격 */
-	if (STANCE::FLURRY == *m_pPlayerStance)
-		m_pPlayer->Set_Animation(23, false);
-	else
-		m_pPlayer->Set_Animation(24, false);
+	case Client::HIT_TYPE::PUSH:
+		m_pPlayer->Get_Transform()->TurnTo(XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+		m_pPlayer->Set_Animation(25, false);
+		break;
+	case Client::HIT_TYPE::FLOAT:
+		m_pPlayer->Get_Transform()->TurnTo(XMVectorSetW(XMLoadFloat3(&pDesc->vPosition), 1.f));
+		m_pPlayer->Set_Animation(18, false);
+		break;
 
-	m_pPlayer->Change_Stance();
+	default:
+		break;
+	}
+
+	m_iNumAnimation = 0;
+	m_fDownTime = 0.f;
+	m_eState = STATE::HIT;
+
 }
 
 void CPlayer_Hit::Update(_float fTimeDelta)
 {
-	// 기상기 체크
+	m_pPlayer->Check_Navi();
 
-
-	// 기본 회복
-	if (m_pPlayer->isAnimationFinish())
+	switch (m_HitType)
 	{
-		if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
-			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
-		else
-			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+	case Client::HIT_TYPE::NORMAL:
+		// 기본 회복
+		if (m_pPlayer->isAnimationFinish())
+		{
+			if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
+			else
+				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+		}
+		break;
+
+	case Client::HIT_TYPE::PUSH:
+		// 기상기 체크
+		if (m_pGameInstance->Get_KeyDown(DIK_SPACE))
+		{
+			if (m_pGameManager->Use_Skill(17))
+			{
+				m_pPlayer->Set_Animation(217, false);
+				m_eState = STATE::RECOVER;
+			}
+		}
+		
+		switch (m_eState)
+		{
+		case Client::CPlayer_Hit::STATE::HIT:
+			if (m_pPlayer->isAnimationFinish())
+			{
+				m_eState = STATE::DOWN;
+			}
+				
+			break;
+		case Client::CPlayer_Hit::STATE::DOWN:
+			m_fDownTime += fTimeDelta;
+
+			if (1.f <= m_fDownTime)
+			{
+				m_eState = STATE::RECOVER;
+				m_pPlayer->Set_Animation(44, false);
+			}
+			break;
+		case Client::CPlayer_Hit::STATE::RECOVER:
+			if (m_pPlayer->isAnimationFinish())
+			{
+				if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+					m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
+				else
+					m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+			}
+
+			break;
+		}
+		
+
+		break;
+	case Client::HIT_TYPE::FLOAT:
+		// 기상기 체크
+		if (m_pGameInstance->Get_KeyDown(DIK_SPACE))
+		{
+			if (m_pGameManager->Use_Skill(17))
+			{
+				m_pPlayer->Set_Animation(217, false);
+				m_eState = STATE::RECOVER;
+			}
+		}
+
+		switch (m_eState)
+		{
+		case Client::CPlayer_Hit::STATE::HIT:
+			if (m_pPlayer->isAnimationFinish())
+			{
+				m_eState = STATE::DOWN;
+			}
+
+			break;
+		case Client::CPlayer_Hit::STATE::DOWN:
+			m_fDownTime += fTimeDelta;
+
+			if (1.f <= m_fDownTime)
+			{
+				m_eState = STATE::RECOVER;
+				m_pPlayer->Set_Animation(44, false);
+			}
+			break;
+		case Client::CPlayer_Hit::STATE::RECOVER:
+			if (m_pPlayer->isAnimationFinish())
+			{
+				if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+					m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
+				else
+					m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+			}
+
+			break;
+		}
+	case Client::HIT_TYPE::END:
+		break;
+	default:
+		break;
 	}
 }
 

@@ -10,6 +10,7 @@
 #include "Body_Player.h"
 #include "Weapon_Player.h"
 #include "HpBar_Player.h"
+#include "Test_Effect.h"
 #include "Buff.h"
 #include "Camera_Fix.h"
 #include "Enemy.h"
@@ -55,8 +56,8 @@ void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
 
 void CPlayer::Set_HitBox(_float3& vCenter, _float3& vExtends)
 {
-    m_pColliderCom->Set_ColliderDesc(vCenter, vExtends);
-    //m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
+    m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
+    //m_pHitBoxColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
 }
 
 _bool CPlayer::isAnimationFinish()
@@ -159,6 +160,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     Update_Buff(fTimeDelta);
 
+    m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
 
 #ifdef _DEBUG
     isCollUpdate = false;
@@ -189,11 +191,11 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
+    m_pHitBoxCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
     m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
     if (isCollUpdate)
-        m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
-   // Update_HitBox();
+        m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Monster"));
 
 #pragma region TEST_CODE
     if (m_pGameInstance->Get_KeyDown(DIK_G))
@@ -216,7 +218,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 {
     /* TEST */
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
- 
+    m_pColliderCom->Update_OnCollision();
     __super::Late_Update(fTimeDelta);
 }
 
@@ -224,16 +226,18 @@ HRESULT CPlayer::Render()
 {
 #ifdef _DEBUG
     if (isCollUpdate)
-        m_pColliderCom->Render();
-    /* TEST */
-    ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
-    ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);
+        m_pHitBoxCom->Render();
 
-    //m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
+  
+    /* TEST */
+ /*  ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
+   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);*/
+
+   // m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
     m_pNavigationCom->Render();
 
 #endif // _DEBUG
-
+    m_pColliderCom->Render();
   
 
     return S_OK;
@@ -241,6 +245,29 @@ HRESULT CPlayer::Render()
 
 void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
 {
+    if (m_iCurSkillID == 99)
+    {
+        m_PlayerInfo.fHp -= Attack_Desc.fDamage;
+
+        CPlayer_Hit::PLAYER_HIT_DESC Desc = {};
+        Desc.eType = Attack_Desc.eHitType;
+        XMStoreFloat3(&Desc.vPosition, m_pColliderCom->Get_HitBoxDesc().pHitObject->Get_Transform()->Get_Position());
+
+        m_pStateMachineCom->Change_State(m_States[STATE::HIT], &Desc);
+    }
+    else 
+    {
+        if (true == m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID)->bInvincible)
+            return;
+
+        m_PlayerInfo.fHp -= Attack_Desc.fDamage;
+
+        CPlayer_Hit::PLAYER_HIT_DESC Desc = {};
+        Desc.eType = Attack_Desc.eHitType;
+        XMStoreFloat3(&Desc.vPosition, m_pColliderCom->Get_HitBoxDesc().pHitObject->Get_Transform()->Get_Position());
+
+        m_pStateMachineCom->Change_State(m_States[STATE::HIT], &Desc);
+    }
     
 }
 
@@ -263,13 +290,13 @@ HRESULT CPlayer::Ready_Components()
     OBB_Desc.pOwner = this;
 
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
-        TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
+        TEXT("Com_HitBox_AABB"), reinterpret_cast<CComponent**>(&m_pHitBoxCom), &OBB_Desc)))
         return E_FAIL;
 
 
-    m_pColliderCom->Set_OnCollisionEnter([&]() {
+    m_pHitBoxCom->Set_OnCollisionEnter([&]() {
 
-        deque<CGameObject*>& Objects = m_pColliderCom->Get_HitObjects();
+        deque<CGameObject*>& Objects = m_pHitBoxCom->Get_HitObjects();
 
         SKILL_INFO* pSkill = m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID);
 
@@ -306,6 +333,14 @@ HRESULT CPlayer::Ready_Components()
         
         });
 
+    /* Collider */
+    OBB_Desc.vCenter = _float3(0.f, 0.f, -0.5f);
+    OBB_Desc.vExtents = _float3(0.3f, 0.3f, 0.5f);
+    OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -331,6 +366,13 @@ HRESULT CPlayer::Ready_PartObjects()
     HpBar_Desc.pParentTransform = m_pTransformCom;
     HpBar_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
+        return E_FAIL;
+
+    CPartObject::PARTOBJECT_DESC Effect_Desc= {};
+ 
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
         return E_FAIL;
 
     return S_OK;
@@ -445,7 +487,7 @@ void CPlayer::Update_HitBox(_uint iSkillID, _uint iHitIndex)
     m_iCurSkillID = iSkillID;
     m_iCurHitIndex = iHitIndex;
   
-    m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
+    m_pGameInstance->Add_Collider(TEXT("Player"), m_pHitBoxCom);
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -488,4 +530,5 @@ void CPlayer::Free()
     }
 
     Safe_Release(m_pNavigationCom);
+    Safe_Release(m_pColliderCom);
 }

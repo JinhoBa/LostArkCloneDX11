@@ -42,7 +42,8 @@ void CDamageFont_Manager::Add_DamageFont(DAMAGEFONT eType, _float fDamage, _floa
         break;
 
     case Client::DAMAGEFONT::PLAYER_HURT:
-        DamageFont.vColor = _float4(1.f, 1.f, 1.f, 1.f);
+        DamageFont.vColor = _float4(0.8f, 0.2f, 0.2f, 1.f);
+        DamageFont.fScale = 1.0f;
         break;
     }
     DamageFont.vPositon = _float2(vPostion.x, vPostion.y);

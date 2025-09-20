@@ -2,6 +2,7 @@
 #include "Monster_Named.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 
 #include "Monster_Idle.h"
 #include "Monster_Attack.h"
@@ -9,6 +10,8 @@
 #include "Monster_Run.h"
 #include "Monster_Dead.h"
 #include "Monster_Hit.h"
+
+#include "Player.h"
 
 CMonster_Named::CMonster_Named(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -50,6 +53,11 @@ void CMonster_Named::Priority_Update(_float fTimeDelta)
 	__super::Priority_Update(fTimeDelta);
 
 	m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
+
+#ifdef _DEBUG
+	isCollUpdate = false;
+#endif // _DEBUG
+
 }
 
 void CMonster_Named::Update(_float fTimeDelta)
@@ -61,20 +69,39 @@ void CMonster_Named::Update(_float fTimeDelta)
 	Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
 
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+	m_pHitBoxCom->Update(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
-	if (!m_HitTypes.empty())
+	if (!m_HitTypes.empty() && 0.f <=m_EnemyInfo.fHp)
 		m_pStateMachineCom->Change_State(Get_State(CMonster::STATE::HIT), nullptr);
+
+	if (isCollUpdate)
+		m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Player"));
 }
 
 void CMonster_Named::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 	m_pColliderCom->Update_OnCollision();
+	m_pHitBoxCom->Update_OnCollision();
+
+
+
 	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CMonster_Named::Render()
 {
+#ifdef _DEBUG
+	
+	/* TEST *//*
+	ImGui::SliderFloat3("HitPos1", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
+	ImGui::SliderFloat3("HitExtents1", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);*/
+
+	if(isCollUpdate)
+		m_pHitBoxCom->Render();
+	m_pNavigationCom->Render();
+
+#endif // _DEBUG
 	m_pColliderCom->Render();
 
 	return S_OK;
@@ -105,8 +132,36 @@ HRESULT CMonster_Named::Ready_Components()
 		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &AABB_Desc)))
 		return E_FAIL;
 
-	m_pColliderCom->Set_OnCollisionEnter([&]() { 
-		//m_pTransformCom->TurnTo(m_pColliderCom->Get_HitBoxDesc().pHitObject->Get_Transform()->Get_Position());
+	/* Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC HitBox_Desc = {};
+	HitBox_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+	HitBox_Desc.vExtents = _float3(0.5f, 0.5f, 0.5f);
+	HitBox_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
+	HitBox_Desc.pOwner = this;
+
+	if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_HitBox_OBB"), reinterpret_cast<CComponent**>(&m_pHitBoxCom), &HitBox_Desc)))
+		return E_FAIL;
+
+	m_pHitBoxCom->Set_OnCollisionEnter([&]() {
+		deque<CGameObject*>& Objects = m_pHitBoxCom->Get_HitObjects();
+
+		MONSTER_SKILL_INFO* pSkill = m_pGameManager->Get_Monster_SkillInfo_Prt(m_iMonsetrID, m_iCurSkillID);
+
+		ATTACK_DESC Desc = {};
+		Desc.eHitType = pSkill->eHitType;
+		Desc.eAttackType = ATTACK_TYPE::NORMAL;
+		_float fDamage = Desc.fDamage = pSkill->Damages[m_iCurHitIndex];
+
+		while (!Objects.empty())
+		{
+			_float3 vPosition;
+			XMStoreFloat3(&vPosition, Objects.front()->Get_Transform()->Get_Position());
+
+			m_pGameManager->Add_DamageFont(DAMAGEFONT::PLAYER_HURT, fDamage, vPosition);
+			dynamic_cast<CPlayer*>(Objects.front())->OnHit(Desc);
+			Objects.pop_front();
+		}
 		});
 
 

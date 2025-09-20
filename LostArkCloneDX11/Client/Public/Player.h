@@ -33,11 +33,12 @@ public:
 	CState*			Get_State(STATE eState) { return m_States[eState]; }
 	const list<class CBuff*>& Get_BuffList() { return m_Buffs; }
 	const CHARGE_SKILL_DESC* Get_ChargeSkill_Desc() { return &m_ChargeSkill_Desc; }
-	_float Get_TrackPositon();
+	_float			Get_TrackPositon();
 
 	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
 	void			Set_HitBox(_float3& vCenter, _float3& vExtends);
+	void			Set_SkillID(_uint iSkillID) { m_iCurSkillID = iSkillID; }
 
 	_bool			isAnimationFinish();
 	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
@@ -73,7 +74,12 @@ private:
 	CStateMachine*			m_pStateMachineCom = { nullptr };
 	CState*					m_States[STATE_END] = {};
 	CNavigation*			m_pNavigationCom = { nullptr };
+	CCollider*				m_pHitBoxCom = { nullptr };
 	CCollider*				m_pColliderCom = { nullptr };
+
+	const _float4x4*		m_pRootBoneMatrix = { nullptr };
+
+	list<class CBuff*>		m_Buffs;
 
 #ifdef _DEBUG
 	_bool isCollUpdate = {false};
@@ -82,20 +88,14 @@ private:
 #endif // _DEBUG
 
 
-	const _float4x4*		m_pRootBoneMatrix = { nullptr };
-
-	list<class CBuff*>		m_Buffs;
-
 private:
 	HRESULT			Ready_Components();
 	HRESULT			Ready_PartObjects();
 	HRESULT			Ready_StateMachine();
 	HRESULT			Ready_States();
+
 	void			Update_Buff(_float fTimeDelta);
-
 	void			Key_Input(_float fTimeDelta);
-
-	void            Change_State();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -30,7 +30,7 @@ public:
 	}
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
 	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.1f);
-
+	_float Get_TrackPoisiton();
 public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;

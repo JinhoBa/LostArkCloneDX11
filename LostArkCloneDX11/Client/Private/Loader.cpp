@@ -35,6 +35,8 @@
 #include "Body_Player.h"
 #include "Weapon_Player.h"
 #include "HpBar_Player.h"
+#include "Test_Effect.h"
+
 #include "Body_Monster.h"
 #include "HpBar_Monster.h"
 #include "Monster_Named.h"
@@ -215,7 +217,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_fLoadProgress = 1.f;
 	m_strMessage = TEXT("데이터 파일을 로딩 중 입니다.");
 
-	if(FAILED(CGameManager::GetInstance()->Load_AnimationData("../Bin/Resources/Data/Animation_Data.xml")))
+	if(FAILED(CGameManager::GetInstance()->Load_AnimationData("../Bin/Resources/Data/Monster/Monster_Animation_Data.xml")))
+		return E_FAIL;
+
+	if(FAILED(CGameManager::GetInstance()->Load_Monster_SkillData("../Bin/Resources/Data/Monster/Monster_Skill_Data.xml")))
 		return E_FAIL;
 	
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
@@ -233,6 +238,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Texture_WorldHpBar */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WorldHpBar"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/WorldHp/WorldHpBar_%d.dds"), 3))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TestEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_j_dustparticle_03.dds"), 1))))
 		return E_FAIL;
 
 #pragma endregion
@@ -377,6 +387,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElement))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxPointParticle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxPointParticle"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointParticle.hlsl"), VTX_POS_INSTANCE_PARTICLE::Elements, VTX_POS_INSTANCE_PARTICLE::iNumElement))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -393,6 +408,19 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CNavigation::Create(m_pDevice, m_pContext, "../Bin/Resources/Data/Navigtion/Trision_Navigation.bin"))))
 		return E_FAIL;
 
+	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC Point_Desc = {};
+	Point_Desc.iNumInstance = 3;
+	Point_Desc.vCenter = _float3(0.f, 0.f, 0.f);
+	Point_Desc.vRange = _float3(1.f, 1.f, 1.f);
+	Point_Desc.vSize = _float2(1.f, 3.f);
+	Point_Desc.isLoop = false;
+	Point_Desc.vLifeTime = _float2(1.0f, 10.f);
+	Point_Desc.vSpeed = _float2(1.f, 3.f);
+
+	/*For Prototype_Component_VIBuffer_Point_Instance_TestEffect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_TestEffect"),
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &Point_Desc))))
+		return E_FAIL;
 
 	/*For Prototype_Component_Collider_AABB*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_AABB"),
@@ -472,6 +500,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_HpBar_Player*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"),
 		CHpBar_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Test_Effect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"),
+		CTest_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Monster_Named */

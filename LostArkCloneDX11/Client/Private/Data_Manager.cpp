@@ -325,13 +325,13 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
             return E_FAIL;
 
         const char* pHitkType;
-        Meta->QueryStringAttribute("hitType", &pAttackType);
+        Meta->QueryStringAttribute("hitType", &pHitkType);
 
-        if (!strcmp(pAttackType, "normal"))
+        if (!strcmp(pHitkType, "normal"))
             Skill_Info.eHitType = HIT_TYPE::NORMAL;
-        else if (!strcmp(pAttackType, "push"))
+        else if (!strcmp(pHitkType, "push"))
             Skill_Info.eHitType = HIT_TYPE::PUSH;
-        else if (!strcmp(pAttackType, "float"))
+        else if (!strcmp(pHitkType, "float"))
             Skill_Info.eHitType = HIT_TYPE::FLOAT;
         else
             return E_FAIL;
@@ -396,6 +396,105 @@ SKILL_INFO* CData_Manager::Get_SkillInfo_Prt(_uint iSkillID)
         return nullptr;
 
     return &m_Skill_Data[iSkillID];
+}
+
+HRESULT CData_Manager::Load_Monster_SkillData(const _char* pFilePath)
+{
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("Data");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+    for(auto* monster = root->FirstChildElement("Monster"); monster; monster = monster->NextSiblingElement("Monster"))
+    {
+        vector<MONSTER_SKILL_INFO> MonsterSkills;
+
+        for (auto* skill = monster->FirstChildElement("Skill"); skill; skill = skill->NextSiblingElement("Skill"))
+        {
+            /*Skill 기본 정보 */
+            MONSTER_SKILL_INFO Skill_Info = {};
+            skill->QueryUnsignedAttribute("id", &Skill_Info.iSkillID);
+
+            /*Skill Stats */
+            tinyxml2::XMLElement* Stats = skill->FirstChildElement("Stats");
+
+            Stats->QueryUnsignedAttribute("numAttack", &Skill_Info.iNumAttack);
+
+
+            tinyxml2::XMLElement* Meta = skill->FirstChildElement("Meta");
+            const char* pHitkType;
+            Meta->QueryStringAttribute("hitType", &pHitkType);
+
+            if (!strcmp(pHitkType, "normal"))
+                Skill_Info.eHitType = HIT_TYPE::NORMAL;
+            else if (!strcmp(pHitkType, "push"))
+                Skill_Info.eHitType = HIT_TYPE::PUSH;
+            else if (!strcmp(pHitkType, "float"))
+                Skill_Info.eHitType = HIT_TYPE::FLOAT;
+            else
+                return E_FAIL;
+
+            /*Hit Box */
+            HITBOX_DESC HitBox_Desc = {};
+
+            tinyxml2::XMLElement* HitBox = skill->FirstChildElement("HitBox");
+
+            HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
+            HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
+            HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
+
+            tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
+
+            Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
+            Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
+            Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
+
+            tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
+
+            Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
+            Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
+            Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+            memcpy(&Skill_Info.HitBoxDesc, &HitBox_Desc, sizeof(HITBOX_DESC));
+
+            /*Skill Damage */
+            tinyxml2::XMLElement* Hits = skill->FirstChildElement("Hit");
+
+            Skill_Info.Damages.reserve(Skill_Info.iNumAttack);
+
+            for (auto* Hits = skill->FirstChildElement("Hit"); Hits; Hits = Hits->NextSiblingElement("Hit"))
+            {
+                _float fDamage = {};
+                Hits->QueryFloatAttribute("damage", &fDamage);
+                Skill_Info.Damages.push_back(fDamage);
+            }
+
+            MonsterSkills.push_back(Skill_Info);
+        }
+
+        m_MonsterSkillData.push_back(MonsterSkills);
+    }
+
+    return S_OK;
+}
+
+MONSTER_SKILL_INFO* CData_Manager::Get_Monster_SkillInfo_Prt(_uint iMonsterID, _uint iSkillID)
+{
+    if ((_uint)m_MonsterSkillData.size() <= iMonsterID)
+        return nullptr;
+
+    if (m_MonsterSkillData[iMonsterID].size() <= iSkillID)
+        return nullptr;
+
+    return &m_MonsterSkillData[iMonsterID][iSkillID];
 }
 
 HRESULT CData_Manager::Load_AnimationData(const _char* pFilePath)

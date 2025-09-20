@@ -51,7 +51,9 @@ public:
 	CState*		Get_State(CMonster::STATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
 	void		Set_Animation(ANIMATIONSLOT eAnim);
 	void		Chase(_float fTimeDelta);
-	
+	_float		Get_TrackPositon();
+	void		Set_HitBox(_float3& vCenter, _float3& vExtends);
+	void		Update_HitBox(_uint iSkillID, _uint iHitIndex);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -68,6 +70,9 @@ protected:
 	_uint				m_iMonsetrID = {};
 	_uint				m_iNumAttack = {};
 
+	_uint				m_iCurSkillID = {};
+	_uint				m_iCurHitIndex = {};
+
 	_float				m_fDistToPlayer = {};
 
 	MONSTER				m_eType = {};
@@ -79,6 +84,7 @@ protected:
 	CTransform*			m_pPlayerTransformCom = { nullptr };
 	CNavigation*		m_pNavigationCom = {nullptr};
 	CCollider*			m_pColliderCom = { nullptr };
+	CCollider*			m_pHitBoxCom = { nullptr };
 
 protected:
 	HRESULT			Ready_PartObjects(_wstring& strModelPrototypeTag);
@@ -90,6 +96,11 @@ protected:
 	_float m_fWeight_Cohesion = {1.f};
 #endif // _DEBUG
 
+#ifdef _DEBUG
+	_bool isCollUpdate = { false };
+	_float3 m_vHitBoxCenter = {};
+	_float3 m_vHitBoxExtents = {};
+#endif // _DEBUG
 
 public:
 	virtual CGameObject* Clone(void* pArg) PURE ;

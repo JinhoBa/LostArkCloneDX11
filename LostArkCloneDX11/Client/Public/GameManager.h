@@ -39,6 +39,9 @@ public:
 #pragma region SKILL_DATA
 	HRESULT				Load_SkillData(const _char* pFilePath);
 	SKILL_INFO*			Get_SkillInfo_Prt(_uint iSkillID);
+
+	HRESULT				Load_Monster_SkillData(const _char* pFilePath);
+	MONSTER_SKILL_INFO* Get_Monster_SkillInfo_Prt(_uint iMonsterID, _uint iSkillID);
 #pragma endregion
 
 #pragma region ANIMATION_DATA

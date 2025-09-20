@@ -40,6 +40,15 @@ namespace Client
 		vector<_float>	Damages;
 	}SKILL_INFO;
 
+	typedef struct tagMonsterSkill_Info
+	{
+		_uint			iSkillID;
+		HIT_TYPE		eHitType;
+		_uint			iNumAttack;
+		HITBOX_DESC     HitBoxDesc;
+		vector<_float>	Damages;
+	}MONSTER_SKILL_INFO;
+
 	typedef struct tagAttack_Desc
 	{
 		_bool			isCritial;
@@ -69,6 +78,7 @@ namespace Client
 
 	typedef struct tagEnemy_Info : public CHARACTER_INFO
 	{
+		_uint  iMonsterID;
 		_float fDetectDistance;
 		_float fAttackRange;
 	}ENEMY_INFO;

@@ -91,6 +91,15 @@ SKILL_INFO* CGameManager::Get_SkillInfo_Prt(_uint iSkillID)
 	return m_pData_Manager->Get_SkillInfo_Prt(iSkillID);
 }
 
+HRESULT	CGameManager::Load_Monster_SkillData(const _char* pFilePath)
+{
+	return m_pData_Manager->Load_Monster_SkillData(pFilePath);
+}
+MONSTER_SKILL_INFO* CGameManager::Get_Monster_SkillInfo_Prt(_uint iMonsterID, _uint iSkillID)
+{
+	return m_pData_Manager->Get_Monster_SkillInfo_Prt(iMonsterID, iSkillID);
+}
+
 #pragma endregion
 
 #pragma region SKILL_MANAGER

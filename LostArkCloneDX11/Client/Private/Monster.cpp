@@ -57,6 +57,9 @@ void CMonster::Chase(_float fTimeDelta)
 		if (this == pMonster)
 			continue;
 
+		if(5.f <= XMVectorGetX(XMVector3Length(pMonster->Get_Transform()->Get_Position() - m_pTransformCom->Get_Position())))
+			continue;
+
 		if (false == dynamic_cast<CMonster*>(pMonster)->isInBattle())
 			continue;
 
@@ -82,7 +85,6 @@ void CMonster::Chase(_float fTimeDelta)
 		_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.3f +
 			vSepration * 1.f + vCohesion * 0.3f;
 
-
 		m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed, m_pNavigationCom);
 	}
 	else
@@ -90,6 +92,24 @@ void CMonster::Chase(_float fTimeDelta)
 		_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position());
 		m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed, m_pNavigationCom);
 	}
+}
+
+_float CMonster::Get_TrackPositon()
+{
+	return static_cast<CBody_Monster*>(Find_PartObject(TEXT("Body_Monster")))->Get_TrackPoisiton();
+}
+
+void CMonster::Set_HitBox(_float3& vCenter, _float3& vExtends)
+{
+	m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
+}
+void CMonster::Update_HitBox(_uint iSkillID, _uint iHitIndex)
+{
+	isCollUpdate = true;
+	m_iCurSkillID = iSkillID;
+	m_iCurHitIndex = iHitIndex;
+
+	m_pGameInstance->Add_Collider(TEXT("Monster_HitBox"), m_pHitBoxCom);
 }
 
 HRESULT CMonster::Initialize_Prototype()
@@ -106,6 +126,7 @@ HRESULT CMonster::Initialize(void* pArg)
 	m_iMonsetrID = pDesc->iMonsterID;
 	m_iNumAttack = pDesc->iNumAttack;
 
+	m_EnemyInfo.iMonsterID = m_iMonsetrID;
 	m_EnemyInfo.fAttack = pDesc->fAttack;
 	m_EnemyInfo.fAttackRange = pDesc->fAttackRange;
 	m_EnemyInfo.fDetectDistance = pDesc->fDetectDistance;
@@ -145,8 +166,8 @@ void CMonster::Update(_float fTimeDelta)
 {
 	Detect_Player();
 
-
-
+	if (isCollUpdate)
+		m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Player"));
 
 	__super::Update(fTimeDelta);
 }
@@ -155,7 +176,7 @@ void CMonster::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+	//m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CMonster::Render()

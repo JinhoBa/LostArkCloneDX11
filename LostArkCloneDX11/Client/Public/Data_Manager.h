@@ -27,6 +27,9 @@ public:
 #pragma region SKILL_DATA
 	HRESULT						Load_SkillData(const _char* pFilePath);
 	SKILL_INFO*					Get_SkillInfo_Prt(_uint iSkillID);
+
+	HRESULT							Load_Monster_SkillData(const _char* pFilePath);
+	MONSTER_SKILL_INFO*		Get_Monster_SkillInfo_Prt(_uint iMonsterID, _uint iSkillID);
 #pragma endregion
 
 #pragma region ANIMATION_MAP
@@ -50,6 +53,7 @@ private:
 	vector<SKILL_INFO>					m_Skill_Data;
 	vector<vector<ANIMATION_DESC>>		m_AnimationData;
 	vector<KAMEN_PHASE_DESC> 			m_KamenData;
+	vector<vector<MONSTER_SKILL_INFO>> 	m_MonsterSkillData;
 	
 public:
 	static CData_Manager* Create();

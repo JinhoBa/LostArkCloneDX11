@@ -17,8 +17,15 @@ public:
 	virtual void Exit()override;
 
 private:
-	_uint					m_iAttackIndex = {};
-	_uint					m_iNumAttackAnimation = {};
+	_bool						m_bStartHit = {};
+	_bool						m_isActive = {};
+	_uint						m_iNumHit = {};
+	_uint						m_iAttackIndex = {};
+	_uint						m_iNumAttackAnimation = {};
+
+	_float						m_fTimeAcc = { 0.f };
+
+	MONSTER_SKILL_INFO*   m_pSkill_Info = { nullptr };
 
 public:
 	static CMonster_Attack* Create(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster, _uint iNumAttackAnimation);

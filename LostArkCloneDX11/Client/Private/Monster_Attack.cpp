@@ -29,12 +29,53 @@ void CMonster_Attack::Enter(void* pArg)
 {
 	ANIMATIONSLOT eType = static_cast<ANIMATIONSLOT>(ENUM_TO_INT(ANIMATIONSLOT::ATTACK_1) + m_iAttackIndex);
 	m_pMonster->Set_Animation(eType);
+
+	m_bStartHit = {false};
+	m_isActive = {false};
+	m_iNumHit = 0;
+	m_fTimeAcc = 0.f;
+
+	m_pSkill_Info = m_pGameManager->Get_Monster_SkillInfo_Prt(m_pInfo->iMonsterID, m_iAttackIndex);
 }
 
 void CMonster_Attack::Update(_float fTimeDelta)
 {
-	if (Check_Hit())
-		return;
+	if (false == m_bStartHit)
+	{
+		if (m_pMonster->Get_TrackPositon() >= m_pSkill_Info->HitBoxDesc.fStartTime)
+		{
+			m_bStartHit = true;
+			m_isActive = true;
+			m_pMonster->Set_HitBox(m_pSkill_Info->HitBoxDesc.vOffset,m_pSkill_Info->HitBoxDesc.vExtends);
+		}
+	}
+	else
+	{
+		if (m_iNumHit < m_pSkill_Info->iNumAttack)
+		{
+			m_fTimeAcc += fTimeDelta;
+
+			if (true == m_isActive)
+			{
+				m_pMonster->Update_HitBox(m_iAttackIndex, m_iNumHit);
+				if (m_fTimeAcc >= m_pSkill_Info->HitBoxDesc.fDuration)
+				{
+					m_isActive = false;
+					++m_iNumHit;
+					m_fTimeAcc = 0.f;
+				}
+			}
+			else
+			{
+				if (m_fTimeAcc >= m_pSkill_Info->HitBoxDesc.fInterval)
+				{
+					m_isActive = true;
+					m_fTimeAcc = 0.f;
+					
+				}
+			}
+		}
+	}
 
 	if (m_pMonster->isAnimationFinish())
 	{

@@ -313,6 +313,9 @@
     <Filter Include="93.DamageFont_Manager">
       <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Test_Effect">
+      <UniqueIdentifier>{8d280cb7-d8a3-4dd1-8049-c7928dd9a938}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -615,6 +618,9 @@
     <ClInclude Include="..\public\Monster_Hit.h">
       <Filter>02.GameObject\Character\Monster\States\HIT</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Test_Effect.h">
+      <Filter>02.GameObject\Test_Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -912,6 +918,9 @@
     <ClCompile Include="..\private\Monster_Hit.cpp">
       <Filter>02.GameObject\Character\Monster\States\HIT</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Test_Effect.cpp">
+      <Filter>02.GameObject\Test_Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
@@ -924,6 +933,9 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointParticle.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

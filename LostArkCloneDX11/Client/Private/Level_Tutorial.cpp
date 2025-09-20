@@ -129,14 +129,17 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.fAttackRange = 2.f;
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
 
-    for (_uint i = 0; i < 5; i++)
+  
+    
+    // 0 : Monter2
+    for (size_t i = 0; i < 5; i++)
     {
         Desc.vPosition = _float4(40.f + m_pGameInstance->Random(-5.f, 5.f), 0.f, 40.f + m_pGameInstance->Random(-5.f, 5.f), 1.f);
-        // 0 : Monter2
         if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
             ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
             return E_FAIL;
     }
+
   
 
     return S_OK;

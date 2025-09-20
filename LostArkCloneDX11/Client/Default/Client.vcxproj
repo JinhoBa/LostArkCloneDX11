@@ -244,6 +244,7 @@
     <ClInclude Include="..\public\Player_Idle.h" />
     <ClInclude Include="..\public\State_Kamen.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\public\Test_Effect.h" />
     <ClInclude Include="..\Public\tinyxml2.h" />
     <ClInclude Include="..\public\TopMenu.h" />
     <ClInclude Include="..\public\UIEffect.h" />
@@ -374,6 +375,7 @@
     <ClCompile Include="..\private\Player_Idle.cpp" />
     <ClCompile Include="..\private\State_Kamen.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\private\Test_Effect.cpp" />
     <ClCompile Include="..\Private\tinyxml2.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -389,6 +391,7 @@
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointParticle.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXNorTex.hlsl" />
