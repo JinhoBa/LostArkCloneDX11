@@ -8,6 +8,8 @@
 #include "VIBuffer_Cell.h"
 #include "VIBuffer_Rect.h"
 #include "VIBuffer_Terrain.h"
+#include "VIBuffer_Rect_Instance.h"
+#include "VIBuffer_Point_Instance.h"
 #include "Shader.h"
 #include "UIAnimation.h"
 #include "Model.h"

@@ -34,10 +34,12 @@ namespace Engine
 
 	typedef struct tagVertexPosition
 	{
-		XMFLOAT3						vPosition;
-		static constexpr unsigned int	iNumElement = { 1 };
+		XMFLOAT3			vPosition;
+
+		static constexpr unsigned int					iNumElement = { 1 };
 		static constexpr D3D11_INPUT_ELEMENT_DESC		Elements[] = {
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
 		};
 	}VTXPOS;
 
@@ -110,14 +112,14 @@ namespace Engine
 		XMFLOAT4		vTranslation;
 
 		XMFLOAT2		vLifeTime;
-	}VERTEX_INSTANCE_PARTICLE;
+	}VTX_INSTANCE_PARTICLE;
 
 	typedef struct tagVertexPosTexInstanceParticleDesc
 	{
 		static constexpr unsigned int		iNumElement = { 7 };
 		static constexpr D3D11_INPUT_ELEMENT_DESC Elements[] = {
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 36, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 
 			{ "TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1},
 			{ "TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1},
@@ -126,6 +128,20 @@ namespace Engine
 			{ "TEXCOORD", 5, DXGI_FORMAT_R32G32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1}
 		};
 	}VTX_POSTEX_INSTANCE_PARTICLE;
+
+	typedef struct tagVertexPosInstanceParticleDesc
+	{
+		static constexpr unsigned int		iNumElement = { 6 };
+		static constexpr D3D11_INPUT_ELEMENT_DESC		Elements[] = {
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
+			{ "WORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
+		};
+	}VTX_POS_INSTANCE_PARTICLE;
 
 	typedef struct tagKeyFrame
 	{

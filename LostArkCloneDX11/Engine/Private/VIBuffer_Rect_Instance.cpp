@@ -9,6 +9,7 @@ CVIBuffer_Rect_Instance::CVIBuffer_Rect_Instance(ID3D11Device* pDevice, ID3D11De
 
 CVIBuffer_Rect_Instance::CVIBuffer_Rect_Instance(CVIBuffer_Rect_Instance& Prototype)
 	:CVIBuffer_Instance{ Prototype }
+	, m_pInstanceVertices{ Prototype.m_pInstanceVertices }
 {
 }
 
@@ -94,18 +95,18 @@ HRESULT CVIBuffer_Rect_Instance::Initialize_Prototype(const INSTANCE_DESC* pInst
 	const RECT_INSTANCE_DESC* pDesc = static_cast<const RECT_INSTANCE_DESC*>(pInstanceDesc);
 
 	m_iNumInstance = pDesc->iNumInstance;
-	m_iInstanceStride = sizeof(VERTEX_INSTANCE_PARTICLE);
+	m_iInstanceStride = sizeof(VTX_INSTANCE_PARTICLE);
 	m_iNumIndexPerInstance = 6;
 
-	m_InstanceBufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
+	m_InstanceBufferDesc.ByteWidth = m_iVertexStride * m_iNumInstance;
 	m_InstanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_InstanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	m_InstanceBufferDesc.StructureByteStride = m_iInstanceStride;
 	m_InstanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_InstanceBufferDesc.MiscFlags = 0;
 
-	m_pInstanceVertices = new VERTEX_INSTANCE_PARTICLE[m_iNumVertices];
-	ZeroMemory(m_pInstanceVertices, sizeof(VERTEX_INSTANCE_PARTICLE) * m_iNumVertices);
+	m_pInstanceVertices = new VTX_INSTANCE_PARTICLE[m_iNumInstance];
+	ZeroMemory(m_pInstanceVertices, sizeof(VTX_INSTANCE_PARTICLE) * m_iNumInstance);
 
 	
 	for (_uint i = 0; i < m_iNumInstance; ++i)

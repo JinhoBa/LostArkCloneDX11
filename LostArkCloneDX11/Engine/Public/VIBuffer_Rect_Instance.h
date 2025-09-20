@@ -20,7 +20,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 private:
-	VERTEX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
+	VTX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
 
 public:
 	static CVIBuffer_Rect_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc);
