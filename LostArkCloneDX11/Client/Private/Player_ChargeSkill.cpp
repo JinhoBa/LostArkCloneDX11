@@ -56,7 +56,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 	m_fChargeTime += fTimeDelta;
 	// 피격 체크 추가
-
+	m_pPlayer->Update_HitBox(m_iSkillID, 0);
 	switch (m_eState)
 	{
 	case Client::CPlayer_ChargeSkill::START:
@@ -81,7 +81,6 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 			{
 				m_eState = CPlayer_ChargeSkill::END;
 				m_pPlayer->Set_Animation(m_iAnimEnd, false);
-
 			}
 			else
 			{
@@ -92,6 +91,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 		break;
 
 	case Client::CPlayer_ChargeSkill::ATTACK:
+
 		if (m_pPlayer->isAnimationFinish())
 		{
 			m_eState = CPlayer_ChargeSkill::END;

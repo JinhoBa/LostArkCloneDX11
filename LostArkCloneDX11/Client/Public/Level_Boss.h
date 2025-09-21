@@ -24,6 +24,7 @@ private:
 	HRESULT Ready_Layer_Kamen(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Monster(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_SkyBox(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_BossUI(const _wstring& strLayerTag);
 	
 
 	HRESULT Load_MapData();

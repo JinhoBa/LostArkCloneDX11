@@ -322,6 +322,21 @@
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\SWORD">
       <UniqueIdentifier>{5f449c1f-356b-490a-8f0e-2264c1d16e0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\MOVE">
+      <UniqueIdentifier>{81ff11b7-1b84-42a1-b15b-604a70293727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\TURN">
+      <UniqueIdentifier>{ca7d2dc6-942b-4e04-9497-daa9b4e44deb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI">
+      <UniqueIdentifier>{5d57845d-e058-4f3f-9c0f-42d088f3e756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI\HpBar">
+      <UniqueIdentifier>{682c56ef-505b-4fca-983d-bcc00fa002f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI\Frame">
+      <UniqueIdentifier>{c78558ee-9b78-47e8-9cbf-63abb63d34be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -633,6 +648,18 @@
     <ClInclude Include="..\public\Attack_Sword_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK\SWORD</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Move_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\MOVE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossUI.h">
+      <Filter>03.UIObject\BossUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossHpBar.h">
+      <Filter>03.UIObject\BossUI\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossHpFrame.h">
+      <Filter>03.UIObject\BossUI\Frame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -938,6 +965,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Attack_Sword_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK\SWORD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Move_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\MOVE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossUI.cpp">
+      <Filter>03.UIObject\BossUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossHpBar.cpp">
+      <Filter>03.UIObject\BossUI\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossHpFrame.cpp">
+      <Filter>03.UIObject\BossUI\Frame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@
 
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
+#include "Player.h"
 
 CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEnemy{ pDevice, pContext }
@@ -108,7 +109,7 @@ HRESULT CKamen::Initialize(void* pArg)
     m_EnemyInfo.fAttack = 600.f;
     m_EnemyInfo.fAttackRange = 3.f;
     m_EnemyInfo.fDetectDistance = 5.f;
-    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 50000000000.f;
+    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 500000000.f;
 
     m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
@@ -186,6 +187,17 @@ void CKamen::Update_HitBox(_uint iSkillID, _uint iHitIndex)
     m_pGameInstance->Add_Collider(TEXT("Kamen_HitBox"), m_pHitBoxCom);
 }
 
+_bool CKamen::MoveToPlayer(_float fTimeDelta)
+{
+   return m_pTransformCom->MoveTo(fTimeDelta, m_pPlayerTransformCom->Get_Position(), 3.f, m_pNavigationCom);
+}
+
+void CKamen::Reposition()
+{
+    if(15.f <= XMVectorGetX(XMVector3Length(XMVectorSet(35.f, 0.1f, 50.f, 1.f) - m_pTransformCom->Get_Position())))
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 50.f, 1.f));
+}
+
 HRESULT CKamen::Reay_Component()
 {
     /* StateMachine */
@@ -222,6 +234,27 @@ HRESULT CKamen::Reay_Component()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_HitBox_OBB"), reinterpret_cast<CComponent**>(&m_pHitBoxCom), &OBB_Desc)))
         return E_FAIL;
+
+    m_pHitBoxCom->Set_OnCollisionEnter([&]() {
+        deque<CGameObject*>& Objects = m_pHitBoxCom->Get_HitObjects();
+
+        MONSTER_SKILL_INFO* pSkill = m_pGameManager->Get_KamenData(ENUM_TO_INT(m_ePhase), m_iCurSkillID);
+
+        ATTACK_DESC Desc = {};
+        Desc.eHitType = pSkill->eHitType;
+        Desc.eAttackType = ATTACK_TYPE::NORMAL;
+        _float fDamage = Desc.fDamage = pSkill->Damages[m_iCurHitIndex];
+
+        while (!Objects.empty())
+        {
+            _float3 vPosition;
+            XMStoreFloat3(&vPosition, Objects.front()->Get_Transform()->Get_Position());
+
+            m_pGameManager->Add_DamageFont(DAMAGEFONT::PLAYER_HURT, fDamage, vPosition);
+            dynamic_cast<CPlayer*>(Objects.front())->OnHit(Desc);
+            Objects.pop_front();
+        }
+        });
 
     return S_OK;
 }

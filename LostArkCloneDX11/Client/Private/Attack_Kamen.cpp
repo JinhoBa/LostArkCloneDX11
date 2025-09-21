@@ -43,12 +43,12 @@ void CAttack_Kamen::Exit()
 
 void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 {
-	if (m_isStartHit ==false && m_pKamen->Get_TrackPositon() <= m_pSkillDesc->HitBoxDesc.fStartTime)
+	if (m_isStartHit ==false && m_pKamen->Get_TrackPositon() >= m_pSkillDesc->HitBoxDesc.fStartTime)
 	{
 		m_isStartHit = m_isActiveHitBox = true;
 	}
 
-	if (true == m_isStartHit && m_iAttackCount <= m_pSkillDesc->iNumAttack)
+	if (true == m_isStartHit && m_iAttackCount < m_pSkillDesc->iNumAttack)
 	{
 		if (m_isActiveHitBox)
 		{
@@ -59,7 +59,6 @@ void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 			{
 				m_fTimeAcc = 0.f;
 				m_isActiveHitBox = false;
-				++m_iAttackCount;
 			}
 		}
 		else
@@ -69,6 +68,7 @@ void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 			{
 				m_isActiveHitBox = true;
 				m_fTimeAcc = 0.f;
+				++m_iAttackCount;
 			}
 		}
 	}

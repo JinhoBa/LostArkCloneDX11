@@ -38,6 +38,9 @@ HRESULT CLevel_Boss::Initialize()
     if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
 
+    if (FAILED(Ready_Layer_BossUI(TEXT("Layer_BossUI"))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -155,6 +158,16 @@ HRESULT CLevel_Boss::Ready_Layer_SkyBox(const _wstring& strLayerTag)
 {
    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Dynamic_SkyBox"),
         ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Sky"))))
+        return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CLevel_Boss::Ready_Layer_BossUI(const _wstring& strLayerTag)
+{
+    // BossUI
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossUI"),
+        ENUM_TO_INT(LEVEL::BOSS), strLayerTag)))
         return E_FAIL;
 
     return S_OK;

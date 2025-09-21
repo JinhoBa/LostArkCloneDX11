@@ -34,6 +34,7 @@ void CIdle_Kamen::Enter(void* pArg)
 
 	case PHASE::PHASE1:
 		m_pKamen->Set_Animation(188, true);
+		m_pKamen->Reposition();
 		break;
 
 	default:
@@ -50,6 +51,8 @@ void CIdle_Kamen::Enter(void* pArg)
 void CIdle_Kamen::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
+
+	m_pKamen->Turn(fTimeDelta);
 
 	if (2.f <= m_fTimeAcc)
 	{

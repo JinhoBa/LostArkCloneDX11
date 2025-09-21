@@ -298,6 +298,9 @@ HRESULT CPlayer::Ready_Components()
 
         deque<CGameObject*>& Objects = m_pHitBoxCom->Get_HitObjects();
 
+        if (99 == m_iCurSkillID)
+            return;
+
         SKILL_INFO* pSkill = m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID);
 
         ATTACK_DESC Desc = {};

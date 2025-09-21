@@ -170,6 +170,9 @@
     <ClInclude Include="..\public\Body_Kamen.h" />
     <ClInclude Include="..\public\Body_Monster.h" />
     <ClInclude Include="..\public\Body_Player.h" />
+    <ClInclude Include="..\public\BossHpBar.h" />
+    <ClInclude Include="..\public\BossHpFrame.h" />
+    <ClInclude Include="..\public\BossUI.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
@@ -226,6 +229,7 @@
     <ClInclude Include="..\Public\Monster_State.h" />
     <ClInclude Include="..\public\Monster_Turn.h" />
     <ClInclude Include="..\public\Mouse.h" />
+    <ClInclude Include="..\public\Move_Kamen.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\Player.h" />
@@ -282,6 +286,9 @@
     <ClCompile Include="..\private\Body_Kamen.cpp" />
     <ClCompile Include="..\private\Body_Monster.cpp" />
     <ClCompile Include="..\private\Body_Player.cpp" />
+    <ClCompile Include="..\private\BossHpBar.cpp" />
+    <ClCompile Include="..\private\BossHpFrame.cpp" />
+    <ClCompile Include="..\private\BossUI.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />
@@ -356,6 +363,7 @@
     <ClCompile Include="..\Private\Monster_State.cpp" />
     <ClCompile Include="..\private\Monster_Turn.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
+    <ClCompile Include="..\private\Move_Kamen.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

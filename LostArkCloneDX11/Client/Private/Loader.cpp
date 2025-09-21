@@ -25,6 +25,9 @@
 #include "UtilitySkillSlot.h"
 #include "HoldingSkillUI.h"
 #include "BuffUI.h"
+#include "BossUI.h"
+#include "BossHpBar.h"
+#include "BossHpFrame.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -829,8 +832,17 @@ HRESULT CLoader::Loading_For_Boss()
 #pragma endregion
 
 #pragma region UI_TEXTURE
+	/* For.Prototype_Component_Texture_BossHpBar */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_BossHpBar"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/BossHp/BossHp_%d.dds"), 9))))
+		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_BossHpBarFrame */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_BossHpBarFrame"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/BossHp/BossHpFrame.dds"), 1))))
+		return E_FAIL;
 #pragma endregion
+
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
@@ -1129,20 +1141,33 @@ HRESULT CLoader::Loading_For_Boss()
 		return E_FAIL;
 
 	
-#pragma region GAEMOBJCET_PROTOTYPE
-	/*For Prototype_Component_Navigation*/
+#pragma region GAEMOBJCET
+	/*For Prototype_GameObject_Dynamic_SkyBox*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Dynamic_SkyBox"),
 		CDynamic_SkyBox::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/*For Prototype_Component_Navigation*/
+	/*For Prototype_GameObject_Kamen_Sword*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
 		CKamen_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 
-#pragma region UI_PROTOTYPE
+#pragma region UI
+	/*For Prototype_GameObject_BossUI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossUI"),
+		CBossUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	/*For Prototype_GameObject_BossHpBar*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossHpBar"),
+		CBossHpBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/*For Prototype_GameObject_BossHpFrame*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossHpFrame"),
+		CBossHpFrame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 	m_fLoadProgress = 100.f;

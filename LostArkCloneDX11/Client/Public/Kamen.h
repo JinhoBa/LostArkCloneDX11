@@ -24,6 +24,7 @@ private:
 	virtual ~CKamen() = default;
 
 public:
+	const ENEMY_INFO* Get_InfoPtr() { return &m_EnemyInfo; };
 	CState* Get_State(KAMENSTATE eState) const {
 		return m_States[ENUM_TO_INT(eState)];
 	}
@@ -34,6 +35,9 @@ public:
 	void	Set_HitBox(_float3& vCenter, _float3& vExtends);
 	void	Change_Phase(PHASE ePhase);
 	void	Chase(_float fTimeDelta);
+	_bool Turn(_float fTimeDelta) {
+		return m_pTransformCom->TurnLerp(m_pPlayerTransformCom->Get_Position(), fTimeDelta);
+	}
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -44,7 +48,9 @@ public:
 	virtual HRESULT		Render() override;
 	virtual void		OnHit(const ATTACK_DESC& Attack_Desc)override;
 
-	void Update_HitBox(_uint iSkillID, _uint iHitIndex);
+	void				Update_HitBox(_uint iSkillID, _uint iHitIndex);
+	_bool				MoveToPlayer(_float fTimeDelta);
+	void				Reposition();
 	
 
 private:

@@ -79,6 +79,8 @@ void CCharacter::Check_Navigation(CNavigation* pNavigation,const _float4x4* pRoo
 
    if(fY < fNaviHeight)
 		m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetY(vPosition, XMVectorGetY(vPosition) + (fNaviHeight - fY)));
+   else
+	   m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetY(vPosition, fNaviHeight));
 }
 
 void CCharacter::Free()
