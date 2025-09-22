@@ -8,7 +8,7 @@
 #include "Player.h"
 
 CPlayer_ChangeStance::CPlayer_ChangeStance()
-	:CPlayer_State{}
+	:CSkill_Player{}
 {
 }
 
@@ -22,6 +22,8 @@ HRESULT CPlayer_ChangeStance::Initilize(CStateMachine* pStateMachine, STANCE* pS
 
 void CPlayer_ChangeStance::Enter(void* pArg)
 {
+	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(8);
+
 	if (STANCE::FLURRY == *m_pPlayerStance)
 		m_pPlayer->Set_Animation(40, false);
 	else

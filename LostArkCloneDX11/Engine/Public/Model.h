@@ -57,7 +57,6 @@ private:
 	_float						m_fAnimDuration_Offset = {};
 
 	_float3*					m_pCameraBonePosition = {};
-
 	_float4x4					m_PreTransformMatrix = {};
 	class CBone*				m_pRootBone = {};
 

@@ -23,6 +23,7 @@ public:
 	virtual void Exit()override;
 	
 protected:
+	COLLIDER			m_eHitboxType = {};
 	_bool				m_isStartHit = {};
 	_bool				m_isActiveHitBox = {};
 	_uint				m_iSkillID = {};

@@ -1,10 +1,10 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Player_State.h"
+#include "Skill_Player.h"
 
 NS_BEGIN(Client)
 
-class CPlayer_ChangeStance final : public CPlayer_State
+class CPlayer_ChangeStance final : public CSkill_Player
 {
 private:
 	CPlayer_ChangeStance();

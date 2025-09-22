@@ -13,7 +13,7 @@
 #include "Player_ChangeStance.h"
 
 CPlayer_Idle::CPlayer_Idle()
-	:CPlayer_State{}
+	:CState_Player{}
 {
 }
 

@@ -43,32 +43,26 @@ void CAttack_Kamen::Exit()
 
 void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 {
-	if (m_isStartHit ==false && m_pKamen->Get_TrackPositon() >= m_pSkillDesc->HitBoxDesc.fStartTime)
-	{
-		m_isStartHit = m_isActiveHitBox = true;
-	}
-
-	if (true == m_isStartHit && m_iAttackCount < m_pSkillDesc->iNumAttack)
+	if (m_iAttackCount < m_pSkillDesc->iNumAttack)
 	{
 		if (m_isActiveHitBox)
 		{
 			m_fTimeAcc += fTimeDelta;
-			m_pKamen->Update_HitBox(m_iSkillID, m_iAttackCount);
-
-			if (m_pSkillDesc->HitBoxDesc.fDuration <= m_fTimeAcc)
+			m_pKamen->Update_HitBox(m_iSkillID, m_iAttackCount, m_eHitboxType);
+			if (m_pSkillDesc->HitBoxDescs[m_iAttackCount].fDuration <= m_fTimeAcc)
 			{
 				m_fTimeAcc = 0.f;
 				m_isActiveHitBox = false;
+				++m_iAttackCount;
 			}
 		}
 		else
 		{
-			m_fTimeAcc += fTimeDelta;
-			if (m_pSkillDesc->HitBoxDesc.fInterval <= m_fTimeAcc)
+			if (m_pKamen->Get_TrackPositon() >= m_pSkillDesc->HitBoxDescs[m_iAttackCount].fStartTime)
 			{
 				m_isActiveHitBox = true;
 				m_fTimeAcc = 0.f;
-				++m_iAttackCount;
+				m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends, m_eHitboxType);
 			}
 		}
 	}

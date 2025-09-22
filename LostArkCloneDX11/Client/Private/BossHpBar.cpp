@@ -62,7 +62,7 @@ HRESULT CBossHpBar::Initialize(void* pArg)
 	if (m_iBackIndex > 7)
 		m_iBackIndex = 0;
 
-	m_iMaxHp = (_float)m_pKamenInfo->fMaxHp;
+	m_iMaxHp = (_uint)m_pKamenInfo->fMaxHp;
 
 	return S_OK;
 }
@@ -83,7 +83,7 @@ void CBossHpBar::Update(_float fTimeDelta)
 	if (m_iBackIndex > 7)
 		m_iBackIndex = 0;
 
-	_uint iHp = m_pKamenInfo->fHp;
+	_uint iHp = (_uint)m_pKamenInfo->fHp;
 
 	m_HpFontDesc.strWord = to_wstring(iHp) + L"/" + to_wstring(m_iMaxHp);
 

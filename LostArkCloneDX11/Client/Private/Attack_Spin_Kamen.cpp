@@ -22,6 +22,7 @@ HRESULT CAttack_Spin_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 
 void CAttack_Spin_Kamen::Enter(void* pArg)
 {
+	m_eHitboxType = COLLIDER::OBB;
 	m_iSkillID = 2;
 	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
@@ -39,7 +40,7 @@ void CAttack_Spin_Kamen::Enter(void* pArg)
 	else
 		m_pKamen->Set_Animation(2, false);
 
-	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDesc.vOffset, m_pSkillDesc->HitBoxDesc.vExtends);
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 }
 
 void CAttack_Spin_Kamen::Update(_float fTimeDelta)

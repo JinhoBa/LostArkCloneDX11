@@ -41,9 +41,12 @@ void CKamen::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
     static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Set_Animation(iIndex, bLoop, fLerpTime);
 }
 
-void	CKamen::Set_HitBox(_float3& vCenter, _float3& vExtends)
+void	CKamen::Set_HitBox(_float3& vCenter, _float3& vExtends, COLLIDER eHitboxType)
 {
-    m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
+    if(COLLIDER::OBB == eHitboxType)
+        m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
+    else
+        m_pHitBoxShpereCom->Set_ColliderDesc(vCenter, vExtends);
 }
 
 void CKamen::Change_Phase(PHASE ePhase)
@@ -127,6 +130,7 @@ void CKamen::Priority_Update(_float fTimeDelta)
     __super::Priority_Update(fTimeDelta);
 
     isCollUpdate = false;
+    isSphereUpdate = false;
 
     m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 }
@@ -140,10 +144,13 @@ void CKamen::Update(_float fTimeDelta)
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
     m_pHitBoxCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+    m_pHitBoxShpereCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
     m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
     if (isCollUpdate)
         m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Player"));
+    if(isSphereUpdate)
+        m_pGameInstance->Check_Collider(m_pHitBoxShpereCom, TEXT("Player"));
 
     __super::Update(fTimeDelta);
 }
@@ -160,15 +167,17 @@ HRESULT CKamen::Render()
 #ifdef _DEBUG
     if (isCollUpdate)
         m_pHitBoxCom->Render();
-
-    /* TEST */
-   /*ImGui::Begin("Collider");
-   ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
-   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 7.f);
-   ImGui::End();
-   m_pHitBoxCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
+   
+    if(isSphereUpdate)
+        m_pHitBoxShpereCom->Render();
+   // /* TEST */
+   //ImGui::Begin("Collider");
+   //ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
+   //ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 15.f);
+   //ImGui::End();
+   //m_pHitBoxShpereCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
 #endif
-    //m_pColliderCom->Render();
+  
     return S_OK;
 }
 
@@ -178,13 +187,23 @@ void CKamen::OnHit(const ATTACK_DESC& Attack_Desc)
   
 }
 
-void CKamen::Update_HitBox(_uint iSkillID, _uint iHitIndex)
+void CKamen::Update_HitBox(_uint iSkillID, _uint iHitIndex, COLLIDER eHitboxType)
 {
-    isCollUpdate = true;
+
     m_iCurSkillID = iSkillID;
     m_iCurHitIndex = iHitIndex;
 
-    m_pGameInstance->Add_Collider(TEXT("Kamen_HitBox"), m_pHitBoxCom);
+    if(COLLIDER::OBB == eHitboxType)
+    {
+        isCollUpdate = true;
+        m_pGameInstance->Add_Collider(TEXT("Kamen_HitBox"), m_pHitBoxCom);
+    }
+    else
+    {
+        isSphereUpdate = true;
+        m_pGameInstance->Add_Collider(TEXT("Kamen_HitBox"), m_pHitBoxShpereCom);
+    }
+
 }
 
 _bool CKamen::MoveToPlayer(_float fTimeDelta)
@@ -225,7 +244,7 @@ HRESULT CKamen::Reay_Component()
         TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
         return E_FAIL;
 
-    /* Collider */
+    /* Hitbox OBB */
     OBB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
     OBB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
     OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
@@ -243,7 +262,44 @@ HRESULT CKamen::Reay_Component()
         ATTACK_DESC Desc = {};
         Desc.eHitType = pSkill->eHitType;
         Desc.eAttackType = ATTACK_TYPE::NORMAL;
-        _float fDamage = Desc.fDamage = pSkill->Damages[m_iCurHitIndex];
+        _float fDamage = Desc.fDamage = pSkill->HitBoxDescs[m_iCurHitIndex].fDamage;
+
+        while (!Objects.empty())
+        {
+            _float3 vPosition;
+            XMStoreFloat3(&vPosition, Objects.front()->Get_Transform()->Get_Position());
+
+            m_pGameManager->Add_DamageFont(DAMAGEFONT::PLAYER_HURT, fDamage, vPosition);
+            dynamic_cast<CPlayer*>(Objects.front())->OnHit(Desc);
+            Objects.pop_front();
+        }
+        });
+
+
+    /* Hitbox Sphere */
+    CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
+
+    SphereDesc.vCenter = _float3(0.f, 0.f, 0.f);
+    SphereDesc.fRadius = 3.f;
+    SphereDesc.pOwner = this;
+
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_HitBox_Sphere"), reinterpret_cast<CComponent**>(&m_pHitBoxShpereCom), &SphereDesc)))
+        return E_FAIL;
+
+    m_pHitBoxShpereCom->Set_OnCollisionEnter([&]() {
+        deque<CGameObject*>& Objects = m_pHitBoxShpereCom->Get_HitObjects();
+
+        MONSTER_SKILL_INFO* pSkill = m_pGameManager->Get_KamenData(ENUM_TO_INT(m_ePhase), m_iCurSkillID);
+
+        ATTACK_DESC Desc = {};
+        Desc.eHitType = pSkill->eHitType;
+        Desc.eAttackType = ATTACK_TYPE::NORMAL;
+        _float fDamage = Desc.fDamage = pSkill->HitBoxDescs[m_iCurHitIndex].fDamage;
+
+
+        if (pSkill->HitBoxDescs[m_iCurHitIndex].vExtends.y >= XMVectorGetX(XMVector3Length(m_pTransformCom->Get_Position() - m_pPlayerTransformCom->Get_Position())))
+            return;
 
         while (!Objects.empty())
         {
@@ -274,7 +330,6 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_CHARGE)] = CAttack_Charge_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SWORD)] = CAttack_Sword_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SPIN)] = CAttack_Spin_Kamen::Create(&Desc);
-
 
     return S_OK;
 }
@@ -343,4 +398,5 @@ void CKamen::Free()
     Safe_Release(m_pPlayerTransformCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHitBoxCom);
+    Safe_Release(m_pHitBoxShpereCom);
 }

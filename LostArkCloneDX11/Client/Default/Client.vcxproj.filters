@@ -244,17 +244,8 @@
     <Filter Include="02.GameObject\Character\Player\States\DASH">
       <UniqueIdentifier>{6926daeb-0bda-4b40-81d7-e1c28776b2e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\CHANGE">
-      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Player\States\HIT">
       <UniqueIdentifier>{43282a82-1efe-4949-a116-192f2b3f64d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\CHARGE_SKILL">
-      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\COMBO">
-      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Player\HpBar">
       <UniqueIdentifier>{d710584d-582b-4f6e-b20f-02d2a176c003}</UniqueIdentifier>
@@ -336,6 +327,18 @@
     </Filter>
     <Filter Include="03.UIObject\BossUI\Frame">
       <UniqueIdentifier>{c78558ee-9b78-47e8-9cbf-63abb63d34be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\Normal">
+      <UniqueIdentifier>{eb7f8f0c-689a-4000-9ea7-bb0af7e952a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\CHARGE_SKILL">
+      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\COMBO">
+      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CHANGE">
+      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -519,11 +522,8 @@
     <ClInclude Include="..\public\Player_Idle.h">
       <Filter>02.GameObject\Character\Player\States\IDLE</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Player_State.h">
+    <ClInclude Include="..\public\State_Player.h">
       <Filter>02.GameObject\Character\Player\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Player_NormalSkill.h">
-      <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_Move.h">
       <Filter>02.GameObject\Character\Player\States\MOVE</Filter>
@@ -538,10 +538,10 @@
       <Filter>02.GameObject\Character\Player\States\HIT</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_ChargeSkill.h">
-      <Filter>02.GameObject\Character\Player\States\CHARGE_SKILL</Filter>
+      <Filter>02.GameObject\Character\Player\States\SKill\CHARGE_SKILL</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player_ComboSkill.h">
-      <Filter>02.GameObject\Character\Player\States\COMBO</Filter>
+      <Filter>02.GameObject\Character\Player\States\SKill\COMBO</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Buff.h">
       <Filter>05. Buff</Filter>
@@ -659,6 +659,12 @@
     </ClInclude>
     <ClInclude Include="..\public\BossHpFrame.h">
       <Filter>03.UIObject\BossUI\Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_NormalSkill.h">
+      <Filter>02.GameObject\Character\Player\States\SKill\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Skill_Player.h">
+      <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -837,11 +843,8 @@
     <ClCompile Include="..\private\Player_Idle.cpp">
       <Filter>02.GameObject\Character\Player\States\IDLE</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Player_State.cpp">
+    <ClCompile Include="..\private\State_Player.cpp">
       <Filter>02.GameObject\Character\Player\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Player_NormalSkill.cpp">
-      <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_Move.cpp">
       <Filter>02.GameObject\Character\Player\States\MOVE</Filter>
@@ -856,10 +859,10 @@
       <Filter>02.GameObject\Character\Player\States\HIT</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_ChargeSkill.cpp">
-      <Filter>02.GameObject\Character\Player\States\CHARGE_SKILL</Filter>
+      <Filter>02.GameObject\Character\Player\States\SKill\CHARGE_SKILL</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player_ComboSkill.cpp">
-      <Filter>02.GameObject\Character\Player\States\COMBO</Filter>
+      <Filter>02.GameObject\Character\Player\States\SKill\COMBO</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Buff.cpp">
       <Filter>05. Buff</Filter>
@@ -977,6 +980,12 @@
     </ClCompile>
     <ClCompile Include="..\private\BossHpFrame.cpp">
       <Filter>03.UIObject\BossUI\Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_NormalSkill.cpp">
+      <Filter>02.GameObject\Character\Player\States\SKill\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Skill_Player.cpp">
+      <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

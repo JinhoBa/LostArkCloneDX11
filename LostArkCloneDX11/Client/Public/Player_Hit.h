@@ -1,10 +1,10 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Player_State.h"
+#include "State_Player.h"
 
 NS_BEGIN(Client)
 
-class CPlayer_Hit final : public CPlayer_State
+class CPlayer_Hit final : public CState_Player
 {
 	enum class STATE {HIT, DOWN, RECOVER, END};
 public:

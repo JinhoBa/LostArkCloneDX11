@@ -152,7 +152,7 @@ HRESULT CMonster_Named::Ready_Components()
 		ATTACK_DESC Desc = {};
 		Desc.eHitType = pSkill->eHitType;
 		Desc.eAttackType = ATTACK_TYPE::NORMAL;
-		_float fDamage = Desc.fDamage = pSkill->Damages[m_iCurHitIndex];
+		_float fDamage = Desc.fDamage = pSkill->HitBoxDescs[m_iCurHitIndex].fDamage;
 
 		while (!Objects.empty())
 		{

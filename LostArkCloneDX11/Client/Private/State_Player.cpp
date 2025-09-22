@@ -1,18 +1,18 @@
 #include "pch.h"
-#include "Player_State.h"
+#include "State_Player.h"
 
 #include "GameInstance.h"
 #include "GameManager.h"
 #include "Player.h"
 #include "StateMachine.h"
 
-CPlayer_State::CPlayer_State()
+CState_Player::CState_Player()
 	:CState{}, m_pGameManager{CGameManager::GetInstance()}
 {
 	Safe_AddRef(m_pGameManager);
 }
 
-HRESULT CPlayer_State::Initilize(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)
+HRESULT CState_Player::Initilize(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)
 {
 	if (nullptr == pStateMachine || nullptr == pStance || nullptr == pPlayer)
 		return E_FAIL;
@@ -27,19 +27,19 @@ HRESULT CPlayer_State::Initilize(CStateMachine* pStateMachine, STANCE* pStance, 
 	return S_OK;
 }
 
-void CPlayer_State::Enter(void* pArg)
+void CState_Player::Enter(void* pArg)
 {
 }
 
-void CPlayer_State::Update(_float fTimeDelta)
+void CState_Player::Update(_float fTimeDelta)
 {
 }
 
-void CPlayer_State::Exit()
+void CState_Player::Exit()
 {
 }
 
-_bool CPlayer_State::Check_Dash()
+_bool CState_Player::Check_Dash()
 {
 	if (m_pGameInstance->Get_KeyDown(DIK_SPACE))
 	{
@@ -49,11 +49,9 @@ _bool CPlayer_State::Check_Dash()
 	return false;
 }
 
-void CPlayer_State::Free()
+void CState_Player::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pGameManager);
-	//Safe_Release(m_pStateMachine);
-	//Safe_Release(m_pPlayer);
 }

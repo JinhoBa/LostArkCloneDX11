@@ -8,7 +8,7 @@
 #include "Player.h"
 
 CPlayer_ComboSkill::CPlayer_ComboSkill()
-	:CPlayer_State{}
+	:CSkill_Player{}
 {
 }
 
@@ -22,8 +22,11 @@ HRESULT CPlayer_ComboSkill::Initilize(CStateMachine* pStateMachine, STANCE* pSta
 
 void CPlayer_ComboSkill::Enter(void* pArg)
 {
+	__super::Enter(pArg);
+
 	COMBOSKILL_DESC* pSkill_Desc = static_cast<COMBOSKILL_DESC*>(pArg);
 
+	m_iSkillID = pSkill_Desc->iSkillID;
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(pSkill_Desc->iSkillID);
 
 	m_iKey = pSkill_Desc->iKey;
@@ -33,6 +36,7 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 	m_iCount = { 1 };
 	m_fTimeAcc = 0.f;
 	m_pPlayer->Set_Animation(m_iAnimationIndex++, false);
+	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 }
 
 void CPlayer_ComboSkill::Update(_float fTimeDelta)

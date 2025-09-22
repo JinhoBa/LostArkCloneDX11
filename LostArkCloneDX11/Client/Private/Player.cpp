@@ -251,6 +251,7 @@ void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
 
         CPlayer_Hit::PLAYER_HIT_DESC Desc = {};
         Desc.eType = Attack_Desc.eHitType;
+    
         XMStoreFloat3(&Desc.vPosition, m_pColliderCom->Get_HitBoxDesc().pHitObject->Get_Transform()->Get_Position());
 
         m_pStateMachineCom->Change_State(m_States[STATE::HIT], &Desc);
@@ -261,6 +262,17 @@ void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
             return;
 
         m_PlayerInfo.fHp -= Attack_Desc.fDamage;
+
+        if (HIT_TYPE::PUSH == Attack_Desc.eHitType &&
+            m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID)->eSuperArmour & SUPER_ARMOUR::SUPRE_ARMOUR_PUSH)
+        {
+            return;
+        }
+        else if (HIT_TYPE::NORMAL == Attack_Desc.eHitType &&
+            m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID)->eSuperArmour & SUPER_ARMOUR::SUPRE_ARMOUR_PARALYSIS)
+        {
+            return;
+        }
 
         CPlayer_Hit::PLAYER_HIT_DESC Desc = {};
         Desc.eType = Attack_Desc.eHitType;

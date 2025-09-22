@@ -4,11 +4,11 @@
 
 NS_BEGIN(Client)
 
-class CPlayer_State abstract : public CState
+class CState_Player abstract : public CState
 {
 protected:
-	CPlayer_State();
-	virtual ~CPlayer_State() = default;
+	CState_Player();
+	virtual ~CState_Player() = default;
 
 public:
 	virtual HRESULT Initilize(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);

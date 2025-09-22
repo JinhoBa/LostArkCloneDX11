@@ -1,10 +1,10 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Player_State.h"
+#include "Skill_Player.h"
 
 NS_BEGIN(Client)
 
-class CPlayer_NormalSkill final : public CPlayer_State
+class CPlayer_NormalSkill final : public CSkill_Player
 {
 public:
 	typedef struct NormalSkill_Desc
@@ -22,14 +22,6 @@ public:
 	virtual void Enter(void* pArg)override;
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
-
-private:
-	SKILL_INFO*		m_pSkillInfo = { nullptr };
-	
-	_bool			m_bStartHit = {};
-	_bool			m_isActive = {};
-	_uint			m_iNumAttack = {};
-	_float			m_fTimeAcc = {};
 
 
 public:

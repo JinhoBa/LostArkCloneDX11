@@ -24,17 +24,14 @@ private:
 	virtual ~CKamen() = default;
 
 public:
-	const ENEMY_INFO* Get_InfoPtr() { return &m_EnemyInfo; };
-	CState* Get_State(KAMENSTATE eState) const {
-		return m_States[ENUM_TO_INT(eState)];
-	}
-	_float			Get_TrackPositon();
-
 	_bool	isAnimationFinish();
+	const ENEMY_INFO* Get_InfoPtr() { return &m_EnemyInfo; };
+	CState* Get_State(KAMENSTATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
+	_float	Get_TrackPositon();
 	void	Set_Animation(_uint iIndex, _bool bLoop = false, _float fLerpTime = 0.2f);
-	void	Set_HitBox(_float3& vCenter, _float3& vExtends);
+	void	Set_HitBox(_float3& vCenter, _float3& vExtends, COLLIDER eHitboxType = COLLIDER::OBB);
 	void	Change_Phase(PHASE ePhase);
-	void	Chase(_float fTimeDelta);
+	
 	_bool Turn(_float fTimeDelta) {
 		return m_pTransformCom->TurnLerp(m_pPlayerTransformCom->Get_Position(), fTimeDelta);
 	}
@@ -48,14 +45,15 @@ public:
 	virtual HRESULT		Render() override;
 	virtual void		OnHit(const ATTACK_DESC& Attack_Desc)override;
 
-	void				Update_HitBox(_uint iSkillID, _uint iHitIndex);
+	void				Update_HitBox(_uint iSkillID, _uint iHitIndex, COLLIDER eHitboxType = COLLIDER::OBB);
 	_bool				MoveToPlayer(_float fTimeDelta);
 	void				Reposition();
-	
+	void				Chase(_float fTimeDelta);
 
 private:
 #ifdef _DEBUG
 	_bool isCollUpdate = { false };
+	_bool isSphereUpdate = { false };
 	_float3 m_vHitBoxCenter = {};
 	_float3 m_vHitBoxExtents = {};
 #endif // _DEBUG
@@ -71,6 +69,7 @@ private:
 	CTransform*			m_pPlayerTransformCom = { nullptr };
 	CCollider*			m_pColliderCom = { nullptr };
 	CCollider*			m_pHitBoxCom = { nullptr };
+	CCollider*			m_pHitBoxShpereCom = { nullptr };
 
 	const _float4x4*	m_pRootBoneMatrix = { nullptr };
 

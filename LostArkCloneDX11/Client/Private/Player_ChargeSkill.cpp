@@ -8,7 +8,7 @@
 #include "Player.h"
 
 CPlayer_ChargeSkill::CPlayer_ChargeSkill()
-	:CPlayer_State{}
+	:CSkill_Player{}
 {
 }
 
@@ -22,16 +22,19 @@ HRESULT CPlayer_ChargeSkill::Initilize(CStateMachine* pStateMachine, STANCE* pSt
 
 void CPlayer_ChargeSkill::Enter(void* pArg)
 {
+	__super::Enter(pArg);
+
 	CHARGESTATE_DESC* m_pSkill_Desc = static_cast<CHARGESTATE_DESC*>(pArg);
 
-	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_pSkill_Desc->iSkillID);
+	m_iSkillID = m_pSkill_Desc->iSkillID;
+	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_iSkillID);
 
 	m_iKey = m_pSkill_Desc->iKey;
 	
 	m_eState = CHARGE_STATE::START;
 	m_fChargeTime = 0.f;
 	m_fMaxChargeTime = 1.5f;
-	m_iSkillID = m_pSkill_Desc->iSkillID;
+	
 
 	if (12 == m_iSkillID)
 	{
@@ -48,6 +51,7 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 	}
 
 	m_pPlayer->Set_Animation(m_iAnimStart, false);
+	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 }
 
 void CPlayer_ChargeSkill::Update(_float fTimeDelta)
@@ -56,7 +60,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 	m_fChargeTime += fTimeDelta;
 	// 피격 체크 추가
-	m_pPlayer->Update_HitBox(m_iSkillID, 0);
+
 	switch (m_eState)
 	{
 	case Client::CPlayer_ChargeSkill::START:
@@ -91,6 +95,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 		break;
 
 	case Client::CPlayer_ChargeSkill::ATTACK:
+		if(13 == m_iSkillID)
+			Update_Hitbox(fTimeDelta);
 
 		if (m_pPlayer->isAnimationFinish())
 		{
@@ -100,6 +106,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 		break;
 
 	case Client::CPlayer_ChargeSkill::END:
+		if (12 == m_iSkillID)
+			Update_Hitbox(fTimeDelta);
 		if (m_pPlayer->isAnimationFinish())
 		{
 			m_pPlayer->Set_ChargeSkill_Desc(false, 0.f);
@@ -120,6 +128,8 @@ void CPlayer_ChargeSkill::Exit()
 {
 
 }
+
+
 
 CPlayer_ChargeSkill* CPlayer_ChargeSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)
 {

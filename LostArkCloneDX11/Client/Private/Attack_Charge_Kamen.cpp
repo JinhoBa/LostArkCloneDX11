@@ -22,7 +22,7 @@ HRESULT CAttack_Charge_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 void CAttack_Charge_Kamen::Enter(void* pArg)
 {
 	ATTACK_KAMEN_DESC* pDesc = static_cast<ATTACK_KAMEN_DESC*>(pArg);
-
+	m_eHitboxType = COLLIDER::OBB;
 	m_iSkillID = 1;
 	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
@@ -32,7 +32,7 @@ void CAttack_Charge_Kamen::Enter(void* pArg)
 
 	m_eState = STATE::START;
 	m_pKamen->Set_Animation(36, false);
-	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDesc.vOffset, m_pSkillDesc->HitBoxDesc.vExtends);
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 }
 
 void CAttack_Charge_Kamen::Update(_float fTimeDelta)
@@ -43,7 +43,7 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 		if (m_pKamen->isAnimationFinish())
 		{
 			m_eState = STATE::LOOP;
-			m_pKamen->Set_Animation(37, true);
+			m_pKamen->Set_Animation(37, false);
 		}
 		break;
 
@@ -57,7 +57,11 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 		break;
 
 	case Client::CAttack_Charge_Kamen::STATE::END:
+
+		if(m_iAttackCount > 0)
+			m_eHitboxType = COLLIDER::SPHERE;
 		Update_HitBox(fTimeDelta);
+
 		if (m_pKamen->isAnimationFinish())
 		{
 			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);

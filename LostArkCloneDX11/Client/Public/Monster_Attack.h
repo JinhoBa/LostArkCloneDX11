@@ -17,7 +17,6 @@ public:
 	virtual void Exit()override;
 
 private:
-	_bool						m_bStartHit = {};
 	_bool						m_isActive = {};
 	_uint						m_iNumHit = {};
 	_uint						m_iAttackIndex = {};

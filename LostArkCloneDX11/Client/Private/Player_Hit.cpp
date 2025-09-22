@@ -8,7 +8,7 @@
 #include "Player.h"
 
 CPlayer_Hit::CPlayer_Hit()
-	:CPlayer_State{}
+	:CState_Player{}
 {
 }
 
@@ -26,8 +26,6 @@ void CPlayer_Hit::Enter(void* pArg)
 
 	m_HitType = pDesc->eType;
 
-	// 피격 종류 받아와서 처리
-	// 피격마다 애니메이션 횟수가 다를 예정
 	switch (m_HitType)
 	{
 	case Client::HIT_TYPE::NORMAL:
@@ -104,6 +102,7 @@ void CPlayer_Hit::Update(_float fTimeDelta)
 			}
 			break;
 		case Client::CPlayer_Hit::STATE::RECOVER:
+			m_pPlayer->Set_SkillID(17);
 			if (m_pPlayer->isAnimationFinish())
 			{
 				if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
@@ -147,6 +146,7 @@ void CPlayer_Hit::Update(_float fTimeDelta)
 			}
 			break;
 		case Client::CPlayer_Hit::STATE::RECOVER:
+			m_pPlayer->Set_SkillID(17);
 			if (m_pPlayer->isAnimationFinish())
 			{
 				if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
@@ -157,8 +157,7 @@ void CPlayer_Hit::Update(_float fTimeDelta)
 
 			break;
 		}
-	case Client::HIT_TYPE::END:
-		break;
+
 	default:
 		break;
 	}
@@ -166,7 +165,7 @@ void CPlayer_Hit::Update(_float fTimeDelta)
 
 void CPlayer_Hit::Exit()
 {
-
+	m_pPlayer->Set_SkillID(99);
 }
 
 CPlayer_Hit* CPlayer_Hit::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

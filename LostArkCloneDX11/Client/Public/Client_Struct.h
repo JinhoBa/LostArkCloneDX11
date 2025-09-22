@@ -6,6 +6,7 @@ namespace Client
 {
 	typedef struct tagHitBoxDesc
 	{
+		_float fDamage;
 		_float fStartTime;
 		_float fDuration;
 		_float fInterval;
@@ -42,11 +43,10 @@ namespace Client
 
 	typedef struct tagMonsterSkill_Info
 	{
-		_uint			iSkillID;
-		HIT_TYPE		eHitType;
-		_uint			iNumAttack;
-		HITBOX_DESC     HitBoxDesc;
-		vector<_float>	Damages;
+		_uint				iSkillID;
+		HIT_TYPE			eHitType;
+		_uint				iNumAttack;
+		vector<HITBOX_DESC> HitBoxDescs;
 	}MONSTER_SKILL_INFO;
 
 	typedef struct tagAttack_Desc

@@ -12,7 +12,7 @@
 #include "Player_ChangeStance.h"
 
 CPlayer_Move::CPlayer_Move()
-	:CPlayer_State{}
+	:CState_Player{}
 {
 }
 

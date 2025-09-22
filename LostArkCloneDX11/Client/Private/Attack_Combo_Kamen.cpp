@@ -22,6 +22,7 @@ HRESULT CAttack_Combo_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 
 void CAttack_Combo_Kamen::Enter(void* pArg)
 {
+	m_eHitboxType = COLLIDER::SPHERE;
 	m_iSkillID = 3;
 	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
@@ -32,7 +33,7 @@ void CAttack_Combo_Kamen::Enter(void* pArg)
 	m_eState = STATE::READY;
 
 	m_pKamen->Set_Animation(192, false);
-	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDesc.vOffset, m_pSkillDesc->HitBoxDesc.vExtends);
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 }
 
 void CAttack_Combo_Kamen::Update(_float fTimeDelta)
@@ -51,7 +52,7 @@ void CAttack_Combo_Kamen::Update(_float fTimeDelta)
 		if (m_pKamen->isAnimationFinish())
 		{
 			m_eState = STATE::LOOP;
-			m_pKamen->Set_Animation(180, true);
+			m_pKamen->Set_Animation(180, false);
 		}
 		break;
 

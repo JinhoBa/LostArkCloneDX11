@@ -30,7 +30,6 @@ void CMonster_Attack::Enter(void* pArg)
 	ANIMATIONSLOT eType = static_cast<ANIMATIONSLOT>(ENUM_TO_INT(ANIMATIONSLOT::ATTACK_1) + m_iAttackIndex);
 	m_pMonster->Set_Animation(eType);
 
-	m_bStartHit = {false};
 	m_isActive = {false};
 	m_iNumHit = 0;
 	m_fTimeAcc = 0.f;
@@ -40,39 +39,28 @@ void CMonster_Attack::Enter(void* pArg)
 
 void CMonster_Attack::Update(_float fTimeDelta)
 {
-	if (false == m_bStartHit)
+	if (m_iNumHit < m_pSkill_Info->iNumAttack)
 	{
-		if (m_pMonster->Get_TrackPositon() >= m_pSkill_Info->HitBoxDesc.fStartTime)
-		{
-			m_bStartHit = true;
-			m_isActive = true;
-			m_pMonster->Set_HitBox(m_pSkill_Info->HitBoxDesc.vOffset,m_pSkill_Info->HitBoxDesc.vExtends);
-		}
-	}
-	else
-	{
-		if (m_iNumHit < m_pSkill_Info->iNumAttack)
-		{
-			m_fTimeAcc += fTimeDelta;
+		m_fTimeAcc += fTimeDelta;
 
-			if (true == m_isActive)
+		if (true == m_isActive)
+		{
+			m_pMonster->Update_HitBox(m_iAttackIndex, m_iNumHit);
+
+			if (m_fTimeAcc >= m_pSkill_Info->HitBoxDescs[m_iNumHit].fDuration)
 			{
-				m_pMonster->Update_HitBox(m_iAttackIndex, m_iNumHit);
-				if (m_fTimeAcc >= m_pSkill_Info->HitBoxDesc.fDuration)
-				{
-					m_isActive = false;
-					++m_iNumHit;
-					m_fTimeAcc = 0.f;
-				}
+				m_isActive = false;
+				++m_iNumHit;
+				m_fTimeAcc = 0.f;
 			}
-			else
+		}
+		else
+		{
+			if (m_pMonster->Get_TrackPositon() >= m_pSkill_Info->HitBoxDescs[m_iNumHit].fStartTime)
 			{
-				if (m_fTimeAcc >= m_pSkill_Info->HitBoxDesc.fInterval)
-				{
-					m_isActive = true;
-					m_fTimeAcc = 0.f;
-					
-				}
+				m_isActive = true;
+				m_fTimeAcc = 0.f;
+				m_pMonster->Set_HitBox(m_pSkill_Info->HitBoxDescs[m_iNumHit].vOffset, m_pSkill_Info->HitBoxDescs[m_iNumHit].vExtends);
 			}
 		}
 	}

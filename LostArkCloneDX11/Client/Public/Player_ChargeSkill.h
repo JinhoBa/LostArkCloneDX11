@@ -1,10 +1,10 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Player_State.h"
+#include "Skill_Player.h"
 
 NS_BEGIN(Client)
 
-class CPlayer_ChargeSkill final : public CPlayer_State
+class CPlayer_ChargeSkill final : public CSkill_Player
 {
 private:
 	enum CHARGE_STATE {START, LOOP, ATTACK, END};
@@ -29,7 +29,6 @@ private:
 	CHARGE_STATE	m_eState = {};
 	
 	_int			m_iKey = {};
-	_uint			m_iSkillID = {};
 	_uint			m_iAnimStart = {};
 	_uint			m_iAnimLoop = {};
 	_uint			m_iAnimEnd = {};
@@ -37,7 +36,8 @@ private:
 	_float			m_fChargeTime = {};
 	_float			m_fMaxChargeTime = {};
 
-	SKILL_INFO*		m_pSkillInfo = { nullptr };
+private:
+	void		HitBox_Update(_float fTimeDelta);
 
 public:
 	static CPlayer_ChargeSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);

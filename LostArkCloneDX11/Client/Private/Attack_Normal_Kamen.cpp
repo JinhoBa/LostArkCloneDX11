@@ -22,6 +22,7 @@ HRESULT CAttack_Normal_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 
 void CAttack_Normal_Kamen::Enter(void* pArg)
 {
+	m_eHitboxType = COLLIDER::OBB;
 	m_iSkillID = 0;
 	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
@@ -30,7 +31,7 @@ void CAttack_Normal_Kamen::Enter(void* pArg)
 	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 
 	m_pKamen->Set_Animation(16, false);
-	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDesc.vOffset, m_pSkillDesc->HitBoxDesc.vExtends);
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 }
 
 void CAttack_Normal_Kamen::Update(_float fTimeDelta)

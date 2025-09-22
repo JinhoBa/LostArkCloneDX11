@@ -8,7 +8,7 @@
 #include "Player.h"
 
 CPlayer_Dash::CPlayer_Dash()
-	:CPlayer_State{}
+	:CState_Player{}
 {
 }
 
@@ -28,6 +28,7 @@ void CPlayer_Dash::Enter(void* pArg)
 		m_pPlayer->Set_Animation(128, false, 0.f);
 
 	m_bChangeStance = false;
+	m_pPlayer->Set_SkillID(16);
 }
 
 void CPlayer_Dash::Update(_float fTimeDelta)
@@ -51,7 +52,7 @@ void CPlayer_Dash::Update(_float fTimeDelta)
 
 void CPlayer_Dash::Exit()
 {
-
+	m_pPlayer->Set_SkillID(99);
 }
 
 CPlayer_Dash* CPlayer_Dash::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

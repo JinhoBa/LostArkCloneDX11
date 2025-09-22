@@ -442,41 +442,35 @@ HRESULT CData_Manager::Load_Monster_SkillData(const _char* pFilePath)
             else
                 return E_FAIL;
 
-            /*Hit Box */
-            HITBOX_DESC HitBox_Desc = {};
+            Skill_Info.HitBoxDescs.reserve(Skill_Info.iNumAttack);
 
-            tinyxml2::XMLElement* HitBox = skill->FirstChildElement("HitBox");
-
-            HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
-            HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
-            HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
-
-            tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
-
-            Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
-            Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
-            Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
-
-            tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
-
-            Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
-            Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
-            Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
-
-            memcpy(&Skill_Info.HitBoxDesc, &HitBox_Desc, sizeof(HITBOX_DESC));
-
-            /*Skill Damage */
-            tinyxml2::XMLElement* Hits = skill->FirstChildElement("Hit");
-
-            Skill_Info.Damages.reserve(Skill_Info.iNumAttack);
-
-            for (auto* Hits = skill->FirstChildElement("Hit"); Hits; Hits = Hits->NextSiblingElement("Hit"))
+            for (auto* HitBox = skill->FirstChildElement("HitBox"); HitBox; HitBox = HitBox->NextSiblingElement("HitBox"))
             {
-                _float fDamage = {};
-                Hits->QueryFloatAttribute("damage", &fDamage);
-                Skill_Info.Damages.push_back(fDamage);
-            }
+                /*Hit Box */
+                HITBOX_DESC HitBox_Desc = {};
 
+                HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
+                HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
+                HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
+
+                tinyxml2::XMLElement* hit = HitBox->FirstChildElement("hit");
+                hit->QueryFloatAttribute("damage", &HitBox_Desc.fDamage);
+
+
+                tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
+
+                Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
+                Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
+                Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
+
+                tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
+
+                Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
+                Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
+                Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+                Skill_Info.HitBoxDescs.push_back(HitBox_Desc);
+            }
             MonsterSkills.push_back(Skill_Info);
         }
 
@@ -674,39 +668,33 @@ HRESULT CData_Manager::Load_KamenData(const _char* pFilePath)
             else
                 return E_FAIL;
 
-            /*Hit Box */
-            HITBOX_DESC HitBox_Desc = {};
+            Skill_Info.HitBoxDescs.reserve(Skill_Info.iNumAttack);
 
-            tinyxml2::XMLElement* HitBox = skill->FirstChildElement("HitBox");
-
-            HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
-            HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
-            HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
-
-            tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
-
-            Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
-            Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
-            Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
-
-            tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
-
-            Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
-            Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
-            Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
-
-            memcpy(&Skill_Info.HitBoxDesc, &HitBox_Desc, sizeof(HITBOX_DESC));
-
-            /*Skill Damage */
-            tinyxml2::XMLElement* Hits = skill->FirstChildElement("Hit");
-
-            Skill_Info.Damages.reserve(Skill_Info.iNumAttack);
-
-            for (auto* Hits = skill->FirstChildElement("Hit"); Hits; Hits = Hits->NextSiblingElement("Hit"))
+            for (auto* HitBox = skill->FirstChildElement("HitBox"); HitBox; HitBox = HitBox->NextSiblingElement("HitBox"))
             {
-                _float fDamage = {};
-                Hits->QueryFloatAttribute("damage", &fDamage);
-                Skill_Info.Damages.push_back(fDamage);
+                /*Hit Box */
+                HITBOX_DESC HitBox_Desc = {};
+
+                HitBox->QueryFloatAttribute("start", &HitBox_Desc.fStartTime);
+                HitBox->QueryFloatAttribute("duration", &HitBox_Desc.fDuration);
+                HitBox->QueryFloatAttribute("interval", &HitBox_Desc.fInterval);
+
+                tinyxml2::XMLElement* hit = HitBox->FirstChildElement("hit");
+                hit->QueryFloatAttribute("damage", &HitBox_Desc.fDamage);
+
+                tinyxml2::XMLElement* Offset = HitBox->FirstChildElement("Offset");
+
+                Offset->QueryFloatAttribute("x", &HitBox_Desc.vOffset.x);
+                Offset->QueryFloatAttribute("y", &HitBox_Desc.vOffset.y);
+                Offset->QueryFloatAttribute("z", &HitBox_Desc.vOffset.z);
+
+                tinyxml2::XMLElement* Size = HitBox->FirstChildElement("Size");
+
+                Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
+                Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
+                Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+                Skill_Info.HitBoxDescs.push_back(HitBox_Desc);
             }
             Keman_Pase.Skills.push_back(Skill_Info);
         }

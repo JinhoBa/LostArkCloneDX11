@@ -1,10 +1,10 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Player_State.h"
+#include "State_Player.h"
 
 NS_BEGIN(Client)
 
-class CPlayer_Dash final : public CPlayer_State
+class CPlayer_Dash final : public CState_Player
 {
 private:
 	CPlayer_Dash();
