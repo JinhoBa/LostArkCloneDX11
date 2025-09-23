@@ -421,9 +421,9 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 #pragma endregion
 
 #pragma region COLLIDER_MANGER
-void CGameInstance::Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag)
+_bool CGameInstance::Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag)
 {
-	m_pCollider_Manager->Check_Collider(pColldier, pDestLayerTag);
+	return m_pCollider_Manager->Check_Collider(pColldier, pDestLayerTag);
 }
 void CGameInstance::Add_Collider(const _tchar* pLayerTag, class CCollider* pCollider)
 {

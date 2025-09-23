@@ -5,6 +5,7 @@ CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
 	, m_pGameInstance { CGameInstance::GetInstance() }
+	, m_isCloned{ false }
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);
@@ -16,6 +17,7 @@ CGameObject::CGameObject(const CGameObject& Prototype)
 	, m_pContext{ Prototype.m_pContext }
 	, m_pGameInstance{ Prototype.m_pGameInstance }
 	, m_isDead { Prototype.m_isDead }
+	, m_isCloned{ true }
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);

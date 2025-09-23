@@ -31,6 +31,8 @@ public:
 
 protected:
 	class CGameManager*		m_pGameManager = { nullptr };
+
+	_bool					m_isColl = {};
 	_float4					m_PreRootBonePosition = {};
 
 public:

@@ -12,6 +12,7 @@ class ENGINE_DLL CCollider : public CComponent
 public:
 	typedef struct COLLIDER_Desc
 	{
+		COLLIDERTYPE	   eColliderType{};
 		class CGameObject* pOwner = { nullptr };
 		class CGameObject* pHitObject = { nullptr };
 		_float3			   vCollPosition = {};
@@ -45,6 +46,7 @@ public:
 	virtual void		Update(_fmatrix WorldMatrix);
 
 	_bool				Intersect(CCollider* pTarget);
+	_vector				ComputePenetration(CCollider* pColldier);
 	void				Update_OnCollision();
 
 	void				Set_ColliderDesc(_float3& vCenter, _float3& vExtents, _float3 vOrientation = _float3(0.f, 0.f, 0.f));
@@ -59,6 +61,7 @@ private:
 	_bool						m_PreisColl = { false };
 	_bool						m_isColl = { false };
 	COLLIDER					m_eType = { COLLIDER::END };
+	COLLIDERTYPE				m_eColliderType = { COLLIDERTYPE::END };
 
 	class CBounding*			m_pBounding = { nullptr };
 	

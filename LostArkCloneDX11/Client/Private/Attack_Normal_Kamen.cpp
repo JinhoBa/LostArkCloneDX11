@@ -30,7 +30,17 @@ void CAttack_Normal_Kamen::Enter(void* pArg)
 
 	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 
-	m_pKamen->Set_Animation(16, false);
+	switch (*m_pPhase)
+	{
+	case PHASE::PHASE1:
+		m_pKamen->Set_Animation(16, false);
+		break;
+
+	case PHASE::PHASE2:
+		m_pKamen->Set_Animation(10, false);
+		break;
+	}
+	
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 }
 

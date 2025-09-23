@@ -73,6 +73,7 @@ HRESULT CCollider::Initialize(void* pArg)
 {
 	CBounding::BOUNDING_DESC* pDesc = static_cast<CBounding::BOUNDING_DESC*>(pArg);
 
+	m_Collider_Desc.eColliderType = pDesc->eColliderType;
 	m_Collider_Desc.pOwner = pDesc->pOwner;
 	m_Collider_Desc.pHitObject = nullptr;
 	m_Collider_Desc.vCollPosition = _float3(0.f, 0.f, 0.f);
@@ -120,6 +121,26 @@ _bool CCollider::Intersect(CCollider* pTarget)
 	}
 
 	return bColl;
+}
+
+_vector CCollider::ComputePenetration(CCollider* pColldier)
+{
+	if (COLLIDER::SPHERE == m_eType && COLLIDER::SPHERE == pColldier->m_eType)
+	{
+		_vector vPositon = XMVectorSetW(XMLoadFloat3(&static_cast<CBounding_Sphere*>(m_pBounding)->Get_WorldPosition()), 1.f);
+		_float fRadius = static_cast<CBounding_Sphere*>(m_pBounding)->Get_Desc()->Radius;
+
+		_vector vSrcPositon = XMVectorSetW(XMLoadFloat3(&static_cast<CBounding_Sphere*>(pColldier->m_pBounding)->Get_WorldPosition()), 1.f);
+		_float fSrcRadius = static_cast<CBounding_Sphere*>(pColldier->m_pBounding)->Get_Desc()->Radius;
+
+		_vector vDirection = vPositon - vSrcPositon;
+
+		_float fDepth = (fRadius + fSrcRadius) - XMVectorGetX(XMVector3Length(vDirection)) + 0.01f;
+
+		return XMVector3Normalize(vDirection) * fDepth;
+	}
+	else
+		return XMVectorSet(0.f, 0.f, 0.f, 0.f);
 }
 
 void CCollider::Update_OnCollision()

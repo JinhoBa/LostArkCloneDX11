@@ -53,5 +53,7 @@ void CState_Player::Free()
 {
 	__super::Free();
 
+	//Safe_Release(m_pPlayer);
+	//Safe_Release(m_pStateMachine);
 	Safe_Release(m_pGameManager);
 }

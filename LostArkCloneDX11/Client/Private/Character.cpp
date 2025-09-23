@@ -13,7 +13,8 @@ CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CCharacter::CCharacter(const CCharacter& Prototype)
 	:CContainerObject{ Prototype },
-	m_pGameManager{ Prototype.m_pGameManager }
+	m_pGameManager{ Prototype.m_pGameManager },
+	m_isColl{false}
 {
 	Safe_AddRef(m_pGameManager);
 }
@@ -67,7 +68,7 @@ void CCharacter::Check_Navigation(CNavigation* pNavigation,const _float4x4* pRoo
 	/* Check Position */
    _vector vDist = XMLoadFloat4(&m_PreRootBonePosition) - vRootBonePosition;
 
-   if (false == pNavigation->isMove(vRootBonePosition))
+   if (true == m_isColl || false == pNavigation->isMove(vRootBonePosition))
 	   m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + XMVectorSetY(vDist,0.f));
    else
 	   XMStoreFloat4(&m_PreRootBonePosition, vRootBonePosition);

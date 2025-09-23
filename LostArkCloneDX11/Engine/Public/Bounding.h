@@ -8,8 +8,9 @@ class CBounding abstract : public CBase
 public:
 	typedef struct tagBoundingDesc
 	{
-		_float3		vCenter;
-		class CGameObject* pOwner;
+		COLLIDERTYPE		eColliderType{};
+		_float3				vCenter;
+		class CGameObject*  pOwner;
 	}BOUNDING_DESC;
 
 protected:

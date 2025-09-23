@@ -84,7 +84,7 @@ _bool CPlayer::Move(_float fTimeDelta)
 {
     _vector vPositon = m_pGameManager->Get_PickingPos();
 
-    if (0.f >= XMVectorGetX(vPositon))
+    if (true == m_isColl || 0.f >= XMVectorGetX(vPositon))
         return false;
 
     return m_pTransformCom->MoveTo(fTimeDelta, vPositon, m_PlayerInfo.fMoveSpeed, m_pNavigationCom);
@@ -197,6 +197,10 @@ void CPlayer::Update(_float fTimeDelta)
     if (isCollUpdate)
         m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Monster"));
 
+    m_isColl = m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
+    
+   
+
 #pragma region TEST_CODE
     if (m_pGameInstance->Get_KeyDown(DIK_G))
     {
@@ -218,8 +222,15 @@ void CPlayer::Late_Update(_float fTimeDelta)
 {
     /* TEST */
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
-    m_pColliderCom->Update_OnCollision();
     __super::Late_Update(fTimeDelta);
+    if (m_isColl)
+    {
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() +
+            XMVector3Normalize(
+                m_pTransformCom->Get_Position() -
+                m_pColliderCom->Get_HitObjects().back()->Get_Transform()->Get_Position()));
+    }
+    m_pColliderCom->Update_OnCollision();
 }
 
 HRESULT CPlayer::Render()
@@ -308,8 +319,9 @@ HRESULT CPlayer::Ready_Components()
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom))))
         return E_FAIL;
 
-    /* Collider */
+    /* HITBOX */
     CBounding_OBB::BOUNDING_OBB_DESC OBB_Desc = {};
+    OBB_Desc.eColliderType = COLLIDERTYPE::HITBOX;
     OBB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
     OBB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
     OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
@@ -363,6 +375,7 @@ HRESULT CPlayer::Ready_Components()
         });
 
     /* Collider */
+    OBB_Desc.eColliderType = COLLIDERTYPE::COLLIDER;
     OBB_Desc.vCenter = _float3(0.f, 0.f, -0.5f);
     OBB_Desc.vExtents = _float3(0.3f, 0.3f, 0.5f);
     OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
@@ -554,6 +567,7 @@ void CPlayer::Free()
     for (auto& pBuff : m_Buffs)
         Safe_Release(pBuff);
 
+  
     for (_uint i = 0; i < STATE::STATE_END; i++)
     {
         Safe_Release(m_States[i]);

@@ -109,7 +109,7 @@ public:
 #pragma endregion
 
 #pragma region COLLIDER_MANGER
-	void	Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag);
+	_bool	Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag);
 	void	Add_Collider(const _tchar* pLayerTag, class CCollider* pCollider);
 #pragma endregion
 

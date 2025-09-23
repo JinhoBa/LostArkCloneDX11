@@ -11,7 +11,8 @@ private:
 
 public:
 	HRESULT Initialize();
-	_bool	Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag);
+	_bool	Check_Collider(class CCollider* pColldier, const _tchar* pSrcLayerTag);
+	_vector  ComputePenetration(class CCollider* pColldier, const _tchar* pSrcLayerTag);
 	void	Update_Collider();
 	void	Clear_Collider();
 	void	Add_Collider(const _tchar* pLayerTag, class CCollider* pCollider);

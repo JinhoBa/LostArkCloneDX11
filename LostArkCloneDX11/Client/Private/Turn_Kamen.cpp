@@ -75,10 +75,10 @@ void CTurn_Kamen::Update(_float fTimeDelta)
 			break;
 
 		case PHASE::PHASE2:
-			if(m_fDistance < 5.f)
+			if(m_fDistance < 6.f)
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
 			else
-				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
+				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr);
 			break;
 
 		}

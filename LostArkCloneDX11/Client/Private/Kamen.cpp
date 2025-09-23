@@ -72,8 +72,11 @@ void CKamen::Change_Phase(PHASE ePhase)
 
             static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
                 dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02"));
-
+            _float3 vCenter = _float3(0.f, 0.f, -1.5f);
+            _float3 vExtend = _float3(0.78f, 1.72f, 1.5f);
+            m_pColliderCom->Set_ColliderDesc(vCenter, vExtend);
             m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::INTRO), nullptr);
+            m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
         break;
     case Client::PHASE::PHASE3:
         break;
@@ -184,13 +187,13 @@ HRESULT CKamen::Render()
         m_pHitBoxShpereCom->Render();
 
    // /* TEST */
-   //ImGui::Begin("Collider");
-   //ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
-   //ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 15.f);
-   //ImGui::End();
-   //m_pHitBoxCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
+   ImGui::Begin("Collider");
+   ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
+   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 15.f);
+   ImGui::End();
+   m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
 #endif
-  
+   m_pColliderCom->Render();
     return S_OK;
 }
 
@@ -248,6 +251,7 @@ HRESULT CKamen::Reay_Component()
 
     /* Collider */
     CBounding_OBB::BOUNDING_OBB_DESC OBB_Desc = {};
+    OBB_Desc.eColliderType = COLLIDERTYPE::COLLIDER;
     OBB_Desc.vCenter = _float3(0.f, 0.5f, -1.41f);
     OBB_Desc.vExtents = _float3(0.5f, 0.3f, 1.31f);
     OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
@@ -258,6 +262,7 @@ HRESULT CKamen::Reay_Component()
         return E_FAIL;
 
     /* Hitbox OBB */
+    OBB_Desc.eColliderType = COLLIDERTYPE::HITBOX;
     OBB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
     OBB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);
     OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
@@ -291,7 +296,7 @@ HRESULT CKamen::Reay_Component()
 
     /* Hitbox Sphere */
     CBounding_Sphere::BOUNDING_SPHERE_DESC SphereDesc = {};
-
+    SphereDesc.eColliderType = COLLIDERTYPE::HITBOX;
     SphereDesc.vCenter = _float3(0.f, 0.f, 0.f);
     SphereDesc.fRadius = 3.f;
     SphereDesc.pOwner = this;

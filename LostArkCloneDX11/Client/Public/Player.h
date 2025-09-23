@@ -65,7 +65,7 @@ public:
 private:
 	PLAYER_INFO				m_DefaultInfo = {};
 	PLAYER_INFO				m_PlayerInfo = {};
-	
+
 	_uint					m_iCurSkillID = {};
 	_uint					m_iCurHitIndex = {};
 

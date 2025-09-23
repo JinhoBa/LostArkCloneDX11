@@ -139,6 +139,11 @@ void CTransform::Go_Backward_World(_float fTimeDelta)
     Set_State(STATE::POSITION, vPosition);
 }
 
+void CTransform::KnockBack(_float fTimDelta, _fvector vTarget, CNavigation* pNavigation)
+{
+
+}
+
 _bool CTransform::MoveTo(_float fTimeDelta, _fvector vTargetPos, _float fSpeedPersec, CNavigation* pNavigation)
 {
     _vector vPosition = Get_State(STATE::POSITION);

@@ -70,6 +70,4 @@ void CSkill_Player::Update_Hitbox(_float fTimeDelta)
 void CSkill_Player::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pGameManager);
 }

@@ -36,6 +36,26 @@ _bool CCollider_Manager::Check_Collider(CCollider* pColldier, const _tchar* pSrc
 	return isColl;
 }
 
+_vector CCollider_Manager::ComputePenetration(CCollider* pColldier, const _tchar* pSrcLayerTag)
+{
+	auto iter = m_ColliderLists.find(pSrcLayerTag);
+
+	if (m_ColliderLists.end() == iter)
+		return XMVectorSet(0.f, 0.f, 0.f, 0.f);
+
+	_bool isColl = false;
+
+	for (auto& pSrcColldier : (*iter).second)
+	{
+		if (true == pColldier->Intersect(pSrcColldier))
+		{
+			return pColldier->ComputePenetration(pSrcColldier);
+		}
+	}
+
+	return XMVectorSet(0.f, 0.f, 0.f, 0.f);
+}
+
 void CCollider_Manager::Update_Collider()
 {
 	for (auto pair : m_ColliderLists)

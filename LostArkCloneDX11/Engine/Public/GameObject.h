@@ -32,6 +32,7 @@ public:
 	class CComponent*	Find_Component(const _wstring& strComponentTag);
 
 protected:
+	_bool						m_isCloned = {};
 	_bool						m_isDead = { false };
 
 	ID3D11Device*				m_pDevice = { nullptr };
