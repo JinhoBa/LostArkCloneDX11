@@ -14,7 +14,8 @@ NS_BEGIN(Client)
 class CKamen final : public CEnemy
 {
 public:
-	enum class KAMENSTATE {INTRO, IDLE, 
+	enum class KAMENSTATE {
+		INTRO, IDLE, TRUN,
 		ATTACK_NORMAL, ATTACK_SPIN, ATTACK_COMBO, ATTACK_CHARGE, ATTACK_SWORD,
 		END };
 
@@ -33,7 +34,7 @@ public:
 	void	Change_Phase(PHASE ePhase);
 	
 	_bool Turn(_float fTimeDelta) {
-		return m_pTransformCom->TurnLerp(m_pPlayerTransformCom->Get_Position(), fTimeDelta);
+		return m_pTransformCom->TurnLerp(m_pPlayerTransformCom->Get_Position(), fTimeDelta * 0.7f);
 	}
 
 public:

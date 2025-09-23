@@ -261,7 +261,21 @@ void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
         if (true == m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID)->bInvincible)
             return;
 
-        m_PlayerInfo.fHp -= Attack_Desc.fDamage;
+        if(8 == m_iCurSkillID)
+        {
+            m_PlayerInfo.fHp -= Attack_Desc.fDamage * 0.1f;
+
+            CPlayer_NormalSkill::NORMALSKILL_DESC Desc = {};
+
+            Desc.bLoop = false;
+            Desc.iAnimationIndex = 59;
+            Desc.iSkillID = 9;
+
+            m_pStateMachineCom->Change_State(Get_State(CPlayer::STATE::NORMAL_SKILL), &Desc);
+
+        }
+        else
+            m_PlayerInfo.fHp -= Attack_Desc.fDamage;
 
         if (HIT_TYPE::PUSH == Attack_Desc.eHitType &&
             m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID)->eSuperArmour & SUPER_ARMOUR::SUPRE_ARMOUR_PUSH)

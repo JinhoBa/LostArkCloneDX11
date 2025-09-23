@@ -33,47 +33,47 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 	m_iMaxCount = pSkill_Desc->iCount;
 	m_iAnimationIndex = pSkill_Desc->iAnimationIndex;
 
+	m_isInputKey = false;
+
 	m_iCount = { 1 };
-	m_fTimeAcc = 0.f;
+
 	m_pPlayer->Set_Animation(m_iAnimationIndex++, false);
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 }
 
 void CPlayer_ComboSkill::Update(_float fTimeDelta)
 {
-	// 피격 체크 추가
-
 	m_pPlayer->Check_Navi();
 
-	m_fTimeAcc += fTimeDelta;
-
-	if (m_pPlayer->isAnimationFinish())
-	{
-		if (m_iMaxCount <= m_iCount)
-		{
-			if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
-				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
-			else
-				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
-		}
-		else
-		{
-			if (m_pGameInstance->Get_KeyDown(m_iKey))
-			{
-				++m_iCount;
-				m_pPlayer->Set_Animation(m_iAnimationIndex++, false);
-				m_fTimeAcc = 0.f;
-			}
-		}
-	}
-
-	if (1.5f <= m_fTimeAcc)
+	if (m_iAttackCount >= m_pSkillInfo->iNumAttack)
 	{
 		if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
 		else
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
 	}
+
+	__super::Update_Hitbox(fTimeDelta);
+
+	if (m_pPlayer->isAnimationFinish())
+	{
+		if (true == m_isInputKey)
+		{
+			m_isInputKey = false;
+			m_pPlayer->Set_Animation(m_iAnimationIndex++, false);
+		}
+		else
+		{
+			if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
+				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
+			else
+				m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
+		}
+	}
+
+	if (m_pGameInstance->Get_KeyDown(m_iKey))
+		m_isInputKey = true;
+	
 }
 
 void CPlayer_ComboSkill::Exit()

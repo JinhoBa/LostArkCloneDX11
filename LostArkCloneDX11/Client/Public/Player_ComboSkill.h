@@ -26,14 +26,12 @@ public:
 	virtual void Exit()override;
 
 private:
-	SKILL_INFO* m_pSkillInfo = { nullptr };
-	
+	_bool		m_isInputKey = {};
+
 	_uint		m_iKey = {};
 	_uint		m_iMaxCount = {};
 	_uint		m_iCount = {};
 	_uint		m_iAnimationIndex = {};
-
-	_float		m_fTimeAcc = {};
 
 public:
 	static CPlayer_ComboSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);

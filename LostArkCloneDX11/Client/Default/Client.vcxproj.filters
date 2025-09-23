@@ -666,6 +666,9 @@
     <ClInclude Include="..\public\Skill_Player.h">
       <Filter>02.GameObject\Character\Player\States\SKill</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Turn_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\TURN</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -986,6 +989,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Skill_Player.cpp">
       <Filter>02.GameObject\Character\Player\States\SKill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Turn_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\TURN</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

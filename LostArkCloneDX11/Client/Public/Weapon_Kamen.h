@@ -31,6 +31,10 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
+	void				Change_SocketMatrix(const _float4x4* pSocketMatrix) { 
+		m_pSocketMatrix = pSocketMatrix; 
+	}
+
 private:
 	const _float4x4* m_pSocketMatrix = { nullptr };
 

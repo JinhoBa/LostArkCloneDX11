@@ -16,11 +16,11 @@ CBody_Kamen::CBody_Kamen(const CBody_Kamen& Prototype)
 }
 _float CBody_Kamen::Get_TrackPoisiton()
 { 
-    return m_pModelCom->Get_TrackPosition(); 
+    return m_pModelComs[m_iCurModelIndex]->Get_TrackPosition();
 }
 const _float4x4* CBody_Kamen::Get_BoneMatrixPtr(const _char* pBoneName) const
 {
-    return m_pModelCom->Get_BoneMatrixPrt(pBoneName);
+    return m_pModelComs[m_iCurModelIndex]->Get_BoneMatrixPrt(pBoneName);
 }
 
 HRESULT CBody_Kamen::Initialize_Prototype()
@@ -33,7 +33,9 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     //if (nullptr == pArg)
     //    return E_FAIL;
 
-    //BODYMONSTER_DESC* pDesc = static_cast<BODYMONSTER_DESC*>(pArg);
+    //BODYKAMEN_DESC* pDesc = static_cast<BODYKAMEN_DESC*>(pArg);
+    //m_pPhase = pDesc->pPhase;
+
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -41,11 +43,12 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    m_iCurModelIndex = 0;
     m_iAnimIndex = 193;
 
-    m_iNumMesh = m_pModelCom->Get_NumMeshes();
+    m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
 
-    m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+    m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
 
     return S_OK;
 }
@@ -56,7 +59,7 @@ void CBody_Kamen::Priority_Update(_float fTimeDelta)
 
 void CBody_Kamen::Update(_float fTimeDelta)
 {
-    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta);
+    m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Animation(fTimeDelta);
 
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
@@ -75,12 +78,12 @@ HRESULT CBody_Kamen::Render()
     ImGui::InputFloat3("Pos", m_Pos, "%.2f");
     ImGui::InputInt("Animation", &m_iAnimIndex);
     _int iIndex = {};
-    for (auto pName : m_pModelCom->Get_AnimationNames())
+    for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
     {
         if (ImGui::Button(to_string(iIndex).c_str()))
         {
             m_iAnimIndex = iIndex;
-            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+            m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
             m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.f, 50.f, 1.f));
         }
         ++iIndex;
@@ -101,14 +104,14 @@ HRESULT CBody_Kamen::Render()
 
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
-        if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
         if (FAILED(m_pShaderCom->Begin(1)))
             return E_FAIL;
 
 
-        if (FAILED(m_pModelCom->Render(i)))
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Render(i)))
             return E_FAIL;
     }
 
@@ -119,7 +122,17 @@ void CBody_Kamen::Set_Animation(_uint iAnimationIdex, _bool bLoop, _float fLerpT
 {
     m_isAnimationFinish = false;
 
-    m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, iAnimationIdex, bLoop, fLerpTime);
+    m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, iAnimationIdex, bLoop, fLerpTime);
+}
+
+void CBody_Kamen::Change_Model(PHASE eType)
+{
+    if (PHASE::PHASE2 == eType)
+    {
+        m_iCurModelIndex = 1;
+        m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, 0, true);
+        m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
+    }
 }
 
 HRESULT CBody_Kamen::Add_Components()
@@ -134,10 +147,21 @@ HRESULT CBody_Kamen::Add_Components()
         TEXT("Com_EmssiveTexture"), reinterpret_cast<CComponent**>(&m_pEmssiveTextureCom))))
         return E_FAIL;
 
+    CModel* pModel = { nullptr };
+
     /* Com_Model */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
-        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&pModel))))
         return E_FAIL;
+
+    m_pModelComs.push_back(pModel);
+
+    /* Com_HorseModel */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_Horse"),
+        TEXT("Com_HorseModel"), reinterpret_cast<CComponent**>(&pModel))))
+        return E_FAIL;
+
+    m_pModelComs.push_back(pModel);
 
     /* Shader_VTXAnimTex */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
@@ -209,7 +233,11 @@ void CBody_Kamen::Free()
     __super::Free();
 
     Safe_Release(m_pShaderCom);
-    Safe_Release(m_pModelCom);
+
+    for(auto& pModel : m_pModelComs)
+        Safe_Release(pModel);
+    m_pModelComs.clear();
+
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pEmssiveTextureCom);
 }

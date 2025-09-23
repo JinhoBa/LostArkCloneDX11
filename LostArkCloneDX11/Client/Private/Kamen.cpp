@@ -11,6 +11,7 @@
 #include "Attack_Charge_Kamen.h"
 #include "Attack_Sword_Kamen.h"
 #include "Attack_Spin_Kamen.h"
+#include "Turn_Kamen.h"
 
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
@@ -65,6 +66,14 @@ void CKamen::Change_Phase(PHASE ePhase)
         break;
 
     case Client::PHASE::PHASE2:
+            static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Change_Model(PHASE::PHASE2);
+
+            m_pRootBoneMatrix = static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_root");
+
+            static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
+                dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02"));
+
+            m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::INTRO), nullptr);
         break;
     case Client::PHASE::PHASE3:
         break;
@@ -133,6 +142,9 @@ void CKamen::Priority_Update(_float fTimeDelta)
     isSphereUpdate = false;
 
     m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
+
+    if (m_pGameInstance->Get_KeyDown(DIK_F3))
+        Change_Phase(PHASE::PHASE2);
 }
 
 void CKamen::Update(_float fTimeDelta)
@@ -170,12 +182,13 @@ HRESULT CKamen::Render()
    
     if(isSphereUpdate)
         m_pHitBoxShpereCom->Render();
+
    // /* TEST */
    //ImGui::Begin("Collider");
    //ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
    //ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 15.f);
    //ImGui::End();
-   //m_pHitBoxShpereCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
+   //m_pHitBoxCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
 #endif
   
     return S_OK;
@@ -330,6 +343,7 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_CHARGE)] = CAttack_Charge_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SWORD)] = CAttack_Sword_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SPIN)] = CAttack_Spin_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::TRUN)] = CTurn_Kamen::Create(&Desc);
 
     return S_OK;
 }

@@ -254,6 +254,7 @@
     <ClInclude Include="..\public\Test_Effect.h" />
     <ClInclude Include="..\Public\tinyxml2.h" />
     <ClInclude Include="..\public\TopMenu.h" />
+    <ClInclude Include="..\public\Turn_Kamen.h" />
     <ClInclude Include="..\public\UIEffect.h" />
     <ClInclude Include="..\public\UtilitySkillSlot.h" />
     <ClInclude Include="..\public\UtilitySkillUI.h" />
@@ -395,6 +396,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\private\TopMenu.cpp" />
+    <ClCompile Include="..\private\Turn_Kamen.cpp" />
     <ClCompile Include="..\private\UIEffect.cpp" />
     <ClCompile Include="..\private\UtilitySkillSlot.cpp" />
     <ClCompile Include="..\private\UtilitySkillUI.cpp" />
