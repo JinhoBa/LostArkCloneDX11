@@ -171,6 +171,9 @@ void CMonster::Update(_float fTimeDelta)
 		m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Player"));
 
 	__super::Update(fTimeDelta);
+
+	if (m_EnemyInfo.fHp <= 0.f)
+		m_isDead = true;
 }
 
 void CMonster::Late_Update(_float fTimeDelta)

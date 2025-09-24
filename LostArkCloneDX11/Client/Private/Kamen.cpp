@@ -187,11 +187,11 @@ HRESULT CKamen::Render()
         m_pHitBoxShpereCom->Render();
 
    // /* TEST */
-   ImGui::Begin("Collider");
+  /* ImGui::Begin("Collider");
    ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
    ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 15.f);
    ImGui::End();
-   m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
+   m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
 #endif
    m_pColliderCom->Render();
     return S_OK;
@@ -249,19 +249,18 @@ HRESULT CKamen::Reay_Component()
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Navi_Desc)))
         return E_FAIL;
 
-    /* Collider */
-    CBounding_OBB::BOUNDING_OBB_DESC OBB_Desc = {};
-    OBB_Desc.eColliderType = COLLIDERTYPE::COLLIDER;
-    OBB_Desc.vCenter = _float3(0.f, 0.5f, -1.41f);
-    OBB_Desc.vExtents = _float3(0.5f, 0.3f, 1.31f);
-    OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
-    OBB_Desc.pOwner = this;
+    /* Collider */CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc = {};
+    ColliderDesc.eColliderType = COLLIDERTYPE::COLLIDER;
+    ColliderDesc.vCenter = _float3(0.f, 0.5f, -1.41f);
+    ColliderDesc.fRadius = 0.4f;
+    ColliderDesc.pOwner = this;
 
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
-        TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
 
     /* Hitbox OBB */
+    CBounding_OBB::BOUNDING_OBB_DESC OBB_Desc = {};
     OBB_Desc.eColliderType = COLLIDERTYPE::HITBOX;
     OBB_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
     OBB_Desc.vExtents = _float3(0.3f, 0.5f, 0.3f);

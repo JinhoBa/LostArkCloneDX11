@@ -429,6 +429,11 @@ void CGameInstance::Add_Collider(const _tchar* pLayerTag, class CCollider* pColl
 {
 	m_pCollider_Manager->Add_Collider(pLayerTag, pCollider);
 }
+
+_vector  CGameInstance::ComputePenetration(class CCollider* pColldier, const _tchar* pSrcLayerTag)
+{
+	return m_pCollider_Manager->ComputePenetration(pColldier, pSrcLayerTag);
+}
 #pragma endregion
 
 void CGameInstance::Release_Engine()

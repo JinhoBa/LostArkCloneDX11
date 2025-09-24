@@ -199,7 +199,11 @@ void CPlayer::Update(_float fTimeDelta)
 
     m_isColl = m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
     
-   
+    if(true == m_isColl)
+    {
+        _vector vDirection = m_pGameInstance->ComputePenetration(m_pColliderCom, TEXT("Monster"));
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + vDirection);
+    }
 
 #pragma region TEST_CODE
     if (m_pGameInstance->Get_KeyDown(DIK_G))
@@ -223,13 +227,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
     /* TEST */
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
     __super::Late_Update(fTimeDelta);
-    if (m_isColl)
-    {
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() +
-            XMVector3Normalize(
-                m_pTransformCom->Get_Position() -
-                m_pColliderCom->Get_HitObjects().back()->Get_Transform()->Get_Position()));
-    }
+ 
     m_pColliderCom->Update_OnCollision();
 }
 
@@ -241,10 +239,10 @@ HRESULT CPlayer::Render()
 
   
     /* TEST */
- /*  ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
-   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);*/
+  /* ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
+   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);
+    m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
 
-   // m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
     m_pNavigationCom->Render();
 
 #endif // _DEBUG
@@ -375,12 +373,14 @@ HRESULT CPlayer::Ready_Components()
         });
 
     /* Collider */
-    OBB_Desc.eColliderType = COLLIDERTYPE::COLLIDER;
-    OBB_Desc.vCenter = _float3(0.f, 0.f, -0.5f);
-    OBB_Desc.vExtents = _float3(0.3f, 0.3f, 0.5f);
-    OBB_Desc.vOrientation = _float3(0.f, 0.f, 0.f);
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
-        TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &OBB_Desc)))
+    CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc = {};
+    ColliderDesc.eColliderType = COLLIDERTYPE::COLLIDER;
+    ColliderDesc.vCenter = _float3(0.f, 0.5f, 0.f);
+    ColliderDesc.fRadius = 0.4f;
+    ColliderDesc.pOwner = this;
+
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
 
     return S_OK;

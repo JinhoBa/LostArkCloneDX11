@@ -111,6 +111,7 @@ public:
 #pragma region COLLIDER_MANGER
 	_bool	Check_Collider(class CCollider* pColldier, const _tchar* pDestLayerTag);
 	void	Add_Collider(const _tchar* pLayerTag, class CCollider* pCollider);
+	_vector  ComputePenetration(class CCollider* pColldier, const _tchar* pSrcLayerTag);
 #pragma endregion
 
 
