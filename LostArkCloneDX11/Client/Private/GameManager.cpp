@@ -19,11 +19,6 @@ CGameManager::CGameManager()
 {
 }
 
-void CGameManager::Set_Camera(CCamera* pCamera)
-{
-	m_pCamera = pCamera;
-}
-
 HRESULT CGameManager::Initialize_Manager()
 {
 	m_pGameInstance = CGameInstance::GetInstance();

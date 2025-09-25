@@ -193,6 +193,9 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Intance\Point">
       <UniqueIdentifier>{d5774a78-fcbc-4b2f-bb9f-d58ffa650e6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\02.GameObject\Camera\Manager">
+      <UniqueIdentifier>{6b87d81f-74c9-4bd8-b235-a543b989138b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -408,6 +411,9 @@
     <ClInclude Include="..\public\VIBuffer_Point_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Intance\Point</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Camera_Manager.h">
+      <Filter>01.Utility\02.GameObject\Camera\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -580,6 +586,9 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Point_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Intance\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_Manager.cpp">
+      <Filter>01.Utility\02.GameObject\Camera\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

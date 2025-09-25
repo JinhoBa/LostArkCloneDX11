@@ -114,6 +114,14 @@ public:
 	_vector  ComputePenetration(class CCollider* pColldier, const _tchar* pSrcLayerTag);
 #pragma endregion
 
+#pragma region CAMERA_MANAGER
+	class CCamera* Find_Camera(const _wstring& strCameraNameTag);
+
+	HRESULT Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject);
+	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn = false);
+#pragma endregion
+
+
 
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
@@ -129,6 +137,7 @@ private:
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
+	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
 
 	_float2							m_vWinSize = {};
 	

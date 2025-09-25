@@ -117,7 +117,6 @@ _bool CCollider::Intersect(CCollider* pTarget)
 	if (bColl)
 	{
 		m_HitObjects.push_back(pTarget->m_Collider_Desc.pOwner);
-		Safe_AddRef(pTarget->m_Collider_Desc.pOwner);
 	}
 
 	return bColl;
@@ -158,10 +157,6 @@ void CCollider::Update_OnCollision()
 			m_OnCollisionEnter_Event();
 	}
 	
-	for (auto& pObject : m_HitObjects)
-	{
-		Safe_Release(pObject);
-	}
 	m_HitObjects.clear();
 }
 

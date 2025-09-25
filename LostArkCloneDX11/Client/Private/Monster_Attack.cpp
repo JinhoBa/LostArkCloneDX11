@@ -10,7 +10,6 @@
 CMonster_Attack::CMonster_Attack()
 	:CMonster_State{}
 {
-	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMonster_Attack::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster, _uint iNumAttackAnimation)

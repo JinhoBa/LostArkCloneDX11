@@ -58,7 +58,7 @@ public:
 	_float		Get_TrackPositon();
 	void		Set_HitBox(_float3& vCenter, _float3& vExtends);
 	void		Update_HitBox(_uint iSkillID, _uint iHitIndex);
-
+	void		Set_Dead(_float fTime);
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -66,6 +66,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
 
 protected:
 	_bool				m_isHit = {};

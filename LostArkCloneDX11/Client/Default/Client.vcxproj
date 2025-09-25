@@ -173,6 +173,8 @@
     <ClInclude Include="..\public\BossHpBar.h" />
     <ClInclude Include="..\public\BossHpFrame.h" />
     <ClInclude Include="..\public\BossUI.h" />
+    <ClInclude Include="..\public\Camera_ChargeSkill.h" />
+    <ClInclude Include="..\public\Camera_Kamen_Intro.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
@@ -291,6 +293,8 @@
     <ClCompile Include="..\private\BossHpBar.cpp" />
     <ClCompile Include="..\private\BossHpFrame.cpp" />
     <ClCompile Include="..\private\BossUI.cpp" />
+    <ClCompile Include="..\private\Camera_ChargeSkill.cpp" />
+    <ClCompile Include="..\private\Camera_Kamen_Intro.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />

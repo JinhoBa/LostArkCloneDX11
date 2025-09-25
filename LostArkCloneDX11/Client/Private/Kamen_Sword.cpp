@@ -34,7 +34,7 @@ HRESULT CKamen_Sword::Initialize(void* pArg)
 	m_EnemyInfo.iMonsterID = 3;
 
 #pragma region TEST_CODE
-	m_EnemyInfo.fMaxHp = m_EnemyInfo.fHp = 0.f;
+	m_EnemyInfo.fMaxHp = m_EnemyInfo.fHp = 10000.f;
 #pragma endregion
 
 	m_eCurState = m_ePreState = STATE::START;
@@ -70,14 +70,11 @@ void CKamen_Sword::Update(_float fTimeDelta)
 				dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
 					ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Change_Phase(PHASE::PHASE1);
 
-				dynamic_cast<CCamera_Fix*>(
-					m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-					->Set_State(CAMERA_ANIM::IDLE);
+				m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"));
 
-				dynamic_cast<CCamera_Fix*>(
-					m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-					->Set_LookDircetion(XMVectorSet(0.f, 7.f, -7.f, 1.f));
-				
+				m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 7.f, -7.f, 0.f));
+				m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 7.f, -7.f, 0.f));
+				m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_Fovy(60.f);
 			}
 		}
 		

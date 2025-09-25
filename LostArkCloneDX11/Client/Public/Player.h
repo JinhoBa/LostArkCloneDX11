@@ -59,7 +59,6 @@ public:
 	void				TurnToCursor();
 	void				Change_Stance();
 	void				Add_Buff(_uint iBuffID);
-	void				Play_CameraAnimation(CAMERA_ANIM eState);
 	void				Update_HitBox(_uint iSkillID, _uint iHitIndex);
 
 private:

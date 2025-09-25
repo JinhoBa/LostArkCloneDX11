@@ -13,6 +13,7 @@
 #include "Font_Manager.h"
 #include "Light_Manager.h"
 #include "Collider_Manager.h"
+#include "Camera_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -76,6 +77,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pCollider_Manager)
 		return E_FAIL;
 
+	m_pCamera_Manager = CCamera_Manager::Create();
+	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -83,15 +88,21 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 {
 	m_pInput_Device->Update();
 
+	m_pCamera_Manager->Priority_Update(fTimeDelta);
+
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 
 	m_pPipeLine->Update();
 
 	m_pPicking->Update();
 
+	m_pCamera_Manager->Update(fTimeDelta);
+
 	m_pObject_Manager->Update(fTimeDelta);
 
 	m_pCollider_Manager->Update_Collider();
+
+	m_pCamera_Manager->Late_Update(fTimeDelta);
 
 	m_pObject_Manager->Late_Update(fTimeDelta);
 
@@ -436,10 +447,27 @@ _vector  CGameInstance::ComputePenetration(class CCollider* pColldier, const _tc
 }
 #pragma endregion
 
+#pragma region CAMERA_MANAGER
+class CCamera* CGameInstance::Find_Camera(const _wstring& strCameraNameTag)
+{
+	return m_pCamera_Manager->Find_Camera(strCameraNameTag);
+}
+
+HRESULT CGameInstance::Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject)
+{
+	return m_pCamera_Manager->Add_Camera(strCameraNameTag, pGameObject);
+}
+HRESULT CGameInstance::Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn)
+{
+	return m_pCamera_Manager->Bind_Camera(strCameraNameTag, isReturn);
+}
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pCollider_Manager);
 	Safe_Release(m_pLight_Manager);
@@ -458,6 +486,4 @@ void CGameInstance::Release_Engine()
 void CGameInstance::Free()
 {
 	__super::Free();
-
-	
 }

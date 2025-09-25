@@ -15,17 +15,6 @@ CCamera_Fix::CCamera_Fix(const CCamera_Fix& Prototype)
 {
 }
 
-void CCamera_Fix::Set_CameraTargetPosition(_vector TargetPosition)
-{
-    XMStoreFloat4(&m_pTargetPosition, TargetPosition);
-}
-
-void CCamera_Fix::Set_LookDircetion(_fvector vDirection)
-{
-    XMStoreFloat3(&m_Default_Direction, vDirection);
-    XMStoreFloat3(&m_vDistance, vDirection);
-}
-
 HRESULT CCamera_Fix::Initialize_Prototype()
 {
     return S_OK;
@@ -33,20 +22,11 @@ HRESULT CCamera_Fix::Initialize_Prototype()
 
 HRESULT CCamera_Fix::Initialize(void* pArg)
 {
-    m_pTargetPosition = _float4(0.f, 0.f, 0.f, 1.f);
-
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    m_Default_Direction = m_vDistance = _float3(0.f, 5.f, 5.f);
-
-    m_eCurState = m_ePreState = CAMERA_ANIM::IDLE;
-    m_fTimeAcc = 0.f;
-    CGameManager::GetInstance()->Set_Camera(this);
-
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
     __super::Bind_Transform();
-
 
 
     return S_OK;
@@ -61,27 +41,7 @@ void CCamera_Fix::Priority_Update(_float fTimeDelta)
 
 void CCamera_Fix::Update(_float fTimeDelta)
 {
-    Change_State();
-
-    switch (m_eCurState)
-    {   
-    case Client::CAMERA_ANIM::IDLE:
-
-        break;
-
-    case Client::CAMERA_ANIM::INTOR_BOSS:
-
-        break;
-
-    case Client::CAMERA_ANIM::SHAKE:
-        m_fTimeAcc += fTimeDelta;
-
-        if (m_fTimeAcc >= m_fDuration)
-            m_eCurState = CAMERA_ANIM::IDLE;
-
-        break;
-
-    case Client::CAMERA_ANIM::ZOOMOUT:
+    /*case Client::CAMERA_ANIM::ZOOMOUT:
          m_fTimeAcc += fTimeDelta;
          if (m_fTimeAcc < m_fDuration)
          {
@@ -94,12 +54,7 @@ void CCamera_Fix::Update(_float fTimeDelta)
          }
         else
             m_eCurState = m_eLevelState;
-        break;
-
-    default:
-        break;
-    }
-
+        break;*/
 }
 
 void CCamera_Fix::Late_Update(_float fTimeDelta)
@@ -108,7 +63,8 @@ void CCamera_Fix::Late_Update(_float fTimeDelta)
 }
 
 HRESULT CCamera_Fix::Render()
-{/*
+{
+    /*
     _float fFovy = XMConvertToDegrees(m_fFovy);
    
     ImGui::InputFloat("Fovy", &fFovy, 0.1f, 1.f);
@@ -123,25 +79,18 @@ HRESULT CCamera_Fix::Render()
 
 void CCamera_Fix::Update_Camera_Position()
 {
-    if (CAMERA_ANIM::SHAKE == m_eCurState)
-    {
-        _float4 fRandomPosition = _float4(
-            m_pTargetPosition.x + m_pGameInstance->Random(-0.1f, 0.1f),
-            m_pTargetPosition.y,
-            m_pTargetPosition.z + m_pGameInstance->Random(-0.1f, 0.1f), 1.f
-        );
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float4));
 
-        m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&fRandomPosition) + XMLoadFloat3(&m_vDistance));
-    }
-    else
-        m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_pTargetPosition) + XMLoadFloat3(&m_vDistance));
+    m_pTransformCom->Set_State(STATE::POSITION, 
+        XMLoadFloat4(&m_vTargetPosition)
+        + XMLoadFloat3(&m_vDirection));
 
-    m_pTransformCom->LookAt(XMLoadFloat4(&m_pTargetPosition));
+    m_pTransformCom->LookAt(XMLoadFloat4(&m_vTargetPosition));
 }
 
 void CCamera_Fix::Change_State()
 {
-    if (m_ePreState != m_eCurState)
+ /*   if (m_ePreState != m_eCurState)
     {
         switch (m_eCurState)
         {
@@ -173,7 +122,7 @@ void CCamera_Fix::Change_State()
             break;
         }
         m_ePreState = m_eCurState;
-    }
+    }*/
 
 }
 

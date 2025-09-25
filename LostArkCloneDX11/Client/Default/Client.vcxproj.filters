@@ -88,9 +88,6 @@
     <Filter Include="02.GameObject\Camera\Camera_Free">
       <UniqueIdentifier>{7f2c039f-7088-49f0-9799-30bd0b8f1100}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_Skill">
-      <UniqueIdentifier>{6ccba7d0-5360-48fe-bb07-b8ed0dbc5397}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.UIObject\GamePlay\HUD\QuickSlot">
       <UniqueIdentifier>{1d6bc005-680a-4d5f-a26d-603c2226d681}</UniqueIdentifier>
     </Filter>
@@ -339,6 +336,12 @@
     </Filter>
     <Filter Include="02.GameObject\Character\Player\States\CHANGE">
       <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_ChargeSkill">
+      <UniqueIdentifier>{6ccba7d0-5360-48fe-bb07-b8ed0dbc5397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Kamen_Intro">
+      <UniqueIdentifier>{38afef9b-2635-470e-a98b-1667d5943d06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -669,6 +672,12 @@
     <ClInclude Include="..\public\Turn_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\State\TURN</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Camera_ChargeSkill.h">
+      <Filter>02.GameObject\Camera\Camera_ChargeSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Camera_Kamen_Intro.h">
+      <Filter>02.GameObject\Camera\Kamen_Intro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -992,6 +1001,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Turn_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\State\TURN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_ChargeSkill.cpp">
+      <Filter>02.GameObject\Camera\Camera_ChargeSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_Kamen_Intro.cpp">
+      <Filter>02.GameObject\Camera\Kamen_Intro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

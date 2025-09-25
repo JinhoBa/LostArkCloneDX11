@@ -43,17 +43,18 @@ private:
 	_bool					m_isAnimationFinish = {};
 	_int					m_iAnimIndex = {};
 	_uint					m_iNumMesh = {};
-	_uint					m_iCameraTargetBoneIndex = {};
 
 	_float*					m_pAttackSpeed = {nullptr};
-
-	class CCamera_Fix*		m_pCamera = { nullptr };
 
 	CShader*				m_pShaderCom = { nullptr };
 	CModel*					m_pModelCom = { nullptr };
 
+	const _float4x4*		m_pCameraTargetBoneMatrix = {};
+	_float4x4				m_CameraTargetBoneWorldMatrix = {};
+
 private:
 	HRESULT			Add_Components();
+	HRESULT			Bind_CameraBoneMatrix();
 
 public:
 	static CBody_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

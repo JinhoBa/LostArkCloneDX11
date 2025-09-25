@@ -53,7 +53,8 @@ void CMonster_Named::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
-	m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
+	if(0.f <= m_EnemyInfo.fHp)
+		m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 
 #ifdef _DEBUG
 	isCollUpdate = false;
@@ -211,5 +212,10 @@ CGameObject* CMonster_Named::Clone(void* pArg)
 
 void CMonster_Named::Free()
 {
+	for (_uint i = 0; i < STATE::STATE_END; i++)
+	{
+		Safe_Release(m_States[i]);
+	}
+
 	__super::Free();
 }

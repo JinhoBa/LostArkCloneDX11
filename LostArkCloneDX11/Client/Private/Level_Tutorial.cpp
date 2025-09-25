@@ -7,6 +7,8 @@
 #include "Level_Loading.h"
 
 #include "Camera_Free.h"
+#include "Camera_Fix.h"
+#include "Camera_ChargeSkill.h"
 #include "Terrain.h"
 #include "MapObject.h"
 #include "Monster.h"
@@ -24,7 +26,7 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
 
-    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+    if (FAILED(Ready_Camera()))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
@@ -76,6 +78,10 @@ HRESULT CLevel_Tutorial::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
     /* Background */
     if (FAILED(Load_MapData()))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkySphere"),
+        ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Sky"))))
         return E_FAIL;
 
     return S_OK;
@@ -131,19 +137,19 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
 
     
     // 0 : Monter2
-    for (size_t i = 0; i < 5; i++)
+  /*  for (size_t i = 0; i < 5; i++)
     {
         Desc.vPosition = _float4(40.f + m_pGameInstance->Random(-5.f, 5.f), 0.f, 40.f + m_pGameInstance->Random(-5.f, 5.f), 1.f);
         if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
             ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
             return E_FAIL;
-    }
+    }*/
   
 
     return S_OK;
 }
 
-HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
+HRESULT CLevel_Tutorial::Ready_Camera()
 {
     CCamera::CAMERA_DESC Desc = {};
 
@@ -154,13 +160,39 @@ HRESULT CLevel_Tutorial::Ready_Layer_Camera(const _wstring& strLayerTag)
     Desc.vLookAt = _float3(0.f, 0.f, 0.f);
     Desc.fSpeedPersec = 5.f;
     Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+    m_pGameInstance->Add_Camera(TEXT("Camera_Fix"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Fix"), &Desc)));
 
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Fix"),
-        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+    if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"))))
         return E_FAIL;
 
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkySphere"),
-        ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Sky"), &Desc)))
+    m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, 5.f, 0.f));
+
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(60.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+
+    m_pGameInstance->Add_Camera(TEXT("Camera_ChargeSkill"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_ChargeSkill"), &Desc)));
+
+    m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, 5.f, 0.f));
+
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(40.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 3.2f, -13.3f);
+    if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Kamen_Intro"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Kamen_Intro"), &Desc)))))
         return E_FAIL;
 
     return S_OK;

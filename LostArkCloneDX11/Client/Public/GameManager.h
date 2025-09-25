@@ -20,9 +20,7 @@ private:
 
 public:
 	_vector Get_PickingPos() { return XMVectorSetW(XMLoadFloat3(&m_PickingPos),1.f); }
-	CCamera* Get_Camera() { return m_pCamera; }
 
-	void	Set_Camera(CCamera* pCamera);
 	void	Set_Level(LEVEL eLevel) { m_eCurLevel = eLevel; }
 	LEVEL	Get_CurrentLevel() const { return m_eCurLevel; }
 public:
@@ -86,7 +84,6 @@ private:
 	LEVEL							m_eCurLevel = {};
 
 	CGameInstance*					m_pGameInstance = { nullptr };
-	class CCamera*					m_pCamera = { nullptr };
 
 	class CData_Manager*			m_pData_Manager = { nullptr };
 	class CSkill_Manager*			m_pSkill_Manager = { nullptr };

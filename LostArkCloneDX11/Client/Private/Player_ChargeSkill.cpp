@@ -69,7 +69,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 			m_eState = CPlayer_ChargeSkill::LOOP;
 			m_pPlayer->Set_Animation(m_iAnimLoop, true, 0.f);
 			m_fChargeTime = 0.f;
-			m_pPlayer->Play_CameraAnimation(CAMERA_ANIM::ZOOMOUT);
+			m_pGameInstance->Bind_Camera(TEXT("Camera_ChargeSkill"));
 		}
 		break;
 
@@ -100,6 +100,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 		if (m_pPlayer->isAnimationFinish())
 		{
+
+
 			m_eState = CPlayer_ChargeSkill::END;
 			m_pPlayer->Set_Animation(m_iAnimEnd, false, 0.f);
 		}
@@ -126,7 +128,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 void CPlayer_ChargeSkill::Exit()
 {
-
+	if (12 == m_iSkillID)
+		m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), true);
 }
 
 

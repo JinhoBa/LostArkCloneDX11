@@ -10,7 +10,6 @@
 CMonster_Idle::CMonster_Idle()
 	:CMonster_State{}
 {
-	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMonster_Idle::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)

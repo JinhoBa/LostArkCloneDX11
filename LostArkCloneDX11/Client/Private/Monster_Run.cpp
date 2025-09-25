@@ -11,7 +11,6 @@
 CMonster_Run::CMonster_Run()
 	:CMonster_State{}
 {
-	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMonster_Run::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)

@@ -10,7 +10,6 @@
 CMonster_Dead::CMonster_Dead()
 	:CMonster_State{}
 {
-	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMonster_Dead::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)
@@ -25,11 +24,15 @@ void CMonster_Dead::Enter(void* pArg)
 {
 	/* Dead Anim*/
 	m_pMonster->Set_Animation(ANIMATIONSLOT::DEAD_LOOP);
+
+	m_fTimeAcc = 0.f;
 }
 
 void CMonster_Dead::Update(_float fTimeDelta)
 {
-	
+	m_fTimeAcc += fTimeDelta;
+
+	m_pMonster->Set_Dead(m_fTimeAcc);
 }
 
 void CMonster_Dead::Exit()

@@ -13,6 +13,8 @@
 #include "Wallpaper.h"
 #include "Camera_Free.h"
 #include "Camera_Fix.h"
+#include "Camera_ChargeSkill.h"
+#include "Camera_Kamen_Intro.h"
 #include "UIButton.h"
 #include "Font.h"
 #include "Mouse.h"
@@ -208,6 +210,16 @@ HRESULT CMainApp::Ready_Prototype()
     /*For Prototype_GameObject_Camera_Fix*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Fix"),
         CCamera_Fix::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_GameObject_Camera_ChargeSkill*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_ChargeSkill"),
+        CCamera_ChargeSkill::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_GameObject_Camera_Kamen_Intro*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Kamen_Intro"),
+        CCamera_Kamen_Intro::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 #pragma endregion
 

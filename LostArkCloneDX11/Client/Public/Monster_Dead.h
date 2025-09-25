@@ -16,6 +16,9 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
 
+private:
+	_float m_fTimeAcc = {};
+
 public:
 	static CMonster_Dead* Create(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster);
 	virtual void Free() override;

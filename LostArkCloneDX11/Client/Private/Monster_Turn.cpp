@@ -10,7 +10,6 @@
 CMonster_Turn::CMonster_Turn()
 	:CMonster_State{}
 {
-	Safe_AddRef(m_pGameManager);
 }
 
 HRESULT CMonster_Turn::Initilize(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster)

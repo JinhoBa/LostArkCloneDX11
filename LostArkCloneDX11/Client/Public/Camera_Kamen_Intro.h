@@ -4,12 +4,12 @@
 
 NS_BEGIN(Client)
 
-class CCamera_Fix final : public CCamera
+class CCamera_Kamen_Intro final : public CCamera
 {
 private:
-	CCamera_Fix(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCamera_Fix(const CCamera_Fix& Prototype);
-	virtual ~CCamera_Fix() = default;
+	CCamera_Kamen_Intro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CCamera_Kamen_Intro(const CCamera_Kamen_Intro& Prototype);
+	virtual ~CCamera_Kamen_Intro() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -23,11 +23,10 @@ private:
 	_float4			m_vTargetPosition = {};
 
 private:
-	void		Update_Camera_Position();
-	void		Change_State();
+	void Update_Camera_Position();
 
 public:
-	static CCamera_Fix* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CCamera_Kamen_Intro* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

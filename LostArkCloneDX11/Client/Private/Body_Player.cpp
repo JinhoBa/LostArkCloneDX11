@@ -48,18 +48,16 @@ HRESULT CBody_Player::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_iNumMesh = m_pModelCom->Get_NumMeshes();
+    if (FAILED(Bind_CameraBoneMatrix()))
+        return E_FAIL;
 
     m_iAnimIndex = 35;
 
-    m_pCamera = dynamic_cast<CCamera_Fix*>(CGameManager::GetInstance()->Get_Camera());
-
-    if (nullptr == m_pCamera)
-        return E_FAIL;
-
     m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, 35, true);
 
-    m_iCameraTargetBoneIndex = m_pModelCom->Get_BoneIndex("b_cameratarget");
+    m_iNumMesh = m_pModelCom->Get_NumMeshes();
+
+    m_pCameraTargetBoneMatrix = m_pModelCom->Get_BoneMatrixPrt("b_cameratarget");
 
     return S_OK;
 }
@@ -77,10 +75,8 @@ void CBody_Player::Update(_float fTimeDelta)
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 
     /* 카메라 타겟 설정 */
-    m_pCamera->Set_CameraTargetPosition(
-        XMVector3TransformCoord(
-            m_pModelCom->Get_BoneMatirx(m_iCameraTargetBoneIndex).r[3], 
-            XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix())));
+    XMStoreFloat4x4(&m_CameraTargetBoneWorldMatrix,
+        XMLoadFloat4x4(m_pCameraTargetBoneMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 }
 
 void CBody_Player::Late_Update(_float fTimeDelta)
@@ -164,6 +160,35 @@ HRESULT CBody_Player::Add_Components()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxAnimMesh"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CBody_Player::Bind_CameraBoneMatrix()
+{
+    /* Fix */
+    CCamera* pCamera = m_pGameInstance->Find_Camera(TEXT("Camera_Fix"));
+
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    pCamera->Set_CameraTargetBone(&m_CameraTargetBoneWorldMatrix);
+
+    /* ChargeSkill */
+   pCamera = m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"));
+
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    pCamera->Set_CameraTargetBone(&m_CameraTargetBoneWorldMatrix);
+
+    /* Kamen */
+   pCamera = m_pGameInstance->Find_Camera(TEXT("Camera_Kamen_Intro"));
+
+    if (nullptr == pCamera)
+        return E_FAIL;
+
+    pCamera->Set_CameraTargetBone(&m_CameraTargetBoneWorldMatrix);
 
     return S_OK;
 }

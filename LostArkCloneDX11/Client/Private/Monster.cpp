@@ -11,7 +11,6 @@
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CEnemy{ pDevice, pContext }
 {
-	Safe_AddRef(m_pGameManager);
 }
 
 CMonster::CMonster(const CMonster& Prototype) 
@@ -111,6 +110,14 @@ void CMonster::Update_HitBox(_uint iSkillID, _uint iHitIndex)
 	m_iCurHitIndex = iHitIndex;
 
 	m_pGameInstance->Add_Collider(TEXT("Monster_HitBox"), m_pHitBoxCom);
+}
+
+void CMonster::Set_Dead(_float fTime)
+{
+	if (2.f <= fTime)
+		m_isDead = true;
+	
+
 }
 
 HRESULT CMonster::Initialize_Prototype()
@@ -220,11 +227,6 @@ void CMonster::Detect_Player()
 void CMonster::Free()
 {
 	__super::Free();
-
-	for (_uint i = 0; i < STATE::STATE_END; i++)
-	{
-		Safe_Release(m_States[i]);
-	}
 
 	Safe_Release(m_pStateMachineCom);
 	Safe_Release(m_pPlayerTransformCom);

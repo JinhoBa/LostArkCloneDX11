@@ -210,9 +210,11 @@ void CPlayer::Update(_float fTimeDelta)
     {
         if(2.f >= XMVectorGetX(XMVector3Length(XMVectorSet(37.f, 13.9f, 12.5f, 1.f) - m_pTransformCom->Get_Position())))
         {
-            dynamic_cast<CCamera_Fix*>(
-                m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-                ->Set_State(CAMERA_ANIM::INTOR_BOSS);
+            m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"));
+           
+            m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_Fovy(40.f);
+            m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 3.2f, -13.3f, 0.f));
+
             m_pNavigationCom->Set_Current_CellIndex(0);
             m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
         }
@@ -242,11 +244,11 @@ HRESULT CPlayer::Render()
   /* ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
    ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);
     m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
-
-    m_pNavigationCom->Render();
-
-#endif // _DEBUG
+  
     m_pColliderCom->Render();
+    m_pNavigationCom->Render();
+#endif // _DEBUG
+ 
   
 
     return S_OK;
@@ -516,11 +518,6 @@ void CPlayer::Add_Buff(_uint iBuffID)
     }
 
     m_Buffs.push_back(m_pGameManager->Add_Buff(iBuffID));
-}
-
-void CPlayer::Play_CameraAnimation(CAMERA_ANIM eState)
-{
-    dynamic_cast<CCamera_Fix*>(CGameManager::GetInstance()->Get_Camera())->Set_State(eState);
 }
 
 void CPlayer::Update_HitBox(_uint iSkillID, _uint iHitIndex)

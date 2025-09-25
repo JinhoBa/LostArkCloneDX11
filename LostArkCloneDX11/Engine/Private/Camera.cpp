@@ -12,6 +12,11 @@ CCamera::CCamera(const CCamera& Prototype)
 {
 }
 
+void CCamera::Set_Fovy(_float fAngle)
+{
+    m_fFovy = XMConvertToRadians(fAngle);
+}
+
 HRESULT CCamera::Initialize_Prototype()
 {
     return S_OK;
@@ -29,6 +34,7 @@ HRESULT CCamera::Initialize(void* pArg)
     m_fNear = pDesc->fNear;
     m_fFar = pDesc->fFar;
     m_fFovy = pDesc->fFovy;
+    m_vDirection = pDesc->vDirection;
     m_fAspect = vViewPort.x / vViewPort.y;
 
     m_fWinSizeX = vViewPort.x;
@@ -55,6 +61,11 @@ void CCamera::Update(_float fTimeDelta)
 
 void CCamera::Late_Update(_float fTimeDelta)
 {
+}
+
+void CCamera::Reset()
+{
+
 }
 
 void CCamera::Bind_Transform()

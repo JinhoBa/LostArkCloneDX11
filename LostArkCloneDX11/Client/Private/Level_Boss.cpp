@@ -4,7 +4,7 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
-#include "Camera_Fix.h"
+#include "Camera_Kamen_Intro.h"
 #include "Terrain.h"
 #include "MapObject.h"
 #include "Monster.h"
@@ -73,9 +73,10 @@ HRESULT CLevel_Boss::Ready_Light()
 
 HRESULT CLevel_Boss::Ready_Camera()
 {
-    dynamic_cast<CCamera_Fix*>(
-        m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Camera")).back())
-        ->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
+    
+
+    m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
+    m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
 
     return S_OK;
 }
