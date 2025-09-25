@@ -50,7 +50,7 @@ void CTest_Effect::Update(_float fTimeDelta)
 
 void CTest_Effect::Late_Update(_float fTimeDelta)
 {
-   // m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+   m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CTest_Effect::Render()
@@ -137,5 +137,5 @@ void CTest_Effect::Free()
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pTextureCom);
-
+    Safe_Release(m_pVIBufferCom);
 }

@@ -69,16 +69,17 @@ void CCamera_Free::Priority_Update(_float fTimeDelta)
 
 void CCamera_Free::Update(_float fTimeDelta)
 {
+    XMStoreFloat3(&m_vPosition, m_pTransformCom->Get_Position());
 }
 
 void CCamera_Free::Late_Update(_float fTimeDelta)
 {
-
+    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CCamera_Free::Render()
 {
-
+    ImGui::InputFloat3("CameraPos", reinterpret_cast<_float*>(&m_vPosition));
 
     return S_OK;
 }

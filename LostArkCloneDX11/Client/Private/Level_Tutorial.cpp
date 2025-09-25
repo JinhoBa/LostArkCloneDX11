@@ -124,10 +124,10 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.vPosition = _float4(50.f, 0.f, 50.f, 1.f);
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster1";
 
-    //// 0 : Monter1
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
-        ENUM_TO_INT(LEVEL::TUTORIAL), strLayerTag, &Desc)))
-        return E_FAIL;
+    ////// 0 : Monter1
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
+    //    ENUM_TO_INT(LEVEL::TUTORIAL), strLayerTag, &Desc)))
+    //    return E_FAIL;
 
     Desc.iMonsterID = 1;
     Desc.iNumAttack = 2;
@@ -193,6 +193,30 @@ HRESULT CLevel_Tutorial::Ready_Camera()
     Desc.vDirection = _float3(0.f, 3.2f, -13.3f);
     if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Kamen_Intro"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
         PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Kamen_Intro"), &Desc)))))
+        return E_FAIL;
+
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(60.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+    if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Free"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"), &Desc)))))
+        return E_FAIL;
+
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(60.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+    if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Enter"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_KamenEnter"), &Desc)))))
         return E_FAIL;
 
     return S_OK;

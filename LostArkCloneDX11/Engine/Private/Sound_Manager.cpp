@@ -29,7 +29,7 @@ void CSound_Manager::Free()
 	}
 	m_mapSound.clear();
 
-	m_pSystem->release();
+	//m_pSystem->release();
 	m_pSystem->close();
 }
 

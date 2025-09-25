@@ -130,9 +130,8 @@ HRESULT CKamen::Initialize(void* pArg)
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
     m_pStateMachineCom->Start_State(m_States[ENUM_TO_INT(KAMENSTATE::INTRO)]);
-     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
     m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
-   
 
     return S_OK;
 }
@@ -154,7 +153,8 @@ void CKamen::Update(_float fTimeDelta)
 {
     m_pStateMachineCom->Upadte(fTimeDelta);
 
-    Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
+    if(PHASE::INTRO != m_ePhase)
+        Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
 
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
@@ -348,6 +348,7 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SWORD)] = CAttack_Sword_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SPIN)] = CAttack_Spin_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::TRUN)] = CTurn_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::CUTSCENE)] = CTurn_Kamen::Create(&Desc);
 
     return S_OK;
 }

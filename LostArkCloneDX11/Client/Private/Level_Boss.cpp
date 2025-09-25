@@ -41,6 +41,8 @@ HRESULT CLevel_Boss::Initialize()
     if (FAILED(Ready_Layer_BossUI(TEXT("Layer_BossUI"))))
         return E_FAIL;
 
+    m_pGameInstance->Bind_Camera(TEXT("Camera_Enter"));
+
     return S_OK;
 }
 
@@ -73,8 +75,6 @@ HRESULT CLevel_Boss::Ready_Light()
 
 HRESULT CLevel_Boss::Ready_Camera()
 {
-    
-
     m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
     m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
 

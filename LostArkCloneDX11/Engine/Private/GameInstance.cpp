@@ -333,6 +333,10 @@ HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRender
 {
 	return m_pRenderer->Add_RenderGroup(eRenderGroup, pRenderObject);
 }
+void CGameInstance::IsVisibleUI(_bool isVisible)
+{
+	m_pRenderer->IsVisibleUI(isVisible);
+}
 
 #pragma endregion
 

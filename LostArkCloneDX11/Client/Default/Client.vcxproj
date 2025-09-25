@@ -174,7 +174,9 @@
     <ClInclude Include="..\public\BossHpFrame.h" />
     <ClInclude Include="..\public\BossUI.h" />
     <ClInclude Include="..\public\Camera_ChargeSkill.h" />
+    <ClInclude Include="..\public\Camera_KamenEnter.h" />
     <ClInclude Include="..\public\Camera_Kamen_Intro.h" />
+    <ClInclude Include="..\public\CutScene_Kamen.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
@@ -238,6 +240,7 @@
     <ClInclude Include="..\public\Player_ChangeStance.h" />
     <ClInclude Include="..\public\Player_ChargeSkill.h" />
     <ClInclude Include="..\public\Player_ComboSkill.h" />
+    <ClInclude Include="..\public\Player_CutScene.h" />
     <ClInclude Include="..\public\Player_Dash.h" />
     <ClInclude Include="..\public\Player_Hit.h" />
     <ClInclude Include="..\public\Player_Move.h" />
@@ -294,7 +297,9 @@
     <ClCompile Include="..\private\BossHpFrame.cpp" />
     <ClCompile Include="..\private\BossUI.cpp" />
     <ClCompile Include="..\private\Camera_ChargeSkill.cpp" />
+    <ClCompile Include="..\private\Camera_KamenEnter.cpp" />
     <ClCompile Include="..\private\Camera_Kamen_Intro.cpp" />
+    <ClCompile Include="..\private\CutScene_Kamen.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />
@@ -379,6 +384,7 @@
     <ClCompile Include="..\private\Player_ChangeStance.cpp" />
     <ClCompile Include="..\private\Player_ChargeSkill.cpp" />
     <ClCompile Include="..\private\Player_ComboSkill.cpp" />
+    <ClCompile Include="..\private\Player_CutScene.cpp" />
     <ClCompile Include="..\private\Player_Dash.cpp" />
     <ClCompile Include="..\private\Player_Hit.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />

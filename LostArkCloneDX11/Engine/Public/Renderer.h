@@ -16,13 +16,22 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
+	void IsVisibleUI(_bool isVisible) {
+		m_isVisibleUI = isVisible;
+	}
+
+public:
 	HRESULT Initialize();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
+	
+
 	void	Render();
 	void	Render_Cursor();
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
+
+	_bool						m_isVisibleUI = { true };
 
 	list<class CGameObject*>	m_RenderObjects[ENUM_TO_INT(RENDER::END)];
 
@@ -36,6 +45,7 @@ private:
 	void Render_WorldUI();
 	void Render_UI();
 
+	void Clear_UI();
 
 	void Sort_AlphaObject();
 	void Sort_UI();

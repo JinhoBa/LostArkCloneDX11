@@ -343,6 +343,15 @@
     <Filter Include="02.GameObject\Camera\Kamen_Intro">
       <UniqueIdentifier>{38afef9b-2635-470e-a98b-1667d5943d06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CutScene">
+      <UniqueIdentifier>{95c70110-1d83-47f7-b6ee-238c27b3e3e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\CutScene">
+      <UniqueIdentifier>{069ad23b-980b-41b1-9c87-157a79b0e4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Kamen_Enter_CutScene">
+      <UniqueIdentifier>{3ef3a825-7fce-4912-8f79-3a3dda22350a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -678,6 +687,15 @@
     <ClInclude Include="..\public\Camera_Kamen_Intro.h">
       <Filter>02.GameObject\Camera\Kamen_Intro</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Player_CutScene.h">
+      <Filter>02.GameObject\Character\Player\States\CutScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\CutScene_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\CutScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Camera_KamenEnter.h">
+      <Filter>02.GameObject\Camera\Kamen_Enter_CutScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1007,6 +1025,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_Kamen_Intro.cpp">
       <Filter>02.GameObject\Camera\Kamen_Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_CutScene.cpp">
+      <Filter>02.GameObject\Character\Player\States\CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CutScene_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_KamenEnter.cpp">
+      <Filter>02.GameObject\Camera\Kamen_Enter_CutScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

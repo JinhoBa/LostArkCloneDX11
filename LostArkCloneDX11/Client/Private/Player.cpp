@@ -26,6 +26,7 @@
 #include "Player_ChangeStance.h"
 #include "Player_Dash.h"
 #include "Player_Hit.h"
+#include "Player_CutScene.h"
 #pragma endregion
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -396,7 +397,6 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Body_Desc)))
         return E_FAIL;
 
-
     CWeapon_Player::WEAPON_DESC Weapon_Desc = {};
     Weapon_Desc.pStance = &m_PlayerInfo.eStance;
     Weapon_Desc.pParentTransform = m_pTransformCom;
@@ -414,10 +414,10 @@ HRESULT CPlayer::Ready_PartObjects()
 
     CPartObject::PARTOBJECT_DESC Effect_Desc= {};
  
-    //Effect_Desc.pParentTransform = m_pTransformCom;
-    ////Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
-    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
-    //    return E_FAIL;
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -442,6 +442,7 @@ HRESULT CPlayer::Ready_States()
     m_States[DASH] = CPlayer_Dash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[CUTSCENE] = CPlayer_CutScene::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }

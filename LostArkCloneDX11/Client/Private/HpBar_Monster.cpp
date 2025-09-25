@@ -112,7 +112,7 @@ HRESULT CHpBar_Monster::Render()
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fValue, sizeof(_float))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(3)))
+    if (FAILED(m_pShaderCom->Begin(7)))
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Bind_Resources()))

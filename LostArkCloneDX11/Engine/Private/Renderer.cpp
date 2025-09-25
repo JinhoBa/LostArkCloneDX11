@@ -43,9 +43,16 @@ void CRenderer::Render()
 	Render_Priority();
 	Render_NonBlend();
 	Render_Blend();
-	Render_WorldUI();
-	Render_UI();
-
+	
+	if(true == m_isVisibleUI)
+	{
+		Render_WorldUI();
+		Render_UI();
+	}
+	else
+	{
+		Clear_UI();
+	}
 }
 
 void CRenderer::Render_Priority()
@@ -115,11 +122,25 @@ void CRenderer::Render_UI()
 	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].clear();
 }
 
+void CRenderer::Clear_UI()
+{
+	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::WORLDUI)])
+		Safe_Release(pRenderObject);
+
+	m_RenderObjects[ENUM_TO_INT(RENDER::WORLDUI)].clear();
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::UI)])
+		Safe_Release(pRenderObject);
+
+	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].clear();
+}
+
 void CRenderer::Render_Cursor()
 {
+	if(m_isVisibleUI)
 	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::CURSOR)])
 	{
-		if (nullptr != pRenderObject)
+		if (nullptr != pRenderObject && true == m_isVisibleUI)
 			pRenderObject->Render();
 
 		Safe_Release(pRenderObject);
