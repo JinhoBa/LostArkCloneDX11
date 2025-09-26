@@ -154,6 +154,18 @@ HRESULT	CGameManager::Load_KamenData(const _char* pFilePath)
 }
 #pragma endregion
 
+#pragma region CAMERA_ANIMATION
+const CAMERA_ANIMATION_DESC* CGameManager::Get_CameraAnimation(_uint iID)
+{
+	return m_pData_Manager->Get_CameraAnimation(iID);
+}
+
+HRESULT CGameManager::Load_CameraAnimation(const _char* pFilePath)
+{
+	return m_pData_Manager->Load_CameraAnimation(pFilePath);
+}
+#pragma endregion
+
 #pragma region BUFF_MANAGER
 
 CBuff* CGameManager::Add_Buff(_uint iBuffID)

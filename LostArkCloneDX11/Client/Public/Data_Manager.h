@@ -43,6 +43,12 @@ public:
 	HRESULT Load_KamenData(const _char* pFilePath);
 #pragma endregion
 
+#pragma region CAMERA_ANIMATION
+	const CAMERA_ANIMATION_DESC* Get_CameraAnimation(_uint iID);
+	HRESULT Load_CameraAnimation(const _char* pFilePath);
+#pragma endregion
+
+
 
 private:
 	CGameInstance*						m_pGameInstance = { nullptr };
@@ -54,6 +60,7 @@ private:
 	vector<vector<ANIMATION_DESC>>		m_AnimationData;
 	vector<KAMEN_PHASE_DESC> 			m_KamenData;
 	vector<vector<MONSTER_SKILL_INFO>> 	m_MonsterSkillData;
+	vector<CAMERA_ANIMATION_DESC>		m_CameraAnimations;
 	
 public:
 	static CData_Manager* Create();

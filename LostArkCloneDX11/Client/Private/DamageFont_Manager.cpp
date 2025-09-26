@@ -65,7 +65,7 @@ void CDamageFont_Manager::Update_DamageFont(_float fTimeDelta)
     {
         (*iter).second.w += fTimeDelta;
 
-        if (0.8f < (*iter).first.fScale)
+        if (0.5f < (*iter).first.fScale)
             (*iter).first.fScale -= 0.05f;
 
         (*iter).first.vColor.w = 1.f - max(0.f ,(*iter).second.w - 0.8f) * 2.f;

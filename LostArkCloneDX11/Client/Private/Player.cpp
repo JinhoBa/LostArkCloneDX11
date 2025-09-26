@@ -58,7 +58,6 @@ void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
 void CPlayer::Set_HitBox(_float3& vCenter, _float3& vExtends)
 {
     m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
-    //m_pHitBoxColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);
 }
 
 _bool CPlayer::isAnimationFinish()
@@ -79,6 +78,17 @@ HRESULT CPlayer::Change_Level(_fvector vPositon, const _tchar* pNavigationProtot
         return E_FAIL;
 
     return S_OK;
+}
+
+void CPlayer::EnterBoss()
+{
+   // m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"));
+
+    m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_Fovy(40.f);
+    m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 3.2f, -13.3f, 0.f));
+
+    m_pNavigationCom->Set_Current_CellIndex(0);
+    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
 }
 
 _bool CPlayer::Move(_float fTimeDelta)
@@ -160,7 +170,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
         m_pGameManager->Picking_Terrains();
 
     Update_Buff(fTimeDelta);
-
+    
     m_pGameInstance->Add_Collider(TEXT("Player"), m_pColliderCom);
 
 #ifdef _DEBUG
@@ -198,29 +208,14 @@ void CPlayer::Update(_float fTimeDelta)
     if (isCollUpdate)
         m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Monster"));
 
-    m_isColl = m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
-    
-    if(true == m_isColl)
-    {
-        _vector vDirection = m_pGameInstance->ComputePenetration(m_pColliderCom, TEXT("Monster"));
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + vDirection);
-    }
-
-#pragma region TEST_CODE
-    if (m_pGameInstance->Get_KeyDown(DIK_G))
-    {
-        if(2.f >= XMVectorGetX(XMVector3Length(XMVectorSet(37.f, 13.9f, 12.5f, 1.f) - m_pTransformCom->Get_Position())))
-        {
-            m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"));
-           
-            m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_Fovy(40.f);
-            m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 3.2f, -13.3f, 0.f));
-
-            m_pNavigationCom->Set_Current_CellIndex(0);
-            m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
-        }
-    }
-#pragma endregion
+   // m_isColl = m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
+    //
+    //if(true == m_isColl)
+    //{
+    //    _vector vDirection = m_pGameInstance->ComputePenetration(m_pColliderCom, TEXT("Monster"));
+        //m_pTransformCom->Go_Backward_World(fTimeDelta);
+        //m_pTransformCom->Set_State(Engine::STATE::POSITION, m_pTransformCom->Get_Position() + vDirection);
+    //}
 
 
 }
@@ -239,7 +234,6 @@ HRESULT CPlayer::Render()
 #ifdef _DEBUG
     if (isCollUpdate)
         m_pHitBoxCom->Render();
-
   
     /* TEST */
   /* ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
@@ -247,7 +241,6 @@ HRESULT CPlayer::Render()
     m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
   
     m_pColliderCom->Render();
-    m_pNavigationCom->Render();
 #endif // _DEBUG
  
   
@@ -412,12 +405,12 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
         return E_FAIL;
 
-    CPartObject::PARTOBJECT_DESC Effect_Desc= {};
+    //CPartObject::PARTOBJECT_DESC Effect_Desc= {};
  
-    Effect_Desc.pParentTransform = m_pTransformCom;
-    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
-    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
-        return E_FAIL;
+    //Effect_Desc.pParentTransform = m_pTransformCom;
+    ////Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
+    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
+    //    return E_FAIL;
 
     return S_OK;
 }

@@ -705,6 +705,75 @@ HRESULT CData_Manager::Load_KamenData(const _char* pFilePath)
     return S_OK;
 }
 
+const CAMERA_ANIMATION_DESC* CData_Manager::Get_CameraAnimation(_uint iID)
+{
+    if (iID >= (_uint)m_CameraAnimations.size())
+        return nullptr;
+
+    return &m_CameraAnimations[iID];
+}
+
+HRESULT CData_Manager::Load_CameraAnimation(const _char* pFilePath)
+{
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("CameraAnimation");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+    for (auto* Animation = root->FirstChildElement("Animation"); Animation; Animation = Animation->NextSiblingElement("Animation"))
+    {
+        CAMERA_ANIMATION_DESC Camera_Animation = {};
+
+        ZeroMemory(&Camera_Animation, sizeof(CAMERA_ANIMATION_DESC));
+
+        //Animation->QueryUnsignedAttribute("id", &Camera_Animation.);
+
+        tinyxml2::XMLElement* Bool = Animation->FirstChildElement("Bool");
+        Bool->BoolAttribute("isLoop", &Camera_Animation.isLoop);
+        Bool->BoolAttribute("isRotate", &Camera_Animation.isRotate);
+
+        tinyxml2::XMLElement* Value = Animation->FirstChildElement("Value");
+        Value->QueryFloatAttribute("duration", &Camera_Animation.fDuration);
+        Value->QueryFloatAttribute("speed", &Camera_Animation.fSpeed);
+        Value->QueryFloatAttribute("fov", &Camera_Animation.fFov);
+        Value->QueryFloatAttribute("rotationSpeed", &Camera_Animation.fRotationSpeed);
+
+        tinyxml2::XMLElement* StartPosition = Animation->FirstChildElement("StartPosition");
+        StartPosition->QueryFloatAttribute("x", &Camera_Animation.vStartPositon.x);
+        StartPosition->QueryFloatAttribute("y", &Camera_Animation.vStartPositon.y);
+        StartPosition->QueryFloatAttribute("z", &Camera_Animation.vStartPositon.z);
+
+        tinyxml2::XMLElement* EndPosition = Animation->FirstChildElement("EndPosition");
+        EndPosition->QueryFloatAttribute("x", &Camera_Animation.vEndPosition.x);
+        EndPosition->QueryFloatAttribute("y", &Camera_Animation.vEndPosition.y);
+        EndPosition->QueryFloatAttribute("z", &Camera_Animation.vEndPosition.z);
+
+        tinyxml2::XMLElement* RotationAxis = Animation->FirstChildElement("RotationAxis");
+        RotationAxis->QueryFloatAttribute("x", &Camera_Animation.vRotationAxis.x);
+        RotationAxis->QueryFloatAttribute("y", &Camera_Animation.vRotationAxis.y);
+        RotationAxis->QueryFloatAttribute("z", &Camera_Animation.vRotationAxis.z);
+
+        tinyxml2::XMLElement* TargetPosition = Animation->FirstChildElement("TargetPosition");
+        TargetPosition->QueryFloatAttribute("x", &Camera_Animation.vTargetPosition.x);
+        TargetPosition->QueryFloatAttribute("y", &Camera_Animation.vTargetPosition.y);
+        TargetPosition->QueryFloatAttribute("z", &Camera_Animation.vTargetPosition.z);
+
+        m_CameraAnimations.push_back(Camera_Animation);
+    }
+
+    xmlDoc.Clear();
+
+    return S_OK;;
+}
+
 CData_Manager* CData_Manager::Create()
 {
     return new CData_Manager();

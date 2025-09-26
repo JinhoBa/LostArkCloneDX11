@@ -1,25 +1,12 @@
 #pragma once
 #include "Client_Defines.h"
+#include "Client_Struct.h"
 #include "Camera.h"
 
 NS_BEGIN(Client)
 
 class CCamera_KamenEnter final : public CCamera
 {
-	typedef struct tagCameraAnimation
-	{
-		_bool		isLoop{};
-		_float		fDuration{};
-		_float      fSpeed{};
-		_float		fStartFov{};
-		_float		fEndFov{};
-		_float     fRotationSpeed{};
-		_float3		vStartPositon{};
-		_float3		vEndPosition{};
-		_float3     vRotationAxis{};
-		_float3		vTargetPosition{};
-	}CAMERA_ANIMATION;
-
 private:
 	CCamera_KamenEnter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCamera_KamenEnter(const CCamera_KamenEnter& Prototype);
@@ -35,12 +22,12 @@ public:
 	virtual void		Reset()override;
 
 private:
+	_uint			m_iAnimationIndex = {};
 	_float			m_fTimeAcc = {};
-
 	_float4			m_vTargetPosition = {};
 
+	CAMERA_ANIMATION_DESC m_anim[3] = {};
 
-	CAMERA_ANIMATION m_anim = {};
 
 private:
 	void Update_Camera_Position();

@@ -50,7 +50,6 @@ void CBossUI::Priority_Update(_float fTimeDelta)
 
 void CBossUI::Update(_float fTimeDelta)
 {
-	Update_Position();
 }
 
 void CBossUI::Late_Update(_float fTimeDelta)
@@ -62,8 +61,6 @@ void CBossUI::Late_Update(_float fTimeDelta)
 
 HRESULT CBossUI::Render()
 {
-
-
 	/*ÇÏÀ§ °èÃþ¸¸ ·»´õ*/
 	if (FAILED(__super::Render()))
 		return E_FAIL;

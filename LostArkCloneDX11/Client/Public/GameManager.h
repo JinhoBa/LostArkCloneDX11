@@ -54,6 +54,10 @@ public:
 	HRESULT			Load_KamenData(const _char* pFilePath);
 #pragma endregion
 
+#pragma region CAMERA_ANIMATION
+	const CAMERA_ANIMATION_DESC* Get_CameraAnimation(_uint iID);
+	HRESULT Load_CameraAnimation(const _char* pFilePath);
+#pragma endregion
 
 #pragma region SKILL_MANAGER
 	void		Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
@@ -72,6 +76,7 @@ public:
 	void Add_DamageFont(DAMAGEFONT eType, _float fDamage, _float3& vPostion);
 	void Update_DamageFont(_float fTimeDelta);
 #pragma endregion
+
 
 
 	void Bind_PickingPos(_float3* pPickingPos);

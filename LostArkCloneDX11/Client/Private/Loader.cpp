@@ -28,6 +28,8 @@
 #include "BossUI.h"
 #include "BossHpBar.h"
 #include "BossHpFrame.h"
+#include "BossEnterUI.h"
+#include "ClashUI.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -225,6 +227,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	if(FAILED(CGameManager::GetInstance()->Load_Monster_SkillData("../Bin/Resources/Data/Monster/Monster_Skill_Data.xml")))
 		return E_FAIL;
+
+	if (FAILED(CGameManager::GetInstance()->Load_CameraAnimation("../Bin/Resources/Data/CameraAnimation/CameraAnimation.xml")))
+		return E_FAIL;
 	
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
@@ -329,6 +334,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Texture_Iden_HoldingSkillUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Iden_HoldingSkillUI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/HoldingSkill/Holding_%d.dds"), 3))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Message_Background */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Message_Background"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/TopMenu/Message_Background.dds"), 1))))
 		return E_FAIL;
 
 #pragma endregion
@@ -817,6 +827,8 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(CGameManager::GetInstance()->Load_KamenData("../Bin/Resources/Data/Kamen/Kamen_Data.xml")))
 		return E_FAIL;
 
+
+
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
 	/* For.Prototype_Component_Texture_skybox_eclipse */
@@ -845,6 +857,16 @@ HRESULT CLoader::Loading_For_Boss()
 	/* For.Prototype_Component_Texture_BossHpBarFrame */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_BossHpBarFrame"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/BossHp/BossHpFrame.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Clash_Circle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_Clash_Circle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Clash/clash_circle_%d.dds"), 2))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Clash_Key */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_Clash_Key"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Clash/clash_key_%d.dds"), 5))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1172,6 +1194,16 @@ HRESULT CLoader::Loading_For_Boss()
 	/*For Prototype_GameObject_BossHpFrame*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossHpFrame"),
 		CBossHpFrame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/*For Prototype_GameObject_BossEnterUI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossEnterUI"),
+		CBossEnterUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/*For Prototype_GameObject_ClashUI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_ClashUI"),
+		CClashUI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

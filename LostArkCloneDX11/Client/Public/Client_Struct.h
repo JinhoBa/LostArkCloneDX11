@@ -144,5 +144,17 @@ namespace Client
 		vector<MONSTER_SKILL_INFO> Skills;
 	}KAMEN_PHASE_DESC;
 
-	
+	typedef struct tagCameraAnimationDesc
+	{
+		_bool		isLoop{};
+		_bool		isRotate{};
+		_float		fDuration{};
+		_float      fSpeed{};
+		_float		fFov{};
+		_float      fRotationSpeed{};
+		_float3		vStartPositon{};
+		_float3		vEndPosition{};
+		_float3     vRotationAxis{};
+		_float3		vTargetPosition{};
+	}CAMERA_ANIMATION_DESC;
 }

@@ -116,8 +116,6 @@ void CMonster::Set_Dead(_float fTime)
 {
 	if (2.f <= fTime)
 		m_isDead = true;
-	
-
 }
 
 HRESULT CMonster::Initialize_Prototype()

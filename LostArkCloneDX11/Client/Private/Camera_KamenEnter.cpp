@@ -2,6 +2,7 @@
 #include "Camera_Kamen_Intro.h"
 
 #include "GameInstance.h"
+#include "GameManager.h"
 #include "Camera_KamenEnter.h"
 
 CCamera_KamenEnter::CCamera_KamenEnter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -24,7 +25,17 @@ HRESULT CCamera_KamenEnter::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
+    const CAMERA_ANIMATION_DESC* pDesc = CGameManager::GetInstance()->Get_CameraAnimation(0);
 
+    memcpy(&m_anim[0], pDesc, sizeof(CAMERA_ANIMATION_DESC));
+
+    pDesc = CGameManager::GetInstance()->Get_CameraAnimation(1);
+
+    memcpy(&m_anim[1], pDesc, sizeof(CAMERA_ANIMATION_DESC));
+
+    pDesc = CGameManager::GetInstance()->Get_CameraAnimation(2);
+
+    memcpy(&m_anim[2], pDesc, sizeof(CAMERA_ANIMATION_DESC));
 
     return S_OK;
 }
@@ -40,17 +51,32 @@ void CCamera_KamenEnter::Update(_float fTimeDelta)
 {
     m_fTimeAcc += fTimeDelta;
 
-    if (m_fTimeAcc * m_anim.fSpeed < m_anim.fDuration)
+    if (m_fTimeAcc * m_anim[m_iAnimationIndex].fSpeed < m_anim[m_iAnimationIndex].fDuration)
     {
         m_pTransformCom->Set_State(STATE::POSITION,
-            XMVectorSetW(XMVectorLerp(XMLoadFloat3(&m_anim.vStartPositon),
-                XMLoadFloat3(&m_anim.vEndPosition), m_fTimeAcc * m_anim.fSpeed / m_anim.fDuration),1.f));
+            XMVectorSetW(XMVectorLerp(XMLoadFloat3(&m_anim[m_iAnimationIndex].vStartPositon),
+                XMLoadFloat3(&m_anim[m_iAnimationIndex].vEndPosition), m_fTimeAcc * m_anim[m_iAnimationIndex].fSpeed / m_anim[m_iAnimationIndex].fDuration), 1.f));
 
-        if (0.f != m_anim.fRotationSpeed)
-            m_pTransformCom->Turn(XMLoadFloat3(&m_anim.vRotationAxis), m_anim.fRotationSpeed * fTimeDelta);
+        if (0.f != m_anim[m_iAnimationIndex].fRotationSpeed)
+            m_pTransformCom->Turn(XMLoadFloat3(&m_anim[m_iAnimationIndex].vRotationAxis), m_anim[m_iAnimationIndex].fRotationSpeed * fTimeDelta);
     }
-    else if (m_anim.isLoop)
+    /* else if (m_anim[m_iAnimationIndex].isLoop)
+         m_fTimeAcc = 0.f;*/
+    else if (m_iAnimationIndex < 2)
+    {
         m_fTimeAcc = 0.f;
+        m_iAnimationIndex++;
+    }
+
+   if (2 == m_iAnimationIndex && m_fTimeAcc * m_anim[m_iAnimationIndex].fSpeed >= m_anim[m_iAnimationIndex].fDuration)
+   {
+       m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"));
+       if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
+           ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Monster"))))
+           return ;
+   }
+
+    m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_anim[m_iAnimationIndex].vTargetPosition), 1.f));
 }
 
 void CCamera_KamenEnter::Late_Update(_float fTimeDelta)
@@ -60,18 +86,17 @@ void CCamera_KamenEnter::Late_Update(_float fTimeDelta)
 
 HRESULT CCamera_KamenEnter::Render()
 {
-    ImGui::Checkbox("isLoop", &m_anim.isLoop);
+    ImGui::Checkbox("isLoop", &m_anim[m_iAnimationIndex].isLoop);
+    //
+    //ImGui::InputFloat("fDuration", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].fDuration));
+    //ImGui::InputFloat("fSpeed", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].fSpeed));
+    //ImGui::InputFloat("fStartFov", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].fFov));
+    //ImGui::InputFloat("fRotationSpeed", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].fRotationSpeed));
 
-    ImGui::InputFloat("fDuration", reinterpret_cast<_float*>(&m_anim.fDuration));
-    ImGui::InputFloat("fSpeed", reinterpret_cast<_float*>(&m_anim.fSpeed));
-    ImGui::InputFloat("fStartFov", reinterpret_cast<_float*>(&m_anim.fStartFov));
-    ImGui::InputFloat("fEndFov", reinterpret_cast<_float*>(&m_anim.fEndFov));
-    ImGui::InputFloat("fRotationSpeed", reinterpret_cast<_float*>(&m_anim.fRotationSpeed));
-
-    ImGui::InputFloat3("vStartPositon", reinterpret_cast<_float*>(&m_anim.vStartPositon));
-    ImGui::InputFloat3("vEndPosition", reinterpret_cast<_float*>(&m_anim.vEndPosition));
-    ImGui::InputFloat3("vRotationAxis", reinterpret_cast<_float*>(&m_anim.vRotationAxis));
-    ImGui::InputFloat3("vTargetPosition", reinterpret_cast<_float*>(&m_anim.vTargetPosition));
+    //ImGui::InputFloat3("vStartPositon", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].vStartPositon));
+    //ImGui::InputFloat3("vEndPosition", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].vEndPosition));
+    //ImGui::InputFloat3("vRotationAxis", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].vRotationAxis));
+    //ImGui::InputFloat3("vTargetPosition", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].vTargetPosition));
 
 
 

@@ -352,6 +352,18 @@
     <Filter Include="02.GameObject\Camera\Kamen_Enter_CutScene">
       <UniqueIdentifier>{3ef3a825-7fce-4912-8f79-3a3dda22350a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.UIObject\BossUI\Enter">
+      <UniqueIdentifier>{e33e1a17-80a9-4c55-b9ce-0caabee250c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\Clash">
+      <UniqueIdentifier>{bca6ff14-fd3a-4dd8-bd7c-f83b05cc0aaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="92.Clash_Manager">
+      <UniqueIdentifier>{51ca6224-ea03-417e-9c18-9b7c41d1641d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\ClashUI">
+      <UniqueIdentifier>{dfb4a623-36d4-4656-93a3-d209287db9b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -696,6 +708,18 @@
     <ClInclude Include="..\public\Camera_KamenEnter.h">
       <Filter>02.GameObject\Camera\Kamen_Enter_CutScene</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\BossEnterUI.h">
+      <Filter>03.UIObject\BossUI\Enter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Clash_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\Clash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Clash_Manager.h">
+      <Filter>92.Clash_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ClashUI.h">
+      <Filter>03.UIObject\ClashUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1034,6 +1058,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_KamenEnter.cpp">
       <Filter>02.GameObject\Camera\Kamen_Enter_CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossEnterUI.cpp">
+      <Filter>03.UIObject\BossUI\Enter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Clash_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\Clash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Clash_Manager.cpp">
+      <Filter>92.Clash_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ClashUI.cpp">
+      <Filter>03.UIObject\ClashUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

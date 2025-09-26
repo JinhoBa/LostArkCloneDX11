@@ -43,7 +43,7 @@ public:
 
 	_bool			isAnimationFinish();
 	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
-	
+	void			EnterBoss();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

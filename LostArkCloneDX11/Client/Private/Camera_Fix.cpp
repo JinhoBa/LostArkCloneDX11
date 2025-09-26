@@ -28,6 +28,7 @@ HRESULT CCamera_Fix::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
     __super::Bind_Transform();
 
+    m_vTargetPosition = _float4(0.f, 0.f, 0.f, 1.f);
 
     return S_OK;
 }
@@ -41,25 +42,10 @@ void CCamera_Fix::Priority_Update(_float fTimeDelta)
 
 void CCamera_Fix::Update(_float fTimeDelta)
 {
-    /*case Client::CAMERA_ANIM::ZOOMOUT:
-         m_fTimeAcc += fTimeDelta;
-         if (m_fTimeAcc < m_fDuration)
-         {
-             if(0.f < m_Default_Direction.z)
-                m_vDistance.z += fTimeDelta* 0.5f;
-             else
-                 m_vDistance.z -= fTimeDelta * 0.5f;
-
-             m_vDistance.y += fTimeDelta * 0.5f;
-         }
-        else
-            m_eCurState = m_eLevelState;
-        break;*/
 }
 
 void CCamera_Fix::Late_Update(_float fTimeDelta)
 {
- /*   m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);*/
 }
 
 HRESULT CCamera_Fix::Render()
@@ -79,7 +65,7 @@ HRESULT CCamera_Fix::Render()
 
 void CCamera_Fix::Update_Camera_Position()
 {
-    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float4));
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
 
     m_pTransformCom->Set_State(STATE::POSITION, 
         XMLoadFloat4(&m_vTargetPosition)

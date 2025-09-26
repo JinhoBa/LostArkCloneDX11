@@ -16,6 +16,9 @@
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
 #include "Player.h"
+#include "Camera.h"
+
+#include "ClashUI.h"
 
 CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEnemy{ pDevice, pContext }
@@ -59,6 +62,13 @@ void CKamen::Change_Phase(PHASE ePhase)
     switch (ePhase)
     {
     case Client::PHASE::PHASE1:
+        // BossUI
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_BossUI"),
+            ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_BossUI"))))
+            return;
+
+        m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_Fovy(60.f);
+        m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
 
         m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 50.f, 1.f));
         m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
@@ -121,10 +131,10 @@ HRESULT CKamen::Initialize(void* pArg)
 
     m_ePhase = PHASE::INTRO;
 
-    m_EnemyInfo.fAttack = 600.f;
+    m_EnemyInfo.fAttack = 200.f;
     m_EnemyInfo.fAttackRange = 3.f;
     m_EnemyInfo.fDetectDistance = 5.f;
-    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 500000000.f;
+    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 1000000.f;
 
     m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
@@ -145,7 +155,7 @@ void CKamen::Priority_Update(_float fTimeDelta)
 
     m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 
-    if (m_pGameInstance->Get_KeyDown(DIK_F3))
+    if (PHASE::PHASE1 == m_ePhase && 0.5f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
         Change_Phase(PHASE::PHASE2);
 }
 
@@ -168,6 +178,21 @@ void CKamen::Update(_float fTimeDelta)
         m_pGameInstance->Check_Collider(m_pHitBoxShpereCom, TEXT("Player"));
 
     __super::Update(fTimeDelta);
+
+#pragma region TEST_CODE
+    CClashUI::CLASH_UI_DESC Desc = {};
+    Desc.fX = 600.f;
+    Desc.fY = 300.f;
+    Desc.iKey = DIK_Q;
+
+    if(m_pGameInstance->Get_KeyDown(DIK_O))
+    {
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_ClashUI"),
+            ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_ClashUI"), &Desc)))
+            return;
+    }
+#pragma endregion
+
 }
 
 void CKamen::Late_Update(_float fTimeDelta)

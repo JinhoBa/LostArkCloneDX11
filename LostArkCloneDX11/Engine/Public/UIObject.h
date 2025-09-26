@@ -28,7 +28,7 @@ public:
 	virtual void	Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
-	void			Update_Position();
+	virtual void	Update_Position();
 
 protected:
 	_float		m_fX = {};

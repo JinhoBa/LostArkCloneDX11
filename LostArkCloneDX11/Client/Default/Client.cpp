@@ -104,8 +104,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     return (int)msg.wParam;
 }
 
-
-
 //
 //  함수: MyRegisterClass()
 //
