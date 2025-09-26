@@ -9,6 +9,7 @@ class CCanvars final : public CUIPanel
 private:
 	CCanvars(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCanvars(CCanvars& Prototype);
+	virtual ~CCanvars() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype()override;
