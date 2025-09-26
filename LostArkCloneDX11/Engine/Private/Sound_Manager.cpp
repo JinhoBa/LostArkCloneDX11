@@ -29,7 +29,12 @@ void CSound_Manager::Free()
 	}
 	m_mapSound.clear();
 
-	//m_pSystem->release();
+	_int iNumDirver = {};
+	m_pSystem->getNumDrivers(&iNumDirver);
+
+	if(0 != iNumDirver)
+		m_pSystem->release();
+	
 	m_pSystem->close();
 }
 
