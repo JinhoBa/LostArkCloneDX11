@@ -43,7 +43,6 @@ void CIdle_Kamen::Enter(void* pArg)
 
 	case PHASE::PHASE2:
 		m_pKamen->Set_Animation(50, true);
-	
 		m_iSkillID = 1;
 		break;
 

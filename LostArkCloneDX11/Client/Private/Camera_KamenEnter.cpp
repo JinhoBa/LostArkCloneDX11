@@ -51,6 +51,13 @@ void CCamera_KamenEnter::Priority_Update(_float fTimeDelta)
 
 void CCamera_KamenEnter::Update(_float fTimeDelta)
 {
+    /* ½ºÅµ */
+    if (m_pGameInstance->Get_KeyDown(DIK_ESCAPE))
+    {
+        End_Scene();
+        return;
+    }
+
     m_fTimeAcc += fTimeDelta;
 
     if (m_fTimeAcc * m_anim[m_iAnimationIndex].fSpeed < m_anim[m_iAnimationIndex].fDuration)
@@ -72,11 +79,7 @@ void CCamera_KamenEnter::Update(_float fTimeDelta)
 
    if (2 == m_iAnimationIndex && m_fTimeAcc * m_anim[m_iAnimationIndex].fSpeed >= m_anim[m_iAnimationIndex].fDuration)
    {
-       m_vTargetPosition = m_anim[m_iAnimationIndex].vTargetPosition;
-       m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"), false, 2.f);
-       if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
-           ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Monster"))))
-           return ;
+       End_Scene();
    }
 
    if(m_iAnimationIndex < 3)
@@ -117,6 +120,17 @@ void CCamera_KamenEnter::Reset()
     m_fTimeAcc = 0.f;
 }
 
+
+void CCamera_KamenEnter::End_Scene()
+{
+    m_pTransformCom->Set_State(STATE::POSITION,
+        XMVectorSetW(XMLoadFloat3(&m_anim[2].vEndPosition), 1.f));
+    m_vTargetPosition = m_anim[m_iAnimationIndex].vTargetPosition;
+    m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"), false, 2.f);
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
+        ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Monster"))))
+        return;
+}
 
 CCamera_KamenEnter* CCamera_KamenEnter::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

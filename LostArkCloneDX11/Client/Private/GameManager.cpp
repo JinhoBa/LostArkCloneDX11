@@ -7,6 +7,7 @@
 #include "Skill_Manager.h"
 #include "Buff_Manager.h"
 #include "DamageFont_Manager.h"
+#include "Clash_Manager.h"
 
 #include "UIObject.h"
 #include "Camera_Fix.h"
@@ -43,6 +44,10 @@ HRESULT CGameManager::Initialize_Manager()
 	if (nullptr == m_pDamageFont_Manager)
 		return E_FAIL;
 
+	m_pClash_Manager = CClash_Manager::Create();
+	if (nullptr == m_pClash_Manager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -50,6 +55,7 @@ void CGameManager::Destory_GameManager()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pClash_Manager);
 	Safe_Release(m_pDamageFont_Manager);
 	Safe_Release(m_pBuff_Manager);
 	Safe_Release(m_pSkill_Manager);
@@ -189,6 +195,17 @@ void CGameManager::Add_DamageFont(DAMAGEFONT eType, _float fDamage, _float3& vPo
 void CGameManager::Update_DamageFont(_float fTimeDelta)
 {
 	m_pDamageFont_Manager->Update_DamageFont(fTimeDelta);
+}
+#pragma endregion
+
+#pragma region CLASH_MANAGER
+_uint CGameManager::Update_Clash(_float fTimeDelta)
+{
+	return m_pClash_Manager->Update_Clash(fTimeDelta);
+}
+_bool  CGameManager::isFinshed_Clash()
+{
+	return m_pClash_Manager->isFinshed_Clash();
 }
 #pragma endregion
 

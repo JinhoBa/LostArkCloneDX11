@@ -15,9 +15,9 @@ CClashUI::CClashUI(CClashUI& Prototype)
 
 _bool CClashUI::Check_Circle()
 {
-    if (m_pGameInstance->Get_KeyDown(m_iKey))
+    if (m_pGameInstance->Get_KeyDown(m_iKey) && 0 == m_iOutCircleTextureIndex)
     {
-        if (125.f <= m_fOutSize && 135.f >= m_fOutSize)
+        if (120.f <= m_fOutSize && 140.f >= m_fOutSize)
         {
             m_iOutCircleTextureIndex = 1;
             return true;
@@ -39,8 +39,8 @@ HRESULT CClashUI::Initialize(void* pArg)
     CLASH_UI_DESC* pDesc = static_cast<CLASH_UI_DESC*>(pArg);
 
     m_iKey = pDesc->iKey;
-    m_fX = pDesc->fX;
-    m_fY = pDesc->fY;
+    m_fX = pDesc->vPosition.x;
+    m_fY = pDesc->vPosition.y;
     m_fZ = 1.f;
 
     m_fSizeX = m_fSizeY = 130.f;
@@ -85,8 +85,6 @@ void CClashUI::Priority_Update(_float fTimeDelta)
 
 void CClashUI::Update(_float fTimeDelta)
 {
-    Check_Circle();
-
     m_fTimeAcc += fTimeDelta;
 
     if(0 == m_iOutCircleTextureIndex)
@@ -95,7 +93,7 @@ void CClashUI::Update(_float fTimeDelta)
     }
 
     /* fail */
-    if (1.3f < m_fTimeAcc)
+    if (1.5f < m_fTimeAcc)
     {
         m_isDead = true;
     }

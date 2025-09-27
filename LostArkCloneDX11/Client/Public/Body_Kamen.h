@@ -58,6 +58,9 @@ private:
 
 	vector<CModel*>			m_pModelComs;
 
+	const _float4x4*		m_pCameraTargetBoneMatrix = {};
+	_float4x4				m_CameraTargetBoneWorldMatrix = {};
+
 private:
 	HRESULT			Add_Components();
 	HRESULT			Bind_ShaderResources();

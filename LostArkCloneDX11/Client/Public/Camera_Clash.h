@@ -6,6 +6,7 @@ NS_BEGIN(Client)
 
 class CCamera_Clash final : public CCamera
 {
+	enum class CLASH_CAMERA {START, LOOP};
 private:
 	CCamera_Clash(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCamera_Clash(const CCamera_Clash& Prototype);
@@ -20,9 +21,30 @@ public:
 	virtual HRESULT		Render() override;
 	virtual void		Reset() override;
 
+	void				Set_Position(_fvector vPosistion);
+
 private:
-	void		Update_Camera_Position();
-	void		Change_State();
+	CLASH_CAMERA	m_eState = {};
+
+	_float			m_fLerp = {};
+	_float			m_fClashFovy = {};
+
+	_float3			m_vStartPosition = {};
+	_float3			m_vEndPosition = {};
+	_float3			m_vClashingPosition = {};
+
+#pragma region TEST
+	_float3		m_vPlayerPos = {};
+	_float3		m_vStartOffset = {};
+	_float3		m_vEndOffset = {};
+	_float3		m_vClashingOffset = {};
+
+#pragma endregion
+
+
+
+private:
+	void		Update_Camera_Position(_float fTimeDelta);
 
 public:
 	static CCamera_Clash* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

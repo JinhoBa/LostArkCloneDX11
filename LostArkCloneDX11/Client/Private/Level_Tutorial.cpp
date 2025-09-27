@@ -219,6 +219,18 @@ HRESULT CLevel_Tutorial::Ready_Camera()
         PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_KamenEnter"), &Desc)))))
         return E_FAIL;
 
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(40.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+    if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Clash"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Clash"), &Desc)))))
+        return E_FAIL;
+
     return S_OK;
 }
 

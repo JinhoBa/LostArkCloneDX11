@@ -16,6 +16,7 @@
 #include "Camera_ChargeSkill.h"
 #include "Camera_Kamen_Intro.h"
 #include "Camera_KamenEnter.h"
+#include "Camera_Clash.h"
 #include "UIButton.h"
 #include "Font.h"
 #include "Mouse.h"
@@ -226,6 +227,11 @@ HRESULT CMainApp::Ready_Prototype()
     /*For Prototype_GameObject_Camera_KamenEnter*/
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_KamenEnter"),
         CCamera_KamenEnter::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /*For Prototype_GameObject_Camera_Clash*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Clash"),
+        CCamera_Clash::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 #pragma endregion
 

@@ -12,6 +12,8 @@
 #include "Attack_Sword_Kamen.h"
 #include "Attack_Spin_Kamen.h"
 #include "Turn_Kamen.h"
+#include "Clash_Kamen.h"
+#include "Critical_Kamen.h"
 
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
@@ -117,6 +119,15 @@ HRESULT CKamen::Initialize(void* pArg)
     Desc.fRotatePersec = 5.f;
     Desc.fSpeedPersec = 5.f;
 
+
+    m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    if (nullptr == m_pPlayerTransformCom)
+        return E_FAIL;
+
+    Safe_AddRef(m_pPlayerTransformCom);
+
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
@@ -136,10 +147,9 @@ HRESULT CKamen::Initialize(void* pArg)
     m_EnemyInfo.fDetectDistance = 5.f;
     m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 1000000.f;
 
-    m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
-        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
     m_pStateMachineCom->Start_State(m_States[ENUM_TO_INT(KAMENSTATE::INTRO)]);
+
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
     m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
 
@@ -178,21 +188,6 @@ void CKamen::Update(_float fTimeDelta)
         m_pGameInstance->Check_Collider(m_pHitBoxShpereCom, TEXT("Player"));
 
     __super::Update(fTimeDelta);
-
-#pragma region TEST_CODE
-    CClashUI::CLASH_UI_DESC Desc = {};
-    Desc.fX = 600.f;
-    Desc.fY = 300.f;
-    Desc.iKey = DIK_Q;
-
-    if(m_pGameInstance->Get_KeyDown(DIK_O))
-    {
-        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_ClashUI"),
-            ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_ClashUI"), &Desc)))
-            return;
-    }
-#pragma endregion
-
 }
 
 void CKamen::Late_Update(_float fTimeDelta)
@@ -252,10 +247,15 @@ _bool CKamen::MoveToPlayer(_float fTimeDelta)
    return m_pTransformCom->MoveTo(fTimeDelta, m_pPlayerTransformCom->Get_Position(), 3.f, m_pNavigationCom);
 }
 
-void CKamen::Reposition()
+_bool CKamen::Reposition()
 {
     if(15.f <= XMVectorGetX(XMVector3Length(XMVectorSet(35.f, 0.1f, 50.f, 1.f) - m_pTransformCom->Get_Position())))
+    {
         m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 50.f, 1.f));
+        return true;
+    }
+
+    return false;
 }
 
 HRESULT CKamen::Reay_Component()
@@ -374,6 +374,8 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::ATTACK_SPIN)] = CAttack_Spin_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::TRUN)] = CTurn_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::CUTSCENE)] = CTurn_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::CLASH)] = CClash_Kamen::Create(&Desc, m_pPlayerTransformCom);
+    m_States[ENUM_TO_INT(KAMENSTATE::CRITICAL)] = CCritical_Kamen::Create(&Desc);
 
     return S_OK;
 }

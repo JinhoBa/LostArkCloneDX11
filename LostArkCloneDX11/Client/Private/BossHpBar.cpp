@@ -132,20 +132,6 @@ HRESULT CBossHpBar::Render()
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
 
-#pragma region TEST_CODE
-	FONT_DESC* pFontDesc = &m_LineFontDesc;
-	ImGui::InputFloat("X", &pFontDesc->vPositon.x, 1.f, 10.f);
-	ImGui::InputFloat("Y", &pFontDesc->vPositon.y, 1.f, 10.f);
-	ImGui::InputFloat("Size", &pFontDesc->fScale, 0.01f, 0.1f);
-	ImGui::ColorEdit4(
-		"Color", (float*)&pFontDesc->vColor,
-		ImGuiColorEditFlags_AlphaBar
-		| ImGuiColorEditFlags_AlphaPreviewHalf
-		| ImGuiColorEditFlags_DisplayRGB
-		| ImGuiColorEditFlags_PickerHueWheel);
-
-#pragma endregion
-
 	return S_OK;
 }
 

@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "GameManager.h"
+#include "Camera.h"
 
 CBody_Kamen::CBody_Kamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CPartObject{ pDevice, pContext }
@@ -50,6 +51,15 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
 
     m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
 
+    ;
+
+    CCamera* pCamera = m_pGameInstance->Find_Camera(TEXT("Camera_Clash"));
+
+    if (nullptr == pCamera)
+        return E_FAIL;
+    m_pCameraTargetBoneMatrix = m_pModelComs[1]->Get_BoneMatrixPrt("b_cameratarget");
+    pCamera->Set_CameraTargetBone(&m_CameraTargetBoneWorldMatrix);
+
     return S_OK;
 }
 
@@ -64,6 +74,10 @@ void CBody_Kamen::Update(_float fTimeDelta)
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+
+    /* 카메라 타겟 설정 */
+    XMStoreFloat4x4(&m_CameraTargetBoneWorldMatrix,
+        XMLoadFloat4x4(m_pCameraTargetBoneMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 }
 
 void CBody_Kamen::Late_Update(_float fTimeDelta)

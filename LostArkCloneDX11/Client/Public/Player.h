@@ -20,7 +20,7 @@ public:
 		IDLE, MOVE, 
 		NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE,
 		HIT,
-		CUTSCENE,
+		CUTSCENE, CLASH,
 		STATE_END};
 
 private:
@@ -44,6 +44,7 @@ public:
 	_bool			isAnimationFinish();
 	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
 	void			EnterBoss();
+	void			Start_Clash();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

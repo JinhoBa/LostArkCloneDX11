@@ -70,11 +70,11 @@ void CKamen_Sword::Update(_float fTimeDelta)
 				dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
 					ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Change_Phase(PHASE::PHASE1);
 
-				m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"));
-
 				m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 7.f, -7.f, 0.f));
 				m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 7.f, -7.f, 0.f));
 				m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_Fovy(60.f);
+
+				m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), false, 3.f);
 			}
 		}
 		

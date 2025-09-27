@@ -27,6 +27,7 @@
 #include "Player_Dash.h"
 #include "Player_Hit.h"
 #include "Player_CutScene.h"
+#include "Player_Clash.h"
 #pragma endregion
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -89,6 +90,11 @@ void CPlayer::EnterBoss()
 
     m_pNavigationCom->Set_Current_CellIndex(0);
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
+}
+
+void CPlayer::Start_Clash()
+{
+    m_pStateMachineCom->Change_State(m_States[STATE::CLASH], nullptr);
 }
 
 _bool CPlayer::Move(_float fTimeDelta)
@@ -436,6 +442,7 @@ HRESULT CPlayer::Ready_States()
     m_States[CHANGE_STANCE] = CPlayer_ChangeStance::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CUTSCENE] = CPlayer_CutScene::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[CLASH] = CPlayer_Clash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }

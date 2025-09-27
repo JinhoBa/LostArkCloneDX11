@@ -30,12 +30,16 @@ HRESULT CCamera_Clash::Initialize(void* pArg)
 
     m_vTargetPosition = _float3(0.f, 0.f, 0.f);
 
+    m_fLerp = 0.f;
+    m_fFovy = XMConvertToRadians(60.f);
+    m_fClashFovy = XMConvertToRadians(46.f);
+
     return S_OK;
 }
 
 void CCamera_Clash::Priority_Update(_float fTimeDelta)
 {
-    Update_Camera_Position();
+    Update_Camera_Position(fTimeDelta);
 
     __super::Bind_Transform();
 }
@@ -46,77 +50,86 @@ void CCamera_Clash::Update(_float fTimeDelta)
 
 void CCamera_Clash::Late_Update(_float fTimeDelta)
 {
+
 }
 
 HRESULT CCamera_Clash::Render()
 {
-    /*
-    _float fFovy = XMConvertToDegrees(m_fFovy);
-
-    ImGui::InputFloat("Fovy", &fFovy, 0.1f, 1.f);
-    ImGui::InputFloat("X", &m_vDistance.x, 0.1f, 1.f);
-    ImGui::InputFloat("Y", &m_vDistance.y, 0.1f, 1.f);
-    ImGui::InputFloat("Z", &m_vDistance.z, 0.1f, 1.f);
-
-    m_fFovy = XMConvertToRadians(fFovy);*/
 
     return S_OK;
 }
 
 void CCamera_Clash::Reset()
 {
+    m_fLerp = 0.f;
     memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
-
-    m_pTransformCom->Set_State(STATE::POSITION,
-        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
 }
 
-void CCamera_Clash::Update_Camera_Position()
+void CCamera_Clash::Set_Position(_fvector vPosistion)
 {
-    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
+    _float3 vPlayerPosition;
+    XMStoreFloat3(&vPlayerPosition, vPosistion);
 
-    m_pTransformCom->Set_State(STATE::POSITION,
-        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
+    m_vPlayerPos = vPlayerPosition;
 
-    m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f));
+    XMStoreFloat3(&m_vStartPosition, XMVectorSet(
+        vPlayerPosition.x - 1.7f, vPlayerPosition.y + 5.f, vPlayerPosition.z - 1.0f, 1.f));
+
+    XMStoreFloat3(&m_vEndPosition, XMVectorSet(
+        vPlayerPosition.x + 1.8f, vPlayerPosition.y + 0.8f, vPlayerPosition.z - 1.2f, 1.f));
+
+    XMStoreFloat3(&m_vClashingPosition, XMVectorSet(
+        m_vEndPosition.x -0.2f, m_vEndPosition.y - 0.6f, m_vEndPosition.z - 0.2f, 1.f));
+
 }
 
-void CCamera_Clash::Change_State()
+void CCamera_Clash::Update_Camera_Position(_float fTimeDelta)
 {
-    /*   if (m_ePreState != m_eCurState)
-       {
-           switch (m_eCurState)
-           {
-           case CAMERA_ANIM::IDLE:
-               m_fTimeAcc = 0.f;
-               m_fFovy = XMConvertToRadians(60.f);
-               m_vDistance = m_Default_Direction;
-               break;
+    m_fLerp += fTimeDelta;
 
-           case CAMERA_ANIM::INTOR_BOSS:
-               m_fTimeAcc = 0.f;
-               m_fFovy = XMConvertToRadians(40.f);
-               m_vDistance = m_Default_Direction = _float3(0.f, 3.2f, -13.3f);
-               break;
-
-           case CAMERA_ANIM::SHAKE:
-               m_fTimeAcc = 0.f;
-               m_fDuration = 1.f;
-
-               break;
-           case CAMERA_ANIM::ZOOMOUT:
-               m_fTimeAcc = 0.f;
-               m_fDuration = 1.f;
-               m_eLevelState = m_ePreState;
-               break;
+    switch (m_eState)
+    {
+    case Client::CCamera_Clash::CLASH_CAMERA::START:
+        if (4.f <= m_fLerp)
+            m_fLerp = 4.f;
 
 
-           default:
-               break;
-           }
-           m_ePreState = m_eCurState;
-       }*/
+        m_pTransformCom->Set_State(STATE::POSITION,
+            XMVectorSetW(XMVectorLerp(XMLoadFloat3(&m_vStartPosition), XMLoadFloat3(&m_vEndPosition), m_fLerp / 4.f), 1.f));
 
+        memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
+
+        m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f));
+
+        if(4.f == m_fLerp)
+        {
+            m_eState = CLASH_CAMERA::LOOP;
+            m_fLerp = 0.f;
+        }
+
+        break;
+
+    case Client::CCamera_Clash::CLASH_CAMERA::LOOP:
+        if (2.f <= m_fLerp)
+            m_fLerp = 2.f;
+
+        m_fFovy = XMConvertToRadians(60.f) * (1.f - m_fLerp / 1.f) + XMConvertToRadians(46.f) * (m_fLerp / 1.f);
+
+        m_pTransformCom->Set_State(STATE::POSITION,
+            XMVectorSetW(XMVectorLerp(XMLoadFloat3(&m_vEndPosition), XMLoadFloat3(&m_vClashingPosition), m_fLerp / 2.f), 1.f));
+
+        memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
+
+        m_pTransformCom->LookAt(XMVectorSet(
+            m_vTargetPosition.x,
+            m_vTargetPosition.y + 1.5f,
+            m_vTargetPosition.z, 1.f));
+
+        break;
+    }
+
+
+   
 }
 
 CCamera_Clash* CCamera_Clash::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

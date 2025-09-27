@@ -367,6 +367,12 @@
     <Filter Include="02.GameObject\Camera\Camera_Clash">
       <UniqueIdentifier>{f1758671-eae5-41e2-ac71-abfd51c27579}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CLASH">
+      <UniqueIdentifier>{c9ae1cd5-57e5-46d1-94e9-72ec49273b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\CRITICAL">
+      <UniqueIdentifier>{42bae504-abb1-40bb-96b2-ed6d58dc4e4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -726,6 +732,12 @@
     <ClInclude Include="..\public\Camera_Clash.h">
       <Filter>02.GameObject\Camera\Camera_Clash</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Player_Clash.h">
+      <Filter>02.GameObject\Character\Player\States\CLASH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Critical_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\CRITICAL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1079,6 +1091,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera_Clash.cpp">
       <Filter>02.GameObject\Camera\Camera_Clash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_Clash.cpp">
+      <Filter>02.GameObject\Character\Player\States\CLASH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Critical_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\CRITICAL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@ public:
 	enum class KAMENSTATE {
 		INTRO, IDLE, TRUN,
 		ATTACK_NORMAL, ATTACK_SPIN, ATTACK_COMBO, ATTACK_CHARGE, ATTACK_SWORD,
-		CUTSCENE,
+		CUTSCENE,CLASH, CRITICAL,
 		END };
 
 private:
@@ -49,7 +49,7 @@ public:
 
 	void				Update_HitBox(_uint iSkillID, _uint iHitIndex, COLLIDER eHitboxType = COLLIDER::OBB);
 	_bool				MoveToPlayer(_float fTimeDelta);
-	void				Reposition();
+	_bool				Reposition();
 	void				Chase(_float fTimeDelta);
 
 private:

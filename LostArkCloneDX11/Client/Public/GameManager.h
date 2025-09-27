@@ -77,6 +77,11 @@ public:
 	void Update_DamageFont(_float fTimeDelta);
 #pragma endregion
 
+#pragma region CLASH_MANAGER
+	_uint	Update_Clash(_float fTimeDelta);
+	_bool   isFinshed_Clash();
+#pragma endregion
+
 
 
 	void Bind_PickingPos(_float3* pPickingPos);
@@ -94,6 +99,7 @@ private:
 	class CSkill_Manager*			m_pSkill_Manager = { nullptr };
 	class CBuff_Manager*			m_pBuff_Manager = { nullptr };
 	class CDamageFont_Manager*		m_pDamageFont_Manager = { nullptr };
+	class CClash_Manager*			m_pClash_Manager = { nullptr };
 
 public:
 	virtual void Free() override;
