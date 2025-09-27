@@ -28,8 +28,6 @@ private:
 	_float				m_fScala = {};
 	_float				m_fTimeAcc = {};
 
-	_float4				m_vTargetPosition = {};
-
 private:
 	void		Update_Camera_Position();
 

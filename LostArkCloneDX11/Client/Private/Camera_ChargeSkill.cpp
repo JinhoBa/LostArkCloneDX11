@@ -65,20 +65,10 @@ void CCamera_ChargeSkill::Update(_float fTimeDelta)
 
 void CCamera_ChargeSkill::Late_Update(_float fTimeDelta)
 {
-    /*   m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);*/
 }
 
 HRESULT CCamera_ChargeSkill::Render()
-{/*
-    _float fFovy = XMConvertToDegrees(m_fFovy);
-
-    ImGui::InputFloat("Fovy", &fFovy, 0.1f, 1.f);
-    ImGui::InputFloat("X", &m_vDistance.x, 0.1f, 1.f);
-    ImGui::InputFloat("Y", &m_vDistance.y, 0.1f, 1.f);
-    ImGui::InputFloat("Z", &m_vDistance.z, 0.1f, 1.f);
-
-    m_fFovy = XMConvertToRadians(fFovy);*/
-
+{
     return S_OK;
 }
 
@@ -88,17 +78,21 @@ void CCamera_ChargeSkill::Reset()
     m_fTimeAcc = 0.f;
     m_fScala = 1.f;
     m_eState = CAMERASTATE::ZOOMOUT;
+
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
+
+    m_pTransformCom->Set_State(STATE::POSITION,
+        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
 }
 
 void CCamera_ChargeSkill::Update_Camera_Position()
 {
-    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float4));
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
 
     m_pTransformCom->Set_State(STATE::POSITION,
-        XMLoadFloat4(&m_vTargetPosition)
-        + XMLoadFloat3(&m_vDirection) * m_fScala);
+        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection) * m_fScala);
 
-    m_pTransformCom->LookAt(XMLoadFloat4(&m_vTargetPosition));
+    m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f));
 }
 
 

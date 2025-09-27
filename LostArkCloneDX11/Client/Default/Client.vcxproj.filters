@@ -364,6 +364,9 @@
     <Filter Include="03.UIObject\ClashUI">
       <UniqueIdentifier>{dfb4a623-36d4-4656-93a3-d209287db9b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Clash">
+      <UniqueIdentifier>{f1758671-eae5-41e2-ac71-abfd51c27579}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -720,6 +723,9 @@
     <ClInclude Include="..\public\ClashUI.h">
       <Filter>03.UIObject\ClashUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Camera_Clash.h">
+      <Filter>02.GameObject\Camera\Camera_Clash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1070,6 +1076,9 @@
     </ClCompile>
     <ClCompile Include="..\private\ClashUI.cpp">
       <Filter>03.UIObject\ClashUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Camera_Clash.cpp">
+      <Filter>02.GameObject\Camera\Camera_Clash</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

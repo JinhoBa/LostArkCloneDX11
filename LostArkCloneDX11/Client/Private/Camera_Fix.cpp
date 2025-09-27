@@ -28,7 +28,7 @@ HRESULT CCamera_Fix::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
     __super::Bind_Transform();
 
-    m_vTargetPosition = _float4(0.f, 0.f, 0.f, 1.f);
+    m_vTargetPosition = _float3(0.f, 0.f, 0.f);
 
     return S_OK;
 }
@@ -63,15 +63,25 @@ HRESULT CCamera_Fix::Render()
     return S_OK;
 }
 
+void CCamera_Fix::Reset()
+{
+    if (nullptr == m_pCameraTargetBoneMatrix)
+        return;
+
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
+
+    m_pTransformCom->Set_State(STATE::POSITION,
+        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
+}
+
 void CCamera_Fix::Update_Camera_Position()
 {
     memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
 
     m_pTransformCom->Set_State(STATE::POSITION, 
-        XMLoadFloat4(&m_vTargetPosition)
-        + XMLoadFloat3(&m_vDirection));
+        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
 
-    m_pTransformCom->LookAt(XMLoadFloat4(&m_vTargetPosition));
+    m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f));
 }
 
 void CCamera_Fix::Change_State()

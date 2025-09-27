@@ -68,6 +68,15 @@ void CCamera::Reset()
 
 }
 
+void CCamera::Update_Lerp(_float fFov, _fvector vPosition, _fvector vTarget)
+{
+    m_fFovy = fFov;
+    m_pTransformCom->Set_State(STATE::POSITION, vPosition);
+    m_pTransformCom->LookAt(vTarget);
+
+    Bind_Transform();
+}
+
 void CCamera::Bind_Transform()
 {
     m_pGameInstance->Set_Transform(D3DTS::VIEW, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix())));

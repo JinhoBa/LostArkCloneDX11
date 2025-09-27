@@ -47,19 +47,24 @@ void CCamera_Kamen_Intro::Late_Update(_float fTimeDelta)
 HRESULT CCamera_Kamen_Intro::Render()
 {
 
-
     return S_OK;
+}
+
+void CCamera_Kamen_Intro::Reset()
+{
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
+    m_pTransformCom->Set_State(STATE::POSITION,
+        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
 }
 
 void CCamera_Kamen_Intro::Update_Camera_Position()
 {
-    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float4));
+    memcpy(&m_vTargetPosition, m_pCameraTargetBoneMatrix->m[3], sizeof(_float3));
 
-    m_pTransformCom->Set_State(STATE::POSITION,
-        XMLoadFloat4(&m_vTargetPosition)
-        + XMLoadFloat3(&m_vDirection));
+    m_pTransformCom->Set_State(STATE::POSITION, 
+        XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
 
-    m_pTransformCom->LookAt(XMLoadFloat4(&m_vTargetPosition));
+    m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f));
 }
 
 

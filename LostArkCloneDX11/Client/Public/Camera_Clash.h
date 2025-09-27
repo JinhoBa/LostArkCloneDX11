@@ -4,12 +4,12 @@
 
 NS_BEGIN(Client)
 
-class CCamera_Fix final : public CCamera
+class CCamera_Clash final : public CCamera
 {
 private:
-	CCamera_Fix(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCamera_Fix(const CCamera_Fix& Prototype);
-	virtual ~CCamera_Fix() = default;
+	CCamera_Clash(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CCamera_Clash(const CCamera_Clash& Prototype);
+	virtual ~CCamera_Clash() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -25,7 +25,7 @@ private:
 	void		Change_State();
 
 public:
-	static CCamera_Fix* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CCamera_Clash* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

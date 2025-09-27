@@ -6,6 +6,7 @@ NS_BEGIN(Client)
 
 class CClash_Kamen final : public CState_Kamen
 {
+	enum class STATE { IDLE, START, LOOP};
 private:
 	CClash_Kamen();
 	virtual ~CClash_Kamen() = default;
@@ -17,7 +18,9 @@ public:
 	virtual void Exit()override;
 
 private:
-	class CTransform* m_pPlayerTransform = { nullptr };
+	class CTransform*	m_pPlayerTransform = { nullptr };
+
+	STATE				m_eState = {};
 
 private:
 	void Enter_Clash();

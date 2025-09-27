@@ -461,9 +461,9 @@ HRESULT CGameInstance::Add_Camera(const _wstring& strCameraNameTag, class CCamer
 {
 	return m_pCamera_Manager->Add_Camera(strCameraNameTag, pGameObject);
 }
-HRESULT CGameInstance::Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn)
+HRESULT CGameInstance::Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn, _float fLerpTime)
 {
-	return m_pCamera_Manager->Bind_Camera(strCameraNameTag, isReturn);
+	return m_pCamera_Manager->Bind_Camera(strCameraNameTag, isReturn, fLerpTime);
 }
 #pragma endregion
 

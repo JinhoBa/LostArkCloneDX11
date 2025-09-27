@@ -17,7 +17,11 @@ protected:
 	virtual ~CCamera() = default;
 	
 public:
-	void	Set_CameraTargetBone(_float4x4* pCameraTargetBoneMatrix) {
+	_float	Get_Fovy() const { return m_fFovy; }
+	_vector Get_TargetPosition() const{ 
+		return XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f);
+	}
+	void Set_CameraTargetBone(_float4x4* pCameraTargetBoneMatrix) {
 		m_pCameraTargetBoneMatrix = pCameraTargetBoneMatrix;
 	}
 	void Set_LookDircetion(_fvector vDirection) {
@@ -33,6 +37,7 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 
 	virtual void		Reset();
+	void	Update_Lerp(_float fFov, _fvector vPosition, _fvector vTarget);
 
 protected:
 	_float			m_fNear = {};
@@ -42,6 +47,8 @@ protected:
 
 	_float			m_fWinSizeX = {};
 	_float			m_fWinSizeY = {};
+
+	_float3			m_vTargetPosition = {};
 
 	_float3			m_vDirection = {};
 	_float4x4*		m_pCameraTargetBoneMatrix = { nullptr };

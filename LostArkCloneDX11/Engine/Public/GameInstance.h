@@ -119,7 +119,7 @@ public:
 	class CCamera* Find_Camera(const _wstring& strCameraNameTag);
 
 	HRESULT Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject);
-	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn = false);
+	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn = false, _float fLerpTime = 0.f);
 #pragma endregion
 
 

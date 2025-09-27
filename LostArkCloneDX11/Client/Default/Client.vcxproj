@@ -175,6 +175,7 @@
     <ClInclude Include="..\public\BossHpFrame.h" />
     <ClInclude Include="..\public\BossUI.h" />
     <ClInclude Include="..\public\Camera_ChargeSkill.h" />
+    <ClInclude Include="..\public\Camera_Clash.h" />
     <ClInclude Include="..\public\Camera_KamenEnter.h" />
     <ClInclude Include="..\public\Camera_Kamen_Intro.h" />
     <ClInclude Include="..\public\ClashUI.h" />
@@ -302,6 +303,7 @@
     <ClCompile Include="..\private\BossHpFrame.cpp" />
     <ClCompile Include="..\private\BossUI.cpp" />
     <ClCompile Include="..\private\Camera_ChargeSkill.cpp" />
+    <ClCompile Include="..\private\Camera_Clash.cpp" />
     <ClCompile Include="..\private\Camera_KamenEnter.cpp" />
     <ClCompile Include="..\private\Camera_Kamen_Intro.cpp" />
     <ClCompile Include="..\private\ClashUI.cpp" />

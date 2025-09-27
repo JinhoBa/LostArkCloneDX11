@@ -24,15 +24,8 @@ public:
 private:
 	_uint			m_iAnimationIndex = {};
 	_float			m_fTimeAcc = {};
-	_float4			m_vTargetPosition = {};
 
 	CAMERA_ANIMATION_DESC m_anim[3] = {};
-
-
-private:
-	void Update_Camera_Position();
-	void ZoomIn(_float fTimeDelta);
-	void ZoomOut(_float fTimeDelta);
 
 public:
 	static CCamera_KamenEnter* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
