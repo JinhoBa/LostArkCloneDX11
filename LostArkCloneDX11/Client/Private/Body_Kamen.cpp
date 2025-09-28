@@ -110,14 +110,21 @@ HRESULT CBody_Kamen::Render()
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Get_SRV(0))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Resource("g_EmissiveTexture", m_pEmssiveTextureCom->Get_SRV(0))))
-        return E_FAIL;
-
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
+        if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Get_SRV(0))))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Bind_Resource("g_EmissiveTexture", m_pEmssiveTextureCom->Get_SRV(0))))
+            return E_FAIL;
+
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE)))
+            return E_FAIL;
+
+
         if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 

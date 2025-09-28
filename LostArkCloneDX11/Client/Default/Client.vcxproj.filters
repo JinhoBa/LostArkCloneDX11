@@ -373,8 +373,11 @@
     <Filter Include="02.GameObject\Kamen_Area">
       <UniqueIdentifier>{392c7edd-9da4-4be3-af2c-b62d0597e9d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Character\Kamen\State\Body">
+    <Filter Include="02.GameObject\Character\Kamen\Body">
       <UniqueIdentifier>{0b13d1a5-e478-40dd-88a3-0f108dac4b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\State\DEAD">
+      <UniqueIdentifier>{0f372d21-7195-479c-9bee-d75cc808ed49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -631,7 +634,7 @@
       <Filter>02.GameObject\Character\Monster\HpBar</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Body_Kamen.h">
-      <Filter>02.GameObject\Character\Kamen\State\Body</Filter>
+      <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Boss.h">
       <Filter>01.Level\Boss</Filter>
@@ -743,6 +746,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Kamen_Area.h">
       <Filter>02.GameObject\Kamen_Area</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Dead_Kamen.h">
+      <Filter>02.GameObject\Character\Kamen\State\DEAD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -994,7 +1000,7 @@
       <Filter>02.GameObject\Character\Monster\HpBar</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Body_Kamen.cpp">
-      <Filter>02.GameObject\Character\Kamen\State\Body</Filter>
+      <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Boss.cpp">
       <Filter>01.Level\Boss</Filter>
@@ -1106,6 +1112,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Kamen_Area.cpp">
       <Filter>02.GameObject\Kamen_Area</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dead_Kamen.cpp">
+      <Filter>02.GameObject\Character\Kamen\State\DEAD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

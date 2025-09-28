@@ -15,6 +15,7 @@
 #include "Clash_Kamen.h"
 #include "Critical_Kamen.h"
 #include "Move_Kamen.h"
+#include "Dead_Kamen.h"
 
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
@@ -48,7 +49,7 @@ void CKamen::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
     static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Set_Animation(iIndex, bLoop, fLerpTime);
 }
 
-void	CKamen::Set_HitBox(_float3& vCenter, _float3& vExtends, COLLIDER eHitboxType)
+void CKamen::Set_HitBox(_float3& vCenter, _float3& vExtends, COLLIDER eHitboxType)
 {
     if(COLLIDER::OBB == eHitboxType)
         m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
@@ -119,6 +120,8 @@ void CKamen::Change_Phase(PHASE ePhase)
         m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::INTRO), nullptr);
         m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 40.f, 1.f));
 
+        dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Start_Phase(3);
+  
         break;
 
     case Client::PHASE::END:
@@ -194,8 +197,12 @@ void CKamen::Priority_Update(_float fTimeDelta)
 
     m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 
-    if (PHASE::PHASE1 == m_ePhase && 0.5f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
+    if (PHASE::PHASE1 == m_ePhase && 0.7f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
         Change_Phase(PHASE::PHASE2);
+    else if (PHASE::PHASE2 == m_ePhase && 0.4f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
+        Change_Phase(PHASE::PHASE3);
+    else if (PHASE::PHASE3 == m_ePhase && 0.f >= m_EnemyInfo.fHp)
+        m_pStateMachineCom->Change_State(m_States[ENUM_TO_INT(KAMENSTATE::DEAD)], nullptr);
 }
 
 void CKamen::Update(_float fTimeDelta)
@@ -415,6 +422,7 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::CLASH)] = CClash_Kamen::Create(&Desc, m_pPlayerTransformCom);
     m_States[ENUM_TO_INT(KAMENSTATE::CRITICAL)] = CCritical_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::MOVE)] = CMove_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::DEAD)] = CDead_Kamen::Create(&Desc);
 
     return S_OK;
 }

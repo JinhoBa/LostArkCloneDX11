@@ -100,39 +100,41 @@ void CBossHpBar::Late_Update(_float fTimeDelta)
 
 HRESULT CBossHpBar::Render()
 {
+	if(0.f <= m_pKamenInfo->fHp)
+	{
+		// UI
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+			return E_FAIL;
 
-	// UI
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+			return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+			return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
-		return E_FAIL;
+		// Background
+		if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iBackIndex))))
+			return E_FAIL;
 
-	// Background
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iBackIndex))))
-		return E_FAIL;
+		if (FAILED(Draw()))
+			return E_FAIL;
 
-	if (FAILED(Draw()))
-		return E_FAIL;
+		// Render Fill
+		if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iFrontIndex))))
+			return E_FAIL;
 
-	// Render Fill
-	if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_iFrontIndex))))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fValue, sizeof(_float))))
+			return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_fValue", &m_fValue, sizeof(_float))))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Begin(3)))
+			return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(3)))
-		return E_FAIL;
+		if (FAILED(m_pVIBufferCom->Bind_Resources()))
+			return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_Resources()))
-		return E_FAIL;
-
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

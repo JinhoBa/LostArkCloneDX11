@@ -55,12 +55,7 @@ void CAttack_Normal_Kamen::Update(_float fTimeDelta)
 
 	if (m_pKamen->isAnimationFinish())
 	{
-		_float fDistance = XMVector3Length(XMVectorSetY(m_pKamen->Get_Transform()->Get_Position(), 0.f) - XMVectorSetY(m_pPlayerTransform->Get_Position(), 0.f)).m128_f32[0];
-		
-		if (PHASE::PHASE3 == (*m_pPhase) && 3.f < fDistance)
-			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
-		else
-			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+		m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
 	}
 
 }

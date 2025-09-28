@@ -183,6 +183,7 @@
     <ClInclude Include="..\public\Clash_Manager.h" />
     <ClInclude Include="..\public\Critical_Kamen.h" />
     <ClInclude Include="..\public\CutScene_Kamen.h" />
+    <ClInclude Include="..\Public\Dead_Kamen.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
@@ -314,6 +315,7 @@
     <ClCompile Include="..\private\Clash_Manager.cpp" />
     <ClCompile Include="..\private\Critical_Kamen.cpp" />
     <ClCompile Include="..\private\CutScene_Kamen.cpp" />
+    <ClCompile Include="..\Private\Dead_Kamen.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />
