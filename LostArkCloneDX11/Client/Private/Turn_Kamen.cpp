@@ -50,15 +50,17 @@ void CTurn_Kamen::Enter(void* pArg)
 		break;
 
 	case PHASE::PHASE2:
+		if (m_isRight)
+			m_pKamen->Set_Animation(238, false);
+		else
+			m_pKamen->Set_Animation(237, false);
+		break;
 
+	case PHASE::PHASE3:
 		if (m_isRight)
 			m_pKamen->Set_Animation(54, false);
 		else
 			m_pKamen->Set_Animation(53, false);
-
-		break;
-
-	default:
 		break;
 	}
 
@@ -81,6 +83,18 @@ void CTurn_Kamen::Update(_float fTimeDelta)
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
 			else
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr);
+			break;
+
+		case PHASE::PHASE3:
+			if (2.f >= m_fDistance)
+				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr); // ±Ÿ¡¢
+			else if (2.f < m_fDistance && 5.f >= m_fDistance)
+				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
+			else if (5.f < m_fDistance && 8.f >= m_fDistance)
+				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_CHARGE), nullptr);
+			else
+				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::MOVE), nullptr);
+			
 			break;
 		}
 

@@ -27,8 +27,6 @@ void CAttack_Sword_Kamen::Enter(void* pArg)
 	m_iAttackCount = 0;
 	m_fTimeAcc = 0.f;
 
-	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
-
 	switch (*m_pPhase)
 	{
 	case PHASE::PHASE1:
@@ -39,9 +37,16 @@ void CAttack_Sword_Kamen::Enter(void* pArg)
 		m_pKamen->Set_Animation(16, false);
 		break;
 
+	case PHASE::PHASE3:
+		m_iSkillID = 0;
+		m_pKamen->Set_Animation(187, false);
+		break;
+
 	default:
 		break;
 	}
+
+	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 }
 
 void CAttack_Sword_Kamen::Update(_float fTimeDelta)

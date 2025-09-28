@@ -14,6 +14,7 @@
 #include "Turn_Kamen.h"
 #include "Clash_Kamen.h"
 #include "Critical_Kamen.h"
+#include "Move_Kamen.h"
 
 #include "Body_Kamen.h"
 #include "Weapon_Kamen.h"
@@ -59,7 +60,13 @@ void CKamen::Change_Phase(PHASE ePhase)
 {
     m_ePhase = ePhase;
 
+    _float3 vCenter = {};
+    _float3 vExtend = {};
+
     CAttack_Kamen::ATTACK_KAMEN_DESC Desc = {};
+    CNavigation::NAVIGATION_DESC NavDesc = {};
+
+    NavDesc.iCurrentIndex = 1;
 
     switch (ePhase)
     {
@@ -84,14 +91,36 @@ void CKamen::Change_Phase(PHASE ePhase)
 
             static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
                 dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02"));
-            _float3 vCenter = _float3(0.f, 0.f, -1.5f);
-            _float3 vExtend = _float3(0.78f, 1.72f, 1.5f);
+
+            vCenter = _float3(0.f, 0.f, -1.5f);
+            vExtend = _float3(1.2f, 1.72f, 1.5f);
             m_pColliderCom->Set_ColliderDesc(vCenter, vExtend);
+
             m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::INTRO), nullptr);
             m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
         break;
+
     case Client::PHASE::PHASE3:
+        dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Change_Model(PHASE::PHASE3);
+
+        m_pRootBoneMatrix = static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_root");
+
+        static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
+            dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wp_1"));
+       
+        if (FAILED(__super::Change_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_KamenPhase2"),
+            TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NavDesc)))
+            return;
+
+        vCenter = _float3(0.f, 0.f, -1.0f);
+        vExtend = _float3(0.7f, 0.7f, 1.f);
+        m_pColliderCom->Set_ColliderDesc(vCenter, vExtend);
+
+        m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::INTRO), nullptr);
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 40.f, 1.f));
+
         break;
+
     case Client::PHASE::END:
         break;
 
@@ -194,6 +223,11 @@ void CKamen::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
+    if (m_pGameInstance->Get_KeyDown(DIK_5))
+    {
+        Change_Phase(PHASE::PHASE3);
+    }
+
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
@@ -206,6 +240,10 @@ HRESULT CKamen::Render()
     if(isSphereUpdate)
         m_pHitBoxShpereCom->Render();
 
+    _float dis = XMVector3Length(XMVectorSetY(m_pTransformCom->Get_Position(), 0.f) - XMVectorSetY(dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_Position(), 0.f)).m128_f32[0];
+
+    ImGui::SliderFloat("dis", &dis, 0.1f, 1.f);
    // /* TEST */
   /* ImGui::Begin("Collider");
    ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
@@ -225,7 +263,6 @@ void CKamen::OnHit(const ATTACK_DESC& Attack_Desc)
 
 void CKamen::Update_HitBox(_uint iSkillID, _uint iHitIndex, COLLIDER eHitboxType)
 {
-
     m_iCurSkillID = iSkillID;
     m_iCurHitIndex = iHitIndex;
 
@@ -274,14 +311,15 @@ HRESULT CKamen::Reay_Component()
         TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Navi_Desc)))
         return E_FAIL;
 
-    /* Collider */CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc = {};
+    /* Collider */CBounding_OBB::BOUNDING_OBB_DESC ColliderDesc = {};
     ColliderDesc.eColliderType = COLLIDERTYPE::COLLIDER;
-    ColliderDesc.vCenter = _float3(0.f, 0.5f, -1.41f);
-    ColliderDesc.fRadius = 0.4f;
+    ColliderDesc.vCenter = _float3(0.f, 0.0f, -1.f);
+    ColliderDesc.vExtents = _float3(0.7f, 0.7f, 1.0f);
+    ColliderDesc.vOrientation = _float3(0.f, 0.f, 0.f);
     ColliderDesc.pOwner = this;
 
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
-        TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
 
     /* Hitbox OBB */
@@ -376,6 +414,7 @@ HRESULT CKamen::Reay_States()
     m_States[ENUM_TO_INT(KAMENSTATE::CUTSCENE)] = CTurn_Kamen::Create(&Desc);
     m_States[ENUM_TO_INT(KAMENSTATE::CLASH)] = CClash_Kamen::Create(&Desc, m_pPlayerTransformCom);
     m_States[ENUM_TO_INT(KAMENSTATE::CRITICAL)] = CCritical_Kamen::Create(&Desc);
+    m_States[ENUM_TO_INT(KAMENSTATE::MOVE)] = CMove_Kamen::Create(&Desc);
 
     return S_OK;
 }

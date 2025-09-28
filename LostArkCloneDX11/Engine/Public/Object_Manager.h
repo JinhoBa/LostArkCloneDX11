@@ -25,9 +25,9 @@ public:
 public:
 	void	Update_Level(_uint iLevelIndex, _float fTimeDelta);
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLayerLevelIndex, const _wstring& strLayerTag, void* pArg);
-	
-	void Clear(_uint iLevelIndex);
-	void Clear_DeadObj();
+	HRESULT Clear_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag);
+	void	Clear(_uint iLevelIndex);
+	void	Clear_DeadObj();
 
 private:
 

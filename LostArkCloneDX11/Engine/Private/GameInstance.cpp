@@ -284,6 +284,11 @@ void CGameInstance::Update_Level(_uint iLevelIndex, _float fTimeDelta)
 	m_pLevel_Manager->Update(fTimeDelta);
 }
 
+HRESULT CGameInstance::Clear_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+	return m_pObject_Manager->Clear_Layer(iLayerLevelIndex, strLayerTag);
+}
+
 CComponent* CGameInstance::Get_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex)
 {
 	return m_pObject_Manager->Get_Component(iLevelIndex, strLayerTag, strComponentTag, iIndex);	

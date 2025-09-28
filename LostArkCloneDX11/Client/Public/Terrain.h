@@ -47,8 +47,6 @@ private:
 	CTexture*				m_pTextureCom = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
 
-	ID3D11RasterizerState*	m_pRasterState = nullptr;
-
 	_wstring				m_strPrototypeTag = {};
 	_float3					m_pPickingPos = {};
 	_float3					m_vRotation = {};

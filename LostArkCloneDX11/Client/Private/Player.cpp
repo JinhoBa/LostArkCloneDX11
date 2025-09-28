@@ -14,6 +14,8 @@
 #include "Buff.h"
 #include "Camera_Fix.h"
 #include "Enemy.h"
+#include "Terrain.h"
+#include "MapObject.h"
 
 #pragma region STATE
 #include "StateMachine.h"
@@ -233,6 +235,65 @@ void CPlayer::Late_Update(_float fTimeDelta)
     __super::Late_Update(fTimeDelta);
  
     m_pColliderCom->Update_OnCollision();
+
+#ifdef _DEBUG
+    if (m_pGameInstance->Get_KeyDown(DIK_5))
+    {
+        if (FAILED(m_pGameInstance->Clear_Layer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Terrain"))))
+            return;
+
+        if (FAILED(m_pGameInstance->Clear_Layer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Background"))))
+            return;
+
+        if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen_Phase2.xml")))
+            return ;
+
+        for (const auto& TerrainData : CGameManager::GetInstance()->Get_TerrainData())
+        {
+            CTerrain::TERRAIN_DESC Desc = {};
+
+            Desc.strPrototypeTag = TerrainData.strPrototypeTag;
+            Desc.vPosition = TerrainData.vPosition;
+            Desc.vRotation = TerrainData.vRotation;
+
+            if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Terrain"),
+                ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Terrain"), &Desc)))
+                return ;
+        }
+
+        for (auto& MapData : CGameManager::GetInstance()->Get_MapData())
+        {
+            CMapObject::MAPOBJECT_DESC Desc = {};
+
+            Desc.iLevelIndex = ENUM_TO_INT(LEVEL::BOSS);
+            Desc.strPrototypeTag = MapData.strPrototypeTag;
+            Desc.vPosition = MapData.vPosition;
+            Desc.vRotation = MapData.vRotation;
+            Desc.vScale = MapData.vScale;
+
+            if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
+                ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Background"), &Desc)))
+                return ;
+        }
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Area"),
+            ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_KamenArea"), nullptr)))
+            return;
+
+        
+
+        CNavigation::NAVIGATION_DESC NavDesc = {};
+
+        NavDesc.iCurrentIndex = 1;
+
+        if (FAILED(__super::Change_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_KamenPhase2"),
+            TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NavDesc)))
+            return ;
+
+        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 30.f, 1.f));
+    }
+#endif // _DEBUG
+
 }
 
 HRESULT CPlayer::Render()

@@ -17,7 +17,6 @@ public:
 	virtual void Exit()override;
 
 private:
-	_bool		m_bActive = {};
 	_float		m_fTimeAcc = {};
 
 public:

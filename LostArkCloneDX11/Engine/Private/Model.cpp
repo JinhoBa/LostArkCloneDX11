@@ -190,8 +190,10 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
     if (FAILED(Ready_Meshes(m_eModel)))
         return E_FAIL;
 
-    if (FAILED(Ready_Materials(pModelFilePath)))
-        return E_FAIL;
+    m_iNumMaterials = m_pAiScene->mNumMaterials;
+
+  /*  if (FAILED(Ready_Materials(pModelFilePath)))
+        return E_FAIL;*/
 
     if (FAILED(Ready_Animations()))
         return E_FAIL;
@@ -299,6 +301,8 @@ _bool CModel::Play_Animation(_float fTimeDelta)
         m_fInterpolationTime += fTimeDelta;
         if (m_fMaxInterpolationTime <= m_fInterpolationTime)
         {
+            if((_uint)m_Animations.size() <= m_iPreAnimIndex)
+                m_iPreAnimIndex = m_iCurrentAnimIndex;
             m_Animations[m_iPreAnimIndex]->Reset_TrackPosition();
             m_fInterpolationTime = 0.f;
             m_iPreAnimIndex = m_iCurrentAnimIndex;

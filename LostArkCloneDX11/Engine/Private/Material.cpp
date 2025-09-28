@@ -140,8 +140,11 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 		{
 			getline(file, strText);
 			auto index = strText.find_first_of("[");
-
-			iNumParameter = strText[index + 1] - '0';
+			auto iBackindex = strText.find_first_of("]");
+			if(index+ 1 != iBackindex - 1)
+				iNumParameter = (strText[iBackindex - 1] - '0') + 10;
+			else
+				iNumParameter = strText[index + 1] - '0';
 
 			getline(file, strText);
 			bParent = true;
@@ -275,10 +278,14 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 			eTexture = TEXTURE::SPECULAR;
 		else if (!strcmp(FileType.c_str(), "detail_normal"))
 			eTexture = TEXTURE::NORMAL;
+		else if (!strcmp(FileType.c_str(), "diffuse_seamless"))
+			eTexture = TEXTURE::DIFFUSE_SEAMLESS;
+		else if (!strcmp(FileType.c_str(), "normal_seamless"))
+			eTexture = TEXTURE::NORMAL_SEAMLESS;
 		else
 		{
 			MSG_BOX("Failed to Path Material Texture Type");
-			return E_FAIL;
+			return S_OK;
 		}
 	}
 	_char TexturePath[MAX_PATH] = {};

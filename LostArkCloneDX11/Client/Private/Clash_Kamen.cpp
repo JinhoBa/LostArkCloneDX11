@@ -67,6 +67,10 @@ void CClash_Kamen::Update(_float fTimeDelta)
 
 			m_pGameInstance->Bind_Camera(TEXT("Camera_Clash"));
 		}
+
+		if (m_pKamen->isAnimationFinish())
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+
 		break;
 
 	case Client::CClash_Kamen::STATE::START:

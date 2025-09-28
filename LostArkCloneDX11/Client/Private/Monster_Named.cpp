@@ -101,7 +101,7 @@ HRESULT CMonster_Named::Render()
 
 	if(isCollUpdate)
 		m_pHitBoxCom->Render();
-	m_pNavigationCom->Render();
+	//m_pNavigationCom->Render();
 
 #endif // _DEBUG
 	m_pColliderCom->Render();

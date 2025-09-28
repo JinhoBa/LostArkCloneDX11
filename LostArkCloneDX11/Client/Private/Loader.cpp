@@ -52,6 +52,7 @@
 #include "SkySphere.h"
 #include "Dynamic_SkyBox.h"
 #include "Kamen_Sword.h"
+#include "Kamen_Area.h"
 #pragma endregion
 
 
@@ -382,6 +383,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen_Horse/Kamen_with_Horse.bin"))))
 		return E_FAIL;
 
+	/* Kamen_3 */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_3"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen3/Kamen3.bin"))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Weapon_Kamen"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kamen_Weapon/KamenWeapon.fbx"))))
 		return E_FAIL;
@@ -424,6 +430,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/*For Prototype_Component_Navigation*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Trision"),
 		CNavigation::Create(m_pDevice, m_pContext, "../Bin/Resources/Data/Navigtion/Trision_Navigation.bin"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Navigation_KamenPhase2*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_KamenPhase2"),
+		CNavigation::Create(m_pDevice, m_pContext, "../Bin/Resources/Data/Navigtion/Kamen2_Navigation.bin"))))
 		return E_FAIL;
 
 	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC Point_Desc = {};
@@ -1178,6 +1189,11 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
 		CKamen_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/*For Prototype_GameObject_Kamen_Sword*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Area"),
+		CKamen_Area::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region UI
@@ -1219,7 +1235,7 @@ HRESULT CLoader::Loading_For_Boss()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Trision.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen_Phase2.xml")))
 		return E_FAIL;
 
 	/*if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen.xml")))

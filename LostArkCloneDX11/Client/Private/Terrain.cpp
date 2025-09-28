@@ -35,21 +35,12 @@ HRESULT CTerrain::Initialize(void* pArg)
         m_vRotation = _float3(0.f, 0.f, 0.f);
     }
 
-    
-
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    D3D11_RASTERIZER_DESC rasterDesc = {};
-    rasterDesc.CullMode = D3D11_CULL_BACK; // or D3D11_CULL_FRONT, D3D11_CULL_NONE
-    rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
-    rasterDesc.FrontCounterClockwise = FALSE;
-
-
-    m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState);
     m_pPickingPos = {};
 
     m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
@@ -96,21 +87,18 @@ void CTerrain::Update(_float fTimeDelta)
     if (m_pGameInstance->Get_KeyDown(DIK_P))
         m_bVisible = !m_bVisible;
 
-    /*m_pVIBufferCom->Change_Verices(m_iSizeX, m_iSizeZ);*/
-
     m_pTransformCom->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPosition));
     m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
 }
 
 void CTerrain::Late_Update(_float fTimeDelta)
 {
-    //if(m_bVisible)
-    //    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    if(m_bVisible)
+        m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CTerrain::Render()
 {
-    m_pContext->RSSetState(m_pRasterState);
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
         return E_FAIL;
@@ -124,7 +112,7 @@ HRESULT CTerrain::Render()
     if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(0))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(0)))
+    if (FAILED(m_pShaderCom->Begin(2)))
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -132,8 +120,6 @@ HRESULT CTerrain::Render()
 
     if (FAILED(m_pVIBufferCom->Render()))
         return E_FAIL;
-
-    m_pContext->RSSetState(nullptr);
 
     
 
@@ -237,6 +223,4 @@ void CTerrain::Free()
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pVIBufferCom);
-
-    Safe_Release(m_pRasterState);
 }

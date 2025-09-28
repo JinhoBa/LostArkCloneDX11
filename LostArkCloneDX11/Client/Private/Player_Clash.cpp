@@ -26,6 +26,8 @@ void CPlayer_Clash::Enter(void* pArg)
 	m_fTimeAcc = 0.f;
 
 	m_eState = STATE::WAIT;
+
+	m_pPlayer->Get_Transform()->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 48.f, 1.f));
 }
 
 void CPlayer_Clash::Update(_float fTimeDelta)

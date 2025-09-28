@@ -28,8 +28,6 @@ void CAttack_Normal_Kamen::Enter(void* pArg)
 	m_iAttackCount = 0;
 	m_fTimeAcc = 0.f;
 
-	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
-
 	switch (*m_pPhase)
 	{
 	case PHASE::PHASE1:
@@ -39,8 +37,15 @@ void CAttack_Normal_Kamen::Enter(void* pArg)
 	case PHASE::PHASE2:
 		m_pKamen->Set_Animation(10, false);
 		break;
+
+	case PHASE::PHASE3:
+		m_iSkillID = 2;
+		m_pKamen->Set_Animation(222, false);
+		m_pKamen->Get_Transform()->TurnTo(m_pPlayerTransform->Get_Position());
+		break;
 	}
-	
+
+	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 }
 
@@ -49,7 +54,14 @@ void CAttack_Normal_Kamen::Update(_float fTimeDelta)
 	Update_HitBox(fTimeDelta);
 
 	if (m_pKamen->isAnimationFinish())
-		m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+	{
+		_float fDistance = XMVector3Length(XMVectorSetY(m_pKamen->Get_Transform()->Get_Position(), 0.f) - XMVectorSetY(m_pPlayerTransform->Get_Position(), 0.f)).m128_f32[0];
+		
+		if (PHASE::PHASE3 == (*m_pPhase) && 3.f < fDistance)
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+		else
+			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+	}
 
 }
 

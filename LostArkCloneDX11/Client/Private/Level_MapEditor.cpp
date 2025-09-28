@@ -142,7 +142,9 @@ HRESULT CLevel_MapEditor::Initialize()
 
 void CLevel_MapEditor::Update(_float fTimeDelta)
 { 
+
 #pragma region NAVI
+
     /* 새로운 점 선택 */
  if(m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
  {
@@ -209,9 +211,8 @@ void CLevel_MapEditor::Update(_float fTimeDelta)
  {
      m_pNavigation_Tool->Remove_Sell();
  }
-
+ 
 #pragma endregion
-
  
 }
 
@@ -220,36 +221,36 @@ HRESULT CLevel_MapEditor::Render()
 #pragma region NAVI
     ImGui::Begin("NAVIGATION");
 
- ImGui::Text("CELL POINTS  :");
- ImGui::SliderFloat3 ("A", reinterpret_cast<_float*>(&m_Points[0]), 0.1f, 1.f);
- ImGui::SliderFloat3("B", reinterpret_cast<_float*>(&m_Points[1]), 0.1f, 1.f);
- ImGui::SliderFloat3("C", reinterpret_cast<_float*>(&m_Points[2]), 0.1f, 1.f);
+     ImGui::Text("CELL POINTS  :");
+     ImGui::SliderFloat3 ("A", reinterpret_cast<_float*>(&m_Points[0]), 0.1f, 1.f);
+     ImGui::SliderFloat3("B", reinterpret_cast<_float*>(&m_Points[1]), 0.1f, 1.f);
+     ImGui::SliderFloat3("C", reinterpret_cast<_float*>(&m_Points[2]), 0.1f, 1.f);
 
- if (ImGui::Button("Save Navigation File"))
- {
-     if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Test.bin")))
-         MSG_BOX("Success Save File");
-     else
-         MSG_BOX("Failed to Save File");
- }
-
- if (ImGui::Button("Load Navigation File"))
- {
-     if(FAILED(m_pNavigation_Tool->LoadFile("../Bin/Resources/Data/Navigtion/Trision_Navigation.bin")))
-         MSG_BOX("Failed to Load File");
-     else
+     if (ImGui::Button("Save Navigation File"))
      {
-         MSG_BOX("Successed to Load File!");
+         if (FAILED(m_pNavigation_Tool->Save_File("../Bin/Resources/Data/Navigtion/Test.bin")))
+             MSG_BOX("Success Save File");
+         else
+             MSG_BOX("Failed to Save File");
      }
 
+     if (ImGui::Button("Load Navigation File"))
+     {
+         if(FAILED(m_pNavigation_Tool->LoadFile("../Bin/Resources/Data/Navigtion/Kamen2_Navigation.bin")))
+             MSG_BOX("Failed to Load File");
+         else
+         {
+             MSG_BOX("Successed to Load File!");
+         }
 
- }
- if (ImGui::Button("Load"))
- {
 
- }
+     }
+     if (ImGui::Button("Load"))
+     {
 
- ImGui::End();
+     }
+
+     ImGui::End();
 #pragma endregion
 
  
@@ -336,7 +337,7 @@ HRESULT CLevel_MapEditor::Render()
     _uint iObjectIndex = {};
     string strSrc;
 
-    const list<CGameObject*>& BackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_BackGround"));
+    const list<CGameObject*>& BackGroundObject = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"));
     for (auto pObject : BackGroundObject)
     {
         CMapObject* pMapObject = dynamic_cast<CMapObject*>(pObject);
@@ -456,11 +457,11 @@ HRESULT CLevel_MapEditor::Add_MapObject()
         ENUM_TO_INT(LEVEL::MAP_EDITOR), TEXT("Layer_Background"), &Desc)))
         return E_FAIL;
 
-    //CMapObject* pMapObject = dynamic_cast<CMapObject*>(m_pBackGroundObject->back());
-    //if (nullptr == pMapObject)
-    //    return S_OK;
+    /*CMapObject* pMapObject = dynamic_cast<CMapObject*>(m_pBackGroundObject->back());
+    if (nullptr == pMapObject)
+        return S_OK;
 
-    //m_pMapObject = pMapObject;
+    m_pMapObject = pMapObject;*/
 
     return S_OK;
 }

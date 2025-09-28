@@ -147,6 +147,12 @@ void CBody_Kamen::Change_Model(PHASE eType)
         m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, 0, true);
         m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
     }
+    else if (PHASE::PHASE3 == eType)
+    {
+        m_iCurModelIndex = 2;
+        m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, 0, true);
+        m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
+    }
 }
 
 HRESULT CBody_Kamen::Add_Components()
@@ -173,6 +179,13 @@ HRESULT CBody_Kamen::Add_Components()
     /* Com_HorseModel */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_Horse"),
         TEXT("Com_HorseModel"), reinterpret_cast<CComponent**>(&pModel))))
+        return E_FAIL;
+
+    m_pModelComs.push_back(pModel);
+
+    /* Com_Phase3Model */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_3"),
+        TEXT("Com_Phase3Model"), reinterpret_cast<CComponent**>(&pModel))))
         return E_FAIL;
 
     m_pModelComs.push_back(pModel);
