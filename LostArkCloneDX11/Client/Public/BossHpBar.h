@@ -26,6 +26,7 @@ private:
 	_uint					m_iBackIndex = {};
 
 	_uint					m_iMaxHp = {};
+	_float					m_fHpPerBar = {};
 
 	FONT_DESC				m_HpFontDesc = {};
 	FONT_DESC				m_LineFontDesc = {};

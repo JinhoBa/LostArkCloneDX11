@@ -33,6 +33,8 @@ HRESULT CBossHpBar::Initialize(void* pArg)
 
 	m_pKamenInfo = pKamen->Get_InfoPtr();
 
+	m_fHpPerBar = m_pKamenInfo->fMaxHp / 100.f;
+
 	UIOBJECT_DESC* pParent_Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
 	UIBAR_DESC Desc = {};
@@ -43,8 +45,8 @@ HRESULT CBossHpBar::Initialize(void* pArg)
 	Desc.fSizeX = 523.f;
 	Desc.fSizeY = 28.f;
 	Desc.pParent_TransformCom = pParent_Desc->pParent_TransformCom;
-	Desc.fMax = 10000000.f;
-	Desc.fStartValue = 0.1f;
+	Desc.fMax = m_fHpPerBar;
+	Desc.fStartValue = 1.f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -54,9 +56,9 @@ HRESULT CBossHpBar::Initialize(void* pArg)
 
 	Set_Indices(0, 1);
 
-	m_fValue = (_float)((_uint)m_pKamenInfo->fHp % 10000000) / 10000000.f;
+	m_fValue = (_float)((_uint)m_pKamenInfo->fHp % (_uint)m_fHpPerBar) / m_fHpPerBar;
 
-	m_iFrontIndex = (_uint)(m_pKamenInfo->fHp / 10000000.f) / 7;
+	m_iFrontIndex = (_uint)(m_pKamenInfo->fHp / m_fHpPerBar) / 7;
 	m_iBackIndex = m_iFrontIndex + 1;
 
 	if (m_iBackIndex > 7)
@@ -73,14 +75,14 @@ void CBossHpBar::Priority_Update(_float fTimeDelta)
 
 void CBossHpBar::Update(_float fTimeDelta)
 {
-	_uint iNumLine = (_uint)m_pKamenInfo->fHp / 10000000;
+	_uint iNumLine = (_uint)m_pKamenInfo->fHp / (_uint)m_fHpPerBar;
 
-	m_fValue = (_float)((_uint)m_pKamenInfo->fHp % 10000000) / 10000000.f;
+	m_fValue = (_float)((_uint)m_pKamenInfo->fHp % (_uint)m_fHpPerBar) / m_fHpPerBar;
 	
-	m_iFrontIndex = (_uint)(m_pKamenInfo->fHp / 10000000.f) % 7;
+	m_iFrontIndex = (_uint)(m_pKamenInfo->fHp / m_fHpPerBar) % 6;
 	m_iBackIndex = m_iFrontIndex + 1;
 
-	if (m_iBackIndex > 7)
+	if (m_iBackIndex > 6)
 		m_iBackIndex = 0;
 
 	_uint iHp = (_uint)m_pKamenInfo->fHp;
