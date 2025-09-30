@@ -28,6 +28,7 @@ public:
 	_bool isDead() const {
 		return m_isDead;
 	}
+	void Set_Dead() { m_isDead = true; }
 	CTransform*			Get_Transform() { return m_pTransformCom; }
 	class CComponent*	Find_Component(const _wstring& strComponentTag);
 

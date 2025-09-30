@@ -43,7 +43,8 @@ void CMonster_Idle::Update(_float fTimeDelta)
 	}
 	else 	/* 전투 상태 아닐 때 */
 	{
-		/* Turn 으로 */
+		if(0.f >= m_pInfo->fHp)
+			m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::DEAD), nullptr);
 	}
 	
 

@@ -50,16 +50,6 @@ void CCamera_Fix::Late_Update(_float fTimeDelta)
 
 HRESULT CCamera_Fix::Render()
 {
-    /*
-    _float fFovy = XMConvertToDegrees(m_fFovy);
-   
-    ImGui::InputFloat("Fovy", &fFovy, 0.1f, 1.f);
-    ImGui::InputFloat("X", &m_vDistance.x, 0.1f, 1.f);
-    ImGui::InputFloat("Y", &m_vDistance.y, 0.1f, 1.f);
-    ImGui::InputFloat("Z", &m_vDistance.z, 0.1f, 1.f);
-
-    m_fFovy = XMConvertToRadians(fFovy);*/
-
     return S_OK;
 }
 

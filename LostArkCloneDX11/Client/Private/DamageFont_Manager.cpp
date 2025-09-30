@@ -29,7 +29,7 @@ void CDamageFont_Manager::Add_DamageFont(DAMAGEFONT eType, _float fDamage, _floa
     
     _int iDamage = (_int)(fDamage * m_pGameInstance->Random(0.8f, 1.2f));
     DamageFont.strWord = to_wstring(iDamage);
-    DamageFont.fScale = 1.5f;
+    DamageFont.fScale = 1.7f;
 
     switch (eType)
     {
@@ -47,9 +47,10 @@ void CDamageFont_Manager::Add_DamageFont(DAMAGEFONT eType, _float fDamage, _floa
         break;
     }
     DamageFont.vPositon = _float2(vPostion.x, vPostion.y);
-    _float OffSetX = m_pGameInstance->Random(-0.5f, 0.5f);
-    _float OffSetXZ = m_pGameInstance->Random(-0.5f, 0.5f);
-    _float4 vPosition = _float4(vPostion.x + OffSetX, vPostion.y + 2.f, vPostion.z + OffSetXZ, 0.f);
+    _float OffSetX = m_pGameInstance->Random(-0.2f, 0.2f);
+    _float OffSetXZ = m_pGameInstance->Random(-0.2f, 0.2f);
+    _float OffSetXY = m_pGameInstance->Random(-0.3f, 0.3f);
+    _float4 vPosition = _float4(vPostion.x + OffSetX, vPostion.y + 1.5f + OffSetXY, vPostion.z + OffSetXZ, 0.f);
 
     m_DamageFonts.emplace_back(DamageFont, vPosition);
 }
@@ -65,8 +66,8 @@ void CDamageFont_Manager::Update_DamageFont(_float fTimeDelta)
     {
         (*iter).second.w += fTimeDelta;
 
-        if (0.5f < (*iter).first.fScale)
-            (*iter).first.fScale -= 0.05f;
+        if (0.8f < (*iter).first.fScale)
+            (*iter).first.fScale -= 0.1f;
 
         (*iter).first.vColor.w = 1.f - max(0.f ,(*iter).second.w - 0.8f) * 2.f;
         (*iter).first.vColor.x *= (*iter).first.vColor.w;
@@ -78,10 +79,10 @@ void CDamageFont_Manager::Update_DamageFont(_float fTimeDelta)
         ViewPortPosition = XMVector3TransformCoord(ViewPortPosition, m_pGameInstance->Get_Transfrom_Matrix(D3DTS::PROJ));
 
         (*iter).first.vPositon = _float2(
-            (_float)g_iWinSizeX * 0.5f + ViewPortPosition.m128_f32[0] * (_float)g_iWinSizeX * 0.5f- 50.f,
-            (_float)g_iWinSizeY * 0.5f + ViewPortPosition.m128_f32[1] * (_float)g_iWinSizeY * -0.5f);
+            (_float)g_iWinSizeX * 0.5f + ViewPortPosition.m128_f32[0] * (_float)g_iWinSizeX * 0.5f - 70.f * ((*iter).first.fScale - 1.f),
+            (_float)g_iWinSizeY * 0.5f + ViewPortPosition.m128_f32[1] * (_float)g_iWinSizeY * -0.5f - 10.f * ((*iter).first.fScale - 1.f));
 
-        m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &(*iter).first);
+        m_pGameInstance->Add_FontDesc(TEXT("Nanum16_Font"), &(*iter).first);
 
         if ((*iter).second.w > 1.f)
         {

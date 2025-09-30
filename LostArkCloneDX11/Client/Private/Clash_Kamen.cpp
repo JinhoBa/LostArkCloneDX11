@@ -60,7 +60,7 @@ void CClash_Kamen::Update(_float fTimeDelta)
 			m_pPlayerTransform->TurnTo(m_pKamen->Get_Transform()->Get_Position());
 
 			dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
-				ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Start_Clash();
+				ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Set_State(CPlayer::CLASH);
 
 			dynamic_cast<CCamera_Clash*>(m_pGameInstance->Find_Camera(TEXT("Camera_Clash"))
 				)->Set_Position(m_pPlayerTransform->Get_Position());

@@ -270,13 +270,21 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 	{
 		if (!strcmp(FileType.c_str(), "eye_iristexture_ui"))
 			eTexture = TEXTURE::MASK;
+		else if (!strcmp(FileType.c_str(), "color_fx_skin"))
+			eTexture = TEXTURE::MASK;
+		else if (!strcmp(FileType.c_str(), "headbase_diffusetexture_ui"))
+			eTexture = TEXTURE::DIFFUSE;
 		else if (!strcmp(FileType.c_str(), "diffuse_base"))
 			eTexture = TEXTURE::DIFFUSE;
 		else if (!strcmp(FileType.c_str(), "orm"))
 			eTexture = TEXTURE::ORM;
 		else if (!strcmp(FileType.c_str(), "tdspecular"))
 			eTexture = TEXTURE::SPECULAR;
+		else if (!strcmp(FileType.c_str(), "headbase_speculartexture_ui"))
+			eTexture = TEXTURE::SPECULAR;
 		else if (!strcmp(FileType.c_str(), "detail_normal"))
+			eTexture = TEXTURE::NORMAL;
+		else if (!strcmp(FileType.c_str(), "headbase_normaltexture_ui"))
 			eTexture = TEXTURE::NORMAL;
 		else if (!strcmp(FileType.c_str(), "diffuse_seamless"))
 			eTexture = TEXTURE::DIFFUSE_SEAMLESS;
@@ -326,6 +334,10 @@ HRESULT CMaterials::Add_VectorValue(string& strValue, string& strName)
 	TEXTURE eTexture = {};
 
 	if (!strcmp(strName.c_str(), "diffuse_color"))
+		eTexture = TEXTURE::DIFFUSE;
+	else if (!strcmp(strName.c_str(), "base_skincolor_ui"))
+		eTexture = TEXTURE::DIFFUSE;
+	else if (!strcmp(strName.c_str(), "base_haircolor_base_ui"))
 		eTexture = TEXTURE::DIFFUSE;
 	else if (!strcmp(strName.c_str(), "emissive_color"))
 		eTexture = TEXTURE::EMISSIVE;

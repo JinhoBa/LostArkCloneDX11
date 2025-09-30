@@ -114,8 +114,7 @@ void CMonster::Update_HitBox(_uint iSkillID, _uint iHitIndex)
 
 void CMonster::Set_Dead(_float fTime)
 {
-	if (2.f <= fTime)
-		m_isDead = true;
+	m_isDead = true;
 }
 
 HRESULT CMonster::Initialize_Prototype()
@@ -176,9 +175,6 @@ void CMonster::Update(_float fTimeDelta)
 		m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Player"));
 
 	__super::Update(fTimeDelta);
-
-	if (m_EnemyInfo.fHp <= 0.f)
-		m_isDead = true;
 }
 
 void CMonster::Late_Update(_float fTimeDelta)

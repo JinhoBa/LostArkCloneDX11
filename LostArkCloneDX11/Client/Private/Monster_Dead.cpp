@@ -32,7 +32,8 @@ void CMonster_Dead::Update(_float fTimeDelta)
 {
 	m_fTimeAcc += fTimeDelta;
 
-	m_pMonster->Set_Dead(m_fTimeAcc);
+	if(5.f < m_fTimeAcc)
+		m_pMonster->Set_Dead(m_fTimeAcc);
 }
 
 void CMonster_Dead::Exit()

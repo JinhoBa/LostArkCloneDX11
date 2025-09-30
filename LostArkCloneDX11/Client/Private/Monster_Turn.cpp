@@ -38,6 +38,10 @@ void CMonster_Turn::Enter(void* pArg)
 
 	/* ¿À¸¥ÂÊ */
 	//m_pMonster->Set_Animation(14, true);
+
+	if (0.f >= m_pInfo->fHp)
+		m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::DEAD), nullptr);
+
 }
 
 void CMonster_Turn::Update(_float fTimeDelta)

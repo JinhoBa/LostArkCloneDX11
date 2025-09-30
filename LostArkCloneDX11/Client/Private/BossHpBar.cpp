@@ -87,9 +87,17 @@ void CBossHpBar::Update(_float fTimeDelta)
 
 	_uint iHp = (_uint)m_pKamenInfo->fHp;
 
-	m_HpFontDesc.strWord = to_wstring(iHp) + L"/" + to_wstring(m_iMaxHp);
 
-	m_LineFontDesc.strWord = L"X " + to_wstring(iNumLine);
+	if (0.f <= m_pKamenInfo->fHp)
+	{
+		m_HpFontDesc.strWord = to_wstring(0) + L"/" + to_wstring(m_iMaxHp);
+		m_LineFontDesc.strWord = L"X " + to_wstring(0);
+	}
+	else
+	{
+		m_HpFontDesc.strWord = to_wstring(iHp) + L"/" + to_wstring(m_iMaxHp);
+		m_LineFontDesc.strWord = L"X " + to_wstring(iNumLine);
+	}
 }
 
 void CBossHpBar::Late_Update(_float fTimeDelta)

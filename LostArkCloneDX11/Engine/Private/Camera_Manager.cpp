@@ -38,12 +38,13 @@ HRESULT CCamera_Manager::Bind_Camera(const _wstring& strCameraNameTag, _bool isR
 
 	m_fLerpTime = fLerpTime;
 
-	if (nullptr != m_pPreCamera)
+	if(nullptr != m_pCurrentCamera)
 	{
 		XMStoreFloat3(&m_vPrePosition, m_pCurrentCamera->Get_Transform()->Get_Position());
 		XMStoreFloat3(&m_vPreTargetPosition, m_pCurrentCamera->Get_TargetPosition());
 		m_fPreFov = m_pCurrentCamera->Get_Fovy();
 	}
+
 
 	if (false == isReturn)
 	{

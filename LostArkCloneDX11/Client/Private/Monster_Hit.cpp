@@ -55,7 +55,10 @@ void CMonster_Hit::Update(_float fTimeDelta)
 	{
 		if(m_fStiffnessTime >= 1.f)
 		{
-			m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::IDLE), nullptr);
+			if (m_pInfo->fHp <= 0.f)
+				m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::DEAD), nullptr);
+			else
+				m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::IDLE), nullptr);
 			return;
 		}
 	}
@@ -113,6 +116,10 @@ void CMonster_Hit::Update(_float fTimeDelta)
 		}
 	}
 
+
+
+	if (m_pInfo->fHp <= 0.f)
+		m_pStateMachine->Change_State(m_pMonster->Get_State(CMonster::STATE::DEAD), nullptr);
 }
 
 void CMonster_Hit::Exit()
