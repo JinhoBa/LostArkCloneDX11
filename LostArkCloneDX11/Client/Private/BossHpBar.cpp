@@ -88,7 +88,7 @@ void CBossHpBar::Update(_float fTimeDelta)
 	_uint iHp = (_uint)m_pKamenInfo->fHp;
 
 
-	if (0.f <= m_pKamenInfo->fHp)
+	if (0.f >= m_pKamenInfo->fHp)
 	{
 		m_HpFontDesc.strWord = to_wstring(0) + L"/" + to_wstring(m_iMaxHp);
 		m_LineFontDesc.strWord = L"X " + to_wstring(0);

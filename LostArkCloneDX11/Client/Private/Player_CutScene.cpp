@@ -30,6 +30,9 @@ void CPlayer_CutScene::Enter(void* pArg)
 	{
 		m_pPlayer->Set_Animation(36, true);
 	}
+
+	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
+	Toggle_HUD();
 }
 
 void CPlayer_CutScene::Update(_float fTimeDelta)
@@ -39,7 +42,8 @@ void CPlayer_CutScene::Update(_float fTimeDelta)
 
 void CPlayer_CutScene::Exit()
 {
-
+	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
+	Toggle_HUD();
 }
 
 CPlayer_CutScene* CPlayer_CutScene::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

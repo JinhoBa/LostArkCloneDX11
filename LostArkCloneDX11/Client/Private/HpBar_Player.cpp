@@ -77,8 +77,11 @@ void CHpBar_Player::Update(_float fTimeDelta)
 
 void CHpBar_Player::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_PlayerNameFont);
-    m_pGameInstance->Add_RenderGroup(RENDER::WORLDUI, this);
+    if(m_isVisible)
+    {
+        m_pGameInstance->Add_FontDesc(TEXT("Defualt_Font"), &m_PlayerNameFont);
+        m_pGameInstance->Add_RenderGroup(RENDER::WORLDUI, this);
+    }
 }
 
 HRESULT CHpBar_Player::Render()

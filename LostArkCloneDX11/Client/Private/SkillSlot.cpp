@@ -78,7 +78,7 @@ void CSkillSlot::Update(_float fTimeDelta)
 
 void CSkillSlot::Late_Update(_float fTimeDelta)
 {
-	if(0.f != m_fCoolTime)
+	if(m_isVisible && 0.f != m_fCoolTime)
 	{
 		size_t NumStr = {};
 		if (9.f <= m_fCoolTime)

@@ -46,6 +46,7 @@ public:
 	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
 	void			EnterBoss();
 	void			Start_Phase(_uint iPhaseIndex);
+	void			Toggle_PartObject(const _tchar* PartObjectTag);
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

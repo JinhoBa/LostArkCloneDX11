@@ -54,8 +54,11 @@ void CQuickSlot::Update(_float fTimeDelta)
 
 void CQuickSlot::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_Font_Key);
-	__super::Late_Update(fTimeDelta);
+	if(m_isVisible)
+	{
+		m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_Font_Key);
+		__super::Late_Update(fTimeDelta);
+	}
 }
 
 HRESULT CQuickSlot::Render()

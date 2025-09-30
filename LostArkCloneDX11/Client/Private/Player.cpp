@@ -96,6 +96,7 @@ void CPlayer::EnterBoss()
 
     m_pNavigationCom->Set_Current_CellIndex(0);
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
+    m_pStateMachineCom->Change_State(m_States[ENUM_TO_INT(STATE::CUTSCENE)], nullptr);
 }
 
 
@@ -156,6 +157,11 @@ void CPlayer::Start_Phase(_uint iPhaseIndex)
 
         m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 30.f, 1.f));
     }
+}
+
+void CPlayer::Toggle_PartObject(const _tchar* PartObjectTag)
+{
+    Find_PartObject(PartObjectTag)->Toggle_Visible();
 }
 
 _bool CPlayer::Move(_float fTimeDelta)

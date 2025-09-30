@@ -43,6 +43,9 @@ void CPlayer_Dialogue::Enter(void* pArg)
 	{
 		m_pPlayer->Set_Animation(36, true);
 	}
+
+	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
+	Toggle_HUD();
 }
 
 void CPlayer_Dialogue::Update(_float fTimeDelta)
@@ -53,6 +56,8 @@ void CPlayer_Dialogue::Update(_float fTimeDelta)
 void CPlayer_Dialogue::Exit()
 {
 	m_pPlayer->Get_Transform()->Set_State(STATE::POSITION, XMLoadFloat4(&m_vPrePosition));
+	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
+	Toggle_HUD();
 }
 
 CPlayer_Dialogue* CPlayer_Dialogue::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

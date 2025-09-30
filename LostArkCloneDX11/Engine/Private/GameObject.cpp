@@ -18,6 +18,7 @@ CGameObject::CGameObject(const CGameObject& Prototype)
 	, m_pGameInstance{ Prototype.m_pGameInstance }
 	, m_isDead { Prototype.m_isDead }
 	, m_isCloned{ true }
+	, m_isVisible{ true }
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);

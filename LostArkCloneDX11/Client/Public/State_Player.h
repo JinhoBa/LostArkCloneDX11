@@ -17,6 +17,7 @@ public:
 	virtual void Exit()override;
 
 	_bool Check_Dash();
+	void Toggle_HUD();
 
 protected:
 	class CGameManager* m_pGameManager = { nullptr };

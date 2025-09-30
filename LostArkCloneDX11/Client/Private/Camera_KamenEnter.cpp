@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 #include "Camera_KamenEnter.h"
+#include "Player.h"
 
 CCamera_KamenEnter::CCamera_KamenEnter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CCamera{ pDevice, pContext }
@@ -125,8 +126,15 @@ void CCamera_KamenEnter::End_Scene()
 {
     m_pTransformCom->Set_State(STATE::POSITION,
         XMVectorSetW(XMLoadFloat3(&m_anim[2].vEndPosition), 1.f));
+
     m_vTargetPosition = m_anim[m_iAnimationIndex].vTargetPosition;
     m_pGameInstance->Bind_Camera(TEXT("Camera_Kamen_Intro"), false, 2.f);
+
+    CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back());
+
+    if (nullptr != pPlayer)
+        pPlayer->Set_State(CPlayer::IDLE);
+
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Sword"),
         ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Monster"))))
         return;

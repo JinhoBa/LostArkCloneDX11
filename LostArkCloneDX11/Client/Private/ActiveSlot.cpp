@@ -50,9 +50,11 @@ void CActiveSlot::Late_Update(_float fTimeDelta)
 HRESULT CActiveSlot::Render()
 {
 
-
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if(m_isVisible)
+	{
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

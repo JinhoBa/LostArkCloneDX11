@@ -70,7 +70,7 @@ void CAwakeSlot::Update(_float fTimeDelta)
 
 void CAwakeSlot::Late_Update(_float fTimeDelta)
 {
-	if (0.f != m_fCoolTime)
+	if (m_isVisible && 0.f != m_fCoolTime)
 	{
 		_uint iMinute = (_uint)m_fCoolTime / 60;
 		if (60.f < m_fCoolTime)

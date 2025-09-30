@@ -25,14 +25,18 @@ public:
 	virtual HRESULT Render();
 
 public:
-	_bool isDead() const {
+	_bool	isDead() const {
 		return m_isDead;
 	}
-	void Set_Dead() { m_isDead = true; }
+	void	Set_Dead() { m_isDead = true; }
+	virtual void	Toggle_Visible() { 
+		m_isVisible = !m_isVisible;
+	}
 	CTransform*			Get_Transform() { return m_pTransformCom; }
 	class CComponent*	Find_Component(const _wstring& strComponentTag);
 
 protected:
+	_bool						m_isVisible = {true};
 	_bool						m_isCloned = {};
 	_bool						m_isDead = { false };
 

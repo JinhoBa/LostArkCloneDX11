@@ -28,6 +28,8 @@ void CPlayer_Clash::Enter(void* pArg)
 	m_eState = STATE::WAIT;
 
 	m_pPlayer->Get_Transform()->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 48.f, 1.f));
+	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
+	Toggle_HUD();
 }
 
 void CPlayer_Clash::Update(_float fTimeDelta)
@@ -67,7 +69,8 @@ void CPlayer_Clash::Update(_float fTimeDelta)
 
 void CPlayer_Clash::Exit()
 {
-
+	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
+	Toggle_HUD();
 }
 
 CPlayer_Clash* CPlayer_Clash::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

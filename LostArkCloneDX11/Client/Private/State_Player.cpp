@@ -49,6 +49,14 @@ _bool CState_Player::Check_Dash()
 	return false;
 }
 
+void CState_Player::Toggle_HUD()
+{
+	for (auto& pObject : m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Canvars")))
+		pObject->Toggle_Visible();
+	for (auto& pObject : m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_HUD")))
+		pObject->Toggle_Visible();
+}
+
 void CState_Player::Free()
 {
 	__super::Free();

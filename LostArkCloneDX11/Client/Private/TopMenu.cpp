@@ -55,9 +55,12 @@ void CTopMenu::Update(_float fTimeDelta)
 
 void CTopMenu::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	if(m_isVisible)
+	{
+		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 
-	__super::Late_Update(fTimeDelta);
+		__super::Late_Update(fTimeDelta);
+	}
 }
 
 HRESULT CTopMenu::Render()

@@ -77,7 +77,7 @@ public:
 #pragma endregion
 
 #pragma region RENDERER
-	void	IsVisibleUI(_bool isVisible);
+	void	Toggle_VisibleUI();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 #pragma endregion
 

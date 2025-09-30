@@ -16,8 +16,8 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	void IsVisibleUI(_bool isVisible) {
-		m_isVisibleUI = isVisible;
+	void Toggle_VisibleUI() {
+		m_isVisibleUI = !m_isVisibleUI;
 	}
 
 public:

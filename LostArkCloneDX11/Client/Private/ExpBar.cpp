@@ -56,9 +56,8 @@ void CExpBar::Update(_float fTimeDelta)
 
 void CExpBar::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
-
-
+	if(m_isVisible)
+		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 }
 
 HRESULT CExpBar::Render()

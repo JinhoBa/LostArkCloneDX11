@@ -59,7 +59,8 @@ void CHUD_Panel::Update(_float fTimeDelta)
 
 void CHUD_Panel::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
+	if(m_isVisible)
+		m_pGameInstance->Add_RenderGroup(RENDER::UI, this);
 
 	__super::Late_Update(fTimeDelta);
 }

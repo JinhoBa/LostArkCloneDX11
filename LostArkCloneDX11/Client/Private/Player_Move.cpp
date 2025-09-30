@@ -207,7 +207,6 @@ void CPlayer_Move::Update(_float fTimeDelta)
 
 void CPlayer_Move::Exit()
 {
-
 }
 
 CPlayer_Move* CPlayer_Move::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)
