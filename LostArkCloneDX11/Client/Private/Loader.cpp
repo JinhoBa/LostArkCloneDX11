@@ -30,6 +30,7 @@
 #include "BossHpFrame.h"
 #include "BossEnterUI.h"
 #include "ClashUI.h"
+#include "DialogueUI.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -53,9 +54,8 @@
 #include "Dynamic_SkyBox.h"
 #include "Kamen_Sword.h"
 #include "Kamen_Area.h"
+#include "Npc.h"
 #pragma endregion
-
-
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }, m_pContext{pContext},
@@ -665,16 +665,27 @@ HRESULT CLoader::Loading_For_Tutorial()
 #pragma endregion
 
 #pragma region UI_TEXTURE
+	/* For.Prototype_Component_Texture_Dialogue */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Texture_Dialogue"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Dialogue/Dialogue.dds"), 1))))
+		return E_FAIL;
+
 
 #pragma endregion
 	m_fLoadProgress = 20.f;
 	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
 
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(-90.f));
 
 	/* For.Prototype_Component_Model_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Sky"),
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_Sky.bin"))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Npc */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Npc"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Npc/Npc.bin"))))
 		return E_FAIL;
 
 #pragma region TRISION
@@ -797,7 +808,15 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 	m_fLoadProgress = 60.f;
 	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
-	
+
+	m_fLoadProgress = 80.f;
+
+#pragma region GAEMOBJCET_PROTOTYPE
+	/* For.Prototype_GameObject_Npc */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Npc"),
+		CNpc::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_MapObjcet */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_MapObject"),
 		CMapObject::Create(m_pDevice, m_pContext))))
@@ -807,16 +826,13 @@ HRESULT CLoader::Loading_For_Tutorial()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkySphere"),
 		CSkySphere::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-
-	m_fLoadProgress = 80.f;
-#pragma region GAEMOBJCET_PROTOTYPE
-
 #pragma endregion
 
 #pragma region UI_PROTOTYPE
-	
-
+	/* For.Prototype_GameObject_DialogueUI */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_DialogueUI"),
+		CDialogueUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 	m_fLoadProgress = 100.f;
 

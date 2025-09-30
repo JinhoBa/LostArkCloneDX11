@@ -178,12 +178,15 @@
     <ClInclude Include="..\public\Camera_Clash.h" />
     <ClInclude Include="..\public\Camera_KamenEnter.h" />
     <ClInclude Include="..\public\Camera_Kamen_Intro.h" />
+    <ClInclude Include="..\public\Camera_Npc.h" />
     <ClInclude Include="..\public\ClashUI.h" />
     <ClInclude Include="..\public\Clash_Kamen.h" />
     <ClInclude Include="..\public\Clash_Manager.h" />
     <ClInclude Include="..\public\Critical_Kamen.h" />
     <ClInclude Include="..\public\CutScene_Kamen.h" />
     <ClInclude Include="..\Public\Dead_Kamen.h" />
+    <ClInclude Include="..\public\DialogueUI.h" />
+    <ClInclude Include="..\public\Dialogue_Controller.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
@@ -243,6 +246,7 @@
     <ClInclude Include="..\public\Mouse.h" />
     <ClInclude Include="..\public\Move_Kamen.h" />
     <ClInclude Include="..\Public\MpBar.h" />
+    <ClInclude Include="..\public\Npc.h" />
     <ClInclude Include="..\Public\pch.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\Player_ChangeStance.h" />
@@ -251,6 +255,7 @@
     <ClInclude Include="..\public\Player_ComboSkill.h" />
     <ClInclude Include="..\public\Player_CutScene.h" />
     <ClInclude Include="..\public\Player_Dash.h" />
+    <ClInclude Include="..\public\Player_Dialogue.h" />
     <ClInclude Include="..\public\Player_Hit.h" />
     <ClInclude Include="..\public\Player_Move.h" />
     <ClInclude Include="..\public\Player_NormalSkill.h" />
@@ -310,12 +315,15 @@
     <ClCompile Include="..\private\Camera_Clash.cpp" />
     <ClCompile Include="..\private\Camera_KamenEnter.cpp" />
     <ClCompile Include="..\private\Camera_Kamen_Intro.cpp" />
+    <ClCompile Include="..\private\Camera_Npc.cpp" />
     <ClCompile Include="..\private\ClashUI.cpp" />
     <ClCompile Include="..\private\Clash_Kamen.cpp" />
     <ClCompile Include="..\private\Clash_Manager.cpp" />
     <ClCompile Include="..\private\Critical_Kamen.cpp" />
     <ClCompile Include="..\private\CutScene_Kamen.cpp" />
     <ClCompile Include="..\Private\Dead_Kamen.cpp" />
+    <ClCompile Include="..\private\DialogueUI.cpp" />
+    <ClCompile Include="..\private\Dialogue_Controller.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />
@@ -393,6 +401,7 @@
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\Move_Kamen.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
+    <ClCompile Include="..\private\Npc.cpp" />
     <ClCompile Include="..\Private\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -404,6 +413,7 @@
     <ClCompile Include="..\private\Player_ComboSkill.cpp" />
     <ClCompile Include="..\private\Player_CutScene.cpp" />
     <ClCompile Include="..\private\Player_Dash.cpp" />
+    <ClCompile Include="..\private\Player_Dialogue.cpp" />
     <ClCompile Include="..\private\Player_Hit.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />
     <ClCompile Include="..\private\Player_NormalSkill.cpp" />

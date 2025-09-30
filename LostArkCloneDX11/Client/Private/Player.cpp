@@ -30,6 +30,7 @@
 #include "Player_Hit.h"
 #include "Player_CutScene.h"
 #include "Player_Clash.h"
+#include "Player_Dialogue.h"
 #pragma endregion
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -45,6 +46,11 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 _float CPlayer::Get_TrackPositon()
 {
     return static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_TrackPoisiton();
+}
+
+void CPlayer::Set_State(STATE eState, void* pArg)
+{
+    m_pStateMachineCom->Change_State(m_States[eState], pArg);
 }
 
 void CPlayer::Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime)
@@ -92,10 +98,6 @@ void CPlayer::EnterBoss()
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 32.f, 1.f));
 }
 
-void CPlayer::Start_Clash()
-{
-    m_pStateMachineCom->Change_State(m_States[STATE::CLASH], nullptr);
-}
 
 void CPlayer::Start_Phase(_uint iPhaseIndex)
 {
@@ -365,9 +367,14 @@ void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
 
         CPlayer_Hit::PLAYER_HIT_DESC Desc = {};
         Desc.eType = Attack_Desc.eHitType;
-        XMStoreFloat3(&Desc.vPosition, m_pColliderCom->Get_HitBoxDesc().pHitObject->Get_Transform()->Get_Position());
 
-        m_pStateMachineCom->Change_State(m_States[STATE::HIT], &Desc);
+
+        CGameObject* pObject = m_pColliderCom->Get_HitBoxDesc().pHitObject;
+        if (nullptr != pObject)
+        {
+            XMStoreFloat3(&Desc.vPosition, pObject->Get_Transform()->Get_Position());
+            m_pStateMachineCom->Change_State(m_States[STATE::HIT], &Desc);
+        }
     }
     
 }
@@ -507,6 +514,7 @@ HRESULT CPlayer::Ready_States()
     m_States[HIT] = CPlayer_Hit::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CUTSCENE] = CPlayer_CutScene::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CLASH] = CPlayer_Clash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[DIALOGUE] = CPlayer_Dialogue::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }

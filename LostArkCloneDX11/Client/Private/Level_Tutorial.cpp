@@ -38,6 +38,9 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
 
+    if (FAILED(Ready_Layer_Npc(TEXT("Layer_Npc"))))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
 
@@ -66,7 +69,7 @@ HRESULT CLevel_Tutorial::Ready_Light()
     Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
     Desc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
     Desc.vSpecular = _float4(1.f, 1.f, 1.f, 0.5f);
-    Desc.vDirection = _float4(0.5f, 0.5f, 0.5f, 0.f);
+    Desc.vDirection = _float4(-0.5f, 0.5f, 0.5f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(Desc)))
         return E_FAIL;
@@ -121,30 +124,39 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.fMaxHp = Desc.fHp = 100000.f;
     Desc.fSpeedPersec = 3.f;
     Desc.fRotatePersec = 5.f;
-    Desc.vPosition = _float4(50.f, 0.f, 50.f, 1.f);
+    Desc.vPosition = _float4(40.f, 0.f, 38.f, 1.f);
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster1";
 
     ////// 0 : Monter1
-  /*  if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
         ENUM_TO_INT(LEVEL::TUTORIAL), strLayerTag, &Desc)))
-        return E_FAIL;*/
+        return E_FAIL;
 
     Desc.iMonsterID = 1;
     Desc.iNumAttack = 2;
-    Desc.fMaxHp = Desc.fHp = 100000.f;
+    Desc.fMaxHp = Desc.fHp = 50000.f;
     Desc.fAttackRange = 2.f;
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
 
     
     // 0 : Monter2
-    for (size_t i = 0; i < 1; i++)
+    for (size_t i = 0; i < 5; i++)
     {
         Desc.vPosition = _float4(40.f + m_pGameInstance->Random(-5.f, 5.f), 0.f, 40.f + m_pGameInstance->Random(-5.f, 5.f), 1.f);
         if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
-            ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag, &Desc)))
+            ENUM_TO_INT(LEVEL::TUTORIAL), strLayerTag, &Desc)))
             return E_FAIL;
     }
   
+
+    return S_OK;
+}
+
+HRESULT CLevel_Tutorial::Ready_Layer_Npc(const _wstring& strLayerTag)
+{
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Npc"),
+        ENUM_TO_INT(LEVEL::TUTORIAL), strLayerTag, nullptr)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -231,6 +243,18 @@ HRESULT CLevel_Tutorial::Ready_Camera()
         PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Clash"), &Desc)))))
         return E_FAIL;
 
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(60.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+    if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Npc"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Npc"), &Desc)))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -255,6 +279,8 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HoldingSkillUI"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
+
+
 
     return S_OK;
 }

@@ -22,6 +22,7 @@ private:
 	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Kamen(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Monster(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_Npc(const _wstring& strLayerTag);
 	HRESULT Ready_Camera();
 	HRESULT Ready_Layer_Canvas(const _wstring& strLayerTag);
 

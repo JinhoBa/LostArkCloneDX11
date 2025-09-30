@@ -20,7 +20,7 @@ public:
 		IDLE, MOVE, 
 		NORMAL_SKILL, CHARGE_SKILL, COMBO_SKILL, DASH, CHANGE_STANCE,
 		HIT,
-		CUTSCENE, CLASH,
+		CUTSCENE, CLASH, DIALOGUE,
 		STATE_END};
 
 private:
@@ -36,6 +36,7 @@ public:
 	const CHARGE_SKILL_DESC* Get_ChargeSkill_Desc() { return &m_ChargeSkill_Desc; }
 	_float			Get_TrackPositon();
 
+	void			Set_State(STATE eState, void* pArg = nullptr);
 	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
 	void			Set_HitBox(_float3& vCenter, _float3& vExtends);
@@ -44,7 +45,6 @@ public:
 	_bool			isAnimationFinish();
 	HRESULT			Change_Level(_fvector vPositon, const _tchar* pNavigationPrototypeTag);
 	void			EnterBoss();
-	void			Start_Clash();
 	void			Start_Phase(_uint iPhaseIndex);
 
 public:
