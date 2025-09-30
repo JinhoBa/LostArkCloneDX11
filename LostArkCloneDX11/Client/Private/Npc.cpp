@@ -4,8 +4,6 @@
 #include "GameInstance.h"
 #include "GameManager.h"
 
-
-
 CNpc::CNpc(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CCharacter{ pDevice, pContext }
 {
@@ -43,6 +41,7 @@ HRESULT CNpc::Initialize(void* pArg)
 
     m_ePreState = { STATE::END };
     m_eCurState = { STATE::FEAR };
+    m_fWalkSpeed = 0.7f;
 
     m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
@@ -51,6 +50,8 @@ HRESULT CNpc::Initialize(void* pArg)
         return E_FAIL;
 
     Safe_AddRef(m_pPlayerTransformCom);
+
+
 
     return S_OK;
 }
@@ -73,18 +74,19 @@ void CNpc::Update(_float fTimeDelta)
             m_eCurState = STATE::TALK;
             m_pGameManager->Start_Dialogue(0, m_pTransformCom->Get_Position());
         }
+        
         break;
 
     case Client::CNpc::TALK:
         if (m_pGameInstance->Get_KeyDown(DIK_ESCAPE))
         {
             m_eCurState = STATE::IDLE;
-            m_pGameManager->End_Dialogue();
+            CGameManager::GetInstance()->End_Dialogue();
         }
         break;
 
     case Client::CNpc::WALK:
-        if (false == m_pTransformCom->MoveTo(fTimeDelta, XMVectorSet(40.f, 0.f, 39.f, 1.f), 1.f, m_pNavigationCom))
+        if (false == m_pTransformCom->MoveTo(fTimeDelta, XMVectorSet(40.f, 0.f, 39.f, 1.f), m_fWalkSpeed, m_pNavigationCom))
             m_eCurState = STATE::IDLE;
         break;
 

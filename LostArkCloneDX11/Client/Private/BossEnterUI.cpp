@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Player.h"
+#include "Kamen.h"
 
 CBossEnterUI::CBossEnterUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{ pDevice, pContext }
@@ -167,6 +168,7 @@ HRESULT CBossEnterUI::Enter_Boss()
 	m_pGameInstance->Bind_Camera(TEXT("Camera_Enter"));
 
 	dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->EnterBoss();
+	dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Set_Animation(182, false);
 
 	return S_OK;
 }

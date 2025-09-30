@@ -21,6 +21,9 @@ private:
 	virtual ~CNpc() = default;
 
 public:
+	void Set_State(STATE eState) { m_eCurState = eState; }
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual void		Priority_Update(_float fTimeDelta) override;
@@ -33,6 +36,7 @@ private:
 	STATE			m_eCurState = { STATE::END };
 
 	_uint			m_iNumMesh = {};
+	_float			m_fWalkSpeed = {};
 
 	CShader*		m_pShaderCom = { nullptr };
 	CModel*			m_pModelCom = { nullptr };

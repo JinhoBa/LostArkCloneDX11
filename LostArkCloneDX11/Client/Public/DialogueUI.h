@@ -23,12 +23,18 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	FONT_DESC m_NameFontDesc = {};
-	FONT_DESC m_ScriptFontDesc = {};
+	_uint				m_iScriptIndex = {};
+	_uint				m_iTextureIndex = {};
+
+	FONT_DESC			m_NameFontDesc = {};
+	FONT_DESC			m_ScriptFontDesc = {};
+
+	vector<_wstring>	m_Scripts;
 
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Font();
+	HRESULT Ready_Scripts();
 	HRESULT Draw_UI();
 
 public:

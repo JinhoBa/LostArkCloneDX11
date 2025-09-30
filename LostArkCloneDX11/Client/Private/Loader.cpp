@@ -667,7 +667,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 #pragma region UI_TEXTURE
 	/* For.Prototype_Component_Texture_Dialogue */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Texture_Dialogue"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Dialogue/Dialogue.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Dialogue/Dialogue_%d.dds"), 2))))
 		return E_FAIL;
 
 
