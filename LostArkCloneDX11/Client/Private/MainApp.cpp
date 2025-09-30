@@ -17,6 +17,7 @@
 #include "Camera_Kamen_Intro.h"
 #include "Camera_KamenEnter.h"
 #include "Camera_Clash.h"
+#include "Camera_Npc.h"
 #include "UIButton.h"
 #include "Font.h"
 #include "Mouse.h"
@@ -97,6 +98,13 @@ HRESULT CMainApp::Initialize()
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 #pragma endregion
+
+    return S_OK;
+}
+
+HRESULT CMainApp::Late_Initialize()
+{
+
 
     return S_OK;
 }
@@ -233,6 +241,11 @@ HRESULT CMainApp::Ready_Prototype()
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Clash"),
         CCamera_Clash::Create(m_pDevice, m_pContext))))
         return E_FAIL;
+
+    /*For Prototype_GameObject_Camera_Npc*/
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Npc"),
+        CCamera_Npc::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
 #pragma endregion
 
 
@@ -297,6 +310,7 @@ HRESULT CMainApp::Ready_Font()
     m_pGameInstance->Add_Font(TEXT("Defualt_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/Eco.spritefont")));
     m_pGameInstance->Add_Font(TEXT("Bold_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/EcoBold.spritefont")));
     m_pGameInstance->Add_Font(TEXT("Title_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/NanumExtraBold12.spritefont")));
+    m_pGameInstance->Add_Font(TEXT("Nanum16_Font"), CFont::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Fonts/NanumExtraBold16.spritefont")));
 
     return S_OK;
 }

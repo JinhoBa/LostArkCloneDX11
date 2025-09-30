@@ -8,6 +8,7 @@
 #include "Buff_Manager.h"
 #include "DamageFont_Manager.h"
 #include "Clash_Manager.h"
+#include "Dialogue_Controller.h"
 
 #include "UIObject.h"
 #include "Camera_Fix.h"
@@ -48,6 +49,10 @@ HRESULT CGameManager::Initialize_Manager()
 	if (nullptr == m_pClash_Manager)
 		return E_FAIL;
 
+	m_pDialogue_Controller = CDialogue_Controller::Create();
+	if (nullptr == m_pDialogue_Controller)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -55,6 +60,7 @@ void CGameManager::Destory_GameManager()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pDialogue_Controller);
 	Safe_Release(m_pClash_Manager);
 	Safe_Release(m_pDamageFont_Manager);
 	Safe_Release(m_pBuff_Manager);
@@ -207,6 +213,20 @@ _bool  CGameManager::isFinshed_Clash()
 {
 	return m_pClash_Manager->isFinshed_Clash();
 }
+#pragma endregion
+
+#pragma region DIALOGUE_CONTROLLER
+
+void CGameManager::Start_Dialogue(_uint iNpcID, _fvector vNpcPosition)
+{
+	m_pDialogue_Controller->Start_Dialogue(iNpcID, vNpcPosition);
+}
+
+void CGameManager::End_Dialogue()
+{
+	m_pDialogue_Controller->End_Dialogue();
+}
+
 #pragma endregion
 
 void CGameManager::Bind_PickingPos(_float3* pPickingPos)

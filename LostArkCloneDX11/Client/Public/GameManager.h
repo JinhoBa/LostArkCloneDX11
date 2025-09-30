@@ -50,31 +50,30 @@ public:
 
 #pragma region KAMEN_DATA
 	MONSTER_SKILL_INFO* Get_KamenData(_uint iPhase, _uint iSkillID);
-
-	HRESULT			Load_KamenData(const _char* pFilePath);
+	HRESULT				Load_KamenData(const _char* pFilePath);
 #pragma endregion
 
 #pragma region CAMERA_ANIMATION
-	const CAMERA_ANIMATION_DESC* Get_CameraAnimation(_uint iID);
-	HRESULT Load_CameraAnimation(const _char* pFilePath);
+	const CAMERA_ANIMATION_DESC*	Get_CameraAnimation(_uint iID);
+	HRESULT							Load_CameraAnimation(const _char* pFilePath);
 #pragma endregion
 
 #pragma region SKILL_MANAGER
-	void		Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
-	void		Update_Skills(_float fTimeDelta);
+	void			Set_PlayerInfoPrt(PLAYER_INFO* pPlayerInfo);
+	void			Update_Skills(_float fTimeDelta);
 
-	const _float		Check_CoolTime(_uint iSkillID) const;
-	const _bool			Use_Skill(_uint iSkillID) const;
+	const _float	Check_CoolTime(_uint iSkillID) const;
+	const _bool		Use_Skill(_uint iSkillID) const;
 #pragma endregion
 
 #pragma region BUFF_MANAGER
-	class CBuff* Add_Buff(_uint iBuffID);
-	void Remove_Buff(class CBuff* pBuff);
+	class CBuff*	Add_Buff(_uint iBuffID);
+	void			Remove_Buff(class CBuff* pBuff);
 #pragma endregion
 
 #pragma region DAMAGEFONT_MANAGER
-	void Add_DamageFont(DAMAGEFONT eType, _float fDamage, _float3& vPostion);
-	void Update_DamageFont(_float fTimeDelta);
+	void	Add_DamageFont(DAMAGEFONT eType, _float fDamage, _float3& vPostion);
+	void	Update_DamageFont(_float fTimeDelta);
 #pragma endregion
 
 #pragma region CLASH_MANAGER
@@ -82,11 +81,13 @@ public:
 	_bool   isFinshed_Clash();
 #pragma endregion
 
-
+#pragma region DIALOGUE_CONTROLLER
+	void	Start_Dialogue(_uint iNpcID, _fvector vNpcPosition);
+	void	End_Dialogue();
+#pragma endregion
 
 	void Bind_PickingPos(_float3* pPickingPos);
 	_vector Picking_Terrains();
-	
 
 private:
 	_bool							m_bPicked = {};
@@ -100,6 +101,7 @@ private:
 	class CBuff_Manager*			m_pBuff_Manager = { nullptr };
 	class CDamageFont_Manager*		m_pDamageFont_Manager = { nullptr };
 	class CClash_Manager*			m_pClash_Manager = { nullptr };
+	class CDialogue_Controller*		m_pDialogue_Controller = { nullptr };
 
 public:
 	virtual void Free() override;
