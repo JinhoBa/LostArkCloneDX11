@@ -232,6 +232,10 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     Add_Buff(1);
 
+#ifdef _DEBUG
+    //m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
+#endif
+
     return S_OK;
 }
 
@@ -488,12 +492,18 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
         return E_FAIL;
 
-    //CPartObject::PARTOBJECT_DESC Effect_Desc= {};
+    CTest_Effect::EFFECT_DESC Effect_Desc= {};
  
-    //Effect_Desc.pParentTransform = m_pTransformCom;
-    ////Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_effectname");
-    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
-    //    return E_FAIL;
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
+        return E_FAIL;
+
+ 
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_root");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Ground"), TEXT("Ground_Effect"), &Effect_Desc)))
+        return E_FAIL;
 
     return S_OK;
 }

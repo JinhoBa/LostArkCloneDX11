@@ -35,11 +35,11 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
         return E_FAIL;
 
-    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+   /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Npc(TEXT("Layer_Npc"))))
-        return E_FAIL;
+        return E_FAIL;*/
 
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;

@@ -32,9 +32,11 @@ void CSound_Manager::Free()
 	_int iNumDirver = {};
 	m_pSystem->getNumDrivers(&iNumDirver);
 
-	if(0 != iNumDirver)
+	if(0 != iNumDirver && nullptr != m_pSystem)
+	{
 		m_pSystem->release();
-	
+	}
+
 	m_pSystem->close();
 }
 

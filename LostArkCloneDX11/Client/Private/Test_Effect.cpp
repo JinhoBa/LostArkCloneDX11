@@ -24,7 +24,10 @@ HRESULT CTest_Effect::Initialize_Prototype()
 
 HRESULT CTest_Effect::Initialize(void* pArg)
 {
-    PARTOBJECT_DESC* pDesc = static_cast<PARTOBJECT_DESC*>(pArg);
+    EFFECT_DESC* pDesc = static_cast<EFFECT_DESC*>(pArg);
+
+    m_pSocketMatrix = pDesc->pSocketMatrix;
+    m_pParentTransformCom = pDesc->pParentTransform;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -32,7 +35,24 @@ HRESULT CTest_Effect::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(40.f, 1.f, 40.f, 1.f));
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+
+    m_isLoop = true;
+    m_iNumInstance = 300;
+    m_vSize = _float2(0.1f, 1.f);
+    m_vCenter = _float3(0.f, 0.f, 0.f);
+    m_vSpeed = _float2(0.1f, 0.2f);
+    m_vRange = _float3(0.f, 0.f, 0.f);
+    m_vLifeTime = _float2(1.f, 1.0f);
+    m_vPivot = _float3(0.f, 0.f, 0.f);
+    m_vPosition = _float3(0.f, 0.f, 0.f);
+    m_vRotation = _float3(0.f, 0.f, 0.f);
+
+    m_isActive = false;
+    m_fTimeAcc = 0.f;
+
+    XMStoreFloat4x4(&m_CombindedMatrix, XMMatrixIdentity());
+
 
     return S_OK;
 }
@@ -44,18 +64,43 @@ void CTest_Effect::Priority_Update(_float fTimeDelta)
 
 void CTest_Effect::Update(_float fTimeDelta)
 {
- /*   XMStoreFloat4x4(&m_CombinedWorldMatrix,
-        XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));*/
+    memcpy(&m_vCenter, m_pSocketMatrix->m[3], sizeof(_float3));
+
+ 
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
+    m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+
+  //  m_pVIBufferCom->Set_Desc(m_isLoop, m_iNumInstance, m_vSize, m_vCenter, m_vSpeed, m_vRange, m_vLifeTime, m_vPivot);
+    //m_pVIBufferCom->Spread(fTimeDelta);
+
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 }
 
 void CTest_Effect::Late_Update(_float fTimeDelta)
 {
-   m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+   //m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CTest_Effect::Render()
 {
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+#ifdef _DEBUG
+    ImGui::Checkbox("isLoop", &m_isLoop);
+    ImGui::InputInt("iNumInstance", (int*) & m_iNumInstance);
+    ImGui::InputFloat2("vSize", (_float*) &m_vSize);
+    //ImGui::InputFloat3("vCenter", (_float*) &m_vCenter);
+    ImGui::InputFloat2("vSpeed", (_float*) &m_vSpeed);
+    ImGui::InputFloat3("vRange", (_float*) &m_vRange);
+    ImGui::InputFloat2("vLifeTime", (_float*) &m_vLifeTime);
+    ImGui::InputFloat3("vPivot", (_float*) &m_vPivot);
+    ImGui::InputFloat3("vPosition", (_float*) &m_vPosition);
+    ImGui::InputFloat3("vRotation", (_float*) &m_vRotation);
+
+#endif // _DEBUG
+
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
@@ -70,7 +115,7 @@ HRESULT CTest_Effect::Render()
     if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(0))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(0)))
+    if (FAILED(m_pShaderCom->Begin(1)))
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -92,6 +137,11 @@ HRESULT CTest_Effect::Add_Components()
     /*Texture*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+        return E_FAIL;
+
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Trail"),
+        TEXT("Com_TextureTrail"), reinterpret_cast<CComponent**>(&m_pTextureTrailCom))))
         return E_FAIL;
 
     /* Shader_VertexMesh */
@@ -137,5 +187,6 @@ void CTest_Effect::Free()
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pTextureCom);
+    Safe_Release(m_pTextureTrailCom);
     Safe_Release(m_pVIBufferCom);
 }

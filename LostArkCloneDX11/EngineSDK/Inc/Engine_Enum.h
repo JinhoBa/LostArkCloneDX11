@@ -18,6 +18,6 @@ namespace Engine
 	enum class MOUSEKEYSTATE { LBUTTON, RBUTTON, WBUTTON, XBUTTON };
 	enum class MOUSEMOVESTATE { X, Y, W };
 	enum class MOUSESPACE { VIEWPORT, PROJ, VIEW, WORLD, LOCAL };
-	
+	enum class LERP {LINEAR, EASEIN, EASEOUT, EASEINOUT};
 }
 #endif // Engine_Enum_h__

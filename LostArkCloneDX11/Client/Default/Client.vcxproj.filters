@@ -394,6 +394,15 @@
     <Filter Include="03.UIObject\Dialogue">
       <UniqueIdentifier>{85f6020a-cbfb-4ffa-bf3e-3654aaca2d3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06.Effect">
+      <UniqueIdentifier>{a9045e11-5619-4453-98b4-d1d2bfe4d801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Manager">
+      <UniqueIdentifier>{c36314b1-ef2a-494b-9df2-ec2e278b28ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Ground">
+      <UniqueIdentifier>{95ccfbdd-7d29-46df-80b4-dd8680b9a3f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -780,6 +789,15 @@
     <ClInclude Include="..\public\DialogueUI.h">
       <Filter>03.UIObject\Dialogue</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Effect_Manager.h">
+      <Filter>06.Effect\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect.h">
+      <Filter>06.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect_Ground.h">
+      <Filter>06.Effect\Ground</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1160,6 +1178,15 @@
     </ClCompile>
     <ClCompile Include="..\private\DialogueUI.cpp">
       <Filter>03.UIObject\Dialogue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Manager.cpp">
+      <Filter>06.Effect\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect.cpp">
+      <Filter>06.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Ground.cpp">
+      <Filter>06.Effect\Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

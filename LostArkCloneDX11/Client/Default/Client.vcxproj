@@ -188,6 +188,9 @@
     <ClInclude Include="..\public\DialogueUI.h" />
     <ClInclude Include="..\public\Dialogue_Controller.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
+    <ClInclude Include="..\public\Effect.h" />
+    <ClInclude Include="..\public\Effect_Ground.h" />
+    <ClInclude Include="..\public\Effect_Manager.h" />
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
     <ClInclude Include="..\public\Idle_Kamen.h" />
@@ -325,6 +328,9 @@
     <ClCompile Include="..\private\DialogueUI.cpp" />
     <ClCompile Include="..\private\Dialogue_Controller.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
+    <ClCompile Include="..\private\Effect.cpp" />
+    <ClCompile Include="..\private\Effect_Ground.cpp" />
+    <ClCompile Include="..\private\Effect_Manager.cpp" />
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />
     <ClCompile Include="..\private\Idle_Kamen.cpp" />

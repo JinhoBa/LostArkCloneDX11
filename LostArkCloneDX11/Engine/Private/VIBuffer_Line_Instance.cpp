@@ -1,21 +1,21 @@
-#include "VIBuffer_Point_Instance.h"
+#include "VIBuffer_Line_Instance.h"
 
 #include "GameInstance.h"
 
-CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CVIBuffer_Line_Instance::CVIBuffer_Line_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer_Instance{ pDevice, pContext }
 {
 }
 
-CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(CVIBuffer_Point_Instance& Prototype)
+CVIBuffer_Line_Instance::CVIBuffer_Line_Instance(CVIBuffer_Line_Instance& Prototype)
 	:CVIBuffer_Instance{ Prototype },
-	m_pInstanceVertices{Prototype.m_pInstanceVertices }
-	, m_isLoop{Prototype.m_isLoop },
-	m_pSpeed{Prototype.m_pSpeed}
+	m_pInstanceVertices{ Prototype.m_pInstanceVertices }
+	, m_isLoop{ Prototype.m_isLoop },
+	m_pSpeed{ Prototype.m_pSpeed }
 {
 }
 
-HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pInstanceDesc)
+HRESULT CVIBuffer_Line_Instance::Initialize_Prototype(const INSTANCE_DESC* pInstanceDesc)
 {
 	m_iNumVertexBuffers = 2;
 	m_iNumVertices = 1;
@@ -55,11 +55,10 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pIns
 #pragma endregion
 
 #pragma region INSTANCE_BUFFER
-	const POINT_INSTANCE_DESC* pDesc = static_cast<const POINT_INSTANCE_DESC*>(pInstanceDesc);
+	const LINE_INSTANCE_DESC* pDesc = static_cast<const LINE_INSTANCE_DESC*>(pInstanceDesc);
 
 	m_isLoop = pDesc->isLoop;
 	m_iNumInstance = pDesc->iNumInstance;
-	m_vPivot = pDesc->vPivot;
 	m_iInstanceStride = sizeof(VTX_INSTANCE_PARTICLE);
 	m_iNumIndexPerInstance = 1;
 
@@ -79,8 +78,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pIns
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		_float			fScale = pDesc->vSize.x;
-		m_vSize = pDesc->vSize;
+		_float			fScale = m_pGameInstance->Random(pDesc->vSize.x, pDesc->vSize.y);
 
 		m_pInstanceVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
 		m_pInstanceVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
@@ -104,7 +102,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pIns
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
+HRESULT CVIBuffer_Line_Instance::Initialize(void* pArg)
 {
 	if (FAILED(m_pDevice->CreateBuffer(&m_InstanceBufferDesc, &m_InstanceSubResourceData, &m_pVBInstance)))
 		return E_FAIL;
@@ -112,7 +110,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Point_Instance::Bind_Resources()
+HRESULT CVIBuffer_Line_Instance::Bind_Resources()
 {
 	ID3D11Buffer* VertexBuffers[] = {
 		m_pVB,
@@ -135,117 +133,44 @@ HRESULT CVIBuffer_Point_Instance::Bind_Resources()
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Point_Instance::Render()
+HRESULT CVIBuffer_Line_Instance::Render()
 {
 	m_pContext->DrawInstanced(1, m_iNumInstance, 0, 0);
 
 	return S_OK;
 }
 
-void CVIBuffer_Point_Instance::Set_Desc(_bool isLoop, _float2 vSize, _float3 vCenter, _float3 vRange, _float2 vLifeTime)
+void CVIBuffer_Line_Instance::Set_Desc(_bool isLoop, _uint iNumInstance, _float2 vSize, _float3 vCenter, _float2 vSpeed, _float3 vRange, _float2 vLifeTime, _float3 vPivot)
 {
-	D3D11_MAPPED_SUBRESOURCE SubResource{};
-
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
-
 	m_isLoop = isLoop;
+	m_iNumInstance = iNumInstance;
+	m_vPivot = vPivot;
 
-	m_vSize = vSize;
+	m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;
 
-	for (_uint i = 0; i < m_iNumInstance; ++i)
+	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		pVertices[i].vTranslation = _float4(vCenter.x, vCenter.y, vCenter.z, 1.f);
-		pVertices[i].vLifeTime.y = m_pGameInstance->Random(vLifeTime.x, vLifeTime.y);
+		_float			fScale = m_pGameInstance->Random(vSize.x, vSize.y);
+
+		m_pInstanceVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
+		m_pInstanceVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
+		m_pInstanceVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
+		m_pInstanceVertices[i].vTranslation = _float4(
+			m_pGameInstance->Random(vCenter.x - vRange.x * 0.5f, vCenter.x + vRange.x * 0.5f),
+			m_pGameInstance->Random(vCenter.y - vRange.y * 0.5f, vCenter.y + vRange.y * 0.5f),
+			m_pGameInstance->Random(vCenter.z - vRange.z * 0.5f, vCenter.z + vRange.z * 0.5f),
+			1.f);
+
+		m_pInstanceVertices[i].vLifeTime = _float2(0.0f, m_pGameInstance->Random(vLifeTime.x, vLifeTime.y));
+
+		m_pSpeed[i] = m_pGameInstance->Random(vSpeed.x, vSpeed.y);
 	}
 
-	m_pContext->Unmap(m_pVBInstance, 0);
+	m_InstanceSubResourceData.pSysMem = m_pInstanceVertices;
+
 }
 
-void CVIBuffer_Point_Instance::Update(_float fTimeDelta)
-{
-	D3D11_MAPPED_SUBRESOURCE SubResource{};
-
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
-
-	for (_uint i = 0; i < m_iNumInstance; ++i)
-	{
-		pVertices[i].vLifeTime.x += fTimeDelta;
-
-		_float fScale = m_vSize.x;
-
-		pVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
-		pVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
-		pVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
-
-		if(true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
-		{
-			pVertices[i].vLifeTime.x = 0.f;
-			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
-		}
-	}
-
-	m_pContext->Unmap(m_pVBInstance, 0);
-}
-
-void CVIBuffer_Point_Instance::Scaling(_float fTimeDelta, LERP eLerpType)
-{
-	D3D11_MAPPED_SUBRESOURCE SubResource{};
-
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
-
-	_float fScale = {};
-
-	for (_uint i = 0; i < m_iNumInstance; ++i)
-	{
-		pVertices[i].vLifeTime.x += fTimeDelta;
-
-		_float fLerpValue = pVertices[i].vLifeTime.x / pVertices[i].vLifeTime.y;
-
-		if (1.f < fLerpValue)
-			fLerpValue = 1.f;
-
-		switch (eLerpType)
-		{
-		case Engine::LERP::LINEAR:
-			fScale = Lerp(m_vSize.x, m_vSize.y, fLerpValue);
-			break;
-		case Engine::LERP::EASEIN:
-			fScale = Lerp(m_vSize.x, m_vSize.y, fLerpValue * fLerpValue);
-			break;
-		case Engine::LERP::EASEOUT:
-			fScale = Lerp(m_vSize.x, m_vSize.y, 1.f - (1.f - fLerpValue) * (1.f - fLerpValue));
-			break;
-		case Engine::LERP::EASEINOUT:
-			fScale = Lerp(m_vSize.x, m_vSize.y, fLerpValue < 0.5f ? 2.f * fLerpValue * fLerpValue : 1.f - (-2.f * fLerpValue + 2.f) * (-2.f * fLerpValue + 2.f) / 2.f);
-			break;
-		}
-
-		pVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
-		pVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
-		pVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
-		pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
-
-		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
-		{
-			pVertices[i].vLifeTime.x = 0.f;
-			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
-
-			pVertices[i].vRight = _float4(m_vSize.x, 0.f, 0.f, 0.f);
-			pVertices[i].vUp = _float4(0.f, m_vSize.x, 0.f, 0.f);
-			pVertices[i].vLook = _float4(0.f, 0.f, m_vSize.x, 0.f);
-		}
-	}
-
-	m_pContext->Unmap(m_pVBInstance, 0);
-}
-
-void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
+void CVIBuffer_Line_Instance::Spread(_float fTimeDelta)
 {
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
 
@@ -272,7 +197,7 @@ void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
-void CVIBuffer_Point_Instance::Trail(_float fTimeDelta)
+void CVIBuffer_Line_Instance::Trail(_float fTimeDelta)
 {
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
 
@@ -297,44 +222,39 @@ void CVIBuffer_Point_Instance::Trail(_float fTimeDelta)
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
-_float CVIBuffer_Point_Instance::Lerp(_float fStart, _float fEnd, _float fTime)
+CVIBuffer_Line_Instance* CVIBuffer_Line_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc)
 {
-	return fStart * (1.f - fTime) + fEnd * fTime;
-}
-
-CVIBuffer_Point_Instance* CVIBuffer_Point_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc)
-{
-	CVIBuffer_Point_Instance* pInstance = new CVIBuffer_Point_Instance(pDevice, pContext);
+	CVIBuffer_Line_Instance* pInstance = new CVIBuffer_Line_Instance(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(pInstanceDesc)))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Create : CVIBuffer_Point_Instance");
+		MSG_BOX("Failed to Create : CVIBuffer_Line_Instance");
 		return nullptr;
 	}
 
 	return pInstance;
 }
 
-CComponent* CVIBuffer_Point_Instance::Clone(void* pArg)
+CComponent* CVIBuffer_Line_Instance::Clone(void* pArg)
 {
-	CComponent* pInstance = new CVIBuffer_Point_Instance(*this);
+	CComponent* pInstance = new CVIBuffer_Line_Instance(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		Safe_Release(pInstance);
-		MSG_BOX("Failed to Clone : CVIBuffer_Point_Instance");
+		MSG_BOX("Failed to Clone : CVIBuffer_Line_Instance");
 		return nullptr;
 	}
 
 	return pInstance;
 }
 
-void CVIBuffer_Point_Instance::Free()
+void CVIBuffer_Line_Instance::Free()
 {
 	__super::Free();
 
-	if(true == m_isCloned)
+	if (true == m_isCloned)
 	{
 		Safe_Delete_Array(m_pInstanceVertices);
 		Safe_Delete_Array(m_pSpeed);

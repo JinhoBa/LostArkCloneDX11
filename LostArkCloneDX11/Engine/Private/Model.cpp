@@ -301,7 +301,7 @@ _bool CModel::Play_Animation(_float fTimeDelta)
         m_fInterpolationTime += fTimeDelta;
         if (m_fMaxInterpolationTime <= m_fInterpolationTime)
         {
-            if((_uint)m_Animations.size() <= m_iPreAnimIndex)
+            if((_int)m_Animations.size() <= m_iPreAnimIndex)
                 m_iPreAnimIndex = m_iCurrentAnimIndex;
             m_Animations[m_iPreAnimIndex]->Reset_TrackPosition();
             m_fInterpolationTime = 0.f;

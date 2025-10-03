@@ -17,6 +17,11 @@ CWeapon_Player::CWeapon_Player(const CWeapon_Player& Prototype)
 {
 }
 
+const _float4x4* CWeapon_Player::Get_BoneMatrixPtr(const _char* pBoneName) const
+{
+    return m_pModelCom[ENUM_TO_INT(*m_pStance)]->Get_BoneMatrixPrt(pBoneName);
+}
+
 HRESULT CWeapon_Player::Initialize_Prototype()
 {
     return S_OK;

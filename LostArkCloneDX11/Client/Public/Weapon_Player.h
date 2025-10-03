@@ -25,6 +25,9 @@ private:
 	virtual ~CWeapon_Player() = default;
 
 public:
+	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual void		Priority_Update(_float fTimeDelta) override;

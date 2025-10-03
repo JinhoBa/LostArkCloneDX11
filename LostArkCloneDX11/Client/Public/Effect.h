@@ -11,17 +11,12 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CTest_Effect final : public CPartObject
+class CEffect abstract : public CPartObject
 {
-public:
-	typedef struct Effect_Desc : public CPartObject::PARTOBJECT_DESC
-	{
-		const _float4x4* pSocketMatrix{ nullptr };
-	}EFFECT_DESC;
-private:
-	CTest_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CTest_Effect(const CTest_Effect& Prototype);
-	virtual ~CTest_Effect() = default;
+protected:
+	CEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CEffect(const CEffect& Prototype);
+	virtual ~CEffect() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -31,18 +26,7 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
-private:
-	const _float4x4*			m_pSocketMatrix = { nullptr };
-	_float4x4					m_CombindedMatrix = {};
-
-	CVIBuffer_Point_Instance*	m_pVIBufferCom = { nullptr };
-	CShader*					m_pShaderCom = { nullptr };
-	CTexture*					m_pTextureCom = { nullptr };
-	CTexture*					m_pTextureTrailCom = { nullptr };
-
-	_float3		m_vPosition;
-	_float3		m_vRotation;
-
+protected:
 	_uint		m_iInstanceIndex = {};
 	_bool		m_isLoop = {};
 	_uint		m_iNumInstance = {};
@@ -56,12 +40,14 @@ private:
 	_bool		m_isActive = {};
 	_float		m_fTimeAcc = {};
 
+	_int m_iPassIndex = {};
+	_int m_iTextureIndex = {};
+
 private:
 	HRESULT		Add_Components();
 
 public:
-	static CTest_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg) override;
+	virtual CGameObject* Clone(void* pArg) PURE;
 	virtual void Free() override;
 };
 
