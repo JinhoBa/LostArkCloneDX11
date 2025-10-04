@@ -18,13 +18,13 @@ CVIBuffer_Line_Instance::CVIBuffer_Line_Instance(CVIBuffer_Line_Instance& Protot
 HRESULT CVIBuffer_Line_Instance::Initialize_Prototype(const INSTANCE_DESC* pInstanceDesc)
 {
 	m_iNumVertexBuffers = 2;
-	m_iNumVertices = 1;
-	m_iVertexStride = sizeof(VTXPOS);
+	m_iNumVertices = 2;
+	m_iVertexStride = sizeof(VTXLINE);
 
 	m_iNumIndices = 0;
 	m_iIndexStride = 0;
 
-	m_ePrimitive = D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
+	m_ePrimitive = D3D_PRIMITIVE_TOPOLOGY_LINELIST;
 
 #pragma region VETEX_BUFFER
 	D3D11_BUFFER_DESC VBDesc = {};
@@ -90,8 +90,6 @@ HRESULT CVIBuffer_Line_Instance::Initialize_Prototype(const INSTANCE_DESC* pInst
 			1.f);
 
 		m_pInstanceVertices[i].vLifeTime = _float2(0.0f, m_pGameInstance->Random(pDesc->vLifeTime.x, pDesc->vLifeTime.y));
-
-
 
 		m_pSpeed[i] = m_pGameInstance->Random(pDesc->vSpeed.x, pDesc->vSpeed.y);
 	}
@@ -168,33 +166,6 @@ void CVIBuffer_Line_Instance::Set_Desc(_bool isLoop, _uint iNumInstance, _float2
 
 	m_InstanceSubResourceData.pSysMem = m_pInstanceVertices;
 
-}
-
-void CVIBuffer_Line_Instance::Spread(_float fTimeDelta)
-{
-	D3D11_MAPPED_SUBRESOURCE SubResource{};
-
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
-
-
-	for (_uint i = 0; i < m_iNumInstance; ++i)
-	{
-		_vector vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
-
-		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeed[i] * fTimeDelta);
-
-		pVertices[i].vLifeTime.x += fTimeDelta;
-
-		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
-		{
-			pVertices[i].vLifeTime.x = 0.f;
-			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
-		}
-	}
-
-	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
 void CVIBuffer_Line_Instance::Trail(_float fTimeDelta)

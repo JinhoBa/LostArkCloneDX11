@@ -289,9 +289,6 @@
     <Filter Include="93.DamageFont_Manager">
       <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Test_Effect">
-      <UniqueIdentifier>{8d280cb7-d8a3-4dd1-8049-c7928dd9a938}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\SPIN">
       <UniqueIdentifier>{aad87f6f-a8ac-4b45-b6b2-0d15cba60fd3}</UniqueIdentifier>
     </Filter>
@@ -402,6 +399,12 @@
     </Filter>
     <Filter Include="06.Effect\Ground">
       <UniqueIdentifier>{95ccfbdd-7d29-46df-80b4-dd8680b9a3f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Test_Effect">
+      <UniqueIdentifier>{8d280cb7-d8a3-4dd1-8049-c7928dd9a938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Trail">
+      <UniqueIdentifier>{2c116854-3d70-42c2-a120-e8c9166fb895}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -703,7 +706,7 @@
       <Filter>02.GameObject\Character\Monster\States\HIT</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Test_Effect.h">
-      <Filter>02.GameObject\Test_Effect</Filter>
+      <Filter>06.Effect\Test_Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Attack_Spin_Kamen.h">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK\SPIN</Filter>
@@ -797,6 +800,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Effect_Ground.h">
       <Filter>06.Effect\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect_Trail.h">
+      <Filter>06.Effect\Trail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1093,7 +1099,7 @@
       <Filter>02.GameObject\Character\Monster\States\HIT</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Test_Effect.cpp">
-      <Filter>02.GameObject\Test_Effect</Filter>
+      <Filter>06.Effect\Test_Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Attack_Spin_Kamen.cpp">
       <Filter>02.GameObject\Character\Kamen\State\ATTACK\SPIN</Filter>
@@ -1187,6 +1193,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Effect_Ground.cpp">
       <Filter>06.Effect\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Trail.cpp">
+      <Filter>06.Effect\Trail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

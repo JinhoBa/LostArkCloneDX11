@@ -30,8 +30,6 @@ public:
 	void Set_Desc(_bool isLoop, _uint	iNumInstance, _float2 vSize, _float3 vCenter, _float2 vSpeed, _float3 vRange, _float2 vLifeTime, _float3 vPivot);
 
 #endif // _DEBUG
-
-	void Spread(_float fTimeDelta);
 	void Trail(_float fTimeDelta);
 
 private:
@@ -39,7 +37,7 @@ private:
 
 	_bool					m_isLoop = {};
 	_float3					m_vPivot = {};
-	_float* m_pSpeed = { nullptr };
+	_float*					m_pSpeed = { nullptr };
 
 public:
 	static CVIBuffer_Line_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc);

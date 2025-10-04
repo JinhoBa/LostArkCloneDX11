@@ -199,6 +199,12 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Intance\Line">
       <UniqueIdentifier>{a7481bbe-3071-47d5-a738-9a622dc4299e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\11.RenderTarget">
+      <UniqueIdentifier>{82d1ba6b-99e6-4e8c-8d40-2bb6c6244921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\11.RenderTarget\Manager">
+      <UniqueIdentifier>{8ddabc6f-9f0b-4fc9-a612-fa26b0c7e48c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -420,6 +426,12 @@
     <ClInclude Include="..\public\VIBuffer_Line_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Intance\Line</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\RenderTarget.h">
+      <Filter>01.Utility\11.RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\RenderTarget_Manager.h">
+      <Filter>01.Utility\11.RenderTarget\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -598,6 +610,12 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Line_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Intance\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\RenderTarget.cpp">
+      <Filter>01.Utility\11.RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\RenderTarget_Manager.cpp">
+      <Filter>01.Utility\11.RenderTarget\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
