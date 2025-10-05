@@ -10,6 +10,9 @@ private:
 	virtual ~CRenderTarget() = default;
 
 public:
+	ID3D11RenderTargetView* Get_RTV() const { return m_pRTV; }
+
+public:
 	HRESULT Initialize(_uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 	void	Clear();
@@ -19,7 +22,6 @@ public:
 	HRESULT Ready_Debug(_float fX, _float fY, _float fSizeX, _float fSizeY);
 	HRESULT Render_Debug(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 #endif // _DEBUG
-
 
 private:
 	ID3D11Device*			m_pDevice = { nullptr };

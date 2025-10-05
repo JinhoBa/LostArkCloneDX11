@@ -123,6 +123,21 @@ public:
 	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn = false, _float fLerpTime = 0.f);
 #pragma endregion
 
+#pragma region RENDERTARGET_MANAGER
+public:
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT End_MRT();
+	HRESULT Bind_RenderTarget(const _wstring& strTargetTag, class CShader* pShader, const _char* pConstantName);
+
+#ifdef _DEBUG
+public:
+	HRESULT Ready_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT Render_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+#endif // _DEBUG
+#pragma endregion
+
 
 
 private:
@@ -140,6 +155,7 @@ private:
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
+	class CRenderTarget_Manager*	m_pRenderTarget_Manager = { nullptr };
 
 	_float2							m_vWinSize = {};
 	

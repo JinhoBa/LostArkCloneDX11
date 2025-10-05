@@ -23,10 +23,14 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
-	
-
 	void	Render();
-	void	Render_Cursor();
+
+#ifdef _DEBUG
+	HRESULT Add_DebugComponent(class CComponent* pDebugCom);
+#endif // _DEBUG
+
+
+
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
@@ -44,11 +48,18 @@ private:
 	void Render_Blend();
 	void Render_WorldUI();
 	void Render_UI();
+	void Render_Cursor();
 
 	void Clear_UI();
 
 	void Sort_AlphaObject();
 	void Sort_UI();
+
+#ifdef _DEBUG
+private:
+	void Render_Debug();
+#endif // _DEBUG
+
 
 public:
 	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

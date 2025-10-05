@@ -14,6 +14,7 @@
 #include "Light_Manager.h"
 #include "Collider_Manager.h"
 #include "Camera_Manager.h"
+#include "RenderTarget_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -79,6 +80,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pCamera_Manager = CCamera_Manager::Create();
 	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
+	m_pRenderTarget_Manager = CRenderTarget_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pRenderTarget_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -470,6 +475,41 @@ HRESULT CGameInstance::Bind_Camera(const _wstring& strCameraNameTag, _bool isRet
 {
 	return m_pCamera_Manager->Bind_Camera(strCameraNameTag, isReturn, fLerpTime);
 }
+#pragma endregion
+
+#pragma region RENDERTARGET_MANAGER
+HRESULT CGameInstance::Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
+{
+	return m_pRenderTarget_Manager->Add_RenderTarget(strTargetTag, iSizeX, iSizeY, ePixelFormat, vClearColor);
+}
+HRESULT CGameInstance::Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag)
+{
+	return m_pRenderTarget_Manager->Add_MRT(strMRTTag, strTargetTag);
+}
+HRESULT CGameInstance::Begin_MRT(const _wstring& strMRTTag)
+{
+	return m_pRenderTarget_Manager->Begin_MRT(strMRTTag);
+}
+HRESULT CGameInstance::End_MRT()
+{
+	return m_pRenderTarget_Manager->End_MRT();
+}
+HRESULT CGameInstance::Bind_RenderTarget(const _wstring& strTargetTag, class CShader* pShader, const _char* pConstantName)
+{
+	return m_pRenderTarget_Manager->Bind_RenderTarget(strTargetTag, pShader, pConstantName);
+}
+
+#ifdef _DEBUG
+HRESULT CGameInstance::Ready_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+	return m_pRenderTarget_Manager->Ready_Debug(strTargetTag, fX, fY, fSizeX, fSizeY);
+}
+
+HRESULT CGameInstance::Render_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer)
+{
+	return m_pRenderTarget_Manager->Render_Debug(strMRTTag, pShader, pVIBuffer);
+}
+#endif // _DEBUG
 #pragma endregion
 
 void CGameInstance::Release_Engine()

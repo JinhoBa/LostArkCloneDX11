@@ -55,6 +55,12 @@ void CRenderer::Render()
 	}
 }
 
+HRESULT CRenderer::Add_DebugComponent(CComponent* pDebugCom)
+{
+
+	return S_OK;
+}
+
 void CRenderer::Render_Priority()
 {
 	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::PRIORITY)])
@@ -159,6 +165,11 @@ void CRenderer::Sort_UI()
 	m_RenderObjects[ENUM_TO_INT(RENDER::UI)].sort(
 		[](CGameObject* pSrc, CGameObject* pDst)->_bool {
 			return dynamic_cast<CUIObject*>(pSrc)->Get_ZValue() > dynamic_cast<CUIObject*>(pDst)->Get_ZValue();});
+}
+
+void CRenderer::Render_Debug()
+{
+
 }
 
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
