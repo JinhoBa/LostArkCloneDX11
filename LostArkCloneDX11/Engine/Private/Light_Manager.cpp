@@ -11,13 +11,9 @@ const LIGHT_DESC& CLight_Manager::Get_Desc(_uint iLightIndex)
 	auto iter = m_Lights.begin();
 
 	for(_uint i = 0; i< iLightIndex; ++i)
-	{
-		iter++;
-	}
+		++iter;
 	
-	/*return (*iter)->Get_LightDesc();*/
-
-	return m_Lights.back()->Get_LightDesc();
+	return (*iter)->Get_LightDesc();
 }
 
 HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
@@ -28,6 +24,17 @@ HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
 		return E_FAIL;
 
 	m_Lights.push_back(pLight);
+
+	return S_OK;
+}
+
+HRESULT CLight_Manager::Render_Lights(CShader* pShader, CVIBuffer* pVIBuffer)
+{
+	for (auto& pLight : m_Lights)
+	{
+		if (FAILED(pLight->Render(pShader, pVIBuffer)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -43,4 +50,5 @@ void CLight_Manager::Free()
 
 	for (auto& pLight : m_Lights)
 		Safe_Release(pLight);
+	m_Lights.clear();
 }

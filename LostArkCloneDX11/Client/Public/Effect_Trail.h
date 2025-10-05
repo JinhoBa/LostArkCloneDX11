@@ -1,9 +1,4 @@
 #pragma once
-class CEffect_Trail
-{
-};
-
-#pragma once
 #include "Client_Defines.h"
 #include "Client_Struct.h"
 #include "Effect.h"
@@ -16,12 +11,12 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CEffect_Ground final : public CEffect
+class CEffect_Trail final : public CEffect
 {
 private:
-	CEffect_Ground(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CEffect_Ground(const CEffect_Ground& Prototype);
-	virtual ~CEffect_Ground() = default;
+	CEffect_Trail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CEffect_Trail(const CEffect_Trail& Prototype);
+	virtual ~CEffect_Trail() = default;
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -46,7 +41,7 @@ private:
 	HRESULT		Add_Components();
 
 public:
-	static CEffect_Ground* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CEffect_Trail* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

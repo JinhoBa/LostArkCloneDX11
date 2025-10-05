@@ -66,7 +66,7 @@ HRESULT CDynamic_SkyBox::Render()
 
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
-        if (FAILED(m_pShaderCom->Begin(3)))
+        if (FAILED(m_pShaderCom->Begin(2)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Render(i)))

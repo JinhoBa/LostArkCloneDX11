@@ -12,7 +12,6 @@ private:
 
 public:
 	class CCamera* Find_Camera(const _wstring& strCameraNameTag);
-
 	HRESULT Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject);
 	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn, _float fLerpTime);
 
@@ -39,6 +38,8 @@ private:
 	_float3				m_vCurTargetPosition = {};
 
 	map<const _wstring, class CCamera*>			m_Cameras;
+
+
 
 private:
 	void Lerp_Camera(_float fTimeDelta);

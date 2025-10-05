@@ -104,19 +104,7 @@ HRESULT CKamen_Sword::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &m_pGameInstance->Get_LightDesc(0).vDirection, sizeof(_float4))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &m_pGameInstance->Get_LightDesc(0).vDiffuse, sizeof(_float4))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &m_pGameInstance->Get_LightDesc(0).vAmbient, sizeof(_float4))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &m_pGameInstance->Get_LightDesc(0).vSpecular, sizeof(_float4))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCameraPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pDiffuseTextureCom->Get_SRV(0))))

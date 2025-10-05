@@ -14,6 +14,11 @@ const _float4x4* CPipeLine::Get_Transfrom_Float4x4(D3DTS eState) const
 	return &m_TransfromStateMatrices[ENUM_TO_INT(eState)];
 }
 
+const _float4x4* CPipeLine::Get_Transfrom_Float4x4_Inverse(D3DTS eState) const
+{
+	return &m_TransfromStateMatrixInverses[ENUM_TO_INT(eState)];
+}
+
 _matrix CPipeLine::Get_Transfrom_Matrix(D3DTS eState)
 {
 	return XMLoadFloat4x4(&m_TransfromStateMatrices[ENUM_TO_INT(eState)]);

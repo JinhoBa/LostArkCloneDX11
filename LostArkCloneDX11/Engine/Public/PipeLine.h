@@ -13,6 +13,7 @@ public:
 	void				Set_Transform(D3DTS eState, _fmatrix Matrix);
 
 	const _float4x4*	Get_Transfrom_Float4x4(D3DTS eState) const;
+	const _float4x4*	Get_Transfrom_Float4x4_Inverse(D3DTS eState) const;
 	_matrix				Get_Transfrom_Matrix(D3DTS eState);
 	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
 	const _float4*		Get_Camera_Position() const;

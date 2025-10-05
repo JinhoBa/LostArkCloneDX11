@@ -19,28 +19,51 @@ public:
 	void Toggle_VisibleUI() {
 		m_isVisibleUI = !m_isVisibleUI;
 	}
+	D3D11_VIEWPORT& Get_Veiwport();
 
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
-	
-
 	void	Render();
 	void	Render_Cursor();
+
+#ifdef _DEBUG
+	HRESULT Add_DebugComponent(class CComponent* pDebugCom);
+#endif // _DEBUG
+
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
+	class CGameInstance*		m_pGameInstance = { nullptr };
 
 	_bool						m_isVisibleUI = { true };
+	_uint						m_iPassIndex = {};
+	_float						m_fMaxDepth = {};
 
 	list<class CGameObject*>	m_RenderObjects[ENUM_TO_INT(RENDER::END)];
 
+	_float4x4					m_WorldMatrix = {};
 	_float4x4					m_OrthographicViewMatrix = {};
 	_float4x4					m_OrthographicMatrix = {};
+
+	class CShader*				m_pShaderCom = { nullptr };
+	class CVIBuffer_Rect*		m_pVIBufferCom = {};
+
+	D3D11_VIEWPORT				m_Viewport = {};
+	_uint						m_iNumViewpprt = { 1 };
+
+#ifdef _DEBUG
+private:
+	list<class CComponent*>		m_DebugComponents;
+#endif // _DEBUG
+
 	
 private:
 	void Render_Priority();
 	void Render_NonBlend();
+	HRESULT Render_LightAcc();
+	HRESULT Render_Combined();
+	void Render_NonLight();
 	void Render_Blend();
 	void Render_WorldUI();
 	void Render_UI();
@@ -49,6 +72,12 @@ private:
 
 	void Sort_AlphaObject();
 	void Sort_UI();
+
+#ifdef _DEBUG
+private:
+	HRESULT Render_Debug();
+#endif // _DEBUG
+
 
 public:
 	static CRenderer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

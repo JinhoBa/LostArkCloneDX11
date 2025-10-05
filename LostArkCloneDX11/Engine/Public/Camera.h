@@ -18,6 +18,7 @@ protected:
 	
 public:
 	_float	Get_Fovy() const { return m_fFovy; }
+	_float Get_Far() const { return m_fFar; }
 	_vector Get_TargetPosition() const{ 
 		return XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f);
 	}

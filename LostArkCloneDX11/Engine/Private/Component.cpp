@@ -33,6 +33,11 @@ HRESULT CComponent::Initialize(void* pArg)
 	return S_OK;
 }
 
+HRESULT CComponent::Render()
+{
+	return S_OK;
+}
+
 void CComponent::Free()
 {
 	__super::Free();

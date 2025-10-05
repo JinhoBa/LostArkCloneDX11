@@ -87,25 +87,25 @@ void CBody_Kamen::Late_Update(_float fTimeDelta)
 
 HRESULT CBody_Kamen::Render()
 {
-#pragma region ANIMATION_TEST
-    ImGui::Begin("ANIM");
-    ImGui::InputFloat3("Pos", m_Pos, "%.2f");
-    ImGui::InputInt("Animation", &m_iAnimIndex);
-    _int iIndex = {};
-    for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
-    {
-        if (ImGui::Button(to_string(iIndex).c_str()))
-        {
-            m_iAnimIndex = iIndex;
-            m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-            m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.f, 50.f, 1.f));
-        }
-        ++iIndex;
-        ImGui::SameLine();
-        ImGui::Text(pName);
-    }
-    ImGui::End();
-#pragma endregion
+//#pragma region ANIMATION_TEST
+//    ImGui::Begin("ANIM");
+//    ImGui::InputFloat3("Pos", m_Pos, "%.2f");
+//    ImGui::InputInt("Animation", &m_iAnimIndex);
+//    _int iIndex = {};
+//    for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
+//    {
+//        if (ImGui::Button(to_string(iIndex).c_str()))
+//        {
+//            m_iAnimIndex = iIndex;
+//            m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+//            m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.f, 50.f, 1.f));
+//        }
+//        ++iIndex;
+//        ImGui::SameLine();
+//        ImGui::Text(pName);
+//    }
+//    ImGui::End();
+//#pragma endregion
 
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
@@ -128,7 +128,7 @@ HRESULT CBody_Kamen::Render()
         if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(1)))
+        if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
 
 
@@ -216,19 +216,7 @@ HRESULT CBody_Kamen::Bind_ShaderResources()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &m_pGameInstance->Get_LightDesc(0).vDirection, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &m_pGameInstance->Get_LightDesc(0).vDiffuse, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &m_pGameInstance->Get_LightDesc(0).vAmbient, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &m_pGameInstance->Get_LightDesc(0).vSpecular, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCameraPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
         return E_FAIL;
 
     return S_OK;

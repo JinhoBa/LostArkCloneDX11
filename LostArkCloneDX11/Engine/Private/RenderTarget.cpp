@@ -1,6 +1,7 @@
 #include "RenderTarget.h"
 
 #include "Shader.h"
+#include "VIBuffer_Rect.h"
 
 CRenderTarget::CRenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{pDevice}
@@ -24,7 +25,7 @@ HRESULT CRenderTarget::Initialize(_uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixel
 	TextureDesc.SampleDesc.Count = 1;
 
 	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	TextureDesc.MipLevels = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	TextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	TextureDesc.CPUAccessFlags = 0;
 	TextureDesc.MiscFlags = 0;
 
@@ -68,6 +69,7 @@ HRESULT CRenderTarget::Ready_Debug(_float fX, _float fY, _float fSizeX, _float f
 	m_WorldMatrix._22 = fSizeY;
 	m_WorldMatrix._41 = fX - Viewport.Width * 0.5f;
 	m_WorldMatrix._42 = -fY + Viewport.Height * 0.5f;
+	m_WorldMatrix._43 = 0.1f;
 
 	return S_OK;
 }
@@ -78,6 +80,15 @@ HRESULT CRenderTarget::Render_Debug(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 		return E_FAIL;
 
 	if (FAILED(pShader->Bind_Resource("g_Texture2D", m_pSRV)))
+		return E_FAIL;
+
+	if (FAILED(pShader->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(pVIBuffer->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(pVIBuffer->Render()))
 		return E_FAIL;
 
 	return S_OK;
@@ -104,4 +115,8 @@ void CRenderTarget::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+
+	Safe_Release(m_pSRV);
+	Safe_Release(m_pRTV);
+	Safe_Release(m_pTexture2D);
 }

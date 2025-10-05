@@ -25,6 +25,7 @@ public:
 	_float		Random(_float fMin, _float fMax);
 	_float2&	Get_WinSize() { return m_vWinSize; }
 
+
 #pragma region GRAPHIC_DEVICE
 public:
 	void Render_Begin(const _float4* pClearColor);
@@ -77,6 +78,7 @@ public:
 #pragma endregion
 
 #pragma region RENDERER
+	D3D11_VIEWPORT& Get_Veiwport();
 	void	Toggle_VisibleUI();
 	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 #pragma endregion
@@ -84,6 +86,7 @@ public:
 #pragma region PIPELINE
 	void				Set_Transform(D3DTS eState, _fmatrix Matrix);
 	const _float4x4*	Get_Transfrom_Float4x4(D3DTS eState) const;
+	const _float4x4*	Get_Transfrom_Float4x4_Inverse(D3DTS eState) const;
 	_matrix				Get_Transfrom_Matrix(D3DTS eState);
 	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
 	const _float4*		Get_Camera_Position() const;
@@ -108,6 +111,7 @@ public:
 #pragma region LIGHT_MANAGER
 	const LIGHT_DESC&	Get_LightDesc(_uint iLightIndex);
 	HRESULT				Add_Light(const LIGHT_DESC& LightDesc);
+	HRESULT				Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 #pragma endregion
 
 #pragma region COLLIDER_MANGER
@@ -123,6 +127,20 @@ public:
 	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn = false, _float fLerpTime = 0.f);
 #pragma endregion
 
+#pragma region RENDERTARGET_MANAGER
+public:
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT End_MRT();
+	HRESULT Bind_RenderTarget(const _wstring& strTargetTag, class CShader* pShader, const _char* pConstantName);
+
+#ifdef _DEBUG
+public:
+	HRESULT Ready_RenderTarget_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT Render_RenderTarget_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+#endif // _DEBUG
+#pragma endregion
 
 
 private:
@@ -140,8 +158,11 @@ private:
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
+	class CRenderTarget_Manager*	m_pRenderTarget_Manager = { nullptr };
 
 	_float2							m_vWinSize = {};
+
+
 	
 public:
 	void Release_Engine();

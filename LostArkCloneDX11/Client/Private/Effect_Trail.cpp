@@ -1,24 +1,24 @@
 #include "pch.h"
-#include "Effect_Ground.h"
+#include "Effect_Trail.h"
 
 #include "GameInstance.h"
 
-CEffect_Ground::CEffect_Ground(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CEffect_Trail::CEffect_Trail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEffect{ pDevice, pContext }
 {
 }
 
-CEffect_Ground::CEffect_Ground(const CEffect_Ground& Prototype)
+CEffect_Trail::CEffect_Trail(const CEffect_Trail& Prototype)
     :CEffect{ Prototype }
 {
 }
 
-HRESULT CEffect_Ground::Initialize_Prototype()
+HRESULT CEffect_Trail::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CEffect_Ground::Initialize(void* pArg)
+HRESULT CEffect_Trail::Initialize(void* pArg)
 {
 
     if (FAILED(__super::Initialize(pArg)))
@@ -43,12 +43,12 @@ HRESULT CEffect_Ground::Initialize(void* pArg)
     return S_OK;
 }
 
-void CEffect_Ground::Priority_Update(_float fTimeDelta)
+void CEffect_Trail::Priority_Update(_float fTimeDelta)
 {
 
 }
 
-void CEffect_Ground::Update(_float fTimeDelta)
+void CEffect_Trail::Update(_float fTimeDelta)
 {
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
     m_pVIBufferCom->Set_Desc(m_isLoop, m_vSize, m_vCenter, m_vRange, m_vLifeTime);
@@ -56,12 +56,12 @@ void CEffect_Ground::Update(_float fTimeDelta)
     m_pVIBufferCom->Scaling(fTimeDelta, m_eLerpType);
 }
 
-void CEffect_Ground::Late_Update(_float fTimeDelta)
+void CEffect_Trail::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
-HRESULT CEffect_Ground::Render()
+HRESULT CEffect_Trail::Render()
 {
 #ifdef _DEBUG
     const char* LerpNames[] = { "Linear", "EaseIn", "EaseOut", "EaseInOut" };
@@ -107,7 +107,7 @@ HRESULT CEffect_Ground::Render()
     return S_OK;
 }
 
-HRESULT CEffect_Ground::Add_Components()
+HRESULT CEffect_Trail::Add_Components()
 {
     /*VIBuffer_Point_Instance*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_GroundEffect"),
@@ -131,35 +131,35 @@ HRESULT CEffect_Ground::Add_Components()
     return S_OK;
 }
 
-CEffect_Ground* CEffect_Ground::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CEffect_Trail* CEffect_Trail::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CEffect_Ground* pInstance = new CEffect_Ground(pDevice, pContext);
+    CEffect_Trail* pInstance = new CEffect_Trail(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
         Safe_Release(pInstance);
-        MSG_BOX("Failed to Create : CEffect_Ground");
+        MSG_BOX("Failed to Create : CEffect_Trail");
         return nullptr;
     }
 
     return pInstance;
 }
 
-CGameObject* CEffect_Ground::Clone(void* pArg)
+CGameObject* CEffect_Trail::Clone(void* pArg)
 {
-    CGameObject* pInstance = new CEffect_Ground(*this);
+    CGameObject* pInstance = new CEffect_Trail(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
         Safe_Release(pInstance);
-        MSG_BOX("Failed to Clone : CEffect_Ground");
+        MSG_BOX("Failed to Clone : CEffect_Trail");
         return nullptr;
     }
 
     return pInstance;
 }
 
-void CEffect_Ground::Free()
+void CEffect_Trail::Free()
 {
     __super::Free();
 

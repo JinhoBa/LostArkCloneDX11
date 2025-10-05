@@ -66,16 +66,7 @@ HRESULT CWeapon_Kamen::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &m_pGameInstance->Get_LightDesc(0).vDirection, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &m_pGameInstance->Get_LightDesc(0).vDiffuse, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &m_pGameInstance->Get_LightDesc(0).vAmbient, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &m_pGameInstance->Get_LightDesc(0).vSpecular, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCameraPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
         return E_FAIL;
 
     for (_uint i = 0; i < m_iNumMesh; i++)
@@ -83,10 +74,10 @@ HRESULT CWeapon_Kamen::Render()
         if (FAILED((m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor"))))
             return E_FAIL;
 
-        if (FAILED((m_pModelCom->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_Emissive_Color"))))
+        if (FAILED((m_pModelCom->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor"))))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(2)))
+        if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Render(i)))

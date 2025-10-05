@@ -58,6 +58,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pLight_Manager)
 		return E_FAIL;
 	
+	m_pRenderTarget_Manager = CRenderTarget_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pRenderTarget_Manager)
+		return E_FAIL;
+
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pRenderer)
 		return E_FAIL;
@@ -80,10 +84,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pCamera_Manager = CCamera_Manager::Create();
 	if (nullptr == m_pCamera_Manager)
-		return E_FAIL;
-
-	m_pRenderTarget_Manager = CRenderTarget_Manager::Create(*ppDevice, *ppContext);
-	if (nullptr == m_pRenderTarget_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -338,6 +338,10 @@ void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
 #pragma endregion
 
 #pragma region RENDERER
+D3D11_VIEWPORT& CGameInstance::Get_Veiwport()
+{
+	return m_pRenderer->Get_Veiwport();
+}
 
 HRESULT CGameInstance::Add_RenderGroup(RENDER eRenderGroup, CGameObject* pRenderObject)
 {
@@ -358,6 +362,10 @@ void CGameInstance::Set_Transform(D3DTS eState, _fmatrix Matrix)
 }
 
 const _float4x4* CGameInstance::Get_Transfrom_Float4x4(D3DTS eState) const
+{
+	return m_pPipeLine->Get_Transfrom_Float4x4(eState);
+}
+const _float4x4* CGameInstance::Get_Transfrom_Float4x4_Inverse(D3DTS eState) const
 {
 	return m_pPipeLine->Get_Transfrom_Float4x4(eState);
 }
@@ -443,6 +451,10 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 	return m_pLight_Manager->Add_Light(LightDesc);
 }
 
+HRESULT CGameInstance::Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer)
+{
+	return m_pLight_Manager->Render_Lights(pShader, pVIBuffer);
+}
 #pragma endregion
 
 #pragma region COLLIDER_MANGER
@@ -500,12 +512,12 @@ HRESULT CGameInstance::Bind_RenderTarget(const _wstring& strTargetTag, class CSh
 }
 
 #ifdef _DEBUG
-HRESULT CGameInstance::Ready_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+HRESULT CGameInstance::Ready_RenderTarget_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	return m_pRenderTarget_Manager->Ready_Debug(strTargetTag, fX, fY, fSizeX, fSizeY);
 }
 
-HRESULT CGameInstance::Render_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer)
+HRESULT CGameInstance::Render_RenderTarget_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer)
 {
 	return m_pRenderTarget_Manager->Render_Debug(strMRTTag, pShader, pVIBuffer);
 }
