@@ -44,6 +44,7 @@ private:
 	_int					m_iAnimIndex = {};
 	_uint					m_iNumMesh = {};
 
+
 	_float*					m_pAttackSpeed = {nullptr};
 
 	CShader*				m_pShaderCom = { nullptr };

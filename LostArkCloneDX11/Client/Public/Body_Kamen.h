@@ -44,10 +44,13 @@ public:
 private:
 	_bool					m_isAnimationFinish = {};
 
+	_uint					m_iPassIndex = {};
 	_uint					m_iNumMesh = {};
 	_uint					m_iCurModelIndex = {};
 
 	_int					m_iAnimIndex = {};
+	_float4					m_vBaseColor = {};
+	_float4					m_vClearColor = {};
 #pragma region TESTCODE
 	_float m_Pos[3] = {};
 #pragma endregion

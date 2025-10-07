@@ -83,6 +83,15 @@ HRESULT CMapObject::Render()
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
             return E_FAIL;
 
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
+        {
+            m_iSeletPass = 0;
+        }
+        else
+        {
+            m_iSeletPass = 3;
+        }
+
         if (FAILED(m_pShaderCom->Begin(m_iSeletPass)))
             return E_FAIL;
 

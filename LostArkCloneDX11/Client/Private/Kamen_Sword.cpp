@@ -41,6 +41,7 @@ HRESULT CKamen_Sword::Initialize(void* pArg)
 	
 
 	m_iNumMesh = m_pModelCom->Get_NumMeshes();
+	m_vBaseColor = _float4(1.f, 1.f, 1.f, 1.f);
 
 	m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, -0.2f, 60.f, 1.f));
 	m_pTransformCom->Set_Scale(_float3(1.2f, 1.2f, 1.2f));
@@ -110,7 +111,13 @@ HRESULT CKamen_Sword::Render()
 	if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pDiffuseTextureCom->Get_SRV(0))))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_DiffuseColor", &m_vBaseColor, sizeof(_float4))))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->Bind_Resource("g_EmissiveTexture", m_pEmissiveTextureCom->Get_SRV(0))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &m_vBaseColor, sizeof(_float4))))
 		return E_FAIL;
 
 	for (_uint i = 0; i < m_iNumMesh; i++)
@@ -118,7 +125,7 @@ HRESULT CKamen_Sword::Render()
 		if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin(1)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render(i)))

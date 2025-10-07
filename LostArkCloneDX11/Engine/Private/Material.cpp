@@ -87,7 +87,7 @@ HRESULT CMaterials::Initialize(aiMaterial* pAiMaterial, const _char* pModelFileP
 HRESULT CMaterials::Bind_SRV(CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex)
 {
 	if (0 >= m_SRVs[ENUM_TO_INT(eTextureType)].size())
-		return S_OK;
+		return E_FAIL;
 
 	return pShader->Bind_Resource(pConstantName, m_SRVs[ENUM_TO_INT(eTextureType)][iTextureIndex]);
 }
@@ -95,7 +95,9 @@ HRESULT CMaterials::Bind_Value(CShader* pShader, const _char* pConstantName, TEX
 {
 	if (m_vectorValues[ENUM_TO_INT(eTextureType)].empty())
 	{
-		_float4 DefaultValue = { 1.f, 1.f, 1.f, 1.f };
+		_float4 DefaultValue = {};
+		DefaultValue = { 1.f, 1.f, 1.f, 1.f };
+
 		return pShader->Bind_Value(pConstantName, &DefaultValue);
 	}
 

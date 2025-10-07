@@ -35,6 +35,8 @@ private:
 	_bool			m_isAnimationFinished = {};
 
 	_uint			m_iNumMesh = {};
+	_float4			m_vBaseColor = {};
+
 	CTexture*		m_pDiffuseTextureCom = { nullptr };
 	CTexture*		m_pEmissiveTextureCom = { nullptr };
 	CModel*			m_pModelCom = { nullptr };

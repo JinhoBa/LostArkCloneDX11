@@ -48,10 +48,11 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     m_iAnimIndex = 193;
 
     m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
+    m_vBaseColor = _float4(1.f, 1.f, 1.f, 1.f);
+    m_vClearColor = _float4(0.f, 0.f, 0.f, 0.f);
+    m_iPassIndex = 1;
 
     m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-
-    ;
 
     CCamera* pCamera = m_pGameInstance->Find_Camera(TEXT("Camera_Clash"));
 
@@ -106,29 +107,48 @@ HRESULT CBody_Kamen::Render()
 //    }
 //    ImGui::End();
 //#pragma endregion
+    m_iPassIndex = 1;
 
     if (FAILED(Bind_ShaderResources()))
         return E_FAIL;
-
-    for (_uint i = 0; i < m_iNumMesh; i++)
+    if(2 != m_iCurModelIndex)
     {
         if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Get_SRV(0))))
+            return E_FAIL;
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_DiffuseColor", &m_vBaseColor, sizeof(_float4))))
             return E_FAIL;
 
         if (FAILED(m_pShaderCom->Bind_Resource("g_EmissiveTexture", m_pEmssiveTextureCom->Get_SRV(0))))
             return E_FAIL;
 
-        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE)))
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &m_vBaseColor, sizeof(_float4))))
             return E_FAIL;
+    }
 
-        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE)))
-            return E_FAIL;
-
+    for (_uint i = 0; i < m_iNumMesh; i++)
+    {
+        if (2 == m_iCurModelIndex)
+        {
+            if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
+                return E_FAIL;
+            if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE)))
+            {
+                m_iPassIndex = 0;
+                if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &m_vClearColor, sizeof(_float4))))
+                    return E_FAIL;
+            }
+            else
+            {
+                if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &m_vBaseColor, sizeof(_float4))))
+                    return E_FAIL;
+            }
+            
+        }
 
         if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(0)))
+        if (FAILED(m_pShaderCom->Begin(1)))
             return E_FAIL;
 
 

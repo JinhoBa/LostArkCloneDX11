@@ -67,9 +67,9 @@ HRESULT CLevel_Tutorial::Ready_Light()
 
     Desc.eType = LIGHT::DIRECTIONAL;
     Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-    Desc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-    Desc.vSpecular = _float4(1.f, 1.f, 1.f, 0.5f);
-    Desc.vDirection = _float4(-0.5f, 0.5f, 0.5f, 0.f);
+    Desc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+    Desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+    Desc.vDirection = _float4(-0.2f, 0.5f, 0.5f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(Desc)))
         return E_FAIL;
