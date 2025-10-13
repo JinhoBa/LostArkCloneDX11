@@ -7,6 +7,7 @@ NS_BEGIN(Engine)
 class CShader;
 class CTexture;
 class CVIBuffer_Point_Instance;
+class CModel;
 NS_END
 
 NS_BEGIN(Client)
@@ -27,6 +28,7 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	CModel*						m_pModelCom = { nullptr };
 	CVIBuffer_Point_Instance*	m_pVIBufferCom = { nullptr };
 	CShader*					m_pShaderCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
@@ -47,6 +49,9 @@ private:
 
 	_bool		m_isActive = {};
 	_float		m_fTimeAcc = {};
+
+	_uint		m_iNumMesh = {};
+	_uint		m_iMeshIndex = {};
 
 private:
 	HRESULT		Add_Components();

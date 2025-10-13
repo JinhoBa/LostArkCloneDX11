@@ -40,7 +40,7 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 	/* HitBox */
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 
-	CEffect_Ground::EffectGroundDesc Effect_Desc = {};
+	EffectGroundDesc Effect_Desc = {};
 
 	XMStoreFloat3(&Effect_Desc.vPosition, m_pPlayer->Get_Transform()->Get_Position());
 

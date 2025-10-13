@@ -42,6 +42,7 @@
 #include "Weapon_Player.h"
 #include "HpBar_Player.h"
 #include "Test_Effect.h"
+#include "TestMeshEffect.h"
 #include "Effect_Ground.h"
 #include "Effect_Trail.h"
 #include "Effect_Manager.h"
@@ -287,6 +288,21 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Noise/fx_noise_%d.dds"), 7))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_TestEffect_NoiseFolder */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_NoiseFolder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Noise")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TestEffect_DiffuseFolder */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_DiffuseFolder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TestEffect_MaskFolder */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_MaskFolder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Mask")))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region UI_TEXTURE
@@ -431,6 +447,73 @@ HRESULT CLoader::Loading_For_GamePlay()
 		return E_FAIL;*/
 #pragma endregion
 
+#pragma region EFFECT_MESH
+	/*For Prototype_Component_Model_Auro*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Auro"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_auro_01.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Cylinder1*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder1"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_cylinder_01.fbx"))))
+		return E_FAIL;
+	/*For Prototype_Component_Model_Cylinder2*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder2"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_cylinder_02.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Dome*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Dome"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_dome.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Line*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Line"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_line_01.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Potal*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Potal"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_potal_01.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Ring*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Ring"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_ring_01.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Screw*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Screw"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_screw_01.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Screwfront*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Screwfront"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_screwfront_01.fbx"))))
+		return E_FAIL;
+
+	/*For Prototype_Component_Model_Trail1*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail1"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_trail_01.fbx"))))
+		return E_FAIL;
+	/*For Prototype_Component_Model_Trail2*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail2"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_trail_02.fbx"))))
+		return E_FAIL;
+	/*For Prototype_Component_Model_Trail3*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail3"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_trail_03.fbx"))))
+		return E_FAIL;
+	/*For Prototype_Component_Model_Trail4*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail4"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_trail_04.fbx"))))
+		return E_FAIL;
+
+
+
+#pragma endregion
+
+
 	
 
 	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
@@ -438,6 +521,10 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Shader_VertexMesh */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElement))))
+		return E_FAIL;
+	/* For.Prototype_Component_Shader_VertexMeshEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMeshEffect"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VTXMeshEffect.hlsl"), VTXMESH::Elements, VTXMESH::iNumElement))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Shader_VtxAnimMesh */
@@ -600,6 +687,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Test_Effect*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"),
 		CTest_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Test_MeshEffect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"),
+		CTestMeshEffect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Effect_Ground*/

@@ -124,7 +124,7 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
 
         iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
 
-        if (MODEL::NONANIM == eModel)
+        if (MODEL::NONANIM == eModel || MODEL::MESH == eModel)
             iFlag |= aiProcess_PreTransformVertices;
 
         m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
@@ -144,6 +144,9 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
 
         if (FAILED(Ready_Meshes(m_eModel)))
             return E_FAIL;
+
+        if (MODEL::MESH == eModel)
+            return S_OK;
 
         if (FAILED(Ready_Materials(pModelFilePath)))
             return E_FAIL;
@@ -170,7 +173,7 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
 
     iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast | aiProcess_GlobalScale;
 
-    if (MODEL::NONANIM == eModel)
+    if (MODEL::NONANIM == eModel || MODEL::MESH == eModel)
         iFlag |= aiProcess_PreTransformVertices;
 
     m_pAiScene = m_Importer.ReadFile(pModelFilePath, iFlag);
@@ -449,6 +452,11 @@ HRESULT CModel::Save_Binary_Model(MODEL eModel, const _char* pModelFielPath, _fm
             out.write(reinterpret_cast<const _char*>(&Mesh->mFaces[j].mIndices[2]), sizeof(_uint));
         }
     }
+    if(MODEL::MESH== eModel)
+    {
+        out.close();
+        return S_OK;
+    }
 #pragma endregion
     
 #pragma region MATERIAL
@@ -523,7 +531,11 @@ HRESULT CModel::Load_Binary_Model(MODEL eModel, const _char* pModelFielPath)
         }
         m_Meshes.push_back(pMesh);
     }
-
+    if (MODEL::MESH == eModel)
+    {
+        in.close();
+        return S_OK;
+    }
 #pragma endregion
 
 #pragma region READY_MATERIAL

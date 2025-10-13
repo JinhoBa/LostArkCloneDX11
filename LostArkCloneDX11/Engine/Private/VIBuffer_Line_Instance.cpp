@@ -267,7 +267,7 @@ void CVIBuffer_Line_Instance::Free()
 {
 	__super::Free();
 
-	if (true == m_isCloned)
+	if (false == m_isCloned)
 	{
 		Safe_Delete_Array(m_pInstanceVertices);
 		Safe_Delete_Array(m_pDist);

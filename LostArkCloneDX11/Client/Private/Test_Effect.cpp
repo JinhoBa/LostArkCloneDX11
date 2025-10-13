@@ -44,7 +44,7 @@ HRESULT CTest_Effect::Initialize(void* pArg)
     m_vSpeed = _float2(0.1f, 0.2f);
     m_vRange = _float3(0.f, 0.f, 0.f);
     m_vLifeTime = _float2(1.f, 1.0f);
-    m_vPivot = _float3(0.f, 0.f, 0.f);
+    m_vPivot = _float3(1.f, 1.f, 1.f);
     m_vPosition = _float3(0.f, 0.f, 0.f);
     m_vRotation = _float3(0.f, 0.f, 0.f);
 
@@ -53,6 +53,8 @@ HRESULT CTest_Effect::Initialize(void* pArg)
 
     XMStoreFloat4x4(&m_CombindedMatrix, XMMatrixIdentity());
 
+    m_iNumMesh = m_pModelCom->Get_NumMeshes();
+    m_iMeshIndex = 0;
 
     return S_OK;
 }
@@ -70,6 +72,7 @@ void CTest_Effect::Update(_float fTimeDelta)
 
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
     m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
+    m_pTransformCom->Set_Scale(m_vPivot);
 
   //  m_pVIBufferCom->Set_Desc(m_isLoop, m_iNumInstance, m_vSize, m_vCenter, m_vSpeed, m_vRange, m_vLifeTime, m_vPivot);
     //m_pVIBufferCom->Spread(fTimeDelta);
@@ -80,7 +83,7 @@ void CTest_Effect::Update(_float fTimeDelta)
 
 void CTest_Effect::Late_Update(_float fTimeDelta)
 {
-   //m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+   m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CTest_Effect::Render()
@@ -100,7 +103,7 @@ HRESULT CTest_Effect::Render()
 #endif // _DEBUG
 
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
@@ -109,20 +112,25 @@ HRESULT CTest_Effect::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+    //if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+    //    return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Get_SRV(0))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(0))))
+
+
+    if (FAILED(m_pShaderCom->Begin(0)))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(1)))
-        return E_FAIL;
-
-    if (FAILED(m_pVIBufferCom->Bind_Resources()))
+   /* if (FAILED(m_pVIBufferCom->Bind_Resources()))
         return E_FAIL;
     
     if (FAILED(m_pVIBufferCom->Render()))
-        return E_FAIL;
+        return E_FAIL;*/
+
+    if (FAILED(m_pModelCom->Render(0)))
+        return S_OK;
 
     return S_OK;
 }
@@ -145,8 +153,13 @@ HRESULT CTest_Effect::Add_Components()
         return E_FAIL;
 
     /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxPointParticle"),
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMeshEffect"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+        return E_FAIL;
+
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_TrailMeshes"),
+        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
     return S_OK;
@@ -189,4 +202,5 @@ void CTest_Effect::Free()
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pTextureTrailCom);
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pModelCom);
 }

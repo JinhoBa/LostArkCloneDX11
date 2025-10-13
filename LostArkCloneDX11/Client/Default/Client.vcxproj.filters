@@ -406,6 +406,9 @@
     <Filter Include="06.Effect\Trail">
       <UniqueIdentifier>{2c116854-3d70-42c2-a120-e8c9166fb895}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06.Effect\Test_MeshEffect">
+      <UniqueIdentifier>{335ed4f0-eb23-4882-8d90-5291f98bd72e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -804,6 +807,9 @@
     <ClInclude Include="..\public\Effect_Trail.h">
       <Filter>06.Effect\Trail</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\TestMeshEffect.h">
+      <Filter>06.Effect\Test_MeshEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1197,6 +1203,9 @@
     <ClCompile Include="..\private\Effect_Trail.cpp">
       <Filter>06.Effect\Trail</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\TestMeshEffect.cpp">
+      <Filter>06.Effect\Test_MeshEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXPosTex.hlsl">
@@ -1215,6 +1224,9 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxLineTrail.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMeshEffect.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

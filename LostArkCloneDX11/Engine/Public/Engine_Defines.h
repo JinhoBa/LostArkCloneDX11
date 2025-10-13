@@ -42,6 +42,7 @@ using namespace DirectX;
 #include <fstream>
 #include <sstream>
 #include <charconv>
+#include <filesystem>
 
 using namespace std;
 
