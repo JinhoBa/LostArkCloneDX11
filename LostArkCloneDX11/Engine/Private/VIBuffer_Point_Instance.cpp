@@ -93,8 +93,6 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pIns
 
 		m_pInstanceVertices[i].vLifeTime = _float2(0.0f, m_pGameInstance->Random(pDesc->vLifeTime.x, pDesc->vLifeTime.y));
 
-
-
 		m_pSpeed[i] = m_pGameInstance->Random(pDesc->vSpeed.x, pDesc->vSpeed.y);
 	}
 
@@ -156,8 +154,8 @@ void CVIBuffer_Point_Instance::Set_Desc(_bool isLoop, _float2 vSize, _float3 vCe
 
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
-		pVertices[i].vTranslation = _float4(vCenter.x, vCenter.y, vCenter.z, 1.f);
-		pVertices[i].vLifeTime.y = m_pGameInstance->Random(vLifeTime.x, vLifeTime.y);
+		//pVertices[i].vTranslation = _float4(vCenter.x, vCenter.y, vCenter.z, 1.f);
+		pVertices[i].vLifeTime.y =  vLifeTime.y;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -191,8 +189,10 @@ void CVIBuffer_Point_Instance::Update(_float fTimeDelta)
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
-void CVIBuffer_Point_Instance::Scaling(_float fTimeDelta, LERP eLerpType)
+void CVIBuffer_Point_Instance::Scaling(_float fTimeDelta, LERP eLerpType, _float3 vPivot, _float fSpeed)
 {
+	m_vPivot = vPivot;
+
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
 
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
@@ -229,7 +229,10 @@ void CVIBuffer_Point_Instance::Scaling(_float fTimeDelta, LERP eLerpType)
 		pVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
 		pVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
 		pVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
-		pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+
+		_vector vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
+
+		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * fSpeed * fTimeDelta);
 
 		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
 		{
@@ -297,6 +300,23 @@ void CVIBuffer_Point_Instance::Trail(_float fTimeDelta)
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
+void CVIBuffer_Point_Instance::Reset()
+{
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	for (_uint i = 0; i < m_iNumInstance; ++i)
+	{
+			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
 _float CVIBuffer_Point_Instance::Lerp(_float fStart, _float fEnd, _float fTime)
 {
 	return fStart * (1.f - fTime) + fEnd * fTime;
@@ -334,7 +354,7 @@ void CVIBuffer_Point_Instance::Free()
 {
 	__super::Free();
 
-	if(true == m_isCloned)
+	if(false == m_isCloned)
 	{
 		Safe_Delete_Array(m_pInstanceVertices);
 		Safe_Delete_Array(m_pSpeed);

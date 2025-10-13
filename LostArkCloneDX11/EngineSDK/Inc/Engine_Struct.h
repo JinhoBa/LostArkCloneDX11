@@ -43,18 +43,6 @@ namespace Engine
 		};
 	}VTXPOS;
 
-	typedef struct tagVertexLine
-	{
-		XMFLOAT3			vPrePosition;
-		XMFLOAT3			vCurPosition;
-
-		static constexpr unsigned int					iNumElement = { 2 };
-		static constexpr D3D11_INPUT_ELEMENT_DESC		Elements[] = {
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 12, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		};
-	}VTXLINE;
-
 	typedef struct tagVertexPositionTexcoord
 	{
 		XMFLOAT3						vPosition;
@@ -126,6 +114,17 @@ namespace Engine
 		XMFLOAT2		vLifeTime;
 	}VTX_INSTANCE_PARTICLE;
 
+	typedef struct tagVertexInstanceTRAIL
+	{
+		XMFLOAT4		vStartPosition;
+		XMFLOAT4		vEndPosition;
+		XMFLOAT4		vStartRight;
+		XMFLOAT4		vEndRight;
+
+		XMFLOAT2		vLifeTime;
+		XMFLOAT3		vWidth;
+	}VTX_INSTANCE_TRAIL;
+
 	typedef struct tagVertexPosTexInstanceParticleDesc
 	{
 		static constexpr unsigned int		iNumElement = { 7 };
@@ -154,6 +153,21 @@ namespace Engine
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
 		};
 	}VTX_POS_INSTANCE_PARTICLE;
+
+	typedef struct tagVertexPosInstanceLineDesc
+	{
+		static constexpr unsigned int		iNumElement = { 7 };
+		static constexpr D3D11_INPUT_ELEMENT_DESC		Elements[] = {
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
+			{ "POSITION", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "POSITION", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 2, DXGI_FORMAT_R32G32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+			{ "TEXCOORD", 3, DXGI_FORMAT_R32G32B32_FLOAT, 1, 72, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
+		};
+	}VTX_POS_INSTANCE_LINE;
 
 	typedef struct tagKeyFrame
 	{

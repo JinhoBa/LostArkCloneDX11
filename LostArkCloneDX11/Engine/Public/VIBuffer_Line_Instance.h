@@ -9,9 +9,8 @@ public:
 	typedef struct tagLineInstanceDesc : public CVIBuffer_Instance::INSTANCE_DESC
 	{
 		_bool		isLoop;
-		_float		fWidth;
-		_float2		vSpeed;
 		_float2		vLifeTime;
+		_float3		vWidth;
 	}LINE_INSTANCE_DESC;
 private:
 	CVIBuffer_Line_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -30,14 +29,17 @@ public:
 	void Set_Desc(_bool isLoop, _uint	iNumInstance, _float2 vSize, _float3 vCenter, _float2 vSpeed, _float3 vRange, _float2 vLifeTime, _float3 vPivot);
 
 #endif // _DEBUG
-	void Trail(_float fTimeDelta);
+	void Add_Position(_float4x4* pMatrix);
+	void Clear();
+	_float Trail(_float fTimeDelta);
 
 private:
-	VTX_INSTANCE_PARTICLE* m_pInstanceVertices = { nullptr };
+	VTX_INSTANCE_TRAIL* m_pInstanceVertices = { nullptr };
 
 	_bool					m_isLoop = {};
+	_uint					m_iNumPosition = {};
 	_float3					m_vPivot = {};
-	_float*					m_pSpeed = { nullptr };
+	_float*					m_pDist = { nullptr };
 
 public:
 	static CVIBuffer_Line_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const INSTANCE_DESC* pInstanceDesc);

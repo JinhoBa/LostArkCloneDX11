@@ -10,6 +10,7 @@
 #include "VIBuffer_Terrain.h"
 #include "VIBuffer_Rect_Instance.h"
 #include "VIBuffer_Point_Instance.h"
+#include "VIBuffer_Line_Instance.h"
 #include "Shader.h"
 #include "UIAnimation.h"
 #include "Model.h"

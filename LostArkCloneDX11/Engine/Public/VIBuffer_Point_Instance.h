@@ -30,9 +30,10 @@ public:
 	void Set_Desc(_bool isLoop, _float2 vSize, _float3 vCenter, _float3 vRange, _float2 vLifeTime);
 #endif // _DEBUG
 	void Update(_float fTimeDelta);
-	void Scaling(_float fTimeDelta, LERP eLerpType);
+	void Scaling(_float fTimeDelta, LERP eLerpType, _float3 vPivot, _float fSpeed);
 	void Spread(_float fTimeDelta);
 	void Trail(_float fTimeDelta);
+	void Reset();
 
 private:
 	VTX_INSTANCE_PARTICLE*	m_pInstanceVertices = { nullptr };
