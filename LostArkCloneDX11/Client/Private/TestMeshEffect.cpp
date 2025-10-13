@@ -175,6 +175,9 @@ HRESULT CTestMeshEffect::Render()
     if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
         return E_FAIL;
 
+    if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShaderCom, "g_DepthTexture")))
+        return E_FAIL;
+
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vDiffuseOffset", &m_vDiffuseOffset, sizeof(_float2))))
         return E_FAIL;
 
@@ -182,6 +185,9 @@ HRESULT CTestMeshEffect::Render()
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_fNoiseStrength, sizeof(_float))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Begin(1)))
