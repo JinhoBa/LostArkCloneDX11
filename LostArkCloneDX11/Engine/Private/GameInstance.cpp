@@ -528,6 +528,7 @@ void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pRenderTarget_Manager);
 	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pCollider_Manager);

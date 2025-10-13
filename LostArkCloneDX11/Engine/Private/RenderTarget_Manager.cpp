@@ -153,7 +153,7 @@ void CRenderTarget_Manager::Free()
 	{
 		for (auto& pRenderTarget : Pair.second)
 			Safe_Release(pRenderTarget);
-		m_RenderTargets.clear();
+		Pair.second.clear();
 	}
 	m_MRTs.clear();
 

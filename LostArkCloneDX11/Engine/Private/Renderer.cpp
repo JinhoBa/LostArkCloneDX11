@@ -367,6 +367,8 @@ HRESULT CRenderer::Render_Debug()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Render_RenderTarget_Debug(TEXT("MRT_LightAcc"), m_pShaderCom, m_pVIBufferCom)))
 		return E_FAIL;
+
+	return S_OK;
 }
 #endif // _DEBUG
 
@@ -386,6 +388,10 @@ CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 void CRenderer::Free()
 {
     __super::Free();
+
+	for (auto& pComponent : m_DebugComponents)
+		Safe_Release(pComponent);
+	m_DebugComponents.clear();
 
 	for (auto& RenderObjects : m_RenderObjects)
 	{
