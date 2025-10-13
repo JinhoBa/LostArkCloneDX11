@@ -24,6 +24,7 @@ HRESULT CEffect::Initialize_Prototype()
 
 HRESULT CEffect::Initialize(void* pArg)
 {
+    m_fLifeTime = 0.f;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -45,6 +46,16 @@ void CEffect::Late_Update(_float fTimeDelta)
 }
 
 HRESULT CEffect::Render()
+{
+    return S_OK;
+}
+
+HRESULT CEffect::Start(void* pArg)
+{
+    return S_OK;
+}
+
+HRESULT CEffect::Reset()
 {
     return S_OK;
 }

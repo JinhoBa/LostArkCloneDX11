@@ -43,6 +43,8 @@
 #include "HpBar_Player.h"
 #include "Test_Effect.h"
 #include "Effect_Ground.h"
+#include "Effect_Trail.h"
+#include "Effect_Manager.h"
 
 #include "Body_Monster.h"
 #include "HpBar_Monster.h"
@@ -252,22 +254,37 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_Component_Texture_TestEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_a_cloud_006.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_base_0.dds"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_TestEffect_Trail */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Trail"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_trail_%d.dds"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_base_%d.dds"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_TestEffect_decal */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_decal"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_a_decal_%d.dds"), 3))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_base_%d.dds"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_TestEffect_hit */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_hit"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_m_atypical_084_clamp.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_base_%d.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TestEffect_Base */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Base"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_base_%d.dds"), 6))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TestEffect_Mask */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Mask"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Mask/fx_mask_%d.dds"), 12))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_TestEffect_Noise */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Noise"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Noise/fx_noise_%d.dds"), 7))))
 		return E_FAIL;
 
 #pragma endregion
@@ -432,6 +449,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxPointParticle"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointParticle.hlsl"), VTX_POS_INSTANCE_PARTICLE::Elements, VTX_POS_INSTANCE_PARTICLE::iNumElement))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Shader_VtxLineTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxLineTrail"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxLineTrail.hlsl"), VTX_POS_INSTANCE_LINE::Elements, VTX_POS_INSTANCE_LINE::iNumElement))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -473,11 +495,26 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Point_Desc.vSize = _float2(1.f, 1.f);
 	Point_Desc.isLoop = true;
 	Point_Desc.vLifeTime = _float2(1.0f, 1.f);
-	Point_Desc.vSpeed = _float2(1.f, 3.f);
+	Point_Desc.vSpeed = _float2(5.f, 5.f);
+
 
 	/*For Prototype_Component_VIBuffer_Point_Instance_TestEffect*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_GroundEffect"),
 		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &Point_Desc))))
+		return E_FAIL;
+
+	CVIBuffer_Line_Instance::LINE_INSTANCE_DESC Line_Desc = {};
+	Line_Desc.iNumInstance = 1000;
+	Line_Desc.vCenter = _float3(0.f, 2.f, 0.f);
+	Line_Desc.vRange = _float3(3.f, 3.f, 3.f);
+	Line_Desc.vSize = _float2(0.1f, 0.5f);
+	Line_Desc.isLoop = false;
+	Line_Desc.vLifeTime = _float2(1.0f, 1.f);
+	Line_Desc.vWidth = _float3(1.f, 5.f, 5.f);
+
+	/*For Prototype_Component_VIBuffer_Point_Instance_TestEffect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Line_Instance_TrailEffect"),
+		CVIBuffer_Line_Instance::Create(m_pDevice, m_pContext, &Line_Desc))))
 		return E_FAIL;
 
 	/*For Prototype_Component_Collider_AABB*/
@@ -570,6 +607,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CEffect_Ground::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Effect_Trail*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Trail"),
+		CEffect_Trail::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_Monster_Named */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Monster_Named"),
 		CMonster_Named::Create(m_pDevice, m_pContext))))
@@ -599,6 +641,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Body_Kamen */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Kamen"),
 		CWeapon_Kamen::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Effect_Manager */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Manager"),
+		CEffect_Manager::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

@@ -6,13 +6,18 @@
 NS_BEGIN(Engine)
 class CShader;
 class CTexture;
-class CVIBuffer_Point_Instance;
+class CVIBuffer_Line_Instance;
 NS_END
 
 NS_BEGIN(Client)
 
 class CEffect_Trail final : public CEffect
 {
+public:
+	typedef struct TrailEffect_Desc : public CPartObject::PARTOBJECT_DESC
+	{
+		const _float4x4* pSocketMatrix{ nullptr };
+	}TRAIL_EFFECT_DESC;
 private:
 	CEffect_Trail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CEffect_Trail(const CEffect_Trail& Prototype);
@@ -29,13 +34,15 @@ public:
 public:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
-
+	CVIBuffer_Line_Instance* m_pVIBufferCom = { nullptr };
+	const _float4x4*		m_pSocketMatrix = { nullptr };
+	_float4x4 m_IdentityMatrix = {};
+	_float m_fWidth = {};
 #ifdef _DEBUG
+	_uint m_BaseIndex = {};
 	_float3							m_vPosition = {};
 	LERP							m_eLerpType = { LERP::LINEAR };
 #endif // _DEBUG
-
 
 private:
 	HRESULT		Add_Components();

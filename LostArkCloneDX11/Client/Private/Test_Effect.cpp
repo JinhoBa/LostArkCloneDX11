@@ -8,12 +8,12 @@
 #include "Camera_Fix.h"
 
 CTest_Effect::CTest_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    :CPartObject{ pDevice, pContext }
+    :CEffect{ pDevice, pContext }
 {
 }
 
 CTest_Effect::CTest_Effect(const CTest_Effect& Prototype)
-    :CPartObject{ Prototype }
+    :CEffect{ Prototype }
 {
 }
 
@@ -24,7 +24,7 @@ HRESULT CTest_Effect::Initialize_Prototype()
 
 HRESULT CTest_Effect::Initialize(void* pArg)
 {
-    EFFECT_DESC* pDesc = static_cast<EFFECT_DESC*>(pArg);
+    CEffect::EFFECT_DESC* pDesc = static_cast<EFFECT_DESC*>(pArg);
 
     m_pSocketMatrix = pDesc->pSocketMatrix;
     m_pParentTransformCom = pDesc->pParentTransform;

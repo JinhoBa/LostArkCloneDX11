@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 
-#include "Base.h"
+#include "GameObject.h"
 #include "GameManager.h"
 
 NS_BEGIN(Engine)
@@ -11,26 +11,34 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CEffect_Manager : public CBase
+class CEffect_Manager : public CGameObject
 {
 private:
-	CEffect_Manager();
+	CEffect_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CEffect_Manager(const CEffect_Manager& Prototype);
 	virtual ~CEffect_Manager() = default;
 
 public:
-	HRESULT Initilize();
+	virtual HRESULT Initialize_Prototype()override;
+	virtual HRESULT Initialize(void* pArg)override;
+	virtual void Priority_Update(_float fTimeDelta)override;
+	virtual void Update(_float fTimeDelta)override;
+	virtual void Late_Update(_float fTimeDelta)override;
+	virtual HRESULT Render()override;
 
 public:
-	void Add_Effects(const _tchar* pEffectTag, class CEffect* pEffect);
+	void Add_Effects(EFFECT eType, _uint iEffectID, void* pArg);
+	HRESULT Load_Data(const _char* pFilePath);
 
 
 private:
-	CGameInstance* m_pGameInstance = { nullptr };
-
-	map<_wstring, class CEffect*> m_Effects;
+	vector<EFFECT_GROUND_DESC>		m_EffectData;
+	deque<class CEffect*>			m_GroundEffects;
+	list<class CEffect*>			m_pActiveEffects;
 
 public:
-	static CEffect_Manager* Create();
+	static CEffect_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
 

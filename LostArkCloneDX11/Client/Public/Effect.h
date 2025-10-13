@@ -13,6 +13,12 @@ NS_BEGIN(Client)
 
 class CEffect abstract : public CPartObject
 {
+public:
+	typedef struct Effect_Desc : public CPartObject::PARTOBJECT_DESC
+	{
+		const _float4x4* pSocketMatrix{ nullptr };
+	}EFFECT_DESC;
+
 protected:
 	CEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CEffect(const CEffect& Prototype);
@@ -26,10 +32,18 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
+	virtual HRESULT Start(void* pArg);
+	virtual HRESULT Reset();
+
 protected:
+	const _float4x4* m_pSocketMatrix = { nullptr };
+	_float4x4		 m_CombindedMatrix = {};
 	_uint		m_iInstanceIndex = {};
 	_bool		m_isLoop = {};
 	_uint		m_iNumInstance = {};
+
+	_float		m_fLifeTime = {};
+
 	_float2		m_vSize = {};
 	_float3		m_vCenter = {};
 	_float2		m_vSpeed = {};
@@ -40,8 +54,8 @@ protected:
 	_bool		m_isActive = {};
 	_float		m_fTimeAcc = {};
 
-	_int m_iPassIndex = {};
-	_int m_iTextureIndex = {};
+	_int		m_iPassIndex = {};
+	_int		m_iTextureIndex = {};
 
 private:
 	HRESULT		Add_Components();

@@ -14,6 +14,7 @@
 #include "Camera_Fix.h"
 #include "Terrain.h"
 #include "Buff.h"
+#include "Effect_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameManager)
 
@@ -68,6 +69,24 @@ void CGameManager::Destory_GameManager()
 	Safe_Release(m_pData_Manager);
 
 	Safe_Release(m_pGameInstance);
+}
+
+HRESULT CGameManager::Initialize_Effect_Manager()
+{
+	m_pEffect_Manager = dynamic_cast<CEffect_Manager*>(m_pGameInstance->Get_LayerObjects(
+		ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Effect_Manager")
+	).back());
+
+	if (nullptr == m_pEffect_Manager)
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, void* pArg)
+{
+	if (nullptr != m_pEffect_Manager)
+		m_pEffect_Manager->Add_Effects(EFFECT::GROUND, iEffectID, pArg);
 }
 
 
@@ -273,5 +292,4 @@ _vector CGameManager::Picking_Terrains()
 void CGameManager::Free()
 {
 	__super::Free();
-
 }

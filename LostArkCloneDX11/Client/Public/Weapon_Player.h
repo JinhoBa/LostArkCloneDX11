@@ -44,6 +44,11 @@ private:
 	CShader*				m_pShaderCom = { nullptr };
 	CModel*					m_pModelCom[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 	
+#ifdef _DEBUG
+	_float4 vSkillColor = {};
+#endif // _DEBUG
+
+
 private:
 	HRESULT		Add_Components();
 

@@ -25,6 +25,7 @@ private:
 	HRESULT Ready_Layer_Npc(const _wstring& strLayerTag);
 	HRESULT Ready_Camera();
 	HRESULT Ready_Layer_Canvas(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_Effect(const _wstring& strLayerTag);
 
 	HRESULT Load_MapData();
 public:

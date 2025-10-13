@@ -6,6 +6,7 @@
 
 #include "StateMachine.h"
 #include "Player.h"
+#include "Effect_Ground.h"
 
 CPlayer_NormalSkill::CPlayer_NormalSkill()
 	:CSkill_Player{}
@@ -38,6 +39,12 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 
 	/* HitBox */
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
+
+	CEffect_Ground::EffectGroundDesc Effect_Desc = {};
+
+	XMStoreFloat3(&Effect_Desc.vPosition, m_pPlayer->Get_Transform()->Get_Position());
+
+	m_pGameManager->Add_Effect(EFFECT::GROUND, 0, &Effect_Desc);
 }
 
 void CPlayer_NormalSkill::Update(_float fTimeDelta)

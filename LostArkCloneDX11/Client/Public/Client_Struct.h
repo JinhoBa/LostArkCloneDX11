@@ -157,4 +157,39 @@ namespace Client
 		_float3     vRotationAxis{};
 		_float3		vTargetPosition{};
 	}CAMERA_ANIMATION_DESC;
+
+	typedef struct tagEffectDesc
+	{
+		EFFECT	eType;
+		LERP	eLerpType;
+		_bool	isLoop;
+		_bool	isMove;
+		_bool	isRotate;
+		_float	fRotationSpeed;
+		_float3 vStrartPosition;
+		_float3 vEndPosition;
+		_float3 vRotation;
+		_float3 vScale;
+		_float2 vLifeTime;
+		
+	};
+
+	typedef struct EffectGroundDesc
+	{
+		LERP		eLerpType = { LERP::LINEAR };
+		_bool		isRotation = {};
+		_uint		iID = {};
+		_uint		iBaseIndex = {};
+		_uint		iMaskIndex = {};
+		_uint		iNoiseIndex = {};
+
+		_float		fSpeed = {};
+		_float		fLifeTime = {};
+		_float		fRotationSpeed = {};
+
+		_float2		vSize = {};
+		_float3		vPosition = {};
+		_float3		vPivot = {};
+		_float3		vRotation = {};
+	}EFFECT_GROUND_DESC;
 }

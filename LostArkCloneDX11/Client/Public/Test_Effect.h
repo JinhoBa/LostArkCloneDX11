@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Client_Struct.h"
-#include "PartObject.h"
+#include "Effect.h"
 
 NS_BEGIN(Engine)
 class CShader;
@@ -11,13 +11,8 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CTest_Effect final : public CPartObject
+class CTest_Effect final : public CEffect
 {
-public:
-	typedef struct Effect_Desc : public CPartObject::PARTOBJECT_DESC
-	{
-		const _float4x4* pSocketMatrix{ nullptr };
-	}EFFECT_DESC;
 private:
 	CTest_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CTest_Effect(const CTest_Effect& Prototype);
@@ -32,9 +27,6 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	const _float4x4*			m_pSocketMatrix = { nullptr };
-	_float4x4					m_CombindedMatrix = {};
-
 	CVIBuffer_Point_Instance*	m_pVIBufferCom = { nullptr };
 	CShader*					m_pShaderCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };

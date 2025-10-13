@@ -453,6 +453,7 @@
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxLineTrail.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointParticle.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VTXMesh.hlsl" />

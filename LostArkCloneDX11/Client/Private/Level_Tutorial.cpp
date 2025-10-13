@@ -44,6 +44,9 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
 
+    if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect_Manager"))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -281,6 +284,16 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
         return E_FAIL;
 
 
+
+    return S_OK;
+}
+HRESULT CLevel_Tutorial::Ready_Layer_Effect(const _wstring& strLayerTag)
+{
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Manager"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
+    CGameManager::GetInstance()->Initialize_Effect_Manager();
 
     return S_OK;
 }

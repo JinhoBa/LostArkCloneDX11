@@ -45,6 +45,8 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
 
     m_pTransformCom->Rotation(XMConvertToRadians(90.f), 0.f, 0.f);
 
+    vSkillColor = _float4(0.7f, 0.7f, 1.f, 1.f);
+
     return S_OK;
 }
 
@@ -61,7 +63,7 @@ void CWeapon_Player::Update(_float fTimeDelta)
 
 void CWeapon_Player::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CWeapon_Player::Render()
@@ -87,12 +89,22 @@ HRESULT CWeapon_Player::Render()
         if (FAILED((m_pModelCom[ENUM_TO_INT(*m_pStance)])->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
             return E_FAIL;
 
+        if(m_pGameInstance->Get_KeyPressing(DIK_R))
+        {
+            if (FAILED(m_pShaderCom->Bind_RawValue("g_DiffuseColor", &vSkillColor, sizeof(_float4))))
+                return E_FAIL;
+            if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &vSkillColor, sizeof(_float4))))
+                return E_FAIL;
+        }
+
         if (FAILED(m_pShaderCom->Begin(3)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom[ENUM_TO_INT(*m_pStance)]->Render(i)))
             return E_FAIL;
     }
+
+
 
     return S_OK;
 }

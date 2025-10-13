@@ -27,6 +27,9 @@ public:
 	HRESULT Initialize_Manager();
 	void Destory_GameManager();
 
+	HRESULT Initialize_Effect_Manager();
+	void Add_Effect(EFFECT eType, _uint iEffectID, void* pArg);
+
 #pragma region MAPDATA
 	const vector<MAP_DATA>&		Get_MapData();
 	const vector<TERRAIN_DATA>&	Get_TerrainData();
@@ -95,6 +98,7 @@ private:
 	LEVEL							m_eCurLevel = {};
 
 	CGameInstance*					m_pGameInstance = { nullptr };
+	class CEffect_Manager*			m_pEffect_Manager = { nullptr };
 
 	class CData_Manager*			m_pData_Manager = { nullptr };
 	class CSkill_Manager*			m_pSkill_Manager = { nullptr };
