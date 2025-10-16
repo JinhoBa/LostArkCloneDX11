@@ -192,4 +192,44 @@ namespace Client
 		_float3		vPivot = {};
 		_float3		vRotation = {};
 	}EFFECT_GROUND_DESC;
+
+	typedef struct tagEffectMeshData
+	{
+		_bool		isLoop = {};
+		_bool		isUseScale = {};
+		_bool		isUseRotation = {};
+
+		_uint		iMeshIndex = {};
+
+		_float		fSpeed = {};
+		_float3		vPosition = {};
+		_float3		vPivot = {};
+
+		_float3		vStartRotation = {};
+		_float3		vEndRotation = {};
+
+		_float3		vStartScale = {};
+		_float3		vEndScale = {};
+
+		_float2		vLifeTime = {};
+
+		_float      fNoiseStrength = {};
+
+		_float		fDiffuseScrollSpeedU = {};
+		_float		fDiffuseScrollSpeedV = {};
+
+		_float		fMaskScrollSpeedU = {};
+		_float		fMaskScrollSpeedV = {};
+	}EFFECT_MESH_DATA;
+
+	typedef struct tagEffectMeshDesc
+	{
+		EFFECT_MESH_DATA Mesh_Data = {};
+
+		_wstring	strDiffuseTexture = {};
+		_wstring	strMaskTexture = {};
+		_wstring	strNoiseTexture = {};
+	}EFFECT_MESH_DESC;
+
+
 }

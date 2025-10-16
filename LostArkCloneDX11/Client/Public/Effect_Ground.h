@@ -27,7 +27,7 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
-	virtual HRESULT Start(void* pArg) override;
+	virtual HRESULT Start(const _float4x4* pWorldMatrix, void* pArg) override;
 	virtual HRESULT Reset() override;
 
 public:
@@ -38,6 +38,23 @@ public:
 	CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 
 #ifdef _DEBUG
+	_bool		m_isLoop = {};
+	_uint		m_iNumInstance = {};
+
+	_float		m_fLifeTime = {};
+
+	_float2		m_vSize = {};
+	_float3		m_vCenter = {};
+	_float2		m_vSpeed = {};
+	_float3		m_vRange = {};
+	_float2		m_vLifeTime = {};
+
+	_bool		m_isActive = {};
+	_float		m_fTimeAcc = {};
+
+	_int		m_iPassIndex = {};
+	_int		m_iTextureIndex = {};
+
 	LERP		m_eLerpType = { LERP::LINEAR };
 	_bool		m_bTest = {};
 	_bool		m_isRotation = {};
@@ -47,7 +64,6 @@ public:
 	_uint		m_NoiseIndex = {};
 
 	_float		m_fSpeed = {};
-	_float		m_fLifeTime = {};
 	_float		m_fSize = {};
 	_float		m_fRotationSpeed = {};
 

@@ -14,7 +14,7 @@ namespace Client
 	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, TUTORIAL, BOSS, MAP_EDITOR, END};
 	enum class STANCE {FLURRY, FOCUS, IDEN_END};
 	enum class MONSTER { NORMAL, NAMED, BOSS };
-	enum class EFFECT { BILLBORD, TRAIL, GROUND, PARTICLE };
+	enum class EFFECT { BILLBORD, TRAIL, GROUND, PARTICLE, MESH };
 	enum class PHASE { INTRO, PHASE1, PHASE2, PHASE3, END };
 
 	enum class CHARACTER {PLAYER, MONSTER, BOSS, END};
@@ -52,3 +52,4 @@ using namespace Client;
 
 extern HINSTANCE g_hInstance;
 extern HWND g_hWnd;
+extern float g_fTestDeltaTime;

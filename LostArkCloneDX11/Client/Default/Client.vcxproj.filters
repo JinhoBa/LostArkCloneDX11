@@ -409,6 +409,9 @@
     <Filter Include="06.Effect\Test_MeshEffect">
       <UniqueIdentifier>{335ed4f0-eb23-4882-8d90-5291f98bd72e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06.Effect\Mesh">
+      <UniqueIdentifier>{8808088e-fa96-42dd-99b3-fe0a3ed677af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -810,6 +813,9 @@
     <ClInclude Include="..\public\TestMeshEffect.h">
       <Filter>06.Effect\Test_MeshEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Effect_Mesh.h">
+      <Filter>06.Effect\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1205,6 +1211,9 @@
     </ClCompile>
     <ClCompile Include="..\private\TestMeshEffect.cpp">
       <Filter>06.Effect\Test_MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Mesh.cpp">
+      <Filter>06.Effect\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

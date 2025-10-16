@@ -35,6 +35,7 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 	m_fChargeTime = 0.f;
 	m_fMaxChargeTime = 1.5f;
 	
+	m_isSpawEffect = true;
 
 	if (12 == m_iSkillID)
 	{
@@ -96,7 +97,14 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 	case Client::CPlayer_ChargeSkill::ATTACK:
 		if(13 == m_iSkillID)
+		{
 			Update_Hitbox(fTimeDelta);
+			if (true == m_isSpawEffect && 7.f <= m_pPlayer->Get_TrackPositon())
+			{
+				m_pGameManager->Add_Effect(EFFECT::MESH, 2, &m_pPlayer->Get_Transform()->Get_WorldMatrix(), nullptr);
+				m_isSpawEffect = false;
+			}
+		}
 
 		if (m_pPlayer->isAnimationFinish())
 		{

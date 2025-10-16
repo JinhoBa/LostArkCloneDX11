@@ -39,7 +39,25 @@ public:
 	_float4x4 m_IdentityMatrix = {};
 	_float m_fWidth = {};
 #ifdef _DEBUG
-	_uint m_BaseIndex = {};
+	_uint		m_iInstanceIndex = {};
+	_bool		m_isLoop = {};
+	_uint		m_iNumInstance = {};
+
+	_float		m_fLifeTime = {};
+
+	_float2		m_vSize = {};
+	_float3		m_vCenter = {};
+	_float2		m_vSpeed = {};
+	_float3		m_vRange = {};
+	_float2		m_vLifeTime = {};
+	_float3		m_vPivot = {};
+
+	_bool		m_isActive = {};
+	_float		m_fTimeAcc = {};
+
+	_int		m_iPassIndex = {};
+	_int		m_iTextureIndex = {};
+	_uint		m_BaseIndex = {};
 	_float3							m_vPosition = {};
 	LERP							m_eLerpType = { LERP::LINEAR };
 #endif // _DEBUG

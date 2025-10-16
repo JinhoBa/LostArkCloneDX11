@@ -101,6 +101,8 @@ HRESULT CBody_Player::Render()
 //        ImGui::Text(pName);
 //    }
 //#pragma endregion
+    _float KeyFrame = m_pModelCom->Get_TrackPosition();
+    ImGui::InputFloat("KeyFrame", &KeyFrame);
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
         return E_FAIL;

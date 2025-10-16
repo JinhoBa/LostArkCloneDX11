@@ -32,13 +32,13 @@ public:
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
 
-	virtual HRESULT Start(void* pArg);
+	virtual HRESULT Start(const _float4x4* pWorldMatrix, void* pArg);
 	virtual HRESULT Reset();
 
 protected:
 	const _float4x4* m_pSocketMatrix = { nullptr };
-	_float4x4		 m_CombindedMatrix = {};
-	_uint		m_iInstanceIndex = {};
+
+	/*_uint		m_iInstanceIndex = {};
 	_bool		m_isLoop = {};
 	_uint		m_iNumInstance = {};
 
@@ -55,7 +55,7 @@ protected:
 	_float		m_fTimeAcc = {};
 
 	_int		m_iPassIndex = {};
-	_int		m_iTextureIndex = {};
+	_int		m_iTextureIndex = {};*/
 
 private:
 	HRESULT		Add_Components();

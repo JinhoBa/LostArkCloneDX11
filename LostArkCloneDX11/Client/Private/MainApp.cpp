@@ -114,7 +114,10 @@ void CMainApp::Update(_float fTimeDelta)
     if(LEVEL::LOADING == CGameManager::GetInstance()->Get_CurrentLevel())
         m_pGameInstance->Update_Level(ENUM_TO_INT(LEVEL::LOADING), fTimeDelta);
     else
-        m_pGameInstance->Update_Engine(fTimeDelta);
+    {
+       // m_pGameInstance->Update_Engine(fTimeDelta);
+       m_pGameInstance->Update_Engine(1.f/60.f * g_fTestDeltaTime);
+    }
 
     m_fTimeAcc += fTimeDelta;
     ++m_iFrame;

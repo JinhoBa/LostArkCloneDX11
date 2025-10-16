@@ -51,7 +51,7 @@ HRESULT CTest_Effect::Initialize(void* pArg)
     m_isActive = false;
     m_fTimeAcc = 0.f;
 
-    XMStoreFloat4x4(&m_CombindedMatrix, XMMatrixIdentity());
+    //XMStoreFloat4x4(&m_CombindedMatrix, XMMatrixIdentity());
 
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
     m_iMeshIndex = 0;

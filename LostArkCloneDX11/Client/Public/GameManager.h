@@ -28,7 +28,11 @@ public:
 	void Destory_GameManager();
 
 	HRESULT Initialize_Effect_Manager();
-	void Add_Effect(EFFECT eType, _uint iEffectID, void* pArg);
+	void Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg);
+#ifdef _DEBUG
+public:
+	HRESULT Save_Effect(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
+#endif // _DEBUG
 
 #pragma region MAPDATA
 	const vector<MAP_DATA>&		Get_MapData();

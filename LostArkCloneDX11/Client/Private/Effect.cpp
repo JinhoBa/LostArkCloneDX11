@@ -24,7 +24,6 @@ HRESULT CEffect::Initialize_Prototype()
 
 HRESULT CEffect::Initialize(void* pArg)
 {
-    m_fLifeTime = 0.f;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -50,7 +49,7 @@ HRESULT CEffect::Render()
     return S_OK;
 }
 
-HRESULT CEffect::Start(void* pArg)
+HRESULT CEffect::Start(const _float4x4* pWorldMatrix, void* pArg)
 {
     return S_OK;
 }

@@ -81,7 +81,7 @@ void CEffect_Ground::Update(_float fTimeDelta)
 
     m_pVIBufferCom->Scaling(fTimeDelta, m_eLerpType, m_vPivot, m_fSpeed);
 
-    XMStoreFloat4x4(&m_CombindedMatrix,
+   XMStoreFloat4x4(&m_CombinedWorldMatrix,
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix())
          * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()) );
 }
@@ -158,7 +158,7 @@ HRESULT CEffect_Ground::Render()
 
 #endif // _DEBUG
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombindedMatrix)))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
@@ -191,7 +191,7 @@ HRESULT CEffect_Ground::Render()
     return S_OK;
 }
 
-HRESULT CEffect_Ground::Start(void* pArg)
+HRESULT CEffect_Ground::Start(const _float4x4* pWorldMatrix, void* pArg)
 {
     m_bTest = false;
     m_fLifeTime = 0.f;

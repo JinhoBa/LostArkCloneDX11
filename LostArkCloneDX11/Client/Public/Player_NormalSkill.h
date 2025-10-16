@@ -23,6 +23,8 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual void Exit()override;
 
+private:
+	_bool m_isSpawEffect = {};
 
 public:
 	static CPlayer_NormalSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);

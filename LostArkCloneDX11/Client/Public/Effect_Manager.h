@@ -27,13 +27,20 @@ public:
 	virtual HRESULT Render()override;
 
 public:
-	void Add_Effects(EFFECT eType, _uint iEffectID, void* pArg);
-	HRESULT Load_Data(const _char* pFilePath);
+	void Add_Effects(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg);
+	HRESULT Load_Mesh_Data(const _char* pFilePath);
+
+#ifdef _DEBUG
+public:
+	HRESULT Save_Effect(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
+#endif // _DEBUG
 
 
 private:
 	vector<EFFECT_GROUND_DESC>		m_EffectData;
+	vector<EFFECT_MESH_DESC>		m_MeshEffect_Datas;
 	deque<class CEffect*>			m_GroundEffects;
+	deque<class CEffect*>			m_MeshEffects;
 	list<class CEffect*>			m_pActiveEffects;
 
 public:

@@ -40,11 +40,7 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 	/* HitBox */
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 
-	EffectGroundDesc Effect_Desc = {};
-
-	XMStoreFloat3(&Effect_Desc.vPosition, m_pPlayer->Get_Transform()->Get_Position());
-
-	m_pGameManager->Add_Effect(EFFECT::GROUND, 0, &Effect_Desc);
+	m_isSpawEffect = true;
 }
 
 void CPlayer_NormalSkill::Update(_float fTimeDelta)
@@ -53,6 +49,21 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 
 	Update_Hitbox(fTimeDelta);
 
+	if(m_isSpawEffect)
+	{
+		if(m_iSkillID == 3 && 28.f <= m_pPlayer->Get_TrackPositon())
+		{
+			m_pGameManager->Add_Effect(EFFECT::MESH, 1, &m_pPlayer->Get_Transform()->Get_WorldMatrix(), nullptr);
+			m_isSpawEffect = false;
+		}
+		else if(m_iSkillID == 1 && 10.f <= m_pPlayer->Get_TrackPositon())
+		{
+			m_pGameManager->Add_Effect(EFFECT::MESH, 0, &m_pPlayer->Get_Transform()->Get_WorldMatrix(), nullptr);
+			m_isSpawEffect = false;
+		}
+
+		
+	}
 	// 피격 체크 추가
 
 	if (m_pPlayer->isAnimationFinish())

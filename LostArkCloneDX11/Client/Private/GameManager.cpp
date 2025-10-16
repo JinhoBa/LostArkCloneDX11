@@ -83,11 +83,21 @@ HRESULT CGameManager::Initialize_Effect_Manager()
 	return S_OK;
 }
 
-void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, void* pArg)
+void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg)
 {
 	if (nullptr != m_pEffect_Manager)
-		m_pEffect_Manager->Add_Effects(EFFECT::GROUND, iEffectID, pArg);
+		m_pEffect_Manager->Add_Effects(eType, iEffectID, pWorldMatirx, pArg);
 }
+
+#ifdef _DEBUG
+HRESULT CGameManager::Save_Effect(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID)
+{
+	if (nullptr != m_pEffect_Manager)
+		return m_pEffect_Manager->Save_Effect(eType, pArg, pFilePath, iID);
+
+	return E_FAIL;
+}
+#endif // _DEBUG
 
 
 #pragma region DATA_MANAGER

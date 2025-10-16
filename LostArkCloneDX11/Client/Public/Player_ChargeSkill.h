@@ -28,6 +28,7 @@ public:
 private:
 	CHARGE_STATE	m_eState = {};
 	
+	_bool			m_isSpawEffect = {};
 	_int			m_iKey = {};
 	_uint			m_iAnimStart = {};
 	_uint			m_iAnimLoop = {};
@@ -35,6 +36,7 @@ private:
 
 	_float			m_fChargeTime = {};
 	_float			m_fMaxChargeTime = {};
+
 
 private:
 	void		HitBox_Update(_float fTimeDelta);

@@ -5,7 +5,7 @@
 #include "GameManager.h"
 
 #include "Skill.h"
-#include "Camera_Fix.h"
+#include "Player.h"
 
 CTestMeshEffect::CTestMeshEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEffect{ pDevice, pContext }
@@ -35,19 +35,29 @@ HRESULT CTestMeshEffect::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMMatrixIdentity());
+
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
 
     m_isLoop = true;
-    m_iNumInstance = 300;
-    m_vSize = _float3(1.f, 1.f, 1.f);
+    m_isUseScale = false;
+    m_isUseRotation = false;
     m_vLifeTime = _float2(1.f, 1.0f);
-    m_vPosition = _float3(45.f, 0.f, 45.f);
-    m_vRotation = _float3(0.f, 0.f, 0.f);
-    m_vDiffuseOffset = _float2(0.f, 0.f);
-    m_isActive = false;
-    m_fTimeAcc = 0.f;
 
-    XMStoreFloat4x4(&m_CombindedMatrix, XMMatrixIdentity());
+    m_vStartScale = _float3(1.f, 1.f, 1.f);
+    m_vCurrentScale = _float3(1.f, 1.f, 1.f);
+    m_vEndScale = _float3(1.f, 1.f, 1.f);
+
+    m_vStartRotation = _float3(0.f, 0.f, 0.f);
+    m_vCurRotation = _float3(0.f, 0.f, 0.f);
+    m_vEndRotation = _float3(0.f, 0.f, 0.f);
+
+    m_vPosition = _float3(0.f, 0.f, 0.f);
+    m_vPivot = _float3(0.f, 0.f, 0.f);
+
+    m_vDiffuseOffset = _float2(0.f, 0.f);
+
+    m_vLifeTime = _float2(0.f, 1.f);
     
     m_iMeshIndex = 0;
 
@@ -60,33 +70,96 @@ HRESULT CTestMeshEffect::Initialize(void* pArg)
     iter = m_pNoiseTextureCom->Get_TextureMap().begin();
     m_strNoiseTexture = (*iter).first;
 
-    fDiffuseScrollSpeedU = 0.f;
-    fDiffuseScrollSpeedV = 0.f;
+    m_fDiffuseScrollSpeedU = 0.f;
+    m_fDiffuseScrollSpeedV = 0.f;
+    
+    m_fMaskScrollSpeedU = 0.f;
+    m_fMaskScrollSpeedV = 0.f;
 
-    fMaskScrollSpeedU = 0.f;
-    fMaskScrollSpeedV = 0.f;
+    m_fSpeed = 0.f;
+    m_fDissolveSpeed = 1.f;
+
+    XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
+    m_pTransformCom->Set_Scale(m_vStartScale);
 
     return S_OK;
 }
 
 void CTestMeshEffect::Priority_Update(_float fTimeDelta)
 {
-
+    
 }
 
 void CTestMeshEffect::Update(_float fTimeDelta)
 {
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
-    m_pTransformCom->Rotation(XMConvertToRadians(m_vRotation.x), XMConvertToRadians(m_vRotation.y), XMConvertToRadians(m_vRotation.z));
-    m_pTransformCom->Set_Scale(m_vSize);
+    /* LifeTime */
+    m_vLifeTime.x += fTimeDelta;
 
-    m_vDiffuseOffset.x += fDiffuseScrollSpeedU * fTimeDelta;
-    m_vDiffuseOffset.y += fDiffuseScrollSpeedV * fTimeDelta;
+    /* Scale */
+    if (m_isUseScale)
+    {
+        XMStoreFloat3(&m_vCurrentScale, XMVectorLerp(XMLoadFloat3(&m_vStartScale), XMLoadFloat3(&m_vEndScale), m_vLifeTime.x / m_vLifeTime.y));
+        m_pTransformCom->Set_Scale(m_vCurrentScale);
+    }
+    else
+        m_pTransformCom->Set_Scale(m_vStartScale);
 
-    m_vMaskOffset.x += fMaskScrollSpeedU * fTimeDelta;
-    m_vMaskOffset.y += fMaskScrollSpeedV * fTimeDelta;
+    /* Rotation */
+    if(m_isUseRotation)
+    {
+        XMStoreFloat3(&m_vCurRotation, XMQuaternionSlerp(XMLoadFloat3(&m_vStartRotation), XMLoadFloat3(&m_vEndRotation), m_vLifeTime.x / m_vLifeTime.y));
+        m_pTransformCom->Rotation(XMConvertToRadians(m_vCurRotation.x), XMConvertToRadians(m_vCurRotation.y), XMConvertToRadians(m_vCurRotation.z));
+    }
+    else
+    {
+        m_pTransformCom->Rotation(XMConvertToRadians(m_vStartRotation.x), XMConvertToRadians(m_vStartRotation.y), XMConvertToRadians(m_vStartRotation.z));
+    }
 
-    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+    /* Position */
+    m_pTransformCom->Set_State(STATE::POSITION, m_pTransformCom->Get_Position() + XMVectorSetW(XMLoadFloat3(&m_vPivot), 0.f) * fTimeDelta * m_fSpeed);
+
+
+    /* Texture UV */
+    if (0.f == m_fDiffuseScrollSpeedU)
+        m_vDiffuseOffset.x = 0.f;
+    else
+        m_vDiffuseOffset.x += m_fDiffuseScrollSpeedU * fTimeDelta;
+    
+    if (0.f == m_fDiffuseScrollSpeedV)
+        m_vDiffuseOffset.y = 0.f;
+    else
+        m_vDiffuseOffset.y += m_fDiffuseScrollSpeedV * fTimeDelta;
+
+    if (0.f == m_fMaskScrollSpeedU)
+        m_vMaskOffset.x = 0.f;
+    else
+        m_vMaskOffset.x += m_fMaskScrollSpeedU * fTimeDelta;
+
+    if (0.f == m_fMaskScrollSpeedV)
+        m_vMaskOffset.y = 0.f;
+    else
+        m_vMaskOffset.y += m_fMaskScrollSpeedV * fTimeDelta;
+
+
+    /* Reset */
+    if (true == m_isLoop && m_vLifeTime.y < m_vLifeTime.x)
+    {
+        m_vLifeTime.x = 0.f;
+        m_pTransformCom->Set_Scale(m_vStartScale);
+        m_pTransformCom->Rotation(XMConvertToRadians(m_vStartRotation.x), XMConvertToRadians(m_vStartRotation.y), XMConvertToRadians(m_vStartRotation.z));
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
+
+        m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
+        m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
+
+        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
+    }
+
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
 }
 
 void CTestMeshEffect::Late_Update(_float fTimeDelta)
@@ -97,21 +170,52 @@ void CTestMeshEffect::Late_Update(_float fTimeDelta)
 HRESULT CTestMeshEffect::Render()
 {
 #ifdef _DEBUG
-    ImGui::InputInt("MehsIndex", (_int*)&m_iMeshIndex);
+    ImGui::SliderFloat("PerTestDeltaTime", &g_fTestDeltaTime, 0.f, 1.f);
+    ImGui::InputInt("ID", (_int*)&m_iEffectID);
+    ImGui::Spacing();
+
+    ImGui::InputInt("MeshIndex", (_int*)&m_iMeshIndex);
     if (m_iMeshIndex >= m_EffectModels.size())
         m_iMeshIndex = 0;
 
-    ImGui::SliderFloat("NoiseStrength", (_float*)&m_fNoiseStrength, 0.f, 1.f);
+    ImGui::Checkbox("Loop", &m_isLoop);
+    ImGui::InputFloat("LifeTime", (_float*)&m_vLifeTime.y);
+    ImGui::Spacing();
+    
+    if (ImGui::CollapsingHeader("Scale", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        ImGui::Checkbox("Use_Scale", &m_isUseScale);
+        ImGui::InputFloat3("StartScale", (_float*)&m_vStartScale);
+        ImGui::InputFloat3("EndScale", (_float*)&m_vEndScale);
+    }
+    ImGui::Spacing();
 
-    ImGui::InputFloat("D_OffsetU", (_float*)&fDiffuseScrollSpeedU);
-    ImGui::InputFloat("D_OffsetV", (_float*)&fDiffuseScrollSpeedV);
-    ImGui::InputFloat("M_OffsetU", (_float*)&fMaskScrollSpeedU);
-    ImGui::InputFloat("M_OffsetV", (_float*)&fMaskScrollSpeedV);
+    if (ImGui::CollapsingHeader("Rotation", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        ImGui::Checkbox("Use_Rotation", &m_isUseRotation);
+        ImGui::SliderFloat3("Start_Rotation", (_float*)&m_vStartRotation, 0.f, 360.f);
+        ImGui::SliderFloat3("End_Rotation", (_float*)&m_vEndRotation, 0.f, 360.f);
+    }
+    ImGui::Spacing();
 
-    ImGui::InputFloat3("vSize", (_float*)&m_vSize);
-    ImGui::InputFloat2("vLifeTime", (_float*)&m_vLifeTime);
-    ImGui::InputFloat3("vPosition", (_float*)&m_vPosition);
-    ImGui::SliderFloat3("vRotation", (_float*)&m_vRotation,0.f, 360.f);
+    if (ImGui::CollapsingHeader("vPosition", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        ImGui::InputFloat3("vPosition", (_float*)&m_vPosition);
+        ImGui::InputFloat3("vPivot", (_float*)&m_vPivot);
+        ImGui::InputFloat("fSpeed", (_float*)&m_fSpeed);
+    }
+    ImGui::Spacing();
+
+    if (ImGui::CollapsingHeader("Shader"))
+    {
+        ImGui::SliderFloat("NoiseStrength", (_float*)&m_fNoiseStrength, 0.f, 1.f);
+        ImGui::InputFloat("D_OffsetU", (_float*)&m_fDiffuseScrollSpeedU);
+        ImGui::InputFloat("D_OffsetV", (_float*)&m_fDiffuseScrollSpeedV);
+        ImGui::InputFloat("M_OffsetU", (_float*)&m_fMaskScrollSpeedU);
+        ImGui::InputFloat("M_OffsetV", (_float*)&m_fMaskScrollSpeedV);
+        ImGui::SliderFloat("Dissolve", (_float*)&m_fDissolveSpeed,0.f, 1.f);
+    }
+    ImGui::Spacing();
 
     if (ImGui::CollapsingHeader("Diffuse", ImGuiTreeNodeFlags_DefaultOpen))
     {
@@ -127,6 +231,7 @@ HRESULT CTestMeshEffect::Render()
             iIndex++;
         }
     }
+    ImGui::Spacing();
     if (ImGui::CollapsingHeader("Mask", ImGuiTreeNodeFlags_DefaultOpen))
     {
         _uint iIndex = {};
@@ -141,6 +246,7 @@ HRESULT CTestMeshEffect::Render()
             iIndex++;
         }
     }
+    ImGui::Spacing();
     if (ImGui::CollapsingHeader("Nosie", ImGuiTreeNodeFlags_DefaultOpen))
     {
         _uint iIndex = {};
@@ -156,38 +262,47 @@ HRESULT CTestMeshEffect::Render()
         }
     }
 
+    if (ImGui::Button("Save"))
+    {
+        EFFECT_MESH_DESC Desc = {};
+        EFFECT_MESH_DATA Data = {};
+
+        Data.isLoop = m_isLoop;
+        Data.isUseScale = m_isUseScale;
+        Data.isUseRotation = m_isUseRotation;
+
+        Data.iMeshIndex = m_iMeshIndex;
+        Data.vPosition = m_vPosition;
+        Data.vPivot = m_vPivot;
+
+        Data.vStartRotation = m_vStartRotation;
+        Data.vEndRotation = m_vEndRotation;
+
+        Data.vStartScale = m_vStartScale;
+        Data.vEndScale = m_vEndScale;
+
+        Data.vLifeTime = _float2(0.f, m_vLifeTime.y);
+        Data.fNoiseStrength = m_fNoiseStrength;
+        Data.fSpeed = m_fSpeed;
+
+        Data.fDiffuseScrollSpeedU = m_fDiffuseScrollSpeedU;
+        Data.fDiffuseScrollSpeedV = m_fDiffuseScrollSpeedV;
+
+        Data.fMaskScrollSpeedU = m_fMaskScrollSpeedU;
+        Data.fMaskScrollSpeedV = m_fMaskScrollSpeedV;
+
+        Desc.Mesh_Data = Data;
+        Desc.strDiffuseTexture = m_strDiffuseTexture;
+        Desc.strMaskTexture = m_strMaskTexture;
+        Desc.strNoiseTexture = m_strNoiseTexture;
+
+        if(FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::MESH, &Desc, "../Bin/Resources/Data/Effect/Player_Effects.xml", m_iEffectID)))
+            MSG_BOX("저장 실패");
+    }
+
 #endif // _DEBUG
 
-
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Find_SRV(m_strDiffuseTexture.c_str()))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Resource("g_MaskTexture", m_pMaskTextureCom->Find_SRV(m_strMaskTexture.c_str()))))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
-        return E_FAIL;
-
-    if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShaderCom, "g_DepthTexture")))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vDiffuseOffset", &m_vDiffuseOffset, sizeof(_float2))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vMaskOffset", &m_vMaskOffset, sizeof(_float2))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_fNoiseStrength, sizeof(_float))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
+    if (FAILED(Bind_ShaderResource()))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Begin(1)))
@@ -291,7 +406,82 @@ HRESULT CTestMeshEffect::Add_Components()
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail5"),
+        TEXT("Com_Trail5_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
 
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Auro"),
+        TEXT("Com_Auro_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_1"),
+        TEXT("Com_Decal_1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_2"),
+        TEXT("Com_Decal_2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_3"),
+        TEXT("Com_Decal_3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+    /* Shader_VertexMesh */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder3"),
+        TEXT("Com_Cylinder3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+
+
+    return S_OK;
+}
+
+HRESULT CTestMeshEffect::Bind_ShaderResource()
+{
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Find_SRV(m_strDiffuseTexture.c_str()))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_MaskTexture", m_pMaskTextureCom->Find_SRV(m_strMaskTexture.c_str()))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShaderCom, "g_DepthTexture")))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vDiffuseOffset", &m_vDiffuseOffset, sizeof(_float2))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vMaskOffset", &m_vMaskOffset, sizeof(_float2))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_fNoiseStrength, sizeof(_float))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveSpeed", &m_fDissolveSpeed, sizeof(_float))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLifeTime", &m_vLifeTime, sizeof(_float2))))
+        return E_FAIL;
 
     return S_OK;
 }
