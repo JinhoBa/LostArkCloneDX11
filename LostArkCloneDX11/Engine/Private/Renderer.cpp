@@ -83,18 +83,17 @@ HRESULT CRenderer::Initialize()
 	XMStoreFloat4x4(&m_OrthographicMatrix, (XMMatrixOrthographicLH(m_Viewport.Width, m_Viewport.Height, 0.f, 1.f)));
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Diffuse"), 50.f, 50.f, 100.f, 100.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Diffuse"), 75.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Normal"), 50.f, 150.f, 100.f, 100.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Normal"), 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shade"), 150.f, 50.f, 100.f, 100.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shade"), 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Specular"), 150.f, 150.f, 100.f, 100.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Specular"), 225.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Emissive"), 50.f, 250.f, 100.f, 100.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Emissive"), 75.f, 375.f, 150.f, 150.f)))
 		return E_FAIL;
 #endif // _DEBUG
-
 
     return S_OK;
 }
@@ -202,13 +201,8 @@ HRESULT CRenderer::Render_LightAcc()
 	m_pShaderCom->Bind_Matrix("g_ViewMatrixInv", m_pGameInstance->Get_Transfrom_Float4x4_Inverse(D3DTS::VIEW));
 	m_pShaderCom->Bind_Matrix("g_ProjMatrixInv", m_pGameInstance->Get_Transfrom_Float4x4_Inverse(D3DTS::PROJ));
 	m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4));
-	
-	m_pContext->RSGetViewports(&m_iNumViewpprt, &m_Viewport);
+	m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float));
 
-	m_fMaxDepth = m_Viewport.MaxDepth;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_fMaxDepth, sizeof(_float))))
-		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Normal"), m_pShaderCom, "g_NormalTexture")))
 		return E_FAIL;
@@ -238,6 +232,8 @@ HRESULT CRenderer::Render_Combined()
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shade"), m_pShaderCom, "g_ShadeTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Specular"), m_pShaderCom, "g_SpecularTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Depth"), m_pShaderCom, "g_DepthTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Emissive"), m_pShaderCom, "g_EmissiveTexture")))
 		return E_FAIL;

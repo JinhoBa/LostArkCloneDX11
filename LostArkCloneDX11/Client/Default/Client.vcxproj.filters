@@ -22,9 +22,6 @@
     <Filter Include="01.Level\Loading">
       <UniqueIdentifier>{f672e1ed-459b-4367-a446-176e68b89f54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Level\GamePlay">
-      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Level\Loading\Loader">
       <UniqueIdentifier>{29fe1fb8-8cc9-4d89-82aa-1afa63521a85}</UniqueIdentifier>
     </Filter>
@@ -411,6 +408,9 @@
     </Filter>
     <Filter Include="06.Effect\Mesh">
       <UniqueIdentifier>{8808088e-fa96-42dd-99b3-fe0a3ed677af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level\Boss\GamePlay">
+      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

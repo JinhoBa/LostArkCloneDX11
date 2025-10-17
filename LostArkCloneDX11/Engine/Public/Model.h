@@ -32,6 +32,7 @@ public:
 	virtual HRESULT Render(_uint iMeshIndex);
 
 	HRESULT Bind_Material(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex = 0, const _char* pValueConstanceName = nullptr);
+	HRESULT Bind_Scalar(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
 	HRESULT Bind_BoneMatrices(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
 	_bool	Play_Animation(_float fTimeDelta);
 

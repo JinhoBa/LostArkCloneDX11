@@ -398,9 +398,9 @@ HRESULT CLoader::Loading_For_GamePlay()
 #pragma region MODEL
 	_matrix			PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(-90.f));
-	/* Player_Model */
+	///* Player_Model */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Player/Player.bin", PreTransformMatrix))))
 		return E_FAIL;
 
 	/* Lance_Model */
@@ -413,34 +413,34 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Player_Weapons/WP_S.fbx"))))
 		return E_FAIL;
 
-	/* Monster1_Model */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Monster1"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster1/Monster1.bin"))))
-		return E_FAIL;
+	///* Monster1_Model */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Monster1"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster1/Monster1.fbx"))))
+	//	return E_FAIL;
 
-	/* Monster2_Model */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Monster2"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster2/Monster2.bin"))))
-		return E_FAIL;
+	///* Monster2_Model */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Monster2"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Monster2/Monster2.fbx"))))
+	//	return E_FAIL;
 
-	/* Kamen */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen/Kamen.bin"))))
-		return E_FAIL;
+	///* Kamen */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen/Kamen.fbx"))))
+	//	return E_FAIL;
 
-	/* Kamen_Horse */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_Horse"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen_Horse/Kamen_with_Horse.bin"))))
-		return E_FAIL;
+	///* Kamen_Horse */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_Horse"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen_Horse/Kamen_with_Horse.fbx"))))
+	//	return E_FAIL;
 
-	/* Kamen_3 */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_3"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen3/Kamen3.bin"))))
-		return E_FAIL;
+	///* Kamen_3 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Kamen_3"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Kamen3/Kamen3.fbx"))))
+	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Weapon_Kamen"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kamen_Weapon/KamenWeapon.fbx"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Weapon_Kamen"),
+	//	CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Kamen_Weapon/KamenWeapon.fbx"))))
+	//	return E_FAIL;
 
 	/* TEST CODE */
 	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Player"),
@@ -895,123 +895,123 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 	/* For.Prototype_Component_Model_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Sky"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_Sky.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_Sky.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Npc */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Npc"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Npc/Npc.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Npc/Npc.fbx"))))
 		return E_FAIL;
 
 #pragma region TRISION
 	/* For.Prototype_Component_Model_Trision */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision2 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision2"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision01b */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision01b"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_01b.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_01b.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Botton01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Botton01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Botton01a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Botton01a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom01a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom01a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Botton02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Botton02"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Botton03 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Botton03"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom03.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_bottom03.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Wall */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Wall"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_wall.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_wall.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_arkprop */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_arkprop"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_arkprop.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision_arkprop.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_circle01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_circle01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_circle01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_circle01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_circle02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_circle02"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_circle02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_circle02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Object01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Object01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stone01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stone01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stone02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stone02"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stone03 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stone03"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone03.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stone03.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_2c */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_2c"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision01_c.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/Trision01_c.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stair01a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stair01a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stair01b */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stair01b"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01b.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01b.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stair01c */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stair01c"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01c.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01c.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stair01d */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stair01d"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01d.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01d.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stair01e */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stair01e"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01e.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01e.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Trision_Stair01f */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Trision_Stair01f"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01f.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Trision/trision_stair01f.fbx"))))
 		return E_FAIL;
 
 
@@ -1129,139 +1129,139 @@ HRESULT CLoader::Loading_For_Boss()
 #pragma region KAMEN_MAP
 	/* For.Prototype_Component_Model_Kamen_chair01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_chair01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_chair01a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_chair01a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_chair01b */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_chair01b"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01b.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_chair01b.fbx"))))
 		return E_FAIL;
 	m_fLoadProgress = 40.f;
 #pragma region FLOOR
 
 	/* For.Prototype_Component_Model_Kamen_floar01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar02"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar03 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar03"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor03.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor03.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar04 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar04"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor04.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor04.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05b */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05b"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05b.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05b.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05c */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05c"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05c.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05c.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05d */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05d"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05d.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05d.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05e */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05e"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05e.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05e.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05f */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05f"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05f.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05f.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05g */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05g"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05g.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05g.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar05h */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar05h"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05h.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor05h.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar06 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar06"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor06.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor06.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar07 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar07"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor07.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor07.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar08 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar08"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor08.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor08.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar08b */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar08b"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor08b.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor08b.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar08e */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar08e"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor08e.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor08e.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar09 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar09"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor09.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor09.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar10 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar10"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor10.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor10.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar11 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar11"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor11.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor11.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar11a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar11a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor11a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor11a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar12 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar12"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor12.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor12.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_floar12a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_floar12a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor12a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_floor12a.fbx"))))
 		return E_FAIL;
 
 
@@ -1270,47 +1270,47 @@ HRESULT CLoader::Loading_For_Boss()
 #pragma region DECO
 	/* For.Prototype_Component_Model_Kamen_deco01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco02"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco02c */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco02c"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02c.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02c.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco02a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco02a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco02b */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco02b"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02b.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco02b.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco03 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco03"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco03.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco03.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco04 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco04"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco04.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco04.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco05 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco05"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco05.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco05.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_deco06 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_deco06"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco06.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_deco06.fbx"))))
 		return E_FAIL;
 
 #pragma endregion
@@ -1318,79 +1318,79 @@ HRESULT CLoader::Loading_For_Boss()
 #pragma region PILLAR
 	/* For.Prototype_Component_Model_Kamen_pillar01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar01.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar01a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar01a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar01a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar01a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar02"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar02.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar02.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar02a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar02a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar02a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar02a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar02low */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar02low"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar02low.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar02low.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar03 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar03"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar03.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar03.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar04*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar04"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar04.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar04.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar05*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar05"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar05.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar05.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar06*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar06"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar06.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar06.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar07 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar07"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar07.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar07.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar08 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar08"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar08.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar08.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar09 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar09"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar09.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar09.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar09a */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar09a"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar09a.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar09a.fbx"))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Kamen_pillar09low */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_pillar09low"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar09low.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_pillar09low.fbx"))))
 		return E_FAIL;
 
 #pragma endregion
 
 	/* For.Prototype_Component_Model_kamen_gate01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Model_Kamen_gate01"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_gate01.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, "../Bin/Resources/Models/Map/Kamen/kamen_gate01.fbx"))))
 		return E_FAIL;
 	m_fLoadProgress = 80.f;
 

@@ -25,7 +25,6 @@ protected:
 public:
 	virtual CComponent* Clone(void* pArg) = 0;
 	virtual void Free();
-
 };
 
 NS_END

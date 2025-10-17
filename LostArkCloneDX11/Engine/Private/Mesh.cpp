@@ -161,6 +161,7 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 		memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
 		memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
 		memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+		memcpy(&pVertices[i].vBinormal, &pAIMesh->mBitangents[i], sizeof(_float3));
 		memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 	}
 
@@ -212,6 +213,7 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vPosition), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vNormal), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vTangent), sizeof(_float3));
+			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vBinormal), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vTexcoord), sizeof(_float2));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vBlendIndex), sizeof(_float4));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vBlendWeight), sizeof(_float4));
@@ -232,6 +234,7 @@ HRESULT CMesh::Save_To_Binary(MODEL eModelType, const aiMesh* pAIMesh, ofstream&
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vPosition), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vNormal), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vTangent), sizeof(_float3));
+			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vBinormal), sizeof(_float3));
 			stream.write(reinterpret_cast<const _char*>(&pVertices[i].vTexcoord), sizeof(_float2));
 		}
 	}
@@ -273,6 +276,9 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(const aiMesh* pAIMesh, _fmatrix Pr
 		memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
 		XMStoreFloat3(&pVertices[i].vTangent, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vTangent), PreTransformMatrix));
 
+		memcpy(&pVertices[i].vBinormal, &pAIMesh->mBitangents[i], sizeof(_float3));
+		XMStoreFloat3(&pVertices[i].vBinormal, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vBinormal), PreTransformMatrix));
+
 		memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 	}
 
@@ -310,6 +316,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(const CModel* pModel, const aiMesh* p
 		memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
 		memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
 		memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+		memcpy(&pVertices[i].vBinormal, &pAIMesh->mBitangents[i], sizeof(_float3));
 		memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 	}
 
@@ -418,6 +425,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim_Binary(_uint iNumFames, ifstream& 
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vPosition), sizeof(_float3));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vNormal), sizeof(_float3));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vTangent), sizeof(_float3));
+		stream.read(reinterpret_cast<_char*>(&pVertices[i].vBinormal), sizeof(_float3));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vTexcoord), sizeof(_float2));
 	}
 
@@ -462,6 +470,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim_Binary(_uint iNumFames, ifstream& str
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vPosition), sizeof(_float3));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vNormal), sizeof(_float3));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vTangent), sizeof(_float3));
+		stream.read(reinterpret_cast<_char*>(&pVertices[i].vBinormal), sizeof(_float3));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vTexcoord), sizeof(_float2));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vBlendIndex), sizeof(_float4));
 		stream.read(reinterpret_cast<_char*>(&pVertices[i].vBlendWeight), sizeof(_float4));

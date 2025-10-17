@@ -367,7 +367,7 @@ const _float4x4* CGameInstance::Get_Transfrom_Float4x4(D3DTS eState) const
 }
 const _float4x4* CGameInstance::Get_Transfrom_Float4x4_Inverse(D3DTS eState) const
 {
-	return m_pPipeLine->Get_Transfrom_Float4x4(eState);
+	return m_pPipeLine->Get_Transfrom_Float4x4_Inverse(eState);
 }
 
 _matrix	CGameInstance::Get_Transfrom_Matrix(D3DTS eState)

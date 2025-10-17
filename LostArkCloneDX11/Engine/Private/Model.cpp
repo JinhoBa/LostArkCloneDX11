@@ -195,8 +195,8 @@ HRESULT CModel::Initialize_Prototype_Binary(MODEL eModel, const _char* pModelFil
 
     m_iNumMaterials = m_pAiScene->mNumMaterials;
 
-  /*  if (FAILED(Ready_Materials(pModelFilePath)))
-        return E_FAIL;*/
+    if (FAILED(Ready_Materials(pModelFilePath)))
+        return E_FAIL;
 
     if (FAILED(Ready_Animations()))
         return E_FAIL;
@@ -262,6 +262,12 @@ HRESULT CModel::Render(_uint iMeshIndex)
     m_Meshes[iMeshIndex]->Render();
 
     return S_OK;
+}
+HRESULT CModel::Bind_Scalar(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName)
+{
+    _uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();
+
+    return m_Materials[iMaterialIndex]->Bind_Scalar(pShader, pConstantName);
 }
 
 HRESULT CModel::Bind_Material(_uint iMeshIndex, CShader* pShader, const _char* pConstantName, TEXTURE eTextureType, _uint iTextureIndex, const _char* pValueConstanceName)

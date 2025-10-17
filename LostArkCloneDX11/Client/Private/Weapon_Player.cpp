@@ -43,7 +43,7 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
     m_iNumMesh[ENUM_TO_INT(STANCE::FLURRY)] = m_pModelCom[ENUM_TO_INT(STANCE::FLURRY)]->Get_NumMeshes();
     m_iNumMesh[ENUM_TO_INT(STANCE::FOCUS)] = m_pModelCom[ENUM_TO_INT(STANCE::FOCUS)]->Get_NumMeshes();
 
-    m_pTransformCom->Rotation(XMConvertToRadians(90.f), 0.f, 0.f);
+   // m_pTransformCom->Rotation(XMConvertToRadians(90.f), 0.f, 0.f);
 
     vSkillColor = _float4(0.7f, 0.7f, 1.f, 1.f);
 

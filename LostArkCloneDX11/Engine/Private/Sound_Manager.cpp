@@ -34,7 +34,7 @@ void CSound_Manager::Free()
 
 	if(0 != iNumDirver && nullptr != m_pSystem)
 	{
-		m_pSystem->release();
+		//m_pSystem->release();
 	}
 
 	m_pSystem->close();

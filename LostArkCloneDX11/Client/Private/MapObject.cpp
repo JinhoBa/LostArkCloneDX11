@@ -80,17 +80,33 @@ HRESULT CMapObject::Render()
 
     for (_uint i = 0; i < m_iNumMesh; i++)
     {
+       
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
             return E_FAIL;
 
-        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
-        {
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_NormalTexture", TEXTURE::NORMAL, 0)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_MaskTexture", TEXTURE::MASK)))
             m_iSeletPass = 0;
+        else
+            m_iSeletPass = 4;
+
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_ReflectionTexture", TEXTURE::REFLECTION, 0, "g_vReflectionColor")))
+        {
+            int a = 0;
         }
         else
         {
-            m_iSeletPass = 3;
+            if (FAILED(m_pModelCom->Bind_Scalar(i, m_pShaderCom, "g_fReflection_intensity")))
+                return E_FAIL;
+            m_iSeletPass = 5;
         }
+       /* if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
+            m_iSeletPass = 3;
+        else
+            m_iSeletPass = 0;*/
+
 
         if (FAILED(m_pShaderCom->Begin(m_iSeletPass)))
             return E_FAIL;

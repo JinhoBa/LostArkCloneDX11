@@ -103,6 +103,10 @@ HRESULT CMaterials::Bind_Value(CShader* pShader, const _char* pConstantName, TEX
 
 	return pShader->Bind_Value(pConstantName, &m_vectorValues[ENUM_TO_INT(eTextureType)][iTextureIndex]);
 }
+HRESULT CMaterials::Bind_Scalar(CShader* pShader, const _char* pConstantName)
+{
+	return pShader->Bind_RawValue(pConstantName, &m_fReflection_intensity, sizeof(_float));
+}
 HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _char* pTextureFolderPath)
 {
 	ifstream file(pMaterialFilePath);
@@ -173,8 +177,16 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 					/* Scala */
 				case 0:
 					// value
+					Value = strText.substr(iBeginIndex + 2);
+
 					getline(file, strText);
 					// name
+					iBeginIndex = (_uint)strText.find_first_of('=');
+
+					Name = strText.substr(iBeginIndex + 2);
+
+					if (FAILED(Add_Scalar(Value, Name)))
+						return E_FAIL;
 					break;
 
 					/* Texture */
@@ -343,6 +355,8 @@ HRESULT CMaterials::Add_VectorValue(string& strValue, string& strName)
 		eTexture = TEXTURE::DIFFUSE;
 	else if (!strcmp(strName.c_str(), "emissive_color"))
 		eTexture = TEXTURE::EMISSIVE;
+	else if (!strcmp(strName.c_str(), "reflection_color"))
+		eTexture = TEXTURE::REFLECTION;
 	else
 		return S_OK;
 
@@ -360,6 +374,14 @@ HRESULT CMaterials::Add_VectorValue(string& strValue, string& strName)
 
 	m_vectorValues[ENUM_TO_INT(eTexture)].push_back(vValue);
 
+
+	return S_OK;
+}
+
+HRESULT CMaterials::Add_Scalar(string& strValue, string& strName)
+{
+	if (!strcmp(strName.c_str(), "reflection_intensity"))
+		m_fReflection_intensity = stof(strValue);
 
 	return S_OK;
 }
