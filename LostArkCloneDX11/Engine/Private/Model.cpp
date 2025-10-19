@@ -338,6 +338,31 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 
     return isFinish;
 }
+#ifdef _DEBUG
+_bool CModel::Play_Debug_Animation(_float fTrackPosition)
+{
+    if (-1 == m_iCurrentAnimIndex || (_int)m_iNumAnimations <= m_iCurrentAnimIndex)
+        return false;
+
+    _bool isFinish = { false };
+  
+    m_Animations[m_iCurrentAnimIndex]->Update_Debug_TransformationMatrix(m_Bones, fTrackPosition);
+    if (m_isLoop)
+    {
+        if (true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
+            m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
+    }
+    else
+        isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished(m_fAnimDuration_Offset);
+
+    for (auto& pBone : m_Bones)
+    {
+        pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+    }
+
+    return isFinish;
+}
+#endif // _DEBUG
 
 HRESULT CModel::Ready_Meshes(MODEL eModel)
 {

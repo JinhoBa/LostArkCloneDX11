@@ -101,6 +101,18 @@ void CAnimation::Reset_TrackPosition()
 		iIndex = 0;
 }
 
+void CAnimation::Update_Debug_TransformationMatrix(const vector<class CBone*> Bones, _float fTrackPosition)
+{
+	m_fCurrentTrackPosition = max(0.f, fTrackPosition);
+
+	_uint iIndex = {};
+
+	for (auto& pChannel : m_Channels)
+	{
+		pChannel->Update_TransformationMatrix(&m_iCurKeyFrameIndices[iIndex++], Bones, m_fCurrentTrackPosition);
+	}
+}
+
 void CAnimation::Save_To_Binary(ofstream& out)
 {
 	out.write(reinterpret_cast<const _char*>(m_szName), MAX_NAME);

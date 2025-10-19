@@ -26,6 +26,7 @@ public:
 	void    Reset_TrackPosition();
 
 #ifdef _DEBUG
+	void	Update_Debug_TransformationMatrix(const vector<class CBone*> Bones, _float fTrackPosition);
 	void Save_To_Binary(ofstream& out);
 #endif
 

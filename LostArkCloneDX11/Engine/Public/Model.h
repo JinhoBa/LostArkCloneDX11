@@ -36,6 +36,10 @@ public:
 	HRESULT Bind_BoneMatrices(_uint iMeshIndex, class CShader* pShader, const _char* pConstantName);
 	_bool	Play_Animation(_float fTimeDelta);
 
+#ifdef _DEBUG
+	_bool	Play_Debug_Animation(_float fTrackPosition);
+#endif // _DEBUG
+
 
 private:
 	const aiScene*				m_pAiScene = {};
