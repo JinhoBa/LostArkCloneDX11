@@ -41,6 +41,7 @@ HRESULT CBody_Player::Initialize(void* pArg)
     BODYPLAYER_DESC* pDesc = static_cast<BODYPLAYER_DESC*>(pArg);
 
     m_pAttackSpeed = pDesc->pAttackSpeed;
+    m_pStance = pDesc->pStance;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -51,6 +52,7 @@ HRESULT CBody_Player::Initialize(void* pArg)
     if (FAILED(Bind_CameraBoneMatrix()))
         return E_FAIL;
 
+    m_bApplyRimLight = false;
     m_iAnimIndex = 35;
 
     m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, 35, true);
@@ -58,6 +60,18 @@ HRESULT CBody_Player::Initialize(void* pArg)
     m_iNumMesh = m_pModelCom->Get_NumMeshes();
 
     m_pCameraTargetBoneMatrix = m_pModelCom->Get_BoneMatrixPrt("b_cameratarget");
+
+    m_fRimStrength = 1.f;
+    m_fRimPower = 1.f;
+
+    m_vRimColor[ENUM_TO_INT(STANCE::FLURRY)] = _float4(0.4f, 0.8f, 1.f, 1.f);
+    m_vRimColor[ENUM_TO_INT(STANCE::FOCUS)] = _float4(0.95f, 0.32f, 0.32f, 1.f);
+
+#ifdef _DEBUG
+    m_isDebug = true;
+    m_fKeyFrame = 0.f;
+#endif // _DEBUG
+
 
     return S_OK;
 }
@@ -68,7 +82,10 @@ void CBody_Player::Priority_Update(_float fTimeDelta)
 
 void CBody_Player::Update(_float fTimeDelta)
 {
-    m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * (*m_pAttackSpeed));
+    if(m_isDebug)
+        m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * (*m_pAttackSpeed));
+    else
+        m_isAnimationFinish = m_pModelCom->Play_Debug_Animation(m_fKeyFrame);
    
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
@@ -77,6 +94,11 @@ void CBody_Player::Update(_float fTimeDelta)
     /* 카메라 타겟 설정 */
     XMStoreFloat4x4(&m_CameraTargetBoneWorldMatrix,
         XMLoadFloat4x4(m_pCameraTargetBoneMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+
+    if (m_bApplyRimLight)
+    {
+        m_fRimStrength -= fTimeDelta;
+    }
 }
 
 void CBody_Player::Late_Update(_float fTimeDelta)
@@ -86,24 +108,28 @@ void CBody_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CBody_Player::Render()
 {
-//#pragma region ANIMATION_TEST
-//    ImGui::InputInt("Animation", &m_iAnimIndex);
-//    _int iIndex = {};
-//    for (auto pName : m_pModelCom->Get_AnimationNames())
-//    {
-//        if (ImGui::Button(to_string(iIndex).c_str()))
-//        {
-//            m_iAnimIndex = iIndex;
-//            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-//        }
-//        ++iIndex;
-//        ImGui::SameLine();
-//        ImGui::Text(pName);
-//    }
-//#pragma endregion
-    _float KeyFrame = m_pModelCom->Get_TrackPosition();
-    ImGui::InputFloat("KeyFrame", &KeyFrame);
+#pragma region ANIMATION_TEST
+    ImGui::Checkbox("Play", &m_isDebug);
+    ImGui::SliderFloat("KeyFrmae", &m_fKeyFrame, 0.f, 300.f);
 
+    /*ImGui::InputInt("Animation", &m_iAnimIndex);
+    _int iIndex = {};
+
+    for (auto pName : m_pModelCom->Get_AnimationNames())
+    {
+        if (ImGui::Button(to_string(iIndex).c_str()))
+        {
+            m_iAnimIndex = iIndex;
+            m_pModelCom->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+        }
+        ++iIndex;
+        ImGui::SameLine();
+        ImGui::Text(pName);
+    }*/
+
+    ImGui::SliderFloat("RimStrength", &m_fRimStrength, 0.f, 100.f);
+    ImGui::SliderFloat("RimPower", &m_fRimPower, 0.f, 10.f);
+#pragma endregion
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
@@ -126,16 +152,37 @@ HRESULT CBody_Player::Render()
 
         if (FAILED(m_pShaderCom->Begin(0)))
             return E_FAIL;
-        /*if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_NormalTexture", TEXTURE::NORMAL, 0)))
+
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_NormalTexture", TEXTURE::NORMAL, 0)))
         {
             if (FAILED(m_pShaderCom->Begin(0)))
                 return E_FAIL;
         }
         else
         {
-            if (FAILED(m_pShaderCom->Begin(2)))
-                return E_FAIL;
-        }*/
+            if(false == m_bApplyRimLight)
+            {
+                if (FAILED(m_pShaderCom->Begin(2)))
+                    return E_FAIL;
+            }
+            else
+            {
+                if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+                    return E_FAIL;
+
+                if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimColor", &m_vRimColor[ENUM_TO_INT(*m_pStance)], sizeof(_float4))))
+                    return E_FAIL;
+
+                if (FAILED(m_pShaderCom->Bind_RawValue("g_fRimStrength", &m_fRimStrength, sizeof(_float))))
+                    return E_FAIL;
+
+                if (FAILED(m_pShaderCom->Bind_RawValue("g_fRimPower", &m_fRimPower, sizeof(_float))))
+                    return E_FAIL;
+
+                if (FAILED(m_pShaderCom->Begin(3)))
+                    return E_FAIL;
+            }
+        }
             
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;

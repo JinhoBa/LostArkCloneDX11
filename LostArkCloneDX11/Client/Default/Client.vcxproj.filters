@@ -412,6 +412,9 @@
     <Filter Include="01.Level\Boss\GamePlay">
       <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Player\EffectWeapon">
+      <UniqueIdentifier>{4f0bdd58-1e60-4b58-a83b-3df72ace85c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -816,6 +819,9 @@
     <ClInclude Include="..\public\Effect_Mesh.h">
       <Filter>06.Effect\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\WeaponEffect_Player.h">
+      <Filter>02.GameObject\Character\Player\EffectWeapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1214,6 +1220,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Effect_Mesh.cpp">
       <Filter>06.Effect\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\WeaponEffect_Player.cpp">
+      <Filter>02.GameObject\Character\Player\EffectWeapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

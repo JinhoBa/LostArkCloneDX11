@@ -24,7 +24,8 @@ public:
 	virtual void Exit()override;
 
 private:
-	_bool m_isSpawEffect = {};
+	_bool		m_isSpawWeaponEffect = { false };
+	_float4		m_vPickingPosition = {};
 
 public:
 	static CPlayer_NormalSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);

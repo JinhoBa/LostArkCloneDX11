@@ -6,6 +6,8 @@
 
 #include "StateMachine.h"
 #include "Player.h"
+#include "Weapon_Player.h"
+#include "Body_Player.h"
 
 CPlayer_ChangeStance::CPlayer_ChangeStance()
 	:CSkill_Player{}
@@ -24,12 +26,32 @@ void CPlayer_ChangeStance::Enter(void* pArg)
 {
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(8);
 
+	_uint iEffectID = {};
+
 	if (STANCE::FLURRY == *m_pPlayerStance)
+	{
+		iEffectID = 19;
 		m_pPlayer->Set_Animation(40, false);
+	}
 	else
+	{
+		iEffectID = 20;
 		m_pPlayer->Set_Animation(41, false);
+	}
 
 	m_pPlayer->Change_Stance();
+
+	const vector<EFFECT_EVENT_DESC>& EffectEvents = m_pGameManager->Get_EffectTrack(CHARACTER::PLAYER, iEffectID);
+
+	m_EffectEvents.reserve(EffectEvents.size());
+
+	for (const auto& Track : EffectEvents)
+	{
+		m_EffectEvents.push_back({ false, Track });
+	}
+
+	dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
+	dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
 }
 
 void CPlayer_ChangeStance::Update(_float fTimeDelta)
@@ -41,11 +63,26 @@ void CPlayer_ChangeStance::Update(_float fTimeDelta)
 		else
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
 	}
+
+	for (auto& Event : m_EffectEvents)
+	{
+		if (false == Event.isTrigge)
+		{
+			if (m_pPlayer->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
+			{
+				Event.isTrigge = true;
+				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pPlayerWorldMatrix, nullptr);
+			}
+		}
+	}
 }
 
 void CPlayer_ChangeStance::Exit()
 {
+	dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
+	dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
 
+	m_EffectEvents.clear();
 }
 
 CPlayer_ChangeStance* CPlayer_ChangeStance::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

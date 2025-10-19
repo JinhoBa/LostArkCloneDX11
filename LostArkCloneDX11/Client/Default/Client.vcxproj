@@ -284,6 +284,7 @@
     <ClInclude Include="..\public\UtilitySkillSlot.h" />
     <ClInclude Include="..\public\UtilitySkillUI.h" />
     <ClInclude Include="..\public\Wallpaper.h" />
+    <ClInclude Include="..\public\WeaponEffect_Player.h" />
     <ClInclude Include="..\public\WeaponUI.h" />
     <ClInclude Include="..\public\Weapon_Kamen.h" />
     <ClInclude Include="..\public\Weapon_Player.h" />
@@ -451,6 +452,7 @@
     <ClCompile Include="..\private\UtilitySkillSlot.cpp" />
     <ClCompile Include="..\private\UtilitySkillUI.cpp" />
     <ClCompile Include="..\private\Wallpaper.cpp" />
+    <ClCompile Include="..\private\WeaponEffect_Player.cpp" />
     <ClCompile Include="..\private\WeaponUI.cpp" />
     <ClCompile Include="..\private\Weapon_Kamen.cpp" />
     <ClCompile Include="..\private\Weapon_Player.cpp" />

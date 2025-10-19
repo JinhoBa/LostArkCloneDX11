@@ -16,6 +16,8 @@ HRESULT CSkill_Player::Initilize(CStateMachine* pStateMachine, STANCE* pStance, 
 	if (FAILED(__super::Initilize(pStateMachine, pStance, pPlayer)))
 		return E_FAIL;
 
+	m_pPlayerWorldMatrix = &pPlayer->Get_Transform()->Get_WorldMatrix();
+
 	return S_OK;
 }
 
@@ -62,6 +64,21 @@ void CSkill_Player::Update_Hitbox(_float fTimeDelta)
 				m_isActiveHitBox = true;
 				m_fTimeAcc = 0.f;
 				++m_iAttackCount;
+			}
+		}
+	}
+}
+
+void CSkill_Player::Update_EffectTrack()
+{
+	for (auto& Event : m_EffectEvents)
+	{
+		if (false == Event.isTrigge)
+		{
+			if (m_pPlayer->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
+			{
+				Event.isTrigge = true;
+				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pPlayerWorldMatrix, nullptr);
 			}
 		}
 	}

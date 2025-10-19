@@ -18,6 +18,7 @@ public:
 	virtual void Exit()override;
 
 	void Update_Hitbox(_float fTimeDelta);
+	void Update_EffectTrack();
 
 protected:
 	_bool				m_isStartHit = {};
@@ -25,8 +26,13 @@ protected:
 	_uint				m_iSkillID = {};
 	_uint				m_iAttackCount = {};
 	_float				m_fTimeAcc = {};
-
+	
 	SKILL_INFO*			m_pSkillInfo = { nullptr };
+
+	_float4x4*			m_pPlayerWorldMatrix = { nullptr };
+
+	vector<EFFECT_EVENT> m_EffectEvents;
+
 
 public:
 	virtual void Free() override;

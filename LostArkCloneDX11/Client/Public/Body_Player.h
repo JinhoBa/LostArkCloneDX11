@@ -17,6 +17,7 @@ public:
 	typedef struct BodyPlayer_Desc : public CPartObject::PARTOBJECT_DESC
 	{
 		_float* pAttackSpeed;
+		STANCE* pStance;
 	}BODYPLAYER_DESC;
 
 private:
@@ -30,6 +31,10 @@ public:
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
 	_float Get_TrackPoisiton();
 	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.1f);
+	void Toggle_RimLight() { 
+		m_bApplyRimLight = !m_bApplyRimLight;
+		m_fRimStrength = 1.f;
+	}
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -41,10 +46,12 @@ public:
 
 private:
 	_bool					m_isAnimationFinish = {};
+	_bool					m_bApplyRimLight = {};
+
 	_int					m_iAnimIndex = {};
 	_uint					m_iNumMesh = {};
 
-
+	STANCE*					m_pStance = { nullptr };
 	_float*					m_pAttackSpeed = {nullptr};
 
 	CShader*				m_pShaderCom = { nullptr };
@@ -52,6 +59,16 @@ private:
 
 	const _float4x4*		m_pCameraTargetBoneMatrix = {};
 	_float4x4				m_CameraTargetBoneWorldMatrix = {};
+
+	_float					m_fRimStrength = {};
+	_float					m_fRimPower = {};
+	_float4					m_vRimColor[ENUM_TO_INT(STANCE::IDEN_END)] = {};
+
+#ifdef _DEBUG
+	_bool					m_isDebug = {};
+	_float					m_fKeyFrame = {};
+#endif // _DEBUG
+
 
 private:
 	HRESULT			Add_Components();

@@ -26,6 +26,7 @@ private:
 
 public:
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
+	void Toggle_RimLight() { m_bApplyRimLight = !m_bApplyRimLight; }
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -38,14 +39,18 @@ public:
 private:
 	const STANCE*			m_pStance = { nullptr };
 	const _float4x4*		m_pSocketMatrix = { nullptr };
-
+	
+	_bool					m_bApplyRimLight = {};
 	_uint					m_iNumMesh[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 
 	CShader*				m_pShaderCom = { nullptr };
 	CModel*					m_pModelCom[ENUM_TO_INT(STANCE::IDEN_END)] = {};
-	
+
+	_float					m_fRimStrength = {};
+	_float					m_fRimPower = {};
+	_float4					m_vRimColor[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 #ifdef _DEBUG
-	_float4 vSkillColor = {};
+
 #endif // _DEBUG
 
 

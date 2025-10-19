@@ -9,6 +9,7 @@
 #include "PartObject.h"
 #include "Body_Player.h"
 #include "Weapon_Player.h"
+#include "WeaponEffect_Player.h"
 #include "HpBar_Player.h"
 #include "Test_Effect.h"
 #include "Buff.h"
@@ -47,6 +48,11 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 _float CPlayer::Get_TrackPositon()
 {
     return static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_TrackPoisiton();
+}
+
+CPartObject* CPlayer::Get_PartObject(const _tchar* PartObjectTag)
+{
+    return Find_PartObject(PartObjectTag);
 }
 
 void CPlayer::Set_State(STATE eState, void* pArg)
@@ -473,6 +479,7 @@ HRESULT CPlayer::Ready_Components()
 HRESULT CPlayer::Ready_PartObjects()
 {
     CBody_Player::BODYPLAYER_DESC Body_Desc = {};
+    Body_Desc.pStance = &m_PlayerInfo.eStance;
     Body_Desc.pParentTransform = m_pTransformCom;
     Body_Desc.pAttackSpeed = &m_PlayerInfo.fAttackSpeed;
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Body_Player"), TEXT("Body_Player"), &Body_Desc)))
@@ -484,6 +491,13 @@ HRESULT CPlayer::Ready_PartObjects()
     Weapon_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
 
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Weapon_Player"), TEXT("Weapon_Player"), &Weapon_Desc)))
+        return E_FAIL;
+
+    CWeaponEffect_Player::WEAPON_DESC WeaponEffect_Desc = {};
+    WeaponEffect_Desc.pParentTransform = m_pTransformCom;
+    WeaponEffect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_WeaponEffect_Player"), TEXT("WeaponEffect_Player"), &WeaponEffect_Desc)))
         return E_FAIL;
 
     CHpBar_Player::HPBARPLAYER_DESC  HpBar_Desc= {};

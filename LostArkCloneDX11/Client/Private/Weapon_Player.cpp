@@ -43,9 +43,15 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
     m_iNumMesh[ENUM_TO_INT(STANCE::FLURRY)] = m_pModelCom[ENUM_TO_INT(STANCE::FLURRY)]->Get_NumMeshes();
     m_iNumMesh[ENUM_TO_INT(STANCE::FOCUS)] = m_pModelCom[ENUM_TO_INT(STANCE::FOCUS)]->Get_NumMeshes();
 
-   // m_pTransformCom->Rotation(XMConvertToRadians(90.f), 0.f, 0.f);
+   //m_pTransformCom->Rotation(XMConvertToRadians(90.f), 0.f, 0.f);
 
-    vSkillColor = _float4(0.7f, 0.7f, 1.f, 1.f);
+    m_vRimColor[ENUM_TO_INT(STANCE::FLURRY)] = _float4(0.4f, 0.8f, 1.f, 1.f);
+    m_vRimColor[ENUM_TO_INT(STANCE::FOCUS)] = _float4(0.95f, 0.32f, 0.32f, 1.f);
+
+    m_bApplyRimLight = false;
+
+    m_fRimStrength = 1.f;
+    m_fRimPower = 1.f;
 
     return S_OK;
 }
@@ -57,18 +63,21 @@ void CWeapon_Player::Priority_Update(_float fTimeDelta)
 
 void CWeapon_Player::Update(_float fTimeDelta)
 {
-    XMStoreFloat4x4(&m_CombinedWorldMatrix,
-        XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+    if (m_isVisible)
+    {
+        XMStoreFloat4x4(&m_CombinedWorldMatrix,
+            XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+    }
 }
 
 void CWeapon_Player::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+    if (m_isVisible)
+        m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CWeapon_Player::Render()
 {
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
@@ -81,6 +90,21 @@ HRESULT CWeapon_Player::Render()
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
         return E_FAIL;
 
+    if (m_bApplyRimLight)
+    {
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimColor", &m_vRimColor[ENUM_TO_INT(*m_pStance)], sizeof(_float4))))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_fRimStrength", &m_fRimStrength, sizeof(_float))))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Bind_RawValue("g_fRimPower", &m_fRimPower, sizeof(_float))))
+            return E_FAIL;
+    }
+
     for (_uint i = 0; i < m_iNumMesh[ENUM_TO_INT(*m_pStance)]; i++)
     {
         if (FAILED((m_pModelCom[ENUM_TO_INT(*m_pStance)])->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
@@ -89,22 +113,20 @@ HRESULT CWeapon_Player::Render()
         if (FAILED((m_pModelCom[ENUM_TO_INT(*m_pStance)])->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
             return E_FAIL;
 
-        if(m_pGameInstance->Get_KeyPressing(DIK_R))
+        if(m_bApplyRimLight)
         {
-            if (FAILED(m_pShaderCom->Bind_RawValue("g_DiffuseColor", &vSkillColor, sizeof(_float4))))
-                return E_FAIL;
-            if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &vSkillColor, sizeof(_float4))))
+            if (FAILED(m_pShaderCom->Begin(1)))
                 return E_FAIL;
         }
-
-        if (FAILED(m_pShaderCom->Begin(3)))
-            return E_FAIL;
+        else
+        {
+            if (FAILED(m_pShaderCom->Begin(3)))
+                return E_FAIL;
+        }
 
         if (FAILED(m_pModelCom[ENUM_TO_INT(*m_pStance)]->Render(i)))
             return E_FAIL;
     }
-
-
 
     return S_OK;
 }

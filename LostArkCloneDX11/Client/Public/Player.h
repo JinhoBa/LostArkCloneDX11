@@ -35,6 +35,7 @@ public:
 	const list<class CBuff*>& Get_BuffList() { return m_Buffs; }
 	const CHARGE_SKILL_DESC* Get_ChargeSkill_Desc() { return &m_ChargeSkill_Desc; }
 	_float			Get_TrackPositon();
+	class CPartObject* Get_PartObject(const _tchar* PartObjectTag);
 
 	void			Set_State(STATE eState, void* pArg = nullptr);
 	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);

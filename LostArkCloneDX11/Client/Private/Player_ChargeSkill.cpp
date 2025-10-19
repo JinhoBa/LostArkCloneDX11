@@ -6,6 +6,8 @@
 
 #include "StateMachine.h"
 #include "Player.h"
+#include "Body_Player.h"
+#include "Weapon_Player.h"
 
 CPlayer_ChargeSkill::CPlayer_ChargeSkill()
 	:CSkill_Player{}
@@ -53,6 +55,21 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 
 	m_pPlayer->Set_Animation(m_iAnimStart, false);
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
+
+	/* Effects */
+	const vector<EFFECT_EVENT_DESC>& EffectEvents = m_pGameManager->Get_EffectTrack(CHARACTER::PLAYER, m_iSkillID);
+
+	m_EffectEvents.reserve(EffectEvents.size());
+
+	for (const auto& Track : EffectEvents)
+	{
+		m_EffectEvents.push_back({ false, Track });
+	}
+
+	if (m_pSkillInfo->bApplyRimLightBody)
+		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
+	if (m_pSkillInfo->bApplyRimLightWeapon)
+		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
 }
 
 void CPlayer_ChargeSkill::Update(_float fTimeDelta)
@@ -99,11 +116,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 		if(13 == m_iSkillID)
 		{
 			Update_Hitbox(fTimeDelta);
-			if (true == m_isSpawEffect && 7.f <= m_pPlayer->Get_TrackPositon())
-			{
-				m_pGameManager->Add_Effect(EFFECT::MESH, 2, &m_pPlayer->Get_Transform()->Get_WorldMatrix(), nullptr);
-				m_isSpawEffect = false;
-			}
+			Update_EffectTrack();
 		}
 
 		if (m_pPlayer->isAnimationFinish())
@@ -117,7 +130,10 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 	case Client::CPlayer_ChargeSkill::END:
 		if (12 == m_iSkillID)
+		{
 			Update_Hitbox(fTimeDelta);
+			Update_EffectTrack();
+		}
 		if (m_pPlayer->isAnimationFinish())
 		{
 			m_pPlayer->Set_ChargeSkill_Desc(false, 0.f);
@@ -138,6 +154,13 @@ void CPlayer_ChargeSkill::Exit()
 {
 	if (12 == m_iSkillID)
 		m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), true);
+
+	if (m_pSkillInfo->bApplyRimLightBody)
+		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
+	if (m_pSkillInfo->bApplyRimLightWeapon)
+		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
+
+	m_EffectEvents.clear();
 }
 
 
