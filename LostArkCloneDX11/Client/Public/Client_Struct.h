@@ -18,6 +18,8 @@ namespace Client
 	{
 		_bool			bCountAttack;
 		_bool			bInvincible; // 무적
+		_bool			bApplyRimLightBody;
+		_bool			bApplyRimLightWeapon;
 
 		SKILL_TYPE		eSkilltype;
 		PART_BREAKER	ePartbreaker; // 부위 파괴
@@ -213,7 +215,7 @@ namespace Client
 
 		_float2		vLifeTime = {};
 
-		_float      fNoiseStrength = {};
+		_uint       iPassIndex = {};
 
 		_float		fDiffuseScrollSpeedU = {};
 		_float		fDiffuseScrollSpeedV = {};
@@ -231,5 +233,16 @@ namespace Client
 		_wstring	strNoiseTexture = {};
 	}EFFECT_MESH_DESC;
 
+	typedef struct tagEffecEventDesc
+	{
+		EFFECT	eType;
+		_uint	iID;
+		_float	fKeyFrame;
+	}EFFECT_EVENT_DESC;
 
+	typedef struct tagEffecEvent
+	{
+		_bool isTrigge;
+		EFFECT_EVENT_DESC EventDesc;
+	}EFFECT_EVENT;
 }

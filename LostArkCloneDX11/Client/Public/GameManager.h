@@ -29,6 +29,7 @@ public:
 
 	HRESULT Initialize_Effect_Manager();
 	void Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg);
+	const vector<EFFECT_EVENT_DESC>& Get_EffectTrack(CHARACTER eType, _uint iTrackIndex);
 #ifdef _DEBUG
 public:
 	HRESULT Save_Effect(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);

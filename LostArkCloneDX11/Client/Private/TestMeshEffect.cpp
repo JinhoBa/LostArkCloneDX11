@@ -78,6 +78,7 @@ HRESULT CTestMeshEffect::Initialize(void* pArg)
 
     m_fSpeed = 0.f;
     m_fDissolveSpeed = 1.f;
+    g_fTestDeltaTime = 1.f;
 
     XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
 
@@ -156,7 +157,23 @@ void CTestMeshEffect::Update(_float fTimeDelta)
 
         m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
             ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
+        
     }
+    else if (false == m_isLoop && dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
+    {
+        m_vLifeTime.x = 0.f;
+        m_pTransformCom->Set_Scale(m_vStartScale);
+        m_pTransformCom->Rotation(XMConvertToRadians(m_vStartRotation.x), XMConvertToRadians(m_vStartRotation.y), XMConvertToRadians(m_vStartRotation.z));
+        m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
+
+        m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
+        m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
+
+        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
+    }
+    
 
 
     XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
@@ -179,6 +196,7 @@ HRESULT CTestMeshEffect::Render()
         m_iMeshIndex = 0;
 
     ImGui::Checkbox("Loop", &m_isLoop);
+    ImGui::InputFloat("ResetFrame", (_float*)&m_fResetFrame);
     ImGui::InputFloat("LifeTime", (_float*)&m_vLifeTime.y);
     ImGui::Spacing();
     
@@ -186,6 +204,9 @@ HRESULT CTestMeshEffect::Render()
     {
         ImGui::Checkbox("Use_Scale", &m_isUseScale);
         ImGui::InputFloat3("StartScale", (_float*)&m_vStartScale);
+        m_vStartScale.x = max(m_vStartScale.x, 0.01f);
+        m_vStartScale.y = max(m_vStartScale.y, 0.01f);
+        m_vStartScale.z = max(m_vStartScale.z, 0.01f);
         ImGui::InputFloat3("EndScale", (_float*)&m_vEndScale);
     }
     ImGui::Spacing();
@@ -208,7 +229,7 @@ HRESULT CTestMeshEffect::Render()
 
     if (ImGui::CollapsingHeader("Shader"))
     {
-        ImGui::SliderFloat("NoiseStrength", (_float*)&m_fNoiseStrength, 0.f, 1.f);
+        ImGui::InputInt("PassIndex", (_int*)&m_iPassIndex);
         ImGui::InputFloat("D_OffsetU", (_float*)&m_fDiffuseScrollSpeedU);
         ImGui::InputFloat("D_OffsetV", (_float*)&m_fDiffuseScrollSpeedV);
         ImGui::InputFloat("M_OffsetU", (_float*)&m_fMaskScrollSpeedU);
@@ -282,7 +303,7 @@ HRESULT CTestMeshEffect::Render()
         Data.vEndScale = m_vEndScale;
 
         Data.vLifeTime = _float2(0.f, m_vLifeTime.y);
-        Data.fNoiseStrength = m_fNoiseStrength;
+        Data.iPassIndex = m_iPassIndex;
         Data.fSpeed = m_fSpeed;
 
         Data.fDiffuseScrollSpeedU = m_fDiffuseScrollSpeedU;
@@ -305,8 +326,9 @@ HRESULT CTestMeshEffect::Render()
     if (FAILED(Bind_ShaderResource()))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(1)))
+    if (FAILED(m_pShaderCom->Begin(m_iPassIndex)))
         return E_FAIL;
+
 
     if (FAILED(m_EffectModels[m_iMeshIndex]->Render(0)))
         return S_OK;
@@ -335,112 +357,123 @@ HRESULT CTestMeshEffect::Add_Components()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMeshEffect"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
+
+#pragma region EFFECT_MODEL
     CModel* pModelCom = { nullptr };
 
-    /* Shader_VertexMesh */
+    /* 0 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder1"),
         TEXT("Com_Cylinder1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder2"),
-        TEXT("Com_Cylinder2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Dome"),
-        TEXT("Com_Dome_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Line"),
-        TEXT("Com_Line_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Potal"),
-        TEXT("Com_Potal_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
+    /* 1 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Ring"),
         TEXT("Com_Ring_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Screw"),
-        TEXT("Com_Screw_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
+    /* 2 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Screwfront"),
         TEXT("Com_Screwfront_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
+    /* 3 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail1"),
         TEXT("Com_Trail1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+    /* 4 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail2"),
         TEXT("Com_Trail2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+
+    /* 5 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail3"),
         TEXT("Com_Trail3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+
+    /* 6 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail4"),
         TEXT("Com_Trail4_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail5"),
-        TEXT("Com_Trail5_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
+    /* 7 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Auro"),
         TEXT("Com_Auro_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_1"),
-        TEXT("Com_Decal_1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_2"),
-        TEXT("Com_Decal_2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+    /* 8 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_3"),
         TEXT("Com_Decal_3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder3"),
-        TEXT("Com_Cylinder3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+
+    /* 9 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Picking"),
+        TEXT("Com_Picking_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
+    /* 10 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Hron"),
+        TEXT("Com_Horn_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
 
+    /* 11 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Plane1"),
+        TEXT("Com_Plane1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
 
+    /* 12 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Plan1"),
+        TEXT("Com_Plan1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 13 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Plan2"),
+        TEXT("Com_Plan2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 14 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Halfsphere1"),
+        TEXT("Com_Halfsphere1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 15 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Halfsphere2"),
+        TEXT("Com_Halfsphere2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 16 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Line2"),
+        TEXT("Com_Line2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 17 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Planecrossup"),
+        TEXT("Com_Planecrossup_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 18 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Bendplane1"),
+        TEXT("Com_Bendpane1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+#pragma endregion
     return S_OK;
 }
 
@@ -471,7 +504,7 @@ HRESULT CTestMeshEffect::Bind_ShaderResource()
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vMaskOffset", &m_vMaskOffset, sizeof(_float2))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_fNoiseStrength, sizeof(_float))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_iPassIndex, sizeof(_float))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))

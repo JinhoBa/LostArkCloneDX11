@@ -172,7 +172,7 @@ HRESULT CEffect_Mesh::Render()
     if (FAILED(Bind_ShaderResource()))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(1)))
+    if (FAILED(m_pShaderCom->Begin(m_Effect_Data.iPassIndex)))
         return E_FAIL;
 
     if (FAILED(m_EffectModels[m_Effect_Data.iMeshIndex]->Render(0)))
@@ -193,7 +193,11 @@ HRESULT CEffect_Mesh::Start(const _float4x4* pWorldMatrix, void* pArg)
     m_strMaskTexture = pDesc->strMaskTexture;
     m_strNoiseTexture = pDesc->strNoiseTexture;
 
+    m_pTransformCom->Set_Scale(m_Effect_Data.vStartScale);
+    m_pTransformCom->Rotation(XMConvertToRadians(m_Effect_Data.vStartRotation.x), XMConvertToRadians(m_Effect_Data.vStartRotation.y), XMConvertToRadians(m_Effect_Data.vStartRotation.z));
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_Effect_Data.vPosition), 1.f));
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
 
     return S_OK;
 }
@@ -226,78 +230,123 @@ HRESULT CEffect_Mesh::Add_Components()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMeshEffect"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
+
+#pragma region EFFECT_MODEL
     CModel* pModelCom = { nullptr };
 
-    /* Shader_VertexMesh */
+    /* 0 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder1"),
         TEXT("Com_Cylinder1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Cylinder2"),
-        TEXT("Com_Cylinder2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Dome"),
-        TEXT("Com_Dome_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Line"),
-        TEXT("Com_Line_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Potal"),
-        TEXT("Com_Potal_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
+    /* 1 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Ring"),
         TEXT("Com_Ring_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Screw"),
-        TEXT("Com_Screw_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
-        return E_FAIL;
-    m_EffectModels.push_back(pModelCom);
-
-    /* Shader_VertexMesh */
+    /* 2 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Screwfront"),
         TEXT("Com_Screwfront_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
-    /* Shader_VertexMesh */
+    /* 3 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail1"),
         TEXT("Com_Trail1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+    /* 4 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail2"),
         TEXT("Com_Trail2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+
+    /* 5 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail3"),
         TEXT("Com_Trail3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
-    /* Shader_VertexMesh */
+
+    /* 6 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Trail4"),
         TEXT("Com_Trail4_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
 
+    /* 7 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Auro"),
+        TEXT("Com_Auro_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
 
+    /* 8 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Decal_3"),
+        TEXT("Com_Decal_3_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 9 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Picking"),
+        TEXT("Com_Picking_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 10 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Hron"),
+        TEXT("Com_Horn_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 11 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Plane1"),
+        TEXT("Com_Plane1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 12 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Plan1"),
+        TEXT("Com_Plan1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 13 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Plan2"),
+        TEXT("Com_Plan2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 14 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Halfsphere1"),
+        TEXT("Com_Halfsphere1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 15 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Halfsphere2"),
+        TEXT("Com_Halfsphere2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 16 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Line2"),
+        TEXT("Com_Line2_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 17 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Planecrossup"),
+        TEXT("Com_Planecrossup_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 18 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Bendplane1"),
+        TEXT("Com_Bendpane1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+#pragma endregion
 
     return S_OK;
 }
@@ -327,9 +376,6 @@ HRESULT CEffect_Mesh::Bind_ShaderResource()
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vMaskOffset", &m_vMaskOffset, sizeof(_float2))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_Effect_Data.fNoiseStrength, sizeof(_float))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))

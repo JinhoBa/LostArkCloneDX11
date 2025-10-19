@@ -57,7 +57,7 @@ private:
 
 	_float2		m_vLifeTime = {};
 
-	_float      m_fNoiseStrength = {};
+	_float      m_iPassIndex = {};
 
 	_float		m_fSpeed = {};
 	_float		m_fDiffuseScrollSpeedU = {};
@@ -74,6 +74,9 @@ private:
 	_wstring	m_strNoiseTexture = {};
 
 	_float4x4	m_ParentWorldMatrix = {};
+
+	class CPlayer* m_pPlayer = {};
+	_float			m_fResetFrame = {};
 
 	vector<CModel*> m_EffectModels;
 

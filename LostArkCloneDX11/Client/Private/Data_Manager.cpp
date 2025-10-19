@@ -257,6 +257,12 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
         skill->QueryUnsignedAttribute("stance", &iStance);
         Skill_Info.eStance = static_cast<STANCE>(iStance);
 
+        /*Skill RimLight */
+        tinyxml2::XMLElement* RimLight = skill->FirstChildElement("RimLight");
+
+        RimLight->QueryBoolAttribute("body", &Skill_Info.bApplyRimLightBody);
+        RimLight->QueryBoolAttribute("weapon", &Skill_Info.bApplyRimLightWeapon);
+
         /*Skill Stats */
         tinyxml2::XMLElement* Stats = skill->FirstChildElement("Stats");
 

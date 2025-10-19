@@ -36,7 +36,7 @@ HRESULT CEffect_Manager::Initialize(void* pArg)
         );
     }
 
-    for (_uint i = 0; i < 15; i++)
+    for (_uint i = 0; i < 20; i++)
     {
         m_MeshEffects.push_back(
             dynamic_cast<CEffect_Mesh*>(m_pGameInstance->Clone_Prototype(
@@ -45,6 +45,9 @@ HRESULT CEffect_Manager::Initialize(void* pArg)
     }
 
     if (FAILED(Load_Mesh_Data("../Bin/Resources/Data/Effect/Player_Effects.xml")))
+        return E_FAIL;
+
+    if (FAILED(Load_EffectTrack(CHARACTER::PLAYER, "../Bin/Resources/Data/Effect/Player_Effects_Track.xml")))
         return E_FAIL;
 
     return S_OK;
@@ -120,6 +123,11 @@ void CEffect_Manager::Add_Effects(EFFECT eType, _uint iEffectID, const _float4x4
         break;
     }
         
+}
+
+const vector<EFFECT_EVENT_DESC>& CEffect_Manager::Get_EffectTrack(CHARACTER eType, _uint iTrackIndex)
+{
+    return m_EffectEvents[ENUM_TO_INT(eType)][iTrackIndex];
 }
 
 HRESULT CEffect_Manager::Load_Mesh_Data(const _char* pFilePath)
@@ -216,9 +224,9 @@ HRESULT CEffect_Manager::Load_Mesh_Data(const _char* pFilePath)
 #pragma endregion
 
 #pragma region SHADER
-        tinyxml2::XMLElement* Noise = Effect->FirstChildElement("Noise");
+        tinyxml2::XMLElement* PassIndex = Effect->FirstChildElement("PassIndex");
 
-        Noise->QueryFloatAttribute("Strength", &Desc.Mesh_Data.fNoiseStrength);
+        PassIndex->QueryUnsignedAttribute("Index", &Desc.Mesh_Data.iPassIndex);
 
 
         tinyxml2::XMLElement* Diffuse = Effect->FirstChildElement("Diffuse");
@@ -237,6 +245,50 @@ HRESULT CEffect_Manager::Load_Mesh_Data(const _char* pFilePath)
         m_MeshEffect_Datas.push_back(Desc);
     }
 
+
+    return S_OK;
+}
+
+HRESULT CEffect_Manager::Load_EffectTrack(CHARACTER eType, const _char* pFilePath)
+{
+    tinyxml2::XMLDocument xmlDoc;
+
+    if ((tinyxml2::XML_SUCCESS != xmlDoc.LoadFile(pFilePath)))
+        return E_FAIL;
+
+    tinyxml2::XMLElement* root = xmlDoc.FirstChildElement("Data");
+
+    if (nullptr == root)
+    {
+        MSG_BOX("Failed to Find root");
+        return E_FAIL;
+    }
+
+    for (auto* Skill = root->FirstChildElement("Skill"); Skill; Skill = Skill->NextSiblingElement("Skill"))
+    {
+        vector<EFFECT_EVENT_DESC> EffectDescs;
+
+        for (auto* Effect = Skill->FirstChildElement("Effect"); Effect; Effect = Effect->NextSiblingElement("Effect"))
+        {
+            EFFECT_EVENT_DESC Desc = {};
+
+            const char* pName;
+            Effect->QueryStringAttribute("type", &pName);
+
+            if (!strcmp(pName, "mesh"))
+                Desc.eType = EFFECT::MESH;
+            else if (!strcmp(pName, "none"))
+                Desc.eType = EFFECT::MESH;
+            
+            Effect->QueryFloatAttribute("keyframe", &Desc.fKeyFrame);
+
+            Effect->QueryUnsignedAttribute("effectID", &Desc.iID);
+
+            EffectDescs.push_back(Desc);
+        }
+        
+        m_EffectEvents[ENUM_TO_INT(eType)].push_back(EffectDescs);
+    }
 
     return S_OK;
 }
@@ -344,11 +396,11 @@ HRESULT CEffect_Manager::Save_Effect(EFFECT eType, void* pArg, const _char* pFil
 #pragma endregion
 
 #pragma region SHADER
-        tinyxml2::XMLElement* Noise = xmlDoc.NewElement("Noise");
+        tinyxml2::XMLElement* PassIndex = xmlDoc.NewElement("PassIndex");
 
-        Noise->SetAttribute("Strength", pDesc->Mesh_Data.fNoiseStrength);
+        PassIndex->SetAttribute("Index", pDesc->Mesh_Data.iPassIndex);
 
-        Effect->InsertEndChild(Noise);
+        Effect->InsertEndChild(PassIndex);
 
         tinyxml2::XMLElement* Diffuse = xmlDoc.NewElement("Diffuse");
 

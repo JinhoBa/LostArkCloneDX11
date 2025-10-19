@@ -28,7 +28,9 @@ public:
 
 public:
 	void Add_Effects(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg);
+	const vector<EFFECT_EVENT_DESC>& Get_EffectTrack(CHARACTER eType, _uint iTrackIndex);
 	HRESULT Load_Mesh_Data(const _char* pFilePath);
+	HRESULT Load_EffectTrack(CHARACTER eType, const _char* pFilePath);
 
 #ifdef _DEBUG
 public:
@@ -37,6 +39,8 @@ public:
 
 
 private:
+	vector<vector<EFFECT_EVENT_DESC>> m_EffectEvents[ENUM_TO_INT(CHARACTER::END)];
+
 	vector<EFFECT_GROUND_DESC>		m_EffectData;
 	vector<EFFECT_MESH_DESC>		m_MeshEffect_Datas;
 	deque<class CEffect*>			m_GroundEffects;
