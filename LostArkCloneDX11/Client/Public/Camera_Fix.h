@@ -21,8 +21,20 @@ public:
 	virtual void		Reset() override;
 
 private:
-	void		Update_Camera_Position();
+	_bool		m_isShake = {};
+
+	_float		m_fDuration = {};
+	_float		m_fChangeDuration = {};
+
+	_float		m_fTimeAcc = {};
+
+	_float4     m_vPositionOffset = {};
+
+private:
+	void		Update_Camera_Position(_float fTimeDelta);
 	void		Change_State();
+	void		Shake(_float fTimeDelta);
+
 
 public:
 	static CCamera_Fix* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
