@@ -7,6 +7,7 @@
 NS_BEGIN(Engine)
 class CGameInstance;
 class CGameObject;
+class CTexture;
 NS_END
 
 NS_BEGIN(Client)
@@ -39,6 +40,10 @@ public:
 
 
 private:
+	CTexture*		m_pTextureCom = { nullptr };
+	CTexture*		m_pMaskTextureCom = { nullptr };
+	CTexture*		m_pNoiseTextureCom = { nullptr };
+
 	vector<vector<EFFECT_EVENT_DESC>> m_EffectEvents[ENUM_TO_INT(CHARACTER::END)];
 
 	vector<EFFECT_GROUND_DESC>		m_EffectData;
@@ -46,6 +51,9 @@ private:
 	deque<class CEffect*>			m_GroundEffects;
 	deque<class CEffect*>			m_MeshEffects;
 	list<class CEffect*>			m_pActiveEffects;
+
+private:
+	HRESULT Add_Components();
 
 public:
 	static CEffect_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -13,6 +13,13 @@ NS_BEGIN(Client)
 
 class CEffect_Ground final : public CEffect
 {
+public:
+	typedef struct EffectGroundComponets
+	{
+		CTexture* m_pTextureCom = { nullptr };
+		CTexture* m_pMaskTextureCom = { nullptr };
+		CTexture* m_pNoiseTextureCom = { nullptr };
+	}EFFECT_GROUND_COM;
 
 private:
 	CEffect_Ground(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -71,12 +78,14 @@ public:
 	_float3		m_vPivot = {};
 	_float3		m_vRotation = {};
 
-
+	_wstring	m_strDiffuseTexture = {};
+	_wstring	m_strMaskTexture = {};
+	_wstring	m_strNoiseTexture = {};
 #endif // _DEBUG
 
 
 private:
-	HRESULT		Add_Components();
+	HRESULT		Add_Components(void* pArg);
 
 public:
 	static CEffect_Ground* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -38,7 +38,7 @@ HRESULT CTest_Effect::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
 
     m_isLoop = true;
-    m_iNumInstance = 300;
+    m_iNumInstance = 1;
     m_vSize = _float2(0.1f, 1.f);
     m_vCenter = _float3(0.f, 0.f, 0.f);
     m_vSpeed = _float2(0.1f, 0.2f);
@@ -51,10 +51,9 @@ HRESULT CTest_Effect::Initialize(void* pArg)
     m_isActive = false;
     m_fTimeAcc = 0.f;
 
-    //XMStoreFloat4x4(&m_CombindedMatrix, XMMatrixIdentity());
 
-    m_iNumMesh = m_pModelCom->Get_NumMeshes();
-    m_iMeshIndex = 0;
+    XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMMatrixIdentity());
 
     return S_OK;
 }
@@ -75,10 +74,10 @@ void CTest_Effect::Update(_float fTimeDelta)
     m_pTransformCom->Set_Scale(m_vPivot);
 
   //  m_pVIBufferCom->Set_Desc(m_isLoop, m_iNumInstance, m_vSize, m_vCenter, m_vSpeed, m_vRange, m_vLifeTime, m_vPivot);
-    //m_pVIBufferCom->Spread(fTimeDelta);
+    //m_pVIBufferCom->Scaling(fTimeDelta);
 
 
-    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
 }
 
 void CTest_Effect::Late_Update(_float fTimeDelta)
@@ -100,10 +99,56 @@ HRESULT CTest_Effect::Render()
     ImGui::InputFloat3("vPosition", (_float*) &m_vPosition);
     ImGui::InputFloat3("vRotation", (_float*) &m_vRotation);
 
+    ImGui::Spacing();
+    if (ImGui::CollapsingHeader("Diffuse", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        _uint iIndex = {};
+        for (auto& Pair : m_pTextureCom->Get_TextureMap())
+        {
+            if (ImGui::ImageButton(to_string(iIndex).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
+                m_strDiffuseTexture = Pair.first;
+
+            if (4 != iIndex % 5)
+                ImGui::SameLine();
+
+            iIndex++;
+        }
+    }
+    ImGui::Spacing();
+    if (ImGui::CollapsingHeader("Mask", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        _uint iIndex = {};
+        for (auto& Pair : m_pMaskTextureCom->Get_TextureMap())
+        {
+            if (ImGui::ImageButton(to_string(iIndex + 100).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
+                m_strMaskTexture = Pair.first;
+
+            if (4 != iIndex % 5)
+                ImGui::SameLine();
+
+            iIndex++;
+        }
+    }
+    ImGui::Spacing();
+    if (ImGui::CollapsingHeader("Nosie", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        _uint iIndex = {};
+        for (auto& Pair : m_pNoiseTextureCom->Get_TextureMap())
+        {
+            if (ImGui::ImageButton(to_string(iIndex + 200).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
+                m_strNoiseTexture = Pair.first;
+
+            if (4 != iIndex % 5)
+                ImGui::SameLine();
+
+            iIndex++;
+        }
+    }
+    ImGui::Spacing();
 #endif // _DEBUG
 
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pTransformCom->Get_WorldMatrix())))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
@@ -112,25 +157,21 @@ HRESULT CTest_Effect::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    //if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
-    //    return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Get_SRV(0))))
+    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Find_SRV(m_strDiffuseTexture.c_str()))))
         return E_FAIL;
-
-
+    if (FAILED(m_pShaderCom->Bind_Resource("g_MaskTexture", m_pMaskTextureCom->Find_SRV(m_strMaskTexture.c_str()))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
+        return E_FAIL;
 
     if (FAILED(m_pShaderCom->Begin(0)))
         return E_FAIL;
 
-   /* if (FAILED(m_pVIBufferCom->Bind_Resources()))
+   if (FAILED(m_pVIBufferCom->Bind_Resources()))
         return E_FAIL;
     
     if (FAILED(m_pVIBufferCom->Render()))
-        return E_FAIL;*/
-
-    if (FAILED(m_pModelCom->Render(0)))
-        return S_OK;
+        return E_FAIL;
 
     return S_OK;
 }
@@ -143,23 +184,23 @@ HRESULT CTest_Effect::Add_Components()
         return E_FAIL;
 
     /*Texture*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect"),
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_DiffuseFolder"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 
     /*Texture*/
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Trail"),
-        TEXT("Com_TextureTrail"), reinterpret_cast<CComponent**>(&m_pTextureTrailCom))))
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_MaskFolder"),
+        TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom))))
+        return E_FAIL;
+
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_NoiseFolder"),
+        TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
         return E_FAIL;
 
     /* Shader_VertexMesh */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMeshEffect"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
-
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_TrailMeshes"),
-        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
     return S_OK;
@@ -200,7 +241,5 @@ void CTest_Effect::Free()
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pTextureCom);
-    Safe_Release(m_pTextureTrailCom);
     Safe_Release(m_pVIBufferCom);
-    Safe_Release(m_pModelCom);
 }

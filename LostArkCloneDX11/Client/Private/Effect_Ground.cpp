@@ -29,7 +29,7 @@ HRESULT CEffect_Ground::Initialize(void* pArg)
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
 
-    if (FAILED(Add_Components()))
+    if (FAILED(Add_Components(pArg)))
         return E_FAIL;
 
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.1f, 0.f, 1.f));
@@ -47,6 +47,8 @@ HRESULT CEffect_Ground::Initialize(void* pArg)
 
     m_BaseIndex = 0;
     m_MaskIndex = 0;
+
+    g_fTestDeltaTime = 1.f;
 
     m_bTest = true;
 
@@ -99,6 +101,8 @@ void CEffect_Ground::Late_Update(_float fTimeDelta)
 HRESULT CEffect_Ground::Render()
 {
 #ifdef _DEBUG
+    ImGui::InputFloat("DeltaTime", (_float*)(&g_fTestDeltaTime));
+
     const char* LerpNames[] = { "Linear", "EaseIn", "EaseOut", "EaseInOut" };
     int currentIndex = static_cast<int>(m_eLerpType);
 
@@ -112,42 +116,52 @@ HRESULT CEffect_Ground::Render()
     {
         m_eLerpType = static_cast<LERP>(currentIndex);
     }
-    if (ImGui::CollapsingHeader("Textures", ImGuiTreeNodeFlags_DefaultOpen))
+    ImGui::Spacing();
+
+    if (ImGui::CollapsingHeader("Diffuse", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        for (_uint i = 0; i < 6; i++)
+        _uint iIndex = {};
+        for (auto& Pair : m_pTextureCom->Get_TextureMap())
         {
-            string id = "##Base" + to_string(i);
-            if (ImGui::ImageButton(id.c_str(), m_pTextureCom->Get_SRV(i), ImVec2(100.f, 100.f)))
-                m_BaseIndex = i;
-            if (4 != i % 5)
+            if (ImGui::ImageButton(to_string(iIndex).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
+                m_strDiffuseTexture = Pair.first;
+
+            if (4 != iIndex % 5)
                 ImGui::SameLine();
+
+            iIndex++;
         }
     }
     ImGui::Spacing();
-    if (ImGui::CollapsingHeader("MaskTextures", ImGuiTreeNodeFlags_DefaultOpen))
+    if (ImGui::CollapsingHeader("Mask", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        for (_uint i = 0; i < 12; i++)
+        _uint iIndex = {};
+        for (auto& Pair : m_pMaskTextureCom->Get_TextureMap())
         {
-            string id = "##Mask" + to_string(i);
-            if (ImGui::ImageButton(id.c_str(), m_pMaskTextureCom->Get_SRV(i), ImVec2(100.f, 100.f)))
-                m_MaskIndex = i;
-            if (4 != i % 5)
+            if (ImGui::ImageButton(to_string(iIndex + 100).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
+                m_strMaskTexture = Pair.first;
+
+            if (4 != iIndex % 5)
                 ImGui::SameLine();
+
+            iIndex++;
         }
     }
     ImGui::Spacing();
-    if (ImGui::CollapsingHeader("NoiseTextures", ImGuiTreeNodeFlags_DefaultOpen))
+    if (ImGui::CollapsingHeader("Nosie", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        for (_uint i = 0; i < 7; i++)
+        _uint iIndex = {};
+        for (auto& Pair : m_pNoiseTextureCom->Get_TextureMap())
         {
-            string id = "##Noise" + to_string(i);
-            if (ImGui::ImageButton(id.c_str(), m_pNoiseTextureCom->Get_SRV(i), ImVec2(100.f, 100.f)))
-                m_NoiseIndex = i;
-            if (4 != i % 5)
+            if (ImGui::ImageButton(to_string(iIndex + 200).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
+                m_strNoiseTexture = Pair.first;
+
+            if (4 != iIndex % 5)
                 ImGui::SameLine();
+
+            iIndex++;
         }
     }
-    ImGui::Spacing();
 
     ImGui::InputFloat2("vSize", (_float*)&m_vSize);
     ImGui::InputFloat3("vPosition", (_float*) &m_vPosition);
@@ -170,16 +184,14 @@ HRESULT CEffect_Ground::Render()
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Resource("g_Texture2D", m_pTextureCom->Get_SRV(m_BaseIndex))))
+    if (FAILED(m_pShaderCom->Bind_Resource("g_DiffuseTexture", m_pTextureCom->Find_SRV(m_strDiffuseTexture.c_str()))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_MaskTexture", m_pMaskTextureCom->Find_SRV(m_strMaskTexture.c_str()))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Resource("g_MaskTexture2D", m_pMaskTextureCom->Get_SRV(m_MaskIndex))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture2D", m_pNoiseTextureCom->Get_SRV(m_NoiseIndex))))
-        return E_FAIL;
-
-    if (FAILED(m_pShaderCom->Begin(5)))
+    if (FAILED(m_pShaderCom->Begin(4)))
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -212,28 +224,27 @@ HRESULT CEffect_Ground::Reset()
     return S_OK;
 }
 
-HRESULT CEffect_Ground::Add_Components()
+HRESULT CEffect_Ground::Add_Components(void* pArg)
 {
     /*VIBuffer_Point_Instance*/
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_GroundEffect"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
 
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Base"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Mask"),
-        TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom))))
-        return E_FAIL;
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_Noise"),
-        TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
-        return E_FAIL;
-
     /* Shader_VertexMesh */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxPointParticle"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
+
+    EFFECT_GROUND_COM* pDesc = static_cast<EFFECT_GROUND_COM*>(pArg);
+
+    m_pTextureCom = pDesc->m_pTextureCom;
+    m_pMaskTextureCom = pDesc->m_pMaskTextureCom;
+    m_pNoiseTextureCom = pDesc->m_pNoiseTextureCom;
+
+    Safe_AddRef(m_pTextureCom);
+    Safe_AddRef(m_pTextureCom);
+    Safe_AddRef(m_pTextureCom);
 
     return S_OK;
 }

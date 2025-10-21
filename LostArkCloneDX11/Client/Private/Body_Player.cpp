@@ -126,9 +126,6 @@ HRESULT CBody_Player::Render()
         ImGui::SameLine();
         ImGui::Text(pName);
     }*/
-
-    ImGui::SliderFloat("RimStrength", &m_fRimStrength, 0.f, 100.f);
-    ImGui::SliderFloat("RimPower", &m_fRimPower, 0.f, 10.f);
 #pragma endregion
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
         return E_FAIL;

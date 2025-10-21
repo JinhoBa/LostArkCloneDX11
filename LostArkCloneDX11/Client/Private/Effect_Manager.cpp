@@ -28,11 +28,20 @@ HRESULT CEffect_Manager::Initialize_Prototype()
 
 HRESULT CEffect_Manager::Initialize(void* pArg)
 {
+    if (FAILED(Add_Components()))
+        return E_FAIL;
+
+    CEffect_Ground::EFFECT_GROUND_COM Component_Desc = {};
+
+    Component_Desc.m_pTextureCom = m_pTextureCom;
+    Component_Desc.m_pMaskTextureCom = m_pMaskTextureCom;
+    Component_Desc.m_pNoiseTextureCom = m_pNoiseTextureCom;
+
     for (_uint i = 0; i < 20; i++)
     {
         m_GroundEffects.push_back(
             dynamic_cast<CEffect_Ground*>(m_pGameInstance->Clone_Prototype(
-                PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Ground")))
+                PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Ground"), &Component_Desc))
         );
     }
 
@@ -430,6 +439,25 @@ HRESULT CEffect_Manager::Save_Effect(EFFECT eType, void* pArg, const _char* pFil
     return S_OK;
 }
 
+HRESULT CEffect_Manager::Add_Components()
+{
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_DiffuseFolder"),
+        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+        return E_FAIL;
+
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_MaskFolder"),
+        TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom))))
+        return E_FAIL;
+
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_NoiseFolder"),
+        TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
+        return E_FAIL;
+
+    return S_OK;
+}
 
 CEffect_Manager* CEffect_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -476,5 +504,9 @@ void CEffect_Manager::Free()
         for (auto& pEffect : m_pActiveEffects)
             Safe_Release(pEffect);
         m_pActiveEffects.clear();
+
+        Safe_Release(m_pTextureCom);
+        Safe_Release(m_pMaskTextureCom);
+        Safe_Release(m_pNoiseTextureCom);
     }
 }

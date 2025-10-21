@@ -507,20 +507,20 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
         return E_FAIL;
 
-    CEffect::EFFECT_DESC Effect_Desc= {};
- 
+   CEffect::EFFECT_DESC Effect_Desc= {};
+     /*
     Effect_Desc.pParentTransform = m_pTransformCom;
     Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
-        return E_FAIL;
+        return E_FAIL;*/
 
  
-   /* Effect_Desc.pParentTransform = m_pTransformCom;
+    Effect_Desc.pParentTransform = m_pTransformCom;
     Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Ground"), TEXT("Ground_Effect"), &Effect_Desc)))
         return E_FAIL;
 
-    CEffect_Trail::TRAIL_EFFECT_DESC TrailDesc = {};
+   /* CEffect_Trail::TRAIL_EFFECT_DESC TrailDesc = {};
 
     TrailDesc.pParentTransform = m_pTransformCom;
     TrailDesc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");

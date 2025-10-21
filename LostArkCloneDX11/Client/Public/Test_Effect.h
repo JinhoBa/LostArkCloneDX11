@@ -28,11 +28,11 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
-	CModel*						m_pModelCom = { nullptr };
 	CVIBuffer_Point_Instance*	m_pVIBufferCom = { nullptr };
 	CShader*					m_pShaderCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
-	CTexture*					m_pTextureTrailCom = { nullptr };
+	CTexture*					m_pMaskTextureCom = { nullptr };
+	CTexture*					m_pNoiseTextureCom = { nullptr };
 
 	_float3		m_vPosition;
 	_float3		m_vRotation;
@@ -50,8 +50,11 @@ private:
 	_bool		m_isActive = {};
 	_float		m_fTimeAcc = {};
 
-	_uint		m_iNumMesh = {};
-	_uint		m_iMeshIndex = {};
+	_float4x4	m_ParentWorldMatrix = {};
+
+	_wstring	m_strDiffuseTexture = {};
+	_wstring	m_strMaskTexture = {};
+	_wstring	m_strNoiseTexture = {};
 
 private:
 	HRESULT		Add_Components();
