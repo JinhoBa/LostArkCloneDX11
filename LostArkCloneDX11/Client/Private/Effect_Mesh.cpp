@@ -164,6 +164,7 @@ void CEffect_Mesh::Update(_float fTimeDelta)
 
 void CEffect_Mesh::Late_Update(_float fTimeDelta)
 {
+    m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
     m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 

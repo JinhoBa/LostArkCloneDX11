@@ -5,7 +5,8 @@ CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
 	, m_pGameInstance { CGameInstance::GetInstance() }
-	, m_isCloned{ false }
+	, m_isCloned{ false },
+	m_fDepth{0.f}
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);
@@ -18,7 +19,8 @@ CGameObject::CGameObject(const CGameObject& Prototype)
 	, m_pGameInstance{ Prototype.m_pGameInstance }
 	, m_isDead { Prototype.m_isDead }
 	, m_isCloned{ true }
-	, m_isVisible{ true }
+	, m_isVisible{ true },
+	m_fDepth{ 0.f }
 {
 	Safe_AddRef(m_pGameInstance);
 	Safe_AddRef(m_pDevice);
@@ -120,6 +122,13 @@ HRESULT CGameObject::Change_Component(_uint iPrototypeLevelIndex, const _wstring
 	Safe_AddRef(pComponent);
 
 	return S_OK;
+}
+
+void CGameObject::Compute_Depth()
+{
+	_vector vCameraPosition = XMLoadFloat4(m_pGameInstance->Get_Camera_Position());
+
+	m_fDepth = XMVectorGetX(XMVector3Length(vCameraPosition - m_pTransformCom->Get_Position()));
 }
 
 void CGameObject::Free()

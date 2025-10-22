@@ -275,7 +275,7 @@ void CPlayer::Update(_float fTimeDelta)
     }
     else
     {
-        m_PlayerInfo.fMp += fTimeDelta * 20.f;
+        m_PlayerInfo.fMp += fTimeDelta * 300.f;
     }
 
     __super::Update(fTimeDelta);

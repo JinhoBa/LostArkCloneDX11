@@ -90,6 +90,7 @@ void CEffect_Ground::Update(_float fTimeDelta)
 
 void CEffect_Ground::Late_Update(_float fTimeDelta)
 {
+   m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
    m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 

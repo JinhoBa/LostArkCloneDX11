@@ -62,6 +62,7 @@ private:
 	void Render_Priority();
 	void Render_NonBlend();
 	HRESULT Render_LightAcc();
+	HRESULT Render_Blur();
 	HRESULT Render_Combined();
 	void Render_NonLight();
 	void Render_Blend();

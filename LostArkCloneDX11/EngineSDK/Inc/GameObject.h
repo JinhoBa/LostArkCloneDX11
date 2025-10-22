@@ -34,12 +34,13 @@ public:
 	}
 	CTransform*			Get_Transform() { return m_pTransformCom; }
 	class CComponent*	Find_Component(const _wstring& strComponentTag);
+	_float Get_Depth() { return m_fDepth; }
 
 protected:
 	_bool						m_isVisible = {true};
 	_bool						m_isCloned = {};
 	_bool						m_isDead = { false };
-
+	_float						m_fDepth = {};
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
@@ -53,6 +54,8 @@ protected:
 
 	HRESULT Change_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, 
 		const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
+	void Compute_Depth();
+
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
