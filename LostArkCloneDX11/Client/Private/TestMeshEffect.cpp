@@ -6,6 +6,7 @@
 
 #include "Skill.h"
 #include "Player.h"
+#include "Kamen.h"
 
 CTestMeshEffect::CTestMeshEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEffect{ pDevice, pContext }
@@ -155,12 +156,12 @@ void CTestMeshEffect::Update(_float fTimeDelta)
         m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
         m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
 
-        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
-            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
+        m_ParentWorldMatrix = dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_Transform()->Get_WorldMatrix();
         
     }
-    else if (false == m_isLoop && dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
-        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
+    else if (false == m_isLoop && dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
     {
         m_vLifeTime.x = 0.f;
         m_pTransformCom->Set_Scale(m_vStartScale);
@@ -170,8 +171,8 @@ void CTestMeshEffect::Update(_float fTimeDelta)
         m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
         m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
 
-        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
-            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
+        m_ParentWorldMatrix = dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_Transform()->Get_WorldMatrix();
     }
     
 
@@ -282,7 +283,7 @@ HRESULT CTestMeshEffect::Render()
             iIndex++;
         }
     }
-
+    ImGui::Spacing();
     if (ImGui::Button("Save"))
     {
         EFFECT_MESH_DESC Desc = {};
@@ -317,7 +318,7 @@ HRESULT CTestMeshEffect::Render()
         Desc.strMaskTexture = m_strMaskTexture;
         Desc.strNoiseTexture = m_strNoiseTexture;
 
-        if(FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::MESH, &Desc, "../Bin/Resources/Data/Effect/Player_Effects.xml", m_iEffectID)))
+        if(FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::MESH, &Desc, "../Bin/Resources/Data/Effect/Kamen_Effects.xml", m_iEffectID)))
             MSG_BOX("저장 실패");
     }
 

@@ -28,14 +28,17 @@ public:
 	virtual HRESULT Render()override;
 
 public:
-	void Add_Effects(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg);
+	void Add_Effects(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, CHARACTER eCharacter);
 	const vector<EFFECT_EVENT_DESC>& Get_EffectTrack(CHARACTER eType, _uint iTrackIndex);
-	HRESULT Load_Mesh_Data(const _char* pFilePath);
+	HRESULT Load_Mesh_Data(const _char* pFilePath, CHARACTER eType);
+	HRESULT Load_Ground_Data(const _char* pFilePath, CHARACTER eType);
 	HRESULT Load_EffectTrack(CHARACTER eType, const _char* pFilePath);
 
 #ifdef _DEBUG
 public:
 	HRESULT Save_Effect(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
+	HRESULT Save_Mesh(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
+	HRESULT Save_Ground(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
 #endif // _DEBUG
 
 
@@ -46,11 +49,12 @@ private:
 
 	vector<vector<EFFECT_EVENT_DESC>> m_EffectEvents[ENUM_TO_INT(CHARACTER::END)];
 
-	vector<EFFECT_GROUND_DESC>		m_EffectData;
-	vector<EFFECT_MESH_DESC>		m_MeshEffect_Datas;
+	vector<EFFECT_GROUND_DESC>		m_GroundEffectData[ENUM_TO_INT(CHARACTER::END)];
+	vector<EFFECT_MESH_DESC>		m_MeshEffect_Datas[ENUM_TO_INT(CHARACTER::END)];
 	deque<class CEffect*>			m_GroundEffects;
 	deque<class CEffect*>			m_MeshEffects;
-	list<class CEffect*>			m_pActiveEffects;
+	list<class CEffect*>			m_pActiveGroundEffects;
+	list<class CEffect*>			m_pActiveMeshEffects;
 
 private:
 	HRESULT Add_Components();

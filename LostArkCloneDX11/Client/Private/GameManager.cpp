@@ -83,10 +83,10 @@ HRESULT CGameManager::Initialize_Effect_Manager()
 	return S_OK;
 }
 
-void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg)
+void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, CHARACTER eCharacter)
 {
 	if (nullptr != m_pEffect_Manager)
-		m_pEffect_Manager->Add_Effects(eType, iEffectID, pWorldMatirx, pArg);
+		m_pEffect_Manager->Add_Effects(eType, iEffectID, pWorldMatirx, eCharacter);
 }
 
 const vector<EFFECT_EVENT_DESC>& CGameManager::Get_EffectTrack(CHARACTER eType, _uint iTrackIndex)

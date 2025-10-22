@@ -25,6 +25,8 @@ HRESULT CCamera_Free::Initialize(void* pArg)
         return E_FAIL;
 
 
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(40.f, 5.f, 40.f, 1.f));
+
     return S_OK;
 }
 

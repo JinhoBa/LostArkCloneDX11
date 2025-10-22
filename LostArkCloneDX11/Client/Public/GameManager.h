@@ -28,7 +28,7 @@ public:
 	void Destory_GameManager();
 
 	HRESULT Initialize_Effect_Manager();
-	void Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, void* pArg);
+	void Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, CHARACTER eCharacter = CHARACTER::PLAYER);
 	const vector<EFFECT_EVENT_DESC>& Get_EffectTrack(CHARACTER eType, _uint iTrackIndex);
 #ifdef _DEBUG
 public:

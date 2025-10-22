@@ -52,7 +52,7 @@ private:
 	_float4					m_vBaseColor = {};
 	_float4					m_vClearColor = {};
 #pragma region TESTCODE
-	_float m_Pos[3] = {};
+	_float3 m_vPos = {};
 #pragma endregion
 	PHASE*					m_pPhase = { nullptr };
 	CShader*				m_pShaderCom = { nullptr };
@@ -63,6 +63,14 @@ private:
 
 	const _float4x4*		m_pCameraTargetBoneMatrix = {};
 	_float4x4				m_CameraTargetBoneWorldMatrix = {};
+
+#ifdef _DEBUG
+	_bool					m_isDebug = {};
+	_float					m_fKeyFrame = {};
+	_uint					m_iEffectID = {};
+
+	vector<EFFECT_EVENT>	m_EffectEvents;
+#endif // _DEBUG
 
 private:
 	HRESULT			Add_Components();

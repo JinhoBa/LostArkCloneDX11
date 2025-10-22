@@ -176,24 +176,23 @@ namespace Client
 		
 	};
 
-	typedef struct EffectGroundDesc
+	typedef struct EffectGroundData
 	{
-		LERP		eLerpType = { LERP::LINEAR };
+		LERP		eLerpType;
 		_bool		isRotation = {};
 		_uint		iID = {};
-		_uint		iBaseIndex = {};
-		_uint		iMaskIndex = {};
-		_uint		iNoiseIndex = {};
+		_uint		iPassIndex = {};
 
 		_float		fSpeed = {};
-		_float		fLifeTime = {};
-		_float		fRotationSpeed = {};
 
+		_float2		vLifeTime = {};
 		_float2		vSize = {};
+
 		_float3		vPosition = {};
 		_float3		vPivot = {};
-		_float3		vRotation = {};
-	}EFFECT_GROUND_DESC;
+		_float3		vStartRotation = {};
+		_float3		vEndRotation = {};
+	}EFFECT_GROUND_DATA;
 
 	typedef struct tagEffectMeshData
 	{
@@ -232,6 +231,15 @@ namespace Client
 		_wstring	strMaskTexture = {};
 		_wstring	strNoiseTexture = {};
 	}EFFECT_MESH_DESC;
+
+	typedef struct tagEffectGroundDesc
+	{
+		EFFECT_GROUND_DATA Ground_Data = {};
+
+		_wstring	strDiffuseTexture;
+		_wstring	strMaskTexture;
+		_wstring	strNoiseTexture;
+	}EFFECT_GROUND_DESC;
 
 	typedef struct tagEffecEventDesc
 	{

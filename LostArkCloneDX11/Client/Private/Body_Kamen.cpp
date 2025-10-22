@@ -47,6 +47,14 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     m_iCurModelIndex = 0;
     m_iAnimIndex = 193;
 
+#ifdef _DEBUG
+    //m_iCurModelIndex = 2;
+    //m_iAnimIndex = 0;
+    //m_isDebug = true;
+    //m_fKeyFrame = 0.f;
+    //m_vPos = _float3(42.f, 0.f, 42.f);
+#endif // _DEBUG
+
     m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
     m_vBaseColor = _float4(1.f, 1.f, 1.f, 1.f);
     m_vClearColor = _float4(0.f, 0.f, 0.f, 0.f);
@@ -61,6 +69,11 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     m_pCameraTargetBoneMatrix = m_pModelComs[1]->Get_BoneMatrixPrt("b_cameratarget");
     pCamera->Set_CameraTargetBone(&m_CameraTargetBoneWorldMatrix);
 
+    g_fTestDeltaTime = 1.f;
+
+
+
+
     return S_OK;
 }
 
@@ -70,7 +83,12 @@ void CBody_Kamen::Priority_Update(_float fTimeDelta)
 
 void CBody_Kamen::Update(_float fTimeDelta)
 {
-    m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Animation(fTimeDelta);
+    //if(m_isDebug)
+    //    m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Animation(fTimeDelta);
+    //else
+    //    m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Debug_Animation(m_fKeyFrame);
+
+   m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Animation(fTimeDelta);
 
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
@@ -79,6 +97,35 @@ void CBody_Kamen::Update(_float fTimeDelta)
     /* 카메라 타겟 설정 */
     XMStoreFloat4x4(&m_CameraTargetBoneWorldMatrix,
         XMLoadFloat4x4(m_pCameraTargetBoneMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+
+#ifdef _DEBUG
+ /*   if (m_pModelComs[m_iCurModelIndex]->Get_LoopFlag())
+    {
+        m_EffectEvents.clear();
+        const vector<EFFECT_EVENT_DESC>& EffectEvents = CGameManager::GetInstance()->Get_EffectTrack(CHARACTER::BOSS, m_iEffectID);
+
+        m_EffectEvents.reserve(EffectEvents.size());
+
+        for (const auto& Track : EffectEvents)
+        {
+            m_EffectEvents.push_back({ false, Track });
+        }
+    }
+
+    for (auto& Event : m_EffectEvents)
+    {
+        if (false == Event.isTrigge)
+        {
+            if (m_pModelComs[m_iCurModelIndex]->Get_TrackPosition() >= Event.EventDesc.fKeyFrame)
+            {
+                Event.isTrigge = true;
+                CGameManager::GetInstance()->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, &m_pParentTransformCom->Get_WorldMatrix(), CHARACTER::BOSS);
+            }
+        }
+    }*/
+   
+#endif // _DEBUG
+
 }
 
 void CBody_Kamen::Late_Update(_float fTimeDelta)
@@ -90,7 +137,10 @@ HRESULT CBody_Kamen::Render()
 {
 //#pragma region ANIMATION_TEST
 //    ImGui::Begin("ANIM");
-//    ImGui::InputFloat3("Pos", m_Pos, "%.2f");
+//    ImGui::Checkbox("Play", &m_isDebug);
+//    ImGui::InputInt("EffectID", (_int*)(&m_iEffectID));
+//    ImGui::SliderFloat("KeyFrmae", &m_fKeyFrame, 0.f, 300.f);
+//    ImGui::InputFloat3("Pos", (_float*)(&m_vPos), "%.2f");
 //    ImGui::InputInt("Animation", &m_iAnimIndex);
 //    _int iIndex = {};
 //    for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
@@ -99,7 +149,17 @@ HRESULT CBody_Kamen::Render()
 //        {
 //            m_iAnimIndex = iIndex;
 //            m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-//            m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.f, 50.f, 1.f));
+//            m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(45.f, 0.f, 45.f, 1.f));
+//            m_EffectEvents.clear();
+//            const vector<EFFECT_EVENT_DESC>& EffectEvents = CGameManager::GetInstance()->Get_EffectTrack(CHARACTER::BOSS, m_iEffectID);
+//
+//            m_EffectEvents.reserve(EffectEvents.size());
+//
+//            for (const auto& Track : EffectEvents)
+//            {
+//                m_EffectEvents.push_back({ false, Track });
+//            }
+//            
 //        }
 //        ++iIndex;
 //        ImGui::SameLine();

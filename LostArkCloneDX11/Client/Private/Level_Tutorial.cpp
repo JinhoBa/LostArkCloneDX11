@@ -32,8 +32,8 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
        return E_FAIL;
 
-    if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
-        return E_FAIL;
+    //if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
+    //    return E_FAIL;
 
    /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
@@ -69,8 +69,8 @@ HRESULT CLevel_Tutorial::Ready_Light()
     LIGHT_DESC Desc = {};
 
     Desc.eType = LIGHT::DIRECTIONAL;
-    Desc.vDiffuse = _float4(0.5, 0.5f, 0.5f, 0.8f);
-    Desc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    Desc.vAmbient = _float4(0.9f, 0.9f, 0.9f, 1.f);
     Desc.vSpecular = _float4(1.f, 1.f, 0.7f, 1.f);
     Desc.vDirection = _float4(0.1f, -1.f, 0.1f, 0.f);
 
@@ -79,10 +79,10 @@ HRESULT CLevel_Tutorial::Ready_Light()
 
     Desc.eType = LIGHT::POINT;
     Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-    Desc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    Desc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
     Desc.vSpecular = Desc.vDiffuse;
     Desc.vPosition = _float4(40.f, 10.f, 40.f, 1.f);
-    Desc.fRange = 30.f;
+    Desc.fRange = 100.f;
 
     if (FAILED(m_pGameInstance->Add_Light(Desc)))
         return E_FAIL;
@@ -118,9 +118,9 @@ HRESULT CLevel_Tutorial::Ready_Layer_Player(const _wstring& strLayerTag)
 HRESULT CLevel_Tutorial::Ready_Layer_Kamen(const _wstring& strLayerTag)
 {
     /* Kamen */
-    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
-    //    ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
-    //    return E_FAIL;
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -231,6 +231,9 @@ HRESULT CLevel_Tutorial::Ready_Camera()
     if (FAILED(m_pGameInstance->Add_Camera(TEXT("Camera_Free"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
         PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"), &Desc)))))
         return E_FAIL;
+
+    //if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Free"))))
+    //    return E_FAIL;
 
     Desc.fNear = 0.1f;
     Desc.fFar = 500.f;

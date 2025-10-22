@@ -23,6 +23,7 @@
 #include "Camera.h"
 
 #include "ClashUI.h"
+#include "Effect.h"
 
 CKamen::CKamen(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEnemy{ pDevice, pContext }
@@ -185,6 +186,13 @@ HRESULT CKamen::Initialize(void* pArg)
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
     m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
 
+//#ifdef _DEBUG
+//    static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
+//        dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wp_1"));
+//#endif // _DEBUG
+
+
+
     return S_OK;
 }
 
@@ -250,7 +258,6 @@ HRESULT CKamen::Render()
     _float dis = XMVector3Length(XMVectorSetY(m_pTransformCom->Get_Position(), 0.f) - XMVectorSetY(dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_Position(), 0.f)).m128_f32[0];
 
-    ImGui::SliderFloat("dis", &dis, 0.1f, 1.f);
    // /* TEST */
   /* ImGui::Begin("Collider");
    ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -7.f, 7.f);
@@ -399,6 +406,9 @@ HRESULT CKamen::Reay_Component()
         }
         });
 
+
+
+
     return S_OK;
 }
 
@@ -445,6 +455,12 @@ HRESULT CKamen::Ready_PartObjects()
         TEXT("Prototype_GameObject_Weapon_Kamen"), TEXT("Weapon_Kamen"), &Weapon_Desc)))
         return E_FAIL;
 
+    //CEffect::EFFECT_DESC Effect_Desc = {};
+
+    //Effect_Desc.pParentTransform = m_pTransformCom;
+    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02");
+    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
+    //    return E_FAIL;
 
     return S_OK;
 }

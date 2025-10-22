@@ -33,6 +33,8 @@ void CAttack_Spin_Kamen::Enter(void* pArg)
 	_float fDot = XMVectorGetX(XMVector3Dot(
 		m_pKamen->Get_Transform()->Get_State(STATE::RIGHT), m_pPlayerTransform->Get_Position()));
 
+	m_iEffectID = 3;
+
 	if(-0.5f >= fDot)
 		m_pKamen->Set_Animation(4, false);
 	else if(0.5f <= fDot)
@@ -41,11 +43,15 @@ void CAttack_Spin_Kamen::Enter(void* pArg)
 		m_pKamen->Set_Animation(2, false);
 
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
+
+	Ready_EffectEvents();
 }
 
 void CAttack_Spin_Kamen::Update(_float fTimeDelta)
 {
 	Update_HitBox(fTimeDelta);
+
+	Update_EffectTrack();
 
 	if (m_pKamen->isAnimationFinish())
 		m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
@@ -53,7 +59,7 @@ void CAttack_Spin_Kamen::Update(_float fTimeDelta)
 
 void CAttack_Spin_Kamen::Exit()
 {
-
+	m_EffectEvents.clear();
 }
 
 CAttack_Spin_Kamen* CAttack_Spin_Kamen::Create(STATE_KAMEN_DESC* pDesc)

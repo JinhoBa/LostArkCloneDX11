@@ -37,9 +37,6 @@
     <Filter Include="IMGUI\public">
       <UniqueIdentifier>{669eaac8-87e9-4a41-99c5-768c441aae53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject">
-      <UniqueIdentifier>{b88c625d-2e40-45db-bcf0-b8889fcbf2c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.UIObject">
       <UniqueIdentifier>{cddebb47-5c6a-4fde-aae3-893ba388ad74}</UniqueIdentifier>
     </Filter>
@@ -64,9 +61,6 @@
     <Filter Include="03.UIObject\GamePlay\HUD">
       <UniqueIdentifier>{b467a4d6-af50-4540-a1e2-e26f8ffd2c46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Terrain">
-      <UniqueIdentifier>{b92eb64d-652c-457b-8e8f-28555ce33f42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.UIObject\GamePlay\HUD\HpBar">
       <UniqueIdentifier>{65361930-8c85-4e2f-b8c4-f3ed1eee5961}</UniqueIdentifier>
     </Filter>
@@ -78,12 +72,6 @@
     </Filter>
     <Filter Include="03.UIObject\GamePlay\HUD\WeaponUI">
       <UniqueIdentifier>{e699f7cd-ac65-47f9-b364-f5b82543a141}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera">
-      <UniqueIdentifier>{33535fac-8963-4535-8ee2-3132feafbbf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_Free">
-      <UniqueIdentifier>{7f2c039f-7088-49f0-9799-30bd0b8f1100}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.UIObject\GamePlay\HUD\QuickSlot">
       <UniqueIdentifier>{1d6bc005-680a-4d5f-a26d-603c2226d681}</UniqueIdentifier>
@@ -106,9 +94,6 @@
     <Filter Include="03.UIObject\GamePlay\TopMenu">
       <UniqueIdentifier>{ce353111-024e-4ac2-b3b9-73306806f97c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\MapObject">
-      <UniqueIdentifier>{8e62f0b8-b101-41d9-8198-7e27fa8189f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="tinyxml2">
       <UniqueIdentifier>{7ed9b398-637a-42d5-9540-0f19d4828884}</UniqueIdentifier>
     </Filter>
@@ -130,9 +115,6 @@
     <Filter Include="03.UIObject\GamePlay\HUD\Iden_Gauge">
       <UniqueIdentifier>{44b53257-d913-4728-a930-874cb4fd6b22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Sky">
-      <UniqueIdentifier>{e9ba7668-c9e7-4b9e-a9e8-0dd2e5513849}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.UIObject\Mouse">
       <UniqueIdentifier>{b25a4856-904f-4c7b-a669-dffaeeaafefc}</UniqueIdentifier>
     </Filter>
@@ -153,9 +135,6 @@
     </Filter>
     <Filter Include="03.UIObject\GamePlay\Loading\Wallpaper">
       <UniqueIdentifier>{3fe21316-9c48-4902-a01b-dae241e35143}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_Fix">
-      <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.Skill\Manger">
       <UniqueIdentifier>{9998b1c8-e252-45c3-ac1b-5f3f029fd649}</UniqueIdentifier>
@@ -187,6 +166,102 @@
     <Filter Include="03.UIObject\GamePlay\HUD\BuffUI">
       <UniqueIdentifier>{066c8c72-ecf0-4620-93e0-90ec17e5abd7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Level\Boss">
+      <UniqueIdentifier>{fb2f1120-0878-411e-be03-0b00499fd8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="93.DamageFont_Manager">
+      <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI">
+      <UniqueIdentifier>{5d57845d-e058-4f3f-9c0f-42d088f3e756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI\HpBar">
+      <UniqueIdentifier>{682c56ef-505b-4fca-983d-bcc00fa002f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI\Frame">
+      <UniqueIdentifier>{c78558ee-9b78-47e8-9cbf-63abb63d34be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\BossUI\Enter">
+      <UniqueIdentifier>{e33e1a17-80a9-4c55-b9ce-0caabee250c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="92.Clash_Manager">
+      <UniqueIdentifier>{51ca6224-ea03-417e-9c18-9b7c41d1641d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\ClashUI">
+      <UniqueIdentifier>{dfb4a623-36d4-4656-93a3-d209287db9b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="91.Dialogue_Controller">
+      <UniqueIdentifier>{d8c7feef-cdcf-442a-926a-28da2136b850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Dialogue">
+      <UniqueIdentifier>{85f6020a-cbfb-4ffa-bf3e-3654aaca2d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect">
+      <UniqueIdentifier>{a9045e11-5619-4453-98b4-d1d2bfe4d801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Test_Effect">
+      <UniqueIdentifier>{8d280cb7-d8a3-4dd1-8049-c7928dd9a938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Trail">
+      <UniqueIdentifier>{2c116854-3d70-42c2-a120-e8c9166fb895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Test_MeshEffect">
+      <UniqueIdentifier>{335ed4f0-eb23-4882-8d90-5291f98bd72e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Level\Boss\GamePlay">
+      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\00.Manager">
+      <UniqueIdentifier>{c36314b1-ef2a-494b-9df2-ec2e278b28ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\01.Ground">
+      <UniqueIdentifier>{95ccfbdd-7d29-46df-80b4-dd8680b9a3f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\02.Mesh">
+      <UniqueIdentifier>{8808088e-fa96-42dd-99b3-fe0a3ed677af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Effect\Test_Ground">
+      <UniqueIdentifier>{04436368-f1c7-494c-928e-e51d19b02681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject">
+      <UniqueIdentifier>{b88c625d-2e40-45db-bcf0-b8889fcbf2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Terrain">
+      <UniqueIdentifier>{b92eb64d-652c-457b-8e8f-28555ce33f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera">
+      <UniqueIdentifier>{33535fac-8963-4535-8ee2-3132feafbbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Free">
+      <UniqueIdentifier>{7f2c039f-7088-49f0-9799-30bd0b8f1100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Fix">
+      <UniqueIdentifier>{33b1ed00-17db-41da-b25d-b0182acd36d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_ChargeSkill">
+      <UniqueIdentifier>{6ccba7d0-5360-48fe-bb07-b8ed0dbc5397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Kamen_Intro">
+      <UniqueIdentifier>{38afef9b-2635-470e-a98b-1667d5943d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Kamen_Enter_CutScene">
+      <UniqueIdentifier>{3ef3a825-7fce-4912-8f79-3a3dda22350a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Clash">
+      <UniqueIdentifier>{f1758671-eae5-41e2-ac71-abfd51c27579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Camera_Npc">
+      <UniqueIdentifier>{a7b3f996-611a-4f5d-acd1-a32e3f5ae04a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\MapObject">
+      <UniqueIdentifier>{8e62f0b8-b101-41d9-8198-7e27fa8189f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Sky">
+      <UniqueIdentifier>{e9ba7668-c9e7-4b9e-a9e8-0dd2e5513849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Sky\Dynamic">
+      <UniqueIdentifier>{36318091-3632-4108-abc7-11ec78fc6fab}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Character">
       <UniqueIdentifier>{674f9c74-b734-4660-95dd-49232aa1ef7f}</UniqueIdentifier>
     </Filter>
@@ -211,8 +286,17 @@
     <Filter Include="02.GameObject\Character\Monster\States\TURN">
       <UniqueIdentifier>{e20da44e-9588-483b-bd65-331da14157b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Monster\States\HIT">
+      <UniqueIdentifier>{fa544004-144e-45bc-9e8b-49c7e32dcef4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Character\Monster\Monter_Named">
       <UniqueIdentifier>{72231633-ad43-4f80-8fac-c3cae2e9bfb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\Body">
+      <UniqueIdentifier>{2189303a-eb0f-4210-bc07-2b841cfb97b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Monster\HpBar">
+      <UniqueIdentifier>{19772885-0cf9-451b-bae3-7851d8c45c89}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Player">
       <UniqueIdentifier>{2fd8baa6-8256-4cd5-9c4d-cd8fa8fb41fb}</UniqueIdentifier>
@@ -232,6 +316,15 @@
     <Filter Include="02.GameObject\Character\Player\States\SKill">
       <UniqueIdentifier>{9262bfd1-d04d-420c-ab56-4df4b0567e3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\Normal">
+      <UniqueIdentifier>{eb7f8f0c-689a-4000-9ea7-bb0af7e952a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\CHARGE_SKILL">
+      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\COMBO">
+      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Character\Player\States\MOVE">
       <UniqueIdentifier>{173bbd62-6b48-4b35-a10e-0554b04fa9d4}</UniqueIdentifier>
     </Filter>
@@ -241,14 +334,23 @@
     <Filter Include="02.GameObject\Character\Player\States\HIT">
       <UniqueIdentifier>{43282a82-1efe-4949-a116-192f2b3f64d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CHANGE">
+      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CutScene">
+      <UniqueIdentifier>{95c70110-1d83-47f7-b6ee-238c27b3e3e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\CLASH">
+      <UniqueIdentifier>{c9ae1cd5-57e5-46d1-94e9-72ec49273b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\Npc">
+      <UniqueIdentifier>{f8256abf-4dfd-4fbd-b6e8-6715c26259a4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Character\Player\HpBar">
       <UniqueIdentifier>{d710584d-582b-4f6e-b20f-02d2a176c003}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Character\Monster\Body">
-      <UniqueIdentifier>{2189303a-eb0f-4210-bc07-2b841cfb97b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Monster\HpBar">
-      <UniqueIdentifier>{19772885-0cf9-451b-bae3-7851d8c45c89}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Character\Player\EffectWeapon">
+      <UniqueIdentifier>{4f0bdd58-1e60-4b58-a83b-3df72ace85c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Kamen">
       <UniqueIdentifier>{d916f16b-eff0-43d9-af42-bf1f0d834450}</UniqueIdentifier>
@@ -256,35 +358,14 @@
     <Filter Include="02.GameObject\Character\Kamen\State">
       <UniqueIdentifier>{5d49de0a-5bf5-4296-9beb-1cb3f6ea0e7e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Level\Boss">
-      <UniqueIdentifier>{fb2f1120-0878-411e-be03-0b00499fd8d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Sky\Dynamic">
-      <UniqueIdentifier>{36318091-3632-4108-abc7-11ec78fc6fab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Kamen\Weapon">
-      <UniqueIdentifier>{e76fd810-d4db-411f-86d2-ac575438fbf8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\IDLE">
       <UniqueIdentifier>{23943a66-2841-4c95-95bc-aae7ed81b7ee}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\INTRO">
       <UniqueIdentifier>{58344d17-d225-40c5-ae12-7f350ab96f8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Kamen_Sword">
-      <UniqueIdentifier>{a6199e67-b16e-4884-b788-5712a856d9c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK">
       <UniqueIdentifier>{09fefe8a-cb19-45da-aaa2-2f05dd293a52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Enemy">
-      <UniqueIdentifier>{fa24e2ee-50d7-4886-9b24-8f75f431da24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Monster\States\HIT">
-      <UniqueIdentifier>{fa544004-144e-45bc-9e8b-49c7e32dcef4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="93.DamageFont_Manager">
-      <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\ATTACK\SPIN">
       <UniqueIdentifier>{aad87f6f-a8ac-4b45-b6b2-0d15cba60fd3}</UniqueIdentifier>
@@ -307,113 +388,35 @@
     <Filter Include="02.GameObject\Character\Kamen\State\TURN">
       <UniqueIdentifier>{ca7d2dc6-942b-4e04-9497-daa9b4e44deb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.UIObject\BossUI">
-      <UniqueIdentifier>{5d57845d-e058-4f3f-9c0f-42d088f3e756}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\BossUI\HpBar">
-      <UniqueIdentifier>{682c56ef-505b-4fca-983d-bcc00fa002f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\BossUI\Frame">
-      <UniqueIdentifier>{c78558ee-9b78-47e8-9cbf-63abb63d34be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\SKill\Normal">
-      <UniqueIdentifier>{eb7f8f0c-689a-4000-9ea7-bb0af7e952a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\SKill\CHARGE_SKILL">
-      <UniqueIdentifier>{04105c2b-fcac-4722-98d7-72094a684862}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\SKill\COMBO">
-      <UniqueIdentifier>{39ebf088-3e0f-44a8-a6dc-66f20de07663}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\CHANGE">
-      <UniqueIdentifier>{bf924053-849f-401d-8808-d04d6b656054}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_ChargeSkill">
-      <UniqueIdentifier>{6ccba7d0-5360-48fe-bb07-b8ed0dbc5397}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera\Kamen_Intro">
-      <UniqueIdentifier>{38afef9b-2635-470e-a98b-1667d5943d06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\CutScene">
-      <UniqueIdentifier>{95c70110-1d83-47f7-b6ee-238c27b3e3e0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\CutScene">
       <UniqueIdentifier>{069ad23b-980b-41b1-9c87-157a79b0e4b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera\Kamen_Enter_CutScene">
-      <UniqueIdentifier>{3ef3a825-7fce-4912-8f79-3a3dda22350a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\BossUI\Enter">
-      <UniqueIdentifier>{e33e1a17-80a9-4c55-b9ce-0caabee250c8}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\Clash">
       <UniqueIdentifier>{bca6ff14-fd3a-4dd8-bd7c-f83b05cc0aaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="92.Clash_Manager">
-      <UniqueIdentifier>{51ca6224-ea03-417e-9c18-9b7c41d1641d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\ClashUI">
-      <UniqueIdentifier>{dfb4a623-36d4-4656-93a3-d209287db9b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_Clash">
-      <UniqueIdentifier>{f1758671-eae5-41e2-ac71-abfd51c27579}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\CLASH">
-      <UniqueIdentifier>{c9ae1cd5-57e5-46d1-94e9-72ec49273b40}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\CRITICAL">
       <UniqueIdentifier>{42bae504-abb1-40bb-96b2-ed6d58dc4e4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Kamen_Area">
-      <UniqueIdentifier>{392c7edd-9da4-4be3-af2c-b62d0597e9d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Kamen\Body">
-      <UniqueIdentifier>{0b13d1a5-e478-40dd-88a3-0f108dac4b8b}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Character\Kamen\State\DEAD">
       <UniqueIdentifier>{0f372d21-7195-479c-9bee-d75cc808ed49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\Weapon">
+      <UniqueIdentifier>{e76fd810-d4db-411f-86d2-ac575438fbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Kamen\Body">
+      <UniqueIdentifier>{0b13d1a5-e478-40dd-88a3-0f108dac4b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Enemy">
+      <UniqueIdentifier>{fa24e2ee-50d7-4886-9b24-8f75f431da24}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Character\Npc">
       <UniqueIdentifier>{e276d703-a912-4140-ac47-c4968e80bff0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera\Camera_Npc">
-      <UniqueIdentifier>{a7b3f996-611a-4f5d-acd1-a32e3f5ae04a}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Kamen_Sword">
+      <UniqueIdentifier>{a6199e67-b16e-4884-b788-5712a856d9c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="91.Dialogue_Controller">
-      <UniqueIdentifier>{d8c7feef-cdcf-442a-926a-28da2136b850}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\States\Npc">
-      <UniqueIdentifier>{f8256abf-4dfd-4fbd-b6e8-6715c26259a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.UIObject\Dialogue">
-      <UniqueIdentifier>{85f6020a-cbfb-4ffa-bf3e-3654aaca2d3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect">
-      <UniqueIdentifier>{a9045e11-5619-4453-98b4-d1d2bfe4d801}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect\Manager">
-      <UniqueIdentifier>{c36314b1-ef2a-494b-9df2-ec2e278b28ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect\Ground">
-      <UniqueIdentifier>{95ccfbdd-7d29-46df-80b4-dd8680b9a3f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect\Test_Effect">
-      <UniqueIdentifier>{8d280cb7-d8a3-4dd1-8049-c7928dd9a938}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect\Trail">
-      <UniqueIdentifier>{2c116854-3d70-42c2-a120-e8c9166fb895}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect\Test_MeshEffect">
-      <UniqueIdentifier>{335ed4f0-eb23-4882-8d90-5291f98bd72e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06.Effect\Mesh">
-      <UniqueIdentifier>{8808088e-fa96-42dd-99b3-fe0a3ed677af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\Boss\GamePlay">
-      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Character\Player\EffectWeapon">
-      <UniqueIdentifier>{4f0bdd58-1e60-4b58-a83b-3df72ace85c7}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Kamen_Area">
+      <UniqueIdentifier>{392c7edd-9da4-4be3-af2c-b62d0597e9d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -802,13 +805,13 @@
       <Filter>03.UIObject\Dialogue</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Manager.h">
-      <Filter>06.Effect\Manager</Filter>
+      <Filter>06.Effect\00.Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect.h">
       <Filter>06.Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Ground.h">
-      <Filter>06.Effect\Ground</Filter>
+      <Filter>06.Effect\01.Ground</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Trail.h">
       <Filter>06.Effect\Trail</Filter>
@@ -817,10 +820,13 @@
       <Filter>06.Effect\Test_MeshEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Mesh.h">
-      <Filter>06.Effect\Mesh</Filter>
+      <Filter>06.Effect\02.Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\public\WeaponEffect_Player.h">
       <Filter>02.GameObject\Character\Player\EffectWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Test_Ground_Effect.h">
+      <Filter>06.Effect\Test_Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1204,13 +1210,13 @@
       <Filter>03.UIObject\Dialogue</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Manager.cpp">
-      <Filter>06.Effect\Manager</Filter>
+      <Filter>06.Effect\00.Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect.cpp">
       <Filter>06.Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Ground.cpp">
-      <Filter>06.Effect\Ground</Filter>
+      <Filter>06.Effect\01.Ground</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Trail.cpp">
       <Filter>06.Effect\Trail</Filter>
@@ -1219,10 +1225,13 @@
       <Filter>06.Effect\Test_MeshEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Mesh.cpp">
-      <Filter>06.Effect\Mesh</Filter>
+      <Filter>06.Effect\02.Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\private\WeaponEffect_Player.cpp">
       <Filter>02.GameObject\Character\Player\EffectWeapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Test_Ground_Effect.cpp">
+      <Filter>06.Effect\Test_Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

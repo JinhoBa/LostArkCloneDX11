@@ -65,7 +65,6 @@ void CCamera::Late_Update(_float fTimeDelta)
 
 void CCamera::Reset()
 {
-
 }
 
 void CCamera::Update_Lerp(_float fFov, _fvector vPosition, _fvector vTarget)

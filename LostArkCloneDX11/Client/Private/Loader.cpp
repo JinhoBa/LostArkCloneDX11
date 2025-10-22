@@ -42,8 +42,10 @@
 #include "Weapon_Player.h"
 #include "WeaponEffect_Player.h"
 #include "HpBar_Player.h"
+
 #include "Test_Effect.h"
 #include "TestMeshEffect.h"
+#include "Test_Ground_Effect.h"
 #include "Effect_Ground.h"
 #include "Effect_Trail.h"
 #include "Effect_Mesh.h"
@@ -647,14 +649,14 @@ HRESULT CLoader::Loading_For_GamePlay()
 		return E_FAIL;
 
 	CVIBuffer_Point_Instance::POINT_INSTANCE_DESC Point_Desc = {};
-	Point_Desc.iNumInstance = 1000;
-	Point_Desc.vCenter = _float3(0.f, 2.f, 0.f);
+	Point_Desc.iNumInstance = 50;
+	Point_Desc.vCenter = _float3(0.f, 0.f, 0.f);
 	Point_Desc.vRange = _float3(3.f, 3.f, 3.f);
-	Point_Desc.vSize = _float2(0.1f, 0.5f);
+	Point_Desc.vSize = _float2(1.f, 2.f);
 	Point_Desc.isLoop = true;
 	Point_Desc.vLifeTime = _float2(1.0f, 10.f);
 	Point_Desc.vSpeed = _float2(1.f, 3.f);
-
+	Point_Desc.vPivot = _float3(3.f, 3.f, 3.f);
 	/*For Prototype_Component_VIBuffer_Point_Instance_TestEffect*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_TestEffect"),
 		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &Point_Desc))))
@@ -781,6 +783,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Test_MeshEffect*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"),
 		CTestMeshEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Test_Ground_Effect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Ground_Effect"),
+		CTest_Ground_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Effect_Ground*/

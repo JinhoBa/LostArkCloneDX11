@@ -34,10 +34,15 @@ void CAttack_Combo_Kamen::Enter(void* pArg)
 
 	m_pKamen->Set_Animation(192, false);
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
+
+	m_iEffectID = 4;
+	Ready_EffectEvents();
 }
 
 void CAttack_Combo_Kamen::Update(_float fTimeDelta)
 {
+
+
 	switch (m_eState)
 	{
 	case Client::CAttack_Combo_Kamen::STATE::READY:
@@ -58,14 +63,20 @@ void CAttack_Combo_Kamen::Update(_float fTimeDelta)
 
 	case Client::CAttack_Combo_Kamen::STATE::LOOP:
 		m_fTimeAcc += fTimeDelta;
+		Update_EffectTrack();
 		if (m_fTimeAcc >= 1.f)
 		{
+			m_EffectEvents.clear();
+			m_iEffectID = 5;
+			Ready_EffectEvents();
+
 			m_eState = STATE::ATTACK;
 			m_pKamen->Set_Animation(181, false);
 		}
 		break;
 
 	case Client::CAttack_Combo_Kamen::STATE::ATTACK:
+		Update_EffectTrack();
 		Update_HitBox(fTimeDelta);
 
 		if (m_pKamen->isAnimationFinish())
@@ -90,7 +101,7 @@ void CAttack_Combo_Kamen::Update(_float fTimeDelta)
 
 void CAttack_Combo_Kamen::Exit()
 {
-
+	m_EffectEvents.clear();
 }
 
 CAttack_Combo_Kamen* CAttack_Combo_Kamen::Create(STATE_KAMEN_DESC* pDesc)

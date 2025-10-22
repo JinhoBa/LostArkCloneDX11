@@ -38,15 +38,16 @@ HRESULT CTest_Effect::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
 
     m_isLoop = true;
-    m_iNumInstance = 1;
-    m_vSize = _float2(0.1f, 1.f);
+    m_iNumInstance = 100;
+    m_vSize = _float2(0.05f, 0.1f);
     m_vCenter = _float3(0.f, 0.f, 0.f);
-    m_vSpeed = _float2(0.1f, 0.2f);
-    m_vRange = _float3(0.f, 0.f, 0.f);
-    m_vLifeTime = _float2(1.f, 1.0f);
-    m_vPivot = _float3(1.f, 1.f, 1.f);
+    m_vSpeed = _float2(3.f, 5.f);
+    m_vRange = _float3(1.f, 1.f, 1.f);
+    m_vLifeTime = _float2(0.5f, 0.5f);
+    m_vPivot = _float3(0.f, 0.f, 0.f);
     m_vPosition = _float3(0.f, 0.f, 0.f);
     m_vRotation = _float3(0.f, 0.f, 0.f);
+    m_vOffset = _float3(0.f, 0.f, 0.f);
 
     m_isActive = false;
     m_fTimeAcc = 0.f;
@@ -54,6 +55,7 @@ HRESULT CTest_Effect::Initialize(void* pArg)
 
     XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
     XMStoreFloat4x4(&m_CombinedWorldMatrix, XMMatrixIdentity());
+
 
     return S_OK;
 }
@@ -65,19 +67,13 @@ void CTest_Effect::Priority_Update(_float fTimeDelta)
 
 void CTest_Effect::Update(_float fTimeDelta)
 {
-    memcpy(&m_vCenter, m_pSocketMatrix->m[3], sizeof(_float3));
+    //XMStoreFloat3(&m_vPosition, m_pParentTransformCom->Get_Position());
 
- 
-
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
-    m_pTransformCom->Rotation(m_vRotation.x, m_vRotation.y, m_vRotation.z);
-    m_pTransformCom->Set_Scale(m_vPivot);
-
-  //  m_pVIBufferCom->Set_Desc(m_isLoop, m_iNumInstance, m_vSize, m_vCenter, m_vSpeed, m_vRange, m_vLifeTime, m_vPivot);
-    //m_pVIBufferCom->Scaling(fTimeDelta);
+    m_pVIBufferCom->Spread(m_vPosition, m_vRange, fTimeDelta);
 
 
-    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
 }
 
 void CTest_Effect::Late_Update(_float fTimeDelta)
@@ -88,15 +84,20 @@ void CTest_Effect::Late_Update(_float fTimeDelta)
 HRESULT CTest_Effect::Render()
 {
 #ifdef _DEBUG
+    if (ImGui::Button("Change"))
+    {
+        m_pVIBufferCom->Set_Spread(m_isLoop, m_vPosition, m_vPivot,m_vRange, m_vLifeTime, m_vSpeed, m_vSize);
+
+    }
+    ImGui::Spacing();
     ImGui::Checkbox("isLoop", &m_isLoop);
     ImGui::InputInt("iNumInstance", (int*) & m_iNumInstance);
     ImGui::InputFloat2("vSize", (_float*) &m_vSize);
-    //ImGui::InputFloat3("vCenter", (_float*) &m_vCenter);
     ImGui::InputFloat2("vSpeed", (_float*) &m_vSpeed);
     ImGui::InputFloat3("vRange", (_float*) &m_vRange);
     ImGui::InputFloat2("vLifeTime", (_float*) &m_vLifeTime);
     ImGui::InputFloat3("vPivot", (_float*) &m_vPivot);
-    ImGui::InputFloat3("vPosition", (_float*) &m_vPosition);
+    ImGui::InputFloat3("Offset", (_float*) &m_vOffset);
     ImGui::InputFloat3("vRotation", (_float*) &m_vRotation);
 
     ImGui::Spacing();
@@ -148,7 +149,7 @@ HRESULT CTest_Effect::Render()
 #endif // _DEBUG
 
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
@@ -162,6 +163,9 @@ HRESULT CTest_Effect::Render()
     if (FAILED(m_pShaderCom->Bind_Resource("g_MaskTexture", m_pMaskTextureCom->Find_SRV(m_strMaskTexture.c_str()))))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Begin(0)))
@@ -198,8 +202,8 @@ HRESULT CTest_Effect::Add_Components()
         TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
         return E_FAIL;
 
-    /* Shader_VertexMesh */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VertexMeshEffect"),
+    /* Shader_VertexPoint */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Shader_VtxPointParticle"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
@@ -241,5 +245,7 @@ void CTest_Effect::Free()
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pTextureCom);
+    Safe_Release(m_pMaskTextureCom);
+    Safe_Release(m_pNoiseTextureCom);
     Safe_Release(m_pVIBufferCom);
 }

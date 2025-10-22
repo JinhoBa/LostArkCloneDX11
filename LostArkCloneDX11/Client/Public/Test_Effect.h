@@ -46,6 +46,7 @@ private:
 	_float3		m_vRange = {};
 	_float2		m_vLifeTime = {};
 	_float3		m_vPivot = {};
+	_float3		m_vOffset = {};
 
 	_bool		m_isActive = {};
 	_float		m_fTimeAcc = {};

@@ -455,6 +455,10 @@ HRESULT CPlayer::Ready_Components()
             _float3 vPosition;
             XMStoreFloat3(&vPosition, Objects.front()->Get_Transform()->Get_Position());
 
+            _uint iEffectID = m_PlayerInfo.eStance == STANCE::FLURRY ? 13 : 12;
+
+            m_pGameManager->Add_Effect(EFFECT::GROUND, iEffectID, &Objects.front()->Get_Transform()->Get_WorldMatrix());
+
             m_pGameManager->Add_DamageFont(eDamageType, fFontDamage, vPosition);
             dynamic_cast<CEnemy*>(Objects.front())->OnHit(Desc);
             Objects.pop_front();
@@ -507,7 +511,13 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
         return E_FAIL;
 
-   CEffect::EFFECT_DESC Effect_Desc= {};
+ /*  CEffect::EFFECT_DESC Effect_Desc= {};
+     
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
+        return E_FAIL;*/
+
      /*
     Effect_Desc.pParentTransform = m_pTransformCom;
     Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
@@ -515,10 +525,10 @@ HRESULT CPlayer::Ready_PartObjects()
         return E_FAIL;*/
 
  
-    Effect_Desc.pParentTransform = m_pTransformCom;
-    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
-    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Ground"), TEXT("Ground_Effect"), &Effect_Desc)))
-        return E_FAIL;
+    //Effect_Desc.pParentTransform = m_pTransformCom;
+    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Ground_Effect"), TEXT("Ground_Effect"), &Effect_Desc)))
+    //    return E_FAIL;
 
    /* CEffect_Trail::TRAIL_EFFECT_DESC TrailDesc = {};
 

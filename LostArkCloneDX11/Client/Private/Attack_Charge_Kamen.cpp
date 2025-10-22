@@ -34,10 +34,18 @@ void CAttack_Charge_Kamen::Enter(void* pArg)
 
 	m_eState = STATE::START;
 	if (PHASE::PHASE1 == (*m_pPhase))
+	{
+		m_iEffectID = 2;
 		m_pKamen->Set_Animation(36, false);
+	}
 	else
+	{
+		m_iEffectID = 13;
 		m_pKamen->Set_Animation(44, false);
+	}
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
+
+	Ready_EffectEvents();
 }
 
 void CAttack_Charge_Kamen::Update(_float fTimeDelta)
@@ -75,6 +83,7 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 				m_eHitboxType = COLLIDER::SPHERE;
 		}
 		Update_HitBox(fTimeDelta);
+		Update_EffectTrack();
 
 		if (m_pKamen->isAnimationFinish())
 		{
@@ -89,7 +98,7 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 
 void CAttack_Charge_Kamen::Exit()
 {
-
+	m_EffectEvents.clear();
 }
 
 CAttack_Charge_Kamen* CAttack_Charge_Kamen::Create(STATE_KAMEN_DESC* pDesc)

@@ -27,11 +27,12 @@ public:
 
 public:
 #ifdef _DEBUG
-	void Set_Desc(_bool isLoop, _float2 vSize, _float3 vCenter, _float3 vRange, _float2 vLifeTime);
+	void Set_Desc(_bool isLoop, _float2 vSize, _float2 vLifeTime);
 #endif // _DEBUG
 	void Update(_float fTimeDelta);
 	void Scaling(_float fTimeDelta, LERP eLerpType, _float3 vPivot, _float fSpeed);
-	void Spread(_float fTimeDelta);
+	void Set_Spread(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
+	void Spread(_float3& vPosition, _float3& vRange, _float fTimeDelta);
 	void Trail(_float fTimeDelta);
 	void Reset();
 

@@ -30,15 +30,18 @@ void CAttack_Sword_Kamen::Enter(void* pArg)
 	switch (*m_pPhase)
 	{
 	case PHASE::PHASE1:
+		m_iEffectID = 6;
 		m_pKamen->Set_Animation(20, false);
 		break;
 
 	case PHASE::PHASE2:
+		m_iEffectID = 10;
 		m_pKamen->Set_Animation(16, false);
 		break;
 
 	case PHASE::PHASE3:
 		m_iSkillID = 0;
+		m_iEffectID = 14;
 		m_pKamen->Set_Animation(187, false);
 		break;
 
@@ -47,11 +50,15 @@ void CAttack_Sword_Kamen::Enter(void* pArg)
 	}
 
 	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
+
+	Ready_EffectEvents();
 }
 
 void CAttack_Sword_Kamen::Update(_float fTimeDelta)
 {
 	Update_HitBox(fTimeDelta);
+
+	Update_EffectTrack();
 
 	if (m_pKamen->isAnimationFinish())
 		m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
@@ -59,6 +66,7 @@ void CAttack_Sword_Kamen::Update(_float fTimeDelta)
 
 void CAttack_Sword_Kamen::Exit()
 {
+	m_EffectEvents.clear();
 }
 
 CAttack_Sword_Kamen* CAttack_Sword_Kamen::Create(STATE_KAMEN_DESC* pDesc)

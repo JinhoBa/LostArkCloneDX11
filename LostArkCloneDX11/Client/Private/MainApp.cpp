@@ -99,6 +99,8 @@ HRESULT CMainApp::Initialize()
     ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 #pragma endregion
 
+    g_fTestDeltaTime = 1.f;
+
     return S_OK;
 }
 

@@ -41,6 +41,7 @@ private:
 	_bool		m_isUseScale = {};
 	_bool		m_isUseRotation = {};
 
+	_uint      m_iPassIndex = {};
 	_uint		m_iNumMesh = {};
 	_uint		m_iMeshIndex = {};
 
@@ -56,8 +57,6 @@ private:
 	_float3		m_vEndScale = {};
 
 	_float2		m_vLifeTime = {};
-
-	_float      m_iPassIndex = {};
 
 	_float		m_fSpeed = {};
 	_float		m_fDiffuseScrollSpeedU = {};

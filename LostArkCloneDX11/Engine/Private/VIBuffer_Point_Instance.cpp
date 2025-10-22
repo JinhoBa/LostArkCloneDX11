@@ -11,7 +11,9 @@ CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(CVIBuffer_Point_Instance& Pro
 	:CVIBuffer_Instance{ Prototype },
 	m_pInstanceVertices{Prototype.m_pInstanceVertices }
 	, m_isLoop{Prototype.m_isLoop },
-	m_pSpeed{Prototype.m_pSpeed}
+	m_pSpeed{Prototype.m_pSpeed},
+	m_vPivot{Prototype.m_vPivot},
+	m_vSize{Prototype.m_vSize}
 {
 }
 
@@ -79,7 +81,8 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const INSTANCE_DESC* pIns
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		_float			fScale = pDesc->vSize.x;
+		_float			fScale = m_pGameInstance->Random(pDesc->vSize.x, pDesc->vSize.y);
+
 		m_vSize = pDesc->vSize;
 
 		m_pInstanceVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
@@ -140,7 +143,7 @@ HRESULT CVIBuffer_Point_Instance::Render()
 	return S_OK;
 }
 
-void CVIBuffer_Point_Instance::Set_Desc(_bool isLoop, _float2 vSize, _float3 vCenter, _float3 vRange, _float2 vLifeTime)
+void CVIBuffer_Point_Instance::Set_Desc(_bool isLoop, _float2 vSize, _float2 vLifeTime)
 {
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
 
@@ -248,7 +251,46 @@ void CVIBuffer_Point_Instance::Scaling(_float fTimeDelta, LERP eLerpType, _float
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
-void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
+void CVIBuffer_Point_Instance::Set_Spread(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize)
+{
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	m_isLoop = isLoop;
+
+	for (size_t i = 0; i < m_iNumInstance; i++)
+	{
+		_float			fScale = m_pGameInstance->Random(vSize.x, vSize.y);
+
+		m_vSize = vSize;
+
+		pVertices[i].vTranslation = _float4(
+			m_pGameInstance->Random(vPosition.x - vRange.x * 0.5f, vPosition.x + vRange.x * 0.5f),
+			m_pGameInstance->Random(vPosition.y - vRange.y * 0.5f, vPosition.y + vRange.y * 0.5f),
+			m_pGameInstance->Random(vPosition.z - vRange.z * 0.5f, vPosition.z + vRange.z * 0.5f),
+			1.f);
+
+		m_vPivot = vPivot;
+
+		_vector vLook = XMVector3Normalize(XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f));
+		_vector vUp = XMVector3Cross(vLook, XMVectorSet(1.f, 0.f, 0.f, 0.f));
+		_vector vRight = XMVector3Cross(vUp, vLook);
+
+		XMStoreFloat4(&pVertices[i].vRight, vRight * fScale);
+		XMStoreFloat4(&pVertices[i].vUp, vUp * fScale);
+		XMStoreFloat4(&pVertices[i].vLook, vLook * fScale);
+
+		pVertices[i].vLifeTime = _float2(0.0f, m_pGameInstance->Random(vLifeTime.x, vLifeTime.y));
+
+		m_pSpeed[i] = m_pGameInstance->Random(vSpeed.x, vSpeed.y);
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+void CVIBuffer_Point_Instance::Spread(_float3& vPosition, _float3& vRange, _float fTimeDelta)
 {
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
 
@@ -268,7 +310,11 @@ void CVIBuffer_Point_Instance::Spread(_float fTimeDelta)
 		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
 		{
 			pVertices[i].vLifeTime.x = 0.f;
-			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+			pVertices[i].vTranslation = _float4(
+				m_pGameInstance->Random(vPosition.x - vRange.x * 0.5f, vPosition.x + vRange.x * 0.5f),
+				m_pGameInstance->Random(vPosition.y - vRange.y * 0.5f, vPosition.y + vRange.y * 0.5f),
+				m_pGameInstance->Random(vPosition.z - vRange.z * 0.5f, vPosition.z + vRange.z * 0.5f),
+				1.f);
 		}
 	}
 
@@ -311,6 +357,9 @@ void CVIBuffer_Point_Instance::Reset()
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
 			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vRight = _float4(m_vSize.x, 0.f, 0.f, 0.f);
+			pVertices[i].vUp = _float4(0.f, m_vSize.x, 0.f, 0.f);
+			pVertices[i].vLook = _float4(0.f, 0.f, m_vSize.x, 0.f);
 			pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
 	}
 

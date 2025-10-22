@@ -54,7 +54,6 @@ void CIdle_Kamen::Enter(void* pArg)
 		break;
 	}
 
-
 }
 
 void CIdle_Kamen::Update(_float fTimeDelta)

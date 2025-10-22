@@ -103,6 +103,8 @@ void CAnimation::Reset_TrackPosition()
 
 void CAnimation::Update_Debug_TransformationMatrix(const vector<class CBone*> Bones, _float fTrackPosition)
 {
+	Reset_TrackPosition();
+
 	m_fCurrentTrackPosition = max(0.f, fTrackPosition);
 
 	_uint iIndex = {};

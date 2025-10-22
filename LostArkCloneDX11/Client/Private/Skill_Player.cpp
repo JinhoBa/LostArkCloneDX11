@@ -78,7 +78,7 @@ void CSkill_Player::Update_EffectTrack()
 			if (m_pPlayer->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
 			{
 				Event.isTrigge = true;
-				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pPlayerWorldMatrix, nullptr);
+				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pPlayerWorldMatrix, CHARACTER::PLAYER);
 			}
 		}
 	}

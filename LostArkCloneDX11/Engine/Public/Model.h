@@ -37,6 +37,7 @@ public:
 	_bool	Play_Animation(_float fTimeDelta);
 
 #ifdef _DEBUG
+	_bool	Get_LoopFlag() { return m_LoopDebugFlag; }
 	_bool	Play_Debug_Animation(_float fTrackPosition);
 #endif // _DEBUG
 
@@ -72,6 +73,11 @@ private:
 	vector<_char*>				m_AnimationNames;
 
 	vector<KEYFRAME>			m_PreAnimationKeyFrames;
+
+#ifdef _DEBUG
+	_bool						m_LoopDebugFlag = {};
+#endif // _DEBUG
+
 
 private:
 	HRESULT Ready_Meshes(MODEL eModel);

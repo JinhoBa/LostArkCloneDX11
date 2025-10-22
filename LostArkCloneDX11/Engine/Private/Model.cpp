@@ -163,6 +163,9 @@ HRESULT CModel::Initialize_Prototype(MODEL eModel, const _char* pModelFilePath, 
             return E_FAIL;
     }
 
+#ifdef _DEBUG
+    m_LoopDebugFlag = false;
+#endif // _DEBUG
 
     return S_OK;
 }
@@ -325,7 +328,15 @@ _bool CModel::Play_Animation(_float fTimeDelta)
         if (m_isLoop)
         {
             if (true == m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished())
+            {
                 m_Animations[m_iCurrentAnimIndex]->Reset_TrackPosition();
+#ifdef _DEBUG
+                m_LoopDebugFlag = true;
+#endif // _DEBUG
+
+            }
+            else
+                m_LoopDebugFlag = false;
         }
         else
             isFinish = m_Animations[m_iCurrentAnimIndex]->IsAnimationFinished(m_fAnimDuration_Offset);
@@ -338,6 +349,8 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 
     return isFinish;
 }
+
+
 #ifdef _DEBUG
 _bool CModel::Play_Debug_Animation(_float fTrackPosition)
 {

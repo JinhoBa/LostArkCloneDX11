@@ -33,18 +33,13 @@ void CClash_Kamen::Enter(void* pArg)
 	m_eState = STATE::IDLE;
 	
 	m_pKamen->Set_Animation(6, false);
+
+	m_iEffectID = 11;
+	Ready_EffectEvents();
 }
 
 void CClash_Kamen::Update(_float fTimeDelta)
 {
-	/*if (2.f >= XMVectorGetX(XMVector3Length(m_pKamen->Get_Transform()->Get_Position() - m_pPlayerTransform->Get_Position())))
-	{
-		if (m_pGameInstance->Get_KeyDown(DIK_G))
-		{
-
-		}
-	}*/
-
 	switch (m_eState)
 	{
 	case Client::CClash_Kamen::STATE::IDLE:
@@ -85,6 +80,8 @@ void CClash_Kamen::Update(_float fTimeDelta)
 	case Client::CClash_Kamen::STATE::LOOP:
 		_uint iResult = m_pGameManager->Update_Clash(fTimeDelta);
 
+		Update_EffectTrack();
+
 		if (1 == iResult)
 		{
 			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::CRITICAL), nullptr);
@@ -107,6 +104,7 @@ void CClash_Kamen::Update(_float fTimeDelta)
 
 void CClash_Kamen::Exit()
 {
+	m_EffectEvents.clear();
 }
 
 CClash_Kamen* CClash_Kamen::Create(STATE_KAMEN_DESC* pDesc, CTransform* pPlayerTransform)

@@ -94,7 +94,7 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 					MouseWorldMartix._43 = m_vPickingPosition.z;
 
 					Event.isTrigge = true;
-					m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, &MouseWorldMartix, nullptr);
+					m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, &MouseWorldMartix, CHARACTER::PLAYER);
 				}
 			}
 		}

@@ -87,6 +87,8 @@ void CBody_Player::Update(_float fTimeDelta)
     else
         m_isAnimationFinish = m_pModelCom->Play_Debug_Animation(m_fKeyFrame);
    
+    //m_isAnimationFinish = m_pModelCom->Play_Animation(fTimeDelta * (*m_pAttackSpeed));
+
     /* 부모 행렬 적용 */
     XMStoreFloat4x4(&m_CombinedWorldMatrix,
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));

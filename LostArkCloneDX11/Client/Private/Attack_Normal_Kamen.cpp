@@ -31,15 +31,18 @@ void CAttack_Normal_Kamen::Enter(void* pArg)
 	switch (*m_pPhase)
 	{
 	case PHASE::PHASE1:
+		m_iEffectID = 1;
 		m_pKamen->Set_Animation(16, false);
 		break;
 
 	case PHASE::PHASE2:
+		m_iEffectID = 9;
 		m_pKamen->Set_Animation(10, false);
 		break;
 
 	case PHASE::PHASE3:
 		m_iSkillID = 2;
+		m_iEffectID = 12;
 		m_pKamen->Set_Animation(222, false);
 		m_pKamen->Get_Transform()->TurnTo(m_pPlayerTransform->Get_Position());
 		break;
@@ -47,11 +50,15 @@ void CAttack_Normal_Kamen::Enter(void* pArg)
 
 	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
+
+	Ready_EffectEvents();
 }
 
 void CAttack_Normal_Kamen::Update(_float fTimeDelta)
 {
 	Update_HitBox(fTimeDelta);
+
+	Update_EffectTrack();
 
 	if (m_pKamen->isAnimationFinish())
 	{
@@ -62,7 +69,7 @@ void CAttack_Normal_Kamen::Update(_float fTimeDelta)
 
 void CAttack_Normal_Kamen::Exit()
 {
-
+	m_EffectEvents.clear();
 }
 
 CAttack_Normal_Kamen* CAttack_Normal_Kamen::Create(STATE_KAMEN_DESC* pDesc)

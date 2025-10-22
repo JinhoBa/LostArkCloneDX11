@@ -20,8 +20,6 @@ HRESULT CEffect_Ground::Initialize_Prototype()
 
 HRESULT CEffect_Ground::Initialize(void* pArg)
 {
-    
-
     PARTOBJECT_DESC Desc = {};
 
     Desc.fRotatePersec = 1.f;
@@ -34,31 +32,25 @@ HRESULT CEffect_Ground::Initialize(void* pArg)
 
     m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(0.f, 0.1f, 0.f, 1.f));
 
-    m_vSize = _float2(0.1f, 2.f);
-    m_vCenter = _float3(0.f, 0.f, 0.f);
-    m_vSpeed = _float2(0.1f, 0.2f);
-    m_vRange = _float3(0.f, 0.f, 0.f);
-    m_vLifeTime = _float2(1.f, 1.0f);
-    m_vPivot = _float3(0.f, 0.f, 0.f);
-    m_vPosition = _float3(0.f, 0.f, 0.f);
-    m_isRotation = false;
-    m_fRotationSpeed = 1.f;
-    m_iPassIndex = 3;
+    m_Effect_Data.eLerpType = LERP::LINEAR;
+    m_Effect_Data.isRotation = false;
+    m_Effect_Data.iID = 0;
+    m_Effect_Data.iPassIndex = 4;
+    m_Effect_Data.vSize = _float2(0.1f, 2.f);
+    m_Effect_Data.vLifeTime = _float2(0.f, 1.0f);
+    m_Effect_Data.vPivot = _float3(0.f, 0.f, 0.f);
+    m_Effect_Data.vPosition = _float3(0.f, 0.f, 0.f);
+    m_Effect_Data.vStartRotation = _float3(0.f, 0.f, 0.f);
+    m_Effect_Data.vEndRotation = _float3(0.f, 0.f, 0.f);
 
-    m_BaseIndex = 0;
-    m_MaskIndex = 0;
+    auto iter = m_pTextureCom->Get_TextureMap().begin();
+    m_strDiffuseTexture = (*iter).first;
 
-    g_fTestDeltaTime = 1.f;
+    iter = m_pMaskTextureCom->Get_TextureMap().begin();
+    m_strMaskTexture = (*iter).first;
 
-    m_bTest = true;
-
-    if (nullptr != pArg)
-    {
-        CEffect::Effect_Desc* pDesc = static_cast<CEffect::Effect_Desc*>(pArg);
-
-        m_pSocketMatrix = pDesc->pSocketMatrix;
-        m_pParentTransformCom = pDesc->pParentTransform;
-    }
+    iter = m_pNoiseTextureCom->Get_TextureMap().begin();
+    m_strNoiseTexture = (*iter).first;
 
     return S_OK;
 }
@@ -70,108 +62,39 @@ void CEffect_Ground::Priority_Update(_float fTimeDelta)
 
 void CEffect_Ground::Update(_float fTimeDelta)
 {
-    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_vPosition), 1.f));
-    m_pTransformCom->Rotation(
-        XMConvertToRadians(m_vRotation.x), 
-        XMConvertToRadians(m_vRotation.y),
-        XMConvertToRadians(m_vRotation.z));
+    m_Effect_Data.vLifeTime.x += fTimeDelta;
 
-    if(m_isRotation)
-        m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), m_fRotationSpeed * fTimeDelta);
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_Effect_Data.vPosition), 1.f));
 
-    m_pVIBufferCom->Set_Desc(m_isLoop, m_vSize, m_vCenter, m_vRange, m_vLifeTime);
+    if (m_Effect_Data.isRotation)
+    {
+        _vector vCurRotaiton = XMVectorLerp(XMLoadFloat3(&m_Effect_Data.vStartRotation),
+            XMLoadFloat3(&m_Effect_Data.vEndRotation),
+            m_Effect_Data.vLifeTime.x / m_Effect_Data.vLifeTime.y);
 
-    m_pVIBufferCom->Scaling(fTimeDelta, m_eLerpType, m_vPivot, m_fSpeed);
+        m_pTransformCom->Rotation(
+            XMConvertToRadians(vCurRotaiton.m128_f32[0]),
+            XMConvertToRadians(vCurRotaiton.m128_f32[1]),
+            XMConvertToRadians(vCurRotaiton.m128_f32[2]));
+    }
 
-   XMStoreFloat4x4(&m_CombinedWorldMatrix,
+    m_pVIBufferCom->Scaling(fTimeDelta, m_Effect_Data.eLerpType, m_Effect_Data.vPivot, m_Effect_Data.fSpeed);
+
+    if (true == m_Effect_Data.vLifeTime.y < m_Effect_Data.vLifeTime.x)
+        m_isDead = true;
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix,
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix())
-         * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()) );
+        * XMLoadFloat4x4(&m_ParentWorldMatrix));
 }
 
 void CEffect_Ground::Late_Update(_float fTimeDelta)
 {
-
-    m_fLifeTime += fTimeDelta;
-    if (3.f < m_fLifeTime && false == m_bTest)
-        m_isDead = true;
-    else
-        m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
+   m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
 }
 
 HRESULT CEffect_Ground::Render()
 {
-#ifdef _DEBUG
-    ImGui::InputFloat("DeltaTime", (_float*)(&g_fTestDeltaTime));
-
-    const char* LerpNames[] = { "Linear", "EaseIn", "EaseOut", "EaseInOut" };
-    int currentIndex = static_cast<int>(m_eLerpType);
-
-    ImGui::Checkbox("isLoop", &m_isLoop);
-    ImGui::Checkbox("isRotate", &m_isRotation);
-    ImGui::InputFloat("RotationSpeed", &m_fRotationSpeed);
-    ImGui::InputFloat3("Rotation", (_float*)(&m_vRotation));
-    ImGui::InputFloat3("Pivot", (_float*)(&m_vPivot));
-    ImGui::InputFloat("Speed", (_float*)(&m_fSpeed));
-    if (ImGui::Combo("LerpType", &currentIndex, LerpNames, IM_ARRAYSIZE(LerpNames)))
-    {
-        m_eLerpType = static_cast<LERP>(currentIndex);
-    }
-    ImGui::Spacing();
-
-    if (ImGui::CollapsingHeader("Diffuse", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        _uint iIndex = {};
-        for (auto& Pair : m_pTextureCom->Get_TextureMap())
-        {
-            if (ImGui::ImageButton(to_string(iIndex).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
-                m_strDiffuseTexture = Pair.first;
-
-            if (4 != iIndex % 5)
-                ImGui::SameLine();
-
-            iIndex++;
-        }
-    }
-    ImGui::Spacing();
-    if (ImGui::CollapsingHeader("Mask", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        _uint iIndex = {};
-        for (auto& Pair : m_pMaskTextureCom->Get_TextureMap())
-        {
-            if (ImGui::ImageButton(to_string(iIndex + 100).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
-                m_strMaskTexture = Pair.first;
-
-            if (4 != iIndex % 5)
-                ImGui::SameLine();
-
-            iIndex++;
-        }
-    }
-    ImGui::Spacing();
-    if (ImGui::CollapsingHeader("Nosie", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        _uint iIndex = {};
-        for (auto& Pair : m_pNoiseTextureCom->Get_TextureMap())
-        {
-            if (ImGui::ImageButton(to_string(iIndex + 200).c_str(), (ImTextureRef)Pair.second, ImVec2(60.f, 60.f)))
-                m_strNoiseTexture = Pair.first;
-
-            if (4 != iIndex % 5)
-                ImGui::SameLine();
-
-            iIndex++;
-        }
-    }
-
-    ImGui::InputFloat2("vSize", (_float*)&m_vSize);
-    ImGui::InputFloat3("vPosition", (_float*) &m_vPosition);
-    ImGui::InputFloat2("vLifeTime", (_float*)&m_vLifeTime);
-    ImGui::DragInt("Pass", &m_iPassIndex, 1, 0, 4);
-    ImGui::DragInt("Texture", &m_iTextureIndex, 1, 0, 2);
-
-
-#endif // _DEBUG
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
@@ -191,7 +114,7 @@ HRESULT CEffect_Ground::Render()
     if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Find_SRV(m_strNoiseTexture.c_str()))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Begin(4)))
+    if (FAILED(m_pShaderCom->Begin(m_Effect_Data.iPassIndex)))
         return E_FAIL;
 
     if (FAILED(m_pVIBufferCom->Bind_Resources()))
@@ -205,23 +128,54 @@ HRESULT CEffect_Ground::Render()
 
 HRESULT CEffect_Ground::Start(const _float4x4* pWorldMatrix, void* pArg)
 {
-    m_bTest = false;
-    m_fLifeTime = 0.f;
-    m_pVIBufferCom->Reset();
+    memcpy(&m_ParentWorldMatrix, pWorldMatrix, sizeof(_float4x4));
 
     EFFECT_GROUND_DESC* pDesc = static_cast<EFFECT_GROUND_DESC*>(pArg);
 
-    m_vPosition = pDesc->vPosition;
+    memcpy(&m_Effect_Data, &(pDesc->Ground_Data), sizeof(EFFECT_GROUND_DATA));
+
+    m_strDiffuseTexture = pDesc->strDiffuseTexture;
+    m_strMaskTexture = pDesc->strMaskTexture;
+    m_strNoiseTexture = pDesc->strNoiseTexture;
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_Effect_Data.vPosition), 1.f));
+    m_pTransformCom->Rotation(XMConvertToRadians(m_Effect_Data.vStartRotation.x), XMConvertToRadians(m_Effect_Data.vStartRotation.y), XMConvertToRadians(m_Effect_Data.vStartRotation.z));
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
+
+    m_pVIBufferCom->Set_Desc(false, m_Effect_Data.vSize, m_Effect_Data.vLifeTime);
+    m_pVIBufferCom->Scaling(0.f, m_Effect_Data.eLerpType, m_Effect_Data.vPivot, m_Effect_Data.fSpeed);
+
+    m_pVIBufferCom->Reset();
+
     return S_OK;
 }
 
 HRESULT CEffect_Ground::Reset()
 {
-    m_fLifeTime = 0.f;
-    m_pVIBufferCom->Reset();
     m_isDead = false;
 
     return S_OK;
+}
+
+void CEffect_Ground::Add_EffectComponets(CTexture* pTextureCom, CTexture* pMaskTextureCom, CTexture* pNoiseTextureCom)
+{
+    m_pTextureCom = pTextureCom;
+    m_pMaskTextureCom = pMaskTextureCom;
+    m_pNoiseTextureCom = pNoiseTextureCom;
+
+    Safe_AddRef(m_pTextureCom);
+    Safe_AddRef(m_pMaskTextureCom);
+    Safe_AddRef(m_pNoiseTextureCom);
+
+    auto iter = m_pTextureCom->Get_TextureMap().begin();
+    m_strDiffuseTexture = (*iter).first;
+
+    iter = m_pMaskTextureCom->Get_TextureMap().begin();
+    m_strMaskTexture = (*iter).first;
+
+    iter = m_pNoiseTextureCom->Get_TextureMap().begin();
+    m_strNoiseTexture = (*iter).first;
 }
 
 HRESULT CEffect_Ground::Add_Components(void* pArg)
@@ -236,15 +190,20 @@ HRESULT CEffect_Ground::Add_Components(void* pArg)
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
-    EFFECT_GROUND_COM* pDesc = static_cast<EFFECT_GROUND_COM*>(pArg);
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_DiffuseFolder"),
+        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+        return E_FAIL;
 
-    m_pTextureCom = pDesc->m_pTextureCom;
-    m_pMaskTextureCom = pDesc->m_pMaskTextureCom;
-    m_pNoiseTextureCom = pDesc->m_pNoiseTextureCom;
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_MaskFolder"),
+        TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom))))
+        return E_FAIL;
 
-    Safe_AddRef(m_pTextureCom);
-    Safe_AddRef(m_pTextureCom);
-    Safe_AddRef(m_pTextureCom);
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_NoiseFolder"),
+        TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -282,8 +241,9 @@ void CEffect_Ground::Free()
     __super::Free();
 
     Safe_Release(m_pShaderCom);
+    Safe_Release(m_pVIBufferCom);
+
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pMaskTextureCom);
     Safe_Release(m_pNoiseTextureCom);
-    Safe_Release(m_pVIBufferCom);
 }
