@@ -35,6 +35,10 @@ HRESULT CRenderer::Initialize()
 		DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_RimLight"), (_uint)m_Viewport.Width, (_uint)m_Viewport.Height,
+		DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Normal"), (_uint)m_Viewport.Width, (_uint)m_Viewport.Height,
 		DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
@@ -74,6 +78,8 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_Emissive"))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_GameObjects"), TEXT("Target_RimLight"))))
+		return E_FAIL;
 
 	/* MRT LightAcc */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
@@ -109,7 +115,7 @@ HRESULT CRenderer::Initialize()
 #ifdef _DEBUG
 	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Diffuse"), 75.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Normal"), 75.f, 225.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_RimLight"), 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shadow"), 225.f, 75.f, 150.f, 150.f)))
 		return E_FAIL;
@@ -315,6 +321,8 @@ HRESULT CRenderer::Render_Combined()
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Emissive"), m_pShaderCom, "g_EmissiveTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_X"), m_pShaderCom, "g_BlurHorizontalTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_RimLight"), m_pShaderCom, "g_RimLightTexture")))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(m_iPassIndex)))

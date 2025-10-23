@@ -27,7 +27,13 @@ _float CBody_Player::Get_TrackPoisiton()
 {
     return m_pModelCom->Get_TrackPosition();
 }
+void CBody_Player::Toggle_RimLight()
+{
+    m_bApplyRimLight = !m_bApplyRimLight;
 
+    if(m_bApplyRimLight)
+        m_fRimStrength = 1.f;
+}
 HRESULT CBody_Player::Initialize_Prototype()
 {
     return S_OK;
@@ -97,9 +103,11 @@ void CBody_Player::Update(_float fTimeDelta)
     XMStoreFloat4x4(&m_CameraTargetBoneWorldMatrix,
         XMLoadFloat4x4(m_pCameraTargetBoneMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 
-    if (m_bApplyRimLight)
+    if (m_bApplyRimLight || m_fRimStrength > 0.f)
     {
-        m_fRimStrength -= fTimeDelta;
+        m_fRimStrength -= fTimeDelta * 0.5f;
+        if (m_fRimStrength < 0.f)
+            m_fRimStrength = 0.f;
     }
 }
 
@@ -159,7 +167,7 @@ HRESULT CBody_Player::Render()
         }
         else
         {
-            if(false == m_bApplyRimLight)
+            if(false == m_bApplyRimLight && m_fRimStrength < 0.f)
             {
                 if (FAILED(m_pShaderCom->Begin(2)))
                     return E_FAIL;

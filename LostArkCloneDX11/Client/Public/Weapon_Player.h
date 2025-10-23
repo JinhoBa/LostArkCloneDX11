@@ -26,7 +26,7 @@ private:
 
 public:
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
-	void Toggle_RimLight() { m_bApplyRimLight = !m_bApplyRimLight; }
+	void Toggle_RimLight();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;

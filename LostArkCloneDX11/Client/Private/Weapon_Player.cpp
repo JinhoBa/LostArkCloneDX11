@@ -22,6 +22,14 @@ const _float4x4* CWeapon_Player::Get_BoneMatrixPtr(const _char* pBoneName) const
     return m_pModelCom[ENUM_TO_INT(*m_pStance)]->Get_BoneMatrixPrt(pBoneName);
 }
 
+void CWeapon_Player::Toggle_RimLight()
+{
+    m_bApplyRimLight = !m_bApplyRimLight;
+
+    if (m_bApplyRimLight)
+        m_fRimStrength = 1.f;
+}
+
 HRESULT CWeapon_Player::Initialize_Prototype()
 {
     return S_OK;
@@ -67,7 +75,16 @@ void CWeapon_Player::Update(_float fTimeDelta)
     {
         XMStoreFloat4x4(&m_CombinedWorldMatrix,
             XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
+
+        
     }
+    if (m_bApplyRimLight || m_fRimStrength > 0.f)
+    {
+        m_fRimStrength -= fTimeDelta * 0.5f;
+        if (m_fRimStrength < 0.f)
+            m_fRimStrength = 0.f;
+    }
+
 }
 
 void CWeapon_Player::Late_Update(_float fTimeDelta)
@@ -90,7 +107,7 @@ HRESULT CWeapon_Player::Render()
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
         return E_FAIL;
 
-    if (m_bApplyRimLight)
+    if (m_bApplyRimLight || m_fRimStrength > 0.f)
     {
         if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
             return E_FAIL;
@@ -113,7 +130,7 @@ HRESULT CWeapon_Player::Render()
         if (FAILED((m_pModelCom[ENUM_TO_INT(*m_pStance)])->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
             return E_FAIL;
 
-        if(m_bApplyRimLight)
+        if(m_bApplyRimLight || m_fRimStrength > 0.f)
         {
             if (FAILED(m_pShaderCom->Begin(1)))
                 return E_FAIL;

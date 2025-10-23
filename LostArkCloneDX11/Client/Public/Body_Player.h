@@ -31,10 +31,7 @@ public:
 	const _float4x4* Get_BoneMatrixPtr(const _char* pBoneName) const;
 	_float Get_TrackPoisiton();
 	void Set_Animation(_uint iAnimationIdex, _bool bLoop = false, _float fLerpTime = 0.1f);
-	void Toggle_RimLight() { 
-		m_bApplyRimLight = !m_bApplyRimLight;
-		m_fRimStrength = 1.f;
-	}
+	void Toggle_RimLight();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
