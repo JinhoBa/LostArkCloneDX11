@@ -15,6 +15,7 @@
 #include "Collider_Manager.h"
 #include "Camera_Manager.h"
 #include "RenderTarget_Manager.h"
+#include "Shadow.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -84,6 +85,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 
 	m_pCamera_Manager = CCamera_Manager::Create();
 	if (nullptr == m_pCamera_Manager)
+		return E_FAIL;
+
+	m_pShadow = CShadow::Create();
+	if (nullptr == m_pShadow)
 		return E_FAIL;
 
 	return S_OK;
@@ -361,23 +366,23 @@ void CGameInstance::Set_Transform(D3DTS eState, _fmatrix Matrix)
 	m_pPipeLine->Set_Transform(eState, Matrix);
 }
 
-const _float4x4* CGameInstance::Get_Transfrom_Float4x4(D3DTS eState) const
+const _float4x4* CGameInstance::Get_Transform_Float4x4(D3DTS eState)
 {
-	return m_pPipeLine->Get_Transfrom_Float4x4(eState);
+	return m_pPipeLine->Get_Transform_Float4x4(eState);
 }
-const _float4x4* CGameInstance::Get_Transfrom_Float4x4_Inverse(D3DTS eState) const
+const _float4x4* CGameInstance::Get_Transform_Float4x4_Inverse(D3DTS eState)
 {
-	return m_pPipeLine->Get_Transfrom_Float4x4_Inverse(eState);
-}
-
-_matrix	CGameInstance::Get_Transfrom_Matrix(D3DTS eState)
-{
-	return m_pPipeLine->Get_Transfrom_Matrix(eState);
+	return m_pPipeLine->Get_Transform_Float4x4_Inverse(eState);
 }
 
-_matrix	CGameInstance::Get_Transfrom_MatrixInverse(D3DTS eState)
+_matrix	CGameInstance::Get_Transform_Matrix(D3DTS eState)
 {
-	return m_pPipeLine->Get_Transfrom_MatrixInverse(eState);
+	return m_pPipeLine->Get_Transform_Matrix(eState);
+}
+
+_matrix	CGameInstance::Get_Transform_MatrixInverse(D3DTS eState)
+{
+	return m_pPipeLine->Get_Transform_MatrixInverse(eState);
 }
 
 const _float4* CGameInstance::Get_Camera_Position() const
@@ -441,14 +446,33 @@ void CGameInstance::Clear_Fonts()
 
 #pragma region LIGHT_MANAGER
 
-const LIGHT_DESC& CGameInstance::Get_LightDesc(_uint iLightIndex)
+const LIGHT_DESC* CGameInstance::Get_LightDesc(const _tchar* pLightTag)
 {
-	return m_pLight_Manager->Get_Desc(iLightIndex);
+	return m_pLight_Manager->Get_Desc(pLightTag);
 }
 
-HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
+void CGameInstance::ToggleLight(const _tchar* pLightTag, _bool bEnable)
 {
-	return m_pLight_Manager->Add_Light(LightDesc);
+	m_pLight_Manager->ToggleLight(pLightTag, bEnable);
+}
+
+void CGameInstance::Update_Light_Position(const _tchar* pLightTag, _float3* pPosition)
+{
+	m_pLight_Manager->Update_Position(pLightTag, pPosition);
+}
+
+void CGameInstance::Update_Light_Range(const _tchar* pLightTag, _float fRange)
+{
+	m_pLight_Manager->Update_Range(pLightTag, fRange);
+}
+void CGameInstance::Update_Light_Color(const _tchar* pLightTag, _uint iColorType, _float4* pColor)
+{
+	m_pLight_Manager->Update_Color(pLightTag, iColorType, pColor);
+}
+
+HRESULT CGameInstance::Add_Light(const _tchar* pLightTag, const LIGHT_DESC& LightDesc)
+{
+	return m_pLight_Manager->Add_Light(pLightTag, LightDesc);
 }
 
 HRESULT CGameInstance::Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer)
@@ -478,6 +502,10 @@ class CCamera* CGameInstance::Find_Camera(const _wstring& strCameraNameTag)
 {
 	return m_pCamera_Manager->Find_Camera(strCameraNameTag);
 }
+_float* CGameInstance::Get_Far()
+{
+	return m_pCamera_Manager->Get_Far();
+}
 
 HRESULT CGameInstance::Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject)
 {
@@ -486,6 +514,17 @@ HRESULT CGameInstance::Add_Camera(const _wstring& strCameraNameTag, class CCamer
 HRESULT CGameInstance::Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn, _float fLerpTime)
 {
 	return m_pCamera_Manager->Bind_Camera(strCameraNameTag, isReturn, fLerpTime);
+}
+#pragma endregion
+
+#pragma region SHADOW
+HRESULT CGameInstance::Ready_Shadow_Light(const SHADOW_LIGHT_DESC& Desc)
+{
+	return m_pShadow->Ready_Shadow_Light(Desc);
+}
+HRESULT CGameInstance::Bind_Shadow_Resource(class CShader* pShader, const _char* pContantName, D3DTS eType) const
+{
+	return m_pShadow->Bind_Shadow_Resource(pShader, pContantName, eType);
 }
 #pragma endregion
 
@@ -498,9 +537,9 @@ HRESULT CGameInstance::Add_MRT(const _wstring& strMRTTag, const _wstring& strTar
 {
 	return m_pRenderTarget_Manager->Add_MRT(strMRTTag, strTargetTag);
 }
-HRESULT CGameInstance::Begin_MRT(const _wstring& strMRTTag)
+HRESULT CGameInstance::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV)
 {
-	return m_pRenderTarget_Manager->Begin_MRT(strMRTTag);
+	return m_pRenderTarget_Manager->Begin_MRT(strMRTTag, pDSV);
 }
 HRESULT CGameInstance::End_MRT()
 {
@@ -528,6 +567,7 @@ void CGameInstance::Release_Engine()
 {
 	DestroyInstance();
 
+	Safe_Release(m_pShadow);
 	Safe_Release(m_pRenderTarget_Manager);
 	Safe_Release(m_pCamera_Manager);
 	Safe_Release(m_pFont_Manager);

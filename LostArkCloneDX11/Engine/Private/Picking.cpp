@@ -37,14 +37,14 @@ void CPicking::Update()
     vMousePosition.z = 0.f;
     vMousePosition.w = 1.f;
 
-    _matrix ProjMatrixInv = m_pGameInstance->Get_Transfrom_MatrixInverse(D3DTS::PROJ);
+    _matrix ProjMatrixInv = m_pGameInstance->Get_Transform_MatrixInverse(D3DTS::PROJ);
     
     _vector vViewMousePos = XMVector4Transform(XMLoadFloat4(&vMousePosition), ProjMatrixInv);
 
     _vector vRayPos = XMVectorSet(0.f, 0.f, 0.f, 1.f);
     _vector vRayDir = XMVectorSetW(vViewMousePos, 0.f);
 
-    _matrix ViewMatrixInv = m_pGameInstance->Get_Transfrom_MatrixInverse(D3DTS::VIEW);
+    _matrix ViewMatrixInv = m_pGameInstance->Get_Transform_MatrixInverse(D3DTS::VIEW);
 
      XMStoreFloat3(&m_vRayPos[ENUM_TO_INT(RAY::WORLD)], XMVector3TransformCoord(vRayPos, ViewMatrixInv));
      XMStoreFloat3(&m_vRayDir[ENUM_TO_INT(RAY::WORLD)], XMVector3Normalize(XMVector3TransformNormal(vRayDir, ViewMatrixInv)));

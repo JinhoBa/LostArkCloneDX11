@@ -45,7 +45,6 @@ HRESULT CCamera_Manager::Bind_Camera(const _wstring& strCameraNameTag, _bool isR
 		m_fPreFov = m_pCurrentCamera->Get_Fovy();
 	}
 
-
 	if (false == isReturn)
 	{
 		m_pPreCamera = m_pCurrentCamera;
@@ -69,6 +68,11 @@ HRESULT CCamera_Manager::Bind_Camera(const _wstring& strCameraNameTag, _bool isR
 	}
 
 	return S_OK;
+}
+
+_float* CCamera_Manager::Get_Far()
+{
+	return m_pCurrentCamera->Get_Far();
 }
 
 void CCamera_Manager::Priority_Update(_float fTimeDelta)

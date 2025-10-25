@@ -60,14 +60,26 @@ HRESULT CLevel_Boss::Ready_Light()
     LIGHT_DESC Desc = {};
 
     Desc.eType = LIGHT::DIRECTIONAL;
-    Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-    Desc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-    Desc.vSpecular = _float4(0.01f, 0.01f, 0.01f, 0.1f);
+    Desc.vDiffuse = _float4(0.57f, 0.57f, 1.f, 1.f);
+    Desc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 0.5f);
     Desc.vDirection = _float4(0.5f, 0.5f, -0.5f, 0.f);
 
-    if (FAILED(m_pGameInstance->Add_Light(Desc)))
-        return E_FAIL;
+    m_pGameInstance->Update_Light_Color(L"Dircection", 0, &Desc.vDiffuse);
+    m_pGameInstance->Update_Light_Color(L"Dircection", 1, &Desc.vAmbient);
+    m_pGameInstance->Update_Light_Color(L"Dircection", 1, &Desc.vSpecular);
 
+
+    Desc.eType = LIGHT::POINT;
+    Desc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 1.f);
+    Desc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+    Desc.vSpecular = Desc.vDiffuse;
+    Desc.vPosition = _float4(30.f, 5.f, 30.f, 1.f);
+    Desc.fRange = 10.f;
+
+    if (FAILED(m_pGameInstance->Add_Light(L"Point1", Desc)))
+        return E_FAIL;
+    
     return S_OK;
 }
 
@@ -75,6 +87,8 @@ HRESULT CLevel_Boss::Ready_Camera()
 {
     m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
     m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
+
+    m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
 
     return S_OK;
 }

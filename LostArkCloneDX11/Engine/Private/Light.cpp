@@ -4,6 +4,7 @@
 #include "VIBuffer_Rect.h"
 
 CLight::CLight()
+	:m_bEnable{ true }
 {
 }
 
@@ -12,6 +13,32 @@ HRESULT CLight::Initialize(const LIGHT_DESC& LightDesc)
 	m_LightDesc = LightDesc;
 
 	return S_OK;
+}
+
+void CLight::Update_Position(_float3* pPosition)
+{
+	memcpy(&m_LightDesc.vPosition, pPosition, sizeof(_float3));
+}
+
+void CLight::Update_Range(_float fRange)
+{
+	m_LightDesc.fRange = fRange;
+}
+
+void CLight::Update_Color(_uint iColorType, _float4* pColor)
+{
+	switch (iColorType)
+	{
+	case 0:
+		memcpy(&m_LightDesc.vDiffuse, pColor, sizeof(_float4));
+		break;
+	case 1:
+		memcpy(&m_LightDesc.vAmbient, pColor, sizeof(_float4));
+		break;
+	case 2:
+		memcpy(&m_LightDesc.vSpecular, pColor, sizeof(_float4));
+		break;
+	}
 }
 
 HRESULT CLight::Render(CShader* pShader, CVIBuffer* pVIBuffer)

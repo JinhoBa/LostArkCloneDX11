@@ -40,6 +40,7 @@ public:
 	virtual void		Update(_float fTimeDelta) override;
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
+	virtual HRESULT		Render_Shadow() override;
 
 private:
 	_bool					m_isAnimationFinish = {};
@@ -64,6 +65,10 @@ private:
 #ifdef _DEBUG
 	_bool					m_isDebug = {};
 	_float					m_fKeyFrame = {};
+
+	LIGHT_DESC				LightDesc = {};
+	_float					m_fRange = {};
+	_float3					m_vPosition = {};
 #endif // _DEBUG
 
 

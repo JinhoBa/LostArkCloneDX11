@@ -49,8 +49,8 @@ private:
 	CModel*				m_pModelCom = { nullptr };
 	CTexture*			m_pTextureCom = { nullptr };
 
-	_float				m_fSpeed = {};
 	_float				m_fTimeAcc = {};
+	_float				m_fSpeed = {};
 	_float4				m_vShootDir = {};
 
 	_float				m_fRimStrength = {};

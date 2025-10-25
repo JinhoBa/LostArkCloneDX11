@@ -52,6 +52,9 @@ HRESULT CMainApp::Initialize()
     if (FAILED(Ready_Prototype()))
         return E_FAIL; 
 
+    if (FAILED(Ready_Layer_Camera()))
+        return E_FAIL;
+
     if (FAILED(Ready_Layer_Canvars()))
         return E_FAIL;
 
@@ -286,6 +289,27 @@ HRESULT CMainApp::Ready_Prototype()
         return E_FAIL;
 
 #pragma endregion
+
+    return S_OK;
+}
+
+HRESULT CMainApp::Ready_Layer_Camera()
+{
+    CCamera::CAMERA_DESC Desc = {};
+
+    Desc.fNear = 0.1f;
+    Desc.fFar = 500.f;
+    Desc.fFovy = XMConvertToRadians(60.f);
+    Desc.vEye = _float3(0.f, 5.f, -5.f);
+    Desc.vLookAt = _float3(0.f, 0.f, 0.f);
+    Desc.fSpeedPersec = 5.f;
+    Desc.fRotatePersec = XMConvertToRadians(90.f);
+    Desc.vDirection = _float3(0.f, 5.f, -5.f);
+    m_pGameInstance->Add_Camera(TEXT("Camera_Logo"), dynamic_cast<CCamera*>(m_pGameInstance->Clone_Prototype(
+        PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"), &Desc)));
+
+    if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Logo"))))
+        return E_FAIL;
 
     return S_OK;
 }

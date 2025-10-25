@@ -71,6 +71,11 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
+HRESULT CGameObject::Render_Shadow()
+{
+	return S_OK;
+}
+
 
 CComponent* CGameObject::Find_Component(const _wstring& strComponentTag)
 {

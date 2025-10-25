@@ -85,10 +85,10 @@ public:
 
 #pragma region PIPELINE
 	void				Set_Transform(D3DTS eState, _fmatrix Matrix);
-	const _float4x4*	Get_Transfrom_Float4x4(D3DTS eState) const;
-	const _float4x4*	Get_Transfrom_Float4x4_Inverse(D3DTS eState) const;
-	_matrix				Get_Transfrom_Matrix(D3DTS eState);
-	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
+	const _float4x4*	Get_Transform_Float4x4(D3DTS eState);
+	const _float4x4*	Get_Transform_Float4x4_Inverse(D3DTS eState);
+	_matrix				Get_Transform_Matrix(D3DTS eState);
+	_matrix				Get_Transform_MatrixInverse(D3DTS eState);
 	const _float4*		Get_Camera_Position() const;
 	const _float4*		Get_Camera_Look() const;
 #pragma endregion
@@ -109,8 +109,12 @@ public:
 #pragma endregion
 
 #pragma region LIGHT_MANAGER
-	const LIGHT_DESC&	Get_LightDesc(_uint iLightIndex);
-	HRESULT				Add_Light(const LIGHT_DESC& LightDesc);
+	const LIGHT_DESC*	Get_LightDesc(const _tchar* pLightTag);
+	void				ToggleLight(const _tchar* pLightTag, _bool bEnable);
+	void				Update_Light_Position(const _tchar* pLightTag, _float3* pPosition);
+	void				Update_Light_Range(const _tchar* pLightTag, _float fRange);
+	void				Update_Light_Color(const _tchar* pLightTag, _uint iColorType, _float4* pColor);
+	HRESULT				Add_Light(const _tchar* pLightTag, const LIGHT_DESC& LightDesc);
 	HRESULT				Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 #pragma endregion
 
@@ -122,16 +126,22 @@ public:
 
 #pragma region CAMERA_MANAGER
 	class CCamera* Find_Camera(const _wstring& strCameraNameTag);
-
+	_float* Get_Far();
 	HRESULT Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject);
 	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn = false, _float fLerpTime = 0.f);
 #pragma endregion
+
+#pragma region SHADOW
+	HRESULT Ready_Shadow_Light(const SHADOW_LIGHT_DESC& Desc);
+	HRESULT Bind_Shadow_Resource(class CShader* pShader, const _char* pContantName, D3DTS eType) const;
+#pragma endregion
+
 
 #pragma region RENDERTARGET_MANAGER
 public:
 	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iSizeX, _uint iSizeY, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
-	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr);
 	HRESULT End_MRT();
 	HRESULT Bind_RenderTarget(const _wstring& strTargetTag, class CShader* pShader, const _char* pConstantName);
 
@@ -159,6 +169,7 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CCamera_Manager*			m_pCamera_Manager = { nullptr };
 	class CRenderTarget_Manager*	m_pRenderTarget_Manager = { nullptr };
+	class CShadow*					m_pShadow = { nullptr };
 
 	_float2							m_vWinSize = {};
 

@@ -183,8 +183,8 @@ void CCollider::Set_ColliderDesc(_float3& vCenter, _float3& vExtents, _float3 vO
 HRESULT CCollider::Render()
 {
 	m_pEffect->SetWorld(XMMatrixIdentity());
-	m_pEffect->SetView(m_pGameInstance->Get_Transfrom_Matrix(D3DTS::VIEW));
-	m_pEffect->SetProjection(m_pGameInstance->Get_Transfrom_Matrix(D3DTS::PROJ));
+	m_pEffect->SetView(m_pGameInstance->Get_Transform_Matrix(D3DTS::VIEW));
+	m_pEffect->SetProjection(m_pGameInstance->Get_Transform_Matrix(D3DTS::PROJ));
 
 	m_pContext->IASetInputLayout(m_pInputLayout);
 	m_pEffect->Apply(m_pContext);

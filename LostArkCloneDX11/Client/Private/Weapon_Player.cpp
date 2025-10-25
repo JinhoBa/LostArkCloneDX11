@@ -58,8 +58,14 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
 
     m_bApplyRimLight = false;
 
-    m_fRimStrength = 1.f;
+    m_fRimStrength = 0.f;
     m_fRimPower = 1.f;
+
+    m_fLightRange = 1.f;
+    m_vLightOffset = _float3(0.f, 0.f, 0.f);
+    m_vLightPosition = _float3(0.f, 0.f, 0.f);
+
+    m_pGameInstance->ToggleLight(L"SkillLight", true);
 
     return S_OK;
 }
@@ -76,8 +82,18 @@ void CWeapon_Player::Update(_float fTimeDelta)
         XMStoreFloat4x4(&m_CombinedWorldMatrix,
             XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 
-        
+        memcpy(&m_vLightPosition, &m_CombinedWorldMatrix.m[3], sizeof(_float3));
+
+        _float3 vPos = {};
+
+        vPos.x = m_vLightPosition.x + m_vLightOffset.x;
+        vPos.y = m_vLightPosition.y + m_vLightOffset.y;
+        vPos.z = m_vLightPosition.z + m_vLightOffset.z;
+
+        m_pGameInstance->Update_Light_Position(L"SkillLight", &vPos);
+        m_pGameInstance->Update_Light_Range(L"SkillLight", m_fLightRange);
     }
+
     if (m_bApplyRimLight || m_fRimStrength > 0.f)
     {
         m_fRimStrength -= fTimeDelta * 0.5f;
@@ -95,16 +111,19 @@ void CWeapon_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CWeapon_Player::Render()
 {
+    ImGui::SliderFloat("Range", &m_fLightRange, 0.f, 10.f);
+    ImGui::SliderFloat3("Offset", (_float*)(&m_vLightOffset), 0.f, 10.f);
+
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::VIEW))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", m_pGameInstance->Get_Far(), sizeof(_float))))
         return E_FAIL;
 
     if (m_bApplyRimLight || m_fRimStrength > 0.f)

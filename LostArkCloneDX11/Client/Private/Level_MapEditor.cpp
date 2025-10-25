@@ -385,7 +385,7 @@ HRESULT CLevel_MapEditor::Ready_Light()
     Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 0.5f);
     Desc.vDirection = _float4(0.5f, 0.5f, 0.5f, 0.f);
 
-    if (FAILED(m_pGameInstance->Add_Light(Desc)))
+    if (FAILED(m_pGameInstance->Add_Light(L"Test", Desc)))
         return E_FAIL;
 
     return S_OK;

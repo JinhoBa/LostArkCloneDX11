@@ -49,6 +49,9 @@ using namespace std;
 namespace Engine
 {
 	const static wstring strTransformTag = { TEXT("Com_Transform") };
+
+	const unsigned int g_iMaxWidth = 8192;
+	const unsigned int g_iMaxHeight = 4608;
 }
 
 #include "Engine_Enum.h"

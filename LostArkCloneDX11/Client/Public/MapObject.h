@@ -33,7 +33,6 @@ public:
 	_float3*	Get_Scale() { return &m_vScale; }
 	_float3*	Get_Rotation() { return &m_vRotation; }
 	_wstring&	Get_PrototypeTag();
-	_wstring&	Get_TextureTag();
 
 public:
 	virtual HRESULT		Initialize_Prototype() override;
@@ -42,6 +41,7 @@ public:
 	virtual void		Update(_float fTimeDelta) override;
 	virtual void		Late_Update(_float fTimeDelta) override;
 	virtual HRESULT		Render() override;
+	virtual HRESULT		Render_Shadow() override;
 
 public:
 	void				Update_ImGui();

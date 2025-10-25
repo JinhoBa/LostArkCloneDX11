@@ -12,10 +12,10 @@ private:
 public:
 	void				Set_Transform(D3DTS eState, _fmatrix Matrix);
 
-	const _float4x4*	Get_Transfrom_Float4x4(D3DTS eState) const;
-	const _float4x4*	Get_Transfrom_Float4x4_Inverse(D3DTS eState) const;
-	_matrix				Get_Transfrom_Matrix(D3DTS eState);
-	_matrix				Get_Transfrom_MatrixInverse(D3DTS eState);
+	const _float4x4*	Get_Transform_Float4x4(D3DTS eState);
+	const _float4x4*	Get_Transform_Float4x4_Inverse(D3DTS eState);
+	_matrix				Get_Transform_Matrix(D3DTS eState);
+	_matrix				Get_Transform_MatrixInverse(D3DTS eState);
 	const _float4*		Get_Camera_Position() const;
 	const _float4*		Get_Camera_Look() const;
 
@@ -26,8 +26,8 @@ private:
 	_float4		m_CameraPosition = {};
 	_float4     m_CameraLook = {};
 
-	_float4x4	m_TransfromStateMatrices[ENUM_TO_INT(D3DTS::END)] = {};
-	_float4x4	m_TransfromStateMatrixInverses[ENUM_TO_INT(D3DTS::END)] = {};
+	_float4x4	m_TransformStateMatrices[ENUM_TO_INT(D3DTS::END)] = {};
+	_float4x4	m_TransformStateMatrixInverses[ENUM_TO_INT(D3DTS::END)] = {};
 
 public:
 	static CPipeLine* Create();

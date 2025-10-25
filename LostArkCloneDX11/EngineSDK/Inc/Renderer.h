@@ -39,6 +39,8 @@ private:
 	_bool						m_isVisibleUI = { true };
 	_uint						m_iPassIndex = {};
 	_float						m_fMaxDepth = {};
+	_float						m_fWinSizeX = {};
+	_float						m_fWinSizeY = {};
 
 	list<class CGameObject*>	m_RenderObjects[ENUM_TO_INT(RENDER::END)];
 
@@ -52,6 +54,8 @@ private:
 	D3D11_VIEWPORT				m_Viewport = {};
 	_uint						m_iNumViewpprt = { 1 };
 
+	ID3D11DepthStencilView*		m_pShadowDSV = { nullptr };
+
 #ifdef _DEBUG
 private:
 	list<class CComponent*>		m_DebugComponents;
@@ -60,6 +64,7 @@ private:
 	
 private:
 	void Render_Priority();
+	HRESULT Render_Shadow();
 	void Render_NonBlend();
 	HRESULT Render_LightAcc();
 	HRESULT Render_Blur();
@@ -73,7 +78,7 @@ private:
 
 	void Sort_AlphaObject();
 	void Sort_UI();
-
+	HRESULT Ready_DepthStencilView(_uint iSizeX, _uint iSizeY);
 #ifdef _DEBUG
 private:
 	HRESULT Render_Debug();

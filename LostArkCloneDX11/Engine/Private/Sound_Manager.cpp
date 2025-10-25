@@ -7,7 +7,7 @@ void CSound_Manager::Initialize()
 	FMOD_RESULT result = FMOD::System_Create(&m_pSystem);
 
 	// 1. 사용할 가상채널 수, 2.초기화 방식, 시스템 포인터 ) 
-	m_pSystem->init(32, FMOD_INIT_NORMAL, NULL);
+	m_pSystem->init(32, FMOD_INIT_NORMAL | FMOD_INIT_VOL0_BECOMES_VIRTUAL, NULL);
 
 	LoadSoundFile();
 	m_pSystem->setDriver(0);
@@ -29,13 +29,7 @@ void CSound_Manager::Free()
 	}
 	m_mapSound.clear();
 
-	_int iNumDirver = {};
-	m_pSystem->getNumDrivers(&iNumDirver);
-
-	if(0 != iNumDirver && nullptr != m_pSystem)
-	{
-		//m_pSystem->release();
-	}
+	m_pSystem->release();
 
 	m_pSystem->close();
 }

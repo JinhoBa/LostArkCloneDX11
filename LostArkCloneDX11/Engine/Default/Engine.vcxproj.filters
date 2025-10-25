@@ -205,6 +205,9 @@
     <Filter Include="01.Utility\07.PipLine">
       <UniqueIdentifier>{feb712fe-cc3d-4a8e-8a8f-2981e600d12c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\12.Shadow">
+      <UniqueIdentifier>{694817ad-eb4d-457e-beb4-fe8ffff7e718}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -432,6 +435,9 @@
     <ClInclude Include="..\public\RenderTarget_Manager.h">
       <Filter>01.Utility\11.RenderTarget\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Shadow.h">
+      <Filter>01.Utility\12.Shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\GameInstance.cpp">
@@ -616,6 +622,9 @@
     </ClCompile>
     <ClCompile Include="..\private\RenderTarget_Manager.cpp">
       <Filter>01.Utility\11.RenderTarget\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Shadow.cpp">
+      <Filter>01.Utility\12.Shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

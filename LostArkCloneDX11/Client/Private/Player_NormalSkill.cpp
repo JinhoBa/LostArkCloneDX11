@@ -40,6 +40,9 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 	else
 		m_pPlayer->Set_Animation(m_pSkill_Desc->iAnimationIndex, m_pSkill_Desc->bLoop);
 
+	/* Sound */
+	Play_SkillSound();
+
 	/* HitBox */
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 
@@ -127,6 +130,8 @@ void CPlayer_NormalSkill::Exit()
 	if(14 == m_iSkillID)
 		m_pPlayer->Toggle_PartObject(L"Weapon_Player");
 
+	//m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
+
 	if (m_pSkillInfo->bApplyRimLightBody)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	if (m_pSkillInfo->bApplyRimLightWeapon)
@@ -135,6 +140,42 @@ void CPlayer_NormalSkill::Exit()
 	m_pPlayer->Set_SkillID(99);
 
 	m_EffectEvents.clear();
+}
+
+void CPlayer_NormalSkill::Play_SkillSound()
+{
+	switch (m_iSkillID)
+	{
+	case 1:
+		m_pGameInstance->Play_Sound(L"Moonblade_Fury.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 3:
+		m_pGameInstance->Play_Sound(L"RingofLight.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 4:
+		m_pGameInstance->Play_Sound(L"DescentOfMoon.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 5:
+		m_pGameInstance->Play_Sound(L"EclipsePath.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 6:
+		m_pGameInstance->Play_Sound(L"SkyWheel.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 7:
+		m_pGameInstance->Play_Sound(L"CrescentMoon.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 10:
+		m_pGameInstance->Play_Sound(L"SolarEclispe.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 11:
+		m_pGameInstance->Play_Sound(L"LightBlades.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		break;
+	case 14:
+		m_pGameInstance->Play_Sound(L"Ultimate1.wav", CHANNELID::SKILL_PLAYER, 0.4f);
+		break;
+	default:
+		break;
+	}
 }
 
 CPlayer_NormalSkill* CPlayer_NormalSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

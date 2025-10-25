@@ -337,6 +337,7 @@ HRESULT CPlayer::Render()
     return S_OK;
 }
 
+
 void CPlayer::OnHit(const ATTACK_DESC& Attack_Desc)
 {
     if (m_iCurSkillID == 99)

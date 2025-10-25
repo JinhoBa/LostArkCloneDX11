@@ -27,6 +27,9 @@ private:
 	_bool		m_isSpawWeaponEffect = { false };
 	_float4		m_vPickingPosition = {};
 
+private:
+	void Play_SkillSound();
+
 public:
 	static CPlayer_NormalSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
 	virtual void Free() override;

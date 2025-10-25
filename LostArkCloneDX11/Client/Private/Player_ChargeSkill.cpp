@@ -39,11 +39,12 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 	
 	m_isSpawEffect = true;
 
-	if (12 == m_iSkillID)
+	if (12 == m_iSkillID) // Àû·ÉÆ÷
 	{
 		m_iAnimStart = 126;
 		m_iAnimLoop = 125;
 		m_iAnimEnd = 124;
+		m_pGameInstance->Play_Sound(L"RedDragonFlight_Start.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 	}
 	else
 	{
@@ -51,6 +52,7 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 		m_iAnimStart = 133;
 		m_iAnimLoop = 134;
 		m_iAnimEnd = 135;
+		m_pGameInstance->Play_Sound(L"ScorchingWaveCharge1.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 	}
 
 	m_pPlayer->Set_Animation(m_iAnimStart, false);
@@ -88,6 +90,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 			m_pPlayer->Set_Animation(m_iAnimLoop, true, 0.f);
 			m_fChargeTime = 0.f;
 			m_pGameInstance->Bind_Camera(TEXT("Camera_ChargeSkill"));
+
+			m_pGameInstance->Play_Sound(L"RedDragonFlight_Charge.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 		}
 		break;
 
@@ -103,11 +107,16 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 			{
 				m_eState = CPlayer_ChargeSkill::END;
 				m_pPlayer->Set_Animation(m_iAnimEnd, false);
+
+				m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
+				m_pGameInstance->Play_Sound(L"RedDragonFlight_Shoot.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 			}
 			else
 			{
 				m_eState = CPlayer_ChargeSkill::ATTACK;
 				m_pPlayer->Set_Animation(m_iAnimLoop, false, 0.f);
+
+				m_pGameInstance->Play_Sound(L"ScorchingWave_Shoot.wav", CHANNELID::SKILL_PLAYER, 0.4f);
 			}
 		}
 		break;
@@ -152,6 +161,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 void CPlayer_ChargeSkill::Exit()
 {
+	m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
+
 	if (12 == m_iSkillID)
 		m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), true);
 

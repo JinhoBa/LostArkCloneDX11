@@ -25,4 +25,5 @@ _uint CBase::Release()
 
 void CBase::Free()
 {
+
 }

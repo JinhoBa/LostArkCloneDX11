@@ -67,9 +67,9 @@ void CHpBar_Monster::Update(_float fTimeDelta)
         XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
 
-    vPosition = XMVector3TransformCoord(vPosition, XMLoadFloat4x4(m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW)));
+    vPosition = XMVector3TransformCoord(vPosition, XMLoadFloat4x4(m_pGameInstance->Get_Transform_Float4x4(D3DTS::VIEW)));
 
-    vPosition = XMVector3TransformCoord(vPosition, XMLoadFloat4x4(m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ)));
+    vPosition = XMVector3TransformCoord(vPosition, XMLoadFloat4x4(m_pGameInstance->Get_Transform_Float4x4(D3DTS::PROJ)));
 
     m_NameFont.vPositon.x = (_float)g_iWinSizeX * 0.5f + vPosition.m128_f32[0] * (_float)g_iWinSizeX * 0.5f - 25.f;
     m_NameFont.vPositon.y = (_float)g_iWinSizeY * 0.5f - vPosition.m128_f32[1] * (_float)g_iWinSizeY * 0.5f - 20.f;
@@ -86,10 +86,10 @@ HRESULT CHpBar_Monster::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::VIEW))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
     /* Back */

@@ -75,8 +75,8 @@ void CDamageFont_Manager::Update_DamageFont(_float fTimeDelta)
         (*iter).first.vColor.z *= (*iter).first.vColor.w;
         (*iter).first.vColor.w *= (*iter).first.vColor.w;
 
-        _vector ViewPortPosition = XMVector3TransformCoord(XMVectorSet((*iter).second.x, (*iter).second.y, (*iter).second.z, 0.f), m_pGameInstance->Get_Transfrom_Matrix(D3DTS::VIEW));
-        ViewPortPosition = XMVector3TransformCoord(ViewPortPosition, m_pGameInstance->Get_Transfrom_Matrix(D3DTS::PROJ));
+        _vector ViewPortPosition = XMVector3TransformCoord(XMVectorSet((*iter).second.x, (*iter).second.y, (*iter).second.z, 0.f), m_pGameInstance->Get_Transform_Matrix(D3DTS::VIEW));
+        ViewPortPosition = XMVector3TransformCoord(ViewPortPosition, m_pGameInstance->Get_Transform_Matrix(D3DTS::PROJ));
 
         (*iter).first.vPositon = _float2(
             (_float)g_iWinSizeX * 0.5f + ViewPortPosition.m128_f32[0] * (_float)g_iWinSizeX * 0.5f - 70.f * ((*iter).first.fScale - 1.f),

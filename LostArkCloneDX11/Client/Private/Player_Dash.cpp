@@ -25,9 +25,15 @@ HRESULT CPlayer_Dash::Initilize(CStateMachine* pStateMachine, STANCE* pStance, C
 void CPlayer_Dash::Enter(void* pArg)
 {
 	if(STANCE::FLURRY ==  *m_pPlayerStance)
+	{
 		m_pPlayer->Set_Animation(127, false, 0.f);
+		m_pGameInstance->Play_Sound(L"Dash_Flurry.wav",CHANNELID::SKILL_PLAYER, 0.5f);
+	}
 	else
+	{
 		m_pPlayer->Set_Animation(128, false, 0.f);
+		m_pGameInstance->Play_Sound(L"Dash_Focus.wav", CHANNELID::SKILL_PLAYER, 0.5f);
+	}
 
 	m_bChangeStance = false;
 	m_pPlayer->Set_SkillID(16);
@@ -48,6 +54,7 @@ void CPlayer_Dash::Update(_float fTimeDelta)
 
 	if (m_pPlayer->isAnimationFinish())
 	{
+		m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
 		if (m_pGameInstance->Get_DIMouseDown(MOUSEKEYSTATE::RBUTTON))
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::MOVE), nullptr);
 		else

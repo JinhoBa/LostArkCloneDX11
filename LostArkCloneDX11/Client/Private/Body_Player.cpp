@@ -67,7 +67,7 @@ HRESULT CBody_Player::Initialize(void* pArg)
 
     m_pCameraTargetBoneMatrix = m_pModelCom->Get_BoneMatrixPrt("b_cameratarget");
 
-    m_fRimStrength = 1.f;
+    m_fRimStrength = 0.f;
     m_fRimPower = 1.f;
 
     m_vRimColor[ENUM_TO_INT(STANCE::FLURRY)] = _float4(0.4f, 0.8f, 1.f, 1.f);
@@ -76,6 +76,12 @@ HRESULT CBody_Player::Initialize(void* pArg)
 #ifdef _DEBUG
     m_isDebug = true;
     m_fKeyFrame = 0.f;
+
+    LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+    m_fRange = 1.f;
+    m_vPosition = _float3(0.f, 0.f, 0.f);
 #endif // _DEBUG
 
 
@@ -109,15 +115,37 @@ void CBody_Player::Update(_float fTimeDelta)
         if (m_fRimStrength < 0.f)
             m_fRimStrength = 0.f;
     }
+
+#ifdef _DEBUG
+
+    m_pGameInstance->Update_Light_Color(L"Point1", 0, &LightDesc.vDiffuse);
+    m_pGameInstance->Update_Light_Color(L"Point1", 1, &LightDesc.vAmbient);
+    m_pGameInstance->Update_Light_Color(L"Point1", 2, &LightDesc.vSpecular);
+    m_pGameInstance->Update_Light_Position(L"Point1", &m_vPosition);
+#endif // _DEBUG
+
 }
 
 void CBody_Player::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
 }
 
 HRESULT CBody_Player::Render()
 {
+#ifdef _DEBUG
+    ImGui::SliderFloat3("D", (_float*)(&LightDesc.vDiffuse),0.f, 1.f);
+    ImGui::SliderFloat3("A", (_float*)(&LightDesc.vAmbient) , 0.f, 1.f);
+    ImGui::SliderFloat3("S", (_float*)(&LightDesc.vSpecular) , 0.f, 1.f);
+    ImGui::SliderFloat3("LightPos", (_float*)(&m_vPosition) , 0.f, 150.f);
+
+    ImGui::SliderFloat("PointRange", &m_fRange, 0.f, 50.f);
+
+    m_pGameInstance->Update_Light_Range(L"Point1", m_fRange);
+#endif // _DEBUG
+
+
 #pragma region ANIMATION_TEST
     ImGui::Checkbox("Play", &m_isDebug);
     ImGui::SliderFloat("KeyFrmae", &m_fKeyFrame, 0.f, 300.f);
@@ -140,13 +168,13 @@ HRESULT CBody_Player::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::VIEW))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", m_pGameInstance->Get_Far(), sizeof(_float))))
         return E_FAIL;
 
     for (_uint i = 0; i < m_iNumMesh; i++)
@@ -191,6 +219,35 @@ HRESULT CBody_Player::Render()
             }
         }
             
+        if (FAILED(m_pModelCom->Render(i)))
+            return E_FAIL;
+    }
+
+    return S_OK;
+}
+
+HRESULT CBody_Player::Render_Shadow()
+{
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", m_pGameInstance->Get_Far(), sizeof(_float))))
+        return E_FAIL;
+
+    for (_uint i = 0; i < m_iNumMesh; i++)
+    {
+        if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Begin(4)))
+            return E_FAIL;
+
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;
     }

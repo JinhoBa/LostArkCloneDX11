@@ -95,7 +95,7 @@ void CWeaponEffect_Player::Update(_float fTimeDelta)
 
             XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
-            if(-5.f > XMVectorGetY(m_pTransformCom->Get_Position()))
+            if(-1.f > XMVectorGetY(m_pTransformCom->Get_Position()))
             {
                 m_eState = STATE::IDLE;
                 m_isVisible = false;
@@ -106,31 +106,30 @@ void CWeaponEffect_Player::Update(_float fTimeDelta)
         }
     }
     
+
 }
 
 void CWeaponEffect_Player::Late_Update(_float fTimeDelta)
 {
     if(m_isVisible)
+    {
         m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+        m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
+    }
 }
 
 HRESULT CWeaponEffect_Player::Render()
 {
-#ifdef _DEBUG
-    ImGui::InputFloat("EffecSpeed", &m_fSpeed);
-#endif // _DEBUG
-
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::VIEW))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::VIEW))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transfrom_Float4x4(D3DTS::PROJ))))
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Veiwport().MaxDepth, sizeof(_float))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", m_pGameInstance->Get_Far(), sizeof(_float))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pTextureCom->Get_SRV(3))))
@@ -160,7 +159,7 @@ HRESULT CWeaponEffect_Player::Render()
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE, 0, "g_EmissiveColor")))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(6)))
+        if (FAILED(m_pShaderCom->Begin(1)))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Render(i)))

@@ -14,6 +14,7 @@ public:
 	class CCamera* Find_Camera(const _wstring& strCameraNameTag);
 	HRESULT Add_Camera(const _wstring& strCameraNameTag, class CCamera* pGameObject);
 	HRESULT Bind_Camera(const _wstring& strCameraNameTag, _bool isReturn, _float fLerpTime);
+	_float* Get_Far();
 
 public:
 	void	Priority_Update(_float fTimeDelta);
