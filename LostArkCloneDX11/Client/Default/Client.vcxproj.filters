@@ -424,6 +424,9 @@
     <Filter Include="02.GameObject\Character\Player\States\SKill\Awake">
       <UniqueIdentifier>{cd33fb05-da67-469a-a29f-04d4740aa1a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06.Effect\03. Particle">
+      <UniqueIdentifier>{d5c42b35-cc73-4edf-874a-ea3b6184a15d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -840,6 +843,9 @@
     <ClInclude Include="..\public\Player_AwakeSkill.h">
       <Filter>02.GameObject\Character\Player\States\SKill\Awake</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Effect_Particle.h">
+      <Filter>06.Effect\03. Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1250,6 +1256,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Player_AwakeSkill.cpp">
       <Filter>02.GameObject\Character\Player\States\SKill\Awake</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Particle.cpp">
+      <Filter>06.Effect\03. Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

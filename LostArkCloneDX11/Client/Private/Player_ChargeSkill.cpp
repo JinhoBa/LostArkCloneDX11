@@ -122,8 +122,6 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 		if (m_pPlayer->isAnimationFinish())
 		{
-
-
 			m_eState = CPlayer_ChargeSkill::END;
 			m_pPlayer->Set_Animation(m_iAnimEnd, false, 0.f);
 		}

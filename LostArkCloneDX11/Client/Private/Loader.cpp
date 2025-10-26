@@ -49,6 +49,7 @@
 #include "Effect_Ground.h"
 #include "Effect_Trail.h"
 #include "Effect_Mesh.h"
+#include "Effect_Particle.h"
 #include "Effect_Manager.h"
 
 #include "Body_Monster.h"
@@ -809,6 +810,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Effect_Mesh*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Mesh"),
 		CEffect_Mesh::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Effect_Particle*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Particle"),
+		CEffect_Particle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Effect_Trail*/

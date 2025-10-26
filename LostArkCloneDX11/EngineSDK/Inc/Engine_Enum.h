@@ -19,5 +19,6 @@ namespace Engine
 	enum class MOUSEMOVESTATE { X, Y, W };
 	enum class MOUSESPACE { VIEWPORT, PROJ, VIEW, WORLD, LOCAL };
 	enum class LERP {LINEAR, EASEIN, EASEOUT, EASEINOUT};
+	enum class PARTICLE {SPREAD, SCALE, CIRCLE};
 }
 #endif // Engine_Enum_h__

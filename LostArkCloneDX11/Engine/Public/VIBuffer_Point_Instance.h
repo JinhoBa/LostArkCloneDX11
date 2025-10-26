@@ -28,18 +28,22 @@ public:
 public:
 #ifdef _DEBUG
 	void Set_Desc(_bool isLoop, _float2 vSize, _float2 vLifeTime);
+	void Set_NumInstance(_uint iNumInstance);
 #endif // _DEBUG
 	void Update(_float fTimeDelta);
 	void Scaling(_float fTimeDelta, LERP eLerpType, _float3 vPivot, _float fSpeed);
 	void Set_Spread(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
+	void Set_Circle(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
 	void Spread(_float3& vPosition, _float3& vRange, _float fTimeDelta);
 	void Trail(_float fTimeDelta);
 	void Reset();
+	void Circle(_float3& vPosition, _float3& vRange, _float fTimeDelta);
 
 private:
 	VTX_INSTANCE_PARTICLE*	m_pInstanceVertices = { nullptr };
 
 	_bool					m_isLoop = {};
+	_uint					m_iMaxInstance = {};
 	_float2					m_vSize = {};
 	_float3					m_vPivot = {};
 	_float*					m_pSpeed = { nullptr };

@@ -160,21 +160,29 @@ namespace Client
 		_float3		vTargetPosition{};
 	}CAMERA_ANIMATION_DESC;
 
-	typedef struct tagEffectDesc
+	typedef struct tagEffectParticleData
 	{
-		EFFECT	eType;
-		LERP	eLerpType;
-		_bool	isLoop;
-		_bool	isMove;
-		_bool	isRotate;
-		_float	fRotationSpeed;
-		_float3 vStrartPosition;
-		_float3 vEndPosition;
-		_float3 vRotation;
-		_float3 vScale;
-		_float2 vLifeTime;
-		
-	};
+		PARTICLE	eType;
+		_bool		isLoop;
+		_uint		iNumInstance;
+		_uint		iPassIndex;
+		_float		fActiveTime;
+		_float2		vTileSize;
+		_float2		vSize;
+		_float2		vSpeed;
+		_float2		vLifeTime;
+		_float3		vCenter;
+		_float3		vRange;
+		_float3		vPivot;
+	}EFFECT_PARTICLE_DATA;
+
+	typedef struct tagEffectParticleDesc
+	{
+		EFFECT_PARTICLE_DATA	Data;
+		_wstring				strDiffuseTexture;
+		_wstring				strMaskTexture;
+		_wstring				strNoiseTexture;
+	}EFFECT_PARTICLE_DESC;
 
 	typedef struct EffectGroundData
 	{

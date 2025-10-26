@@ -35,11 +35,13 @@ public:
 	const vector<BLUR_EVENT_DESC>& Get_BlurTrack(_uint iTrackIndex);
 	HRESULT Load_Mesh_Data(const _char* pFilePath, CHARACTER eType);
 	HRESULT Load_Ground_Data(const _char* pFilePath, CHARACTER eType);
+	HRESULT Load_Particle_Data(const _char* pFilePath, CHARACTER eType);
 	HRESULT Load_EffectTrack(CHARACTER eType, const _char* pFilePath);
 
 #ifdef _DEBUG
 public:
 	HRESULT Save_Effect(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
+	HRESULT Save_Particle(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
 	HRESULT Save_Mesh(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
 	HRESULT Save_Ground(EFFECT eType, void* pArg, const _char* pFilePath, _uint iID);
 #endif // _DEBUG
@@ -59,12 +61,15 @@ private:
 
 	vector<EFFECT_GROUND_DESC>		m_GroundEffectData[ENUM_TO_INT(CHARACTER::END)];
 	vector<EFFECT_MESH_DESC>		m_MeshEffect_Datas[ENUM_TO_INT(CHARACTER::END)];
+	vector<EFFECT_PARTICLE_DESC>	m_ParticleEffect_Datas[ENUM_TO_INT(CHARACTER::END)];
 
 	deque<class CEffect*>			m_GroundEffects;
 	deque<class CEffect*>			m_MeshEffects;
+	deque<class CEffect*>			m_ParticleEffects;
 
 	list<class CEffect*>			m_pActiveGroundEffects;
 	list<class CEffect*>			m_pActiveMeshEffects;
+	list<class CEffect*>			m_pActiveParticleEffects;
 
 private:
 	HRESULT Add_Components();
