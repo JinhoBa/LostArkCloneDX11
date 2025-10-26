@@ -79,8 +79,9 @@ public:
 
 #pragma region RENDERER
 	D3D11_VIEWPORT& Get_Veiwport();
-	void	Toggle_VisibleUI();
-	HRESULT Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
+	void		Toggle_VisibleUI();
+	HRESULT		Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
+	void		BlurBackBuffer(_float fStrength);
 #pragma endregion
 
 #pragma region PIPELINE

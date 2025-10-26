@@ -63,6 +63,7 @@
 #include "Kamen_Sword.h"
 #include "Kamen_Area.h"
 #include "Npc.h"
+#include "DynamicLand.h"
 #pragma endregion
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -305,6 +306,16 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_Component_Texture_TestEffect_MaskFolder */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_TestEffect_MaskFolder"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Mask")))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Water */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Water"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_x_water_002_1.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_WaterNoise */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WaterNoise"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Noise/fx_s_waternoise_01.dds"), 1))))
 		return E_FAIL;
 
 #pragma endregion
@@ -1099,6 +1110,11 @@ HRESULT CLoader::Loading_For_Tutorial()
 	/* For.Prototype_GameObject_SkySphere */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_SkySphere"),
 		CSkySphere::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_DynamicLand */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DynamicLand"),
+		CDynamicLand::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

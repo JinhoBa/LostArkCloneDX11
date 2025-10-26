@@ -88,7 +88,7 @@ HRESULT CLevel_Boss::Ready_Camera()
     m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
     m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
 
-    m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
+   // m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
 
     return S_OK;
 }

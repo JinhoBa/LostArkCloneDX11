@@ -58,15 +58,7 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 	m_pPlayer->Set_Animation(m_iAnimStart, false);
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 
-	/* Effects */
-	const vector<EFFECT_EVENT_DESC>& EffectEvents = m_pGameManager->Get_EffectTrack(CHARACTER::PLAYER, m_iSkillID);
-
-	m_EffectEvents.reserve(EffectEvents.size());
-
-	for (const auto& Track : EffectEvents)
-	{
-		m_EffectEvents.push_back({ false, Track });
-	}
+	Ready_EffectTrack();
 
 	if (m_pSkillInfo->bApplyRimLightBody)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();

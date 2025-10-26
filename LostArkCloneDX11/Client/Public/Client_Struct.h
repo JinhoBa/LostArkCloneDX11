@@ -248,9 +248,17 @@ namespace Client
 		_float	fKeyFrame;
 	}EFFECT_EVENT_DESC;
 
-	typedef struct tagEffecEvent
+	typedef struct tagCameraShakeEvenetDesc
 	{
-		_bool isTrigge;
-		EFFECT_EVENT_DESC EventDesc;
-	}EFFECT_EVENT;
+		_uint iID;
+		_float fKeyFrame;
+		_float fTime;
+	}CAMERA_SHAKE_EVENT_DESC;
+
+	typedef struct tagBlurEventDesc
+	{
+		_uint iID;
+		_float fKeyFrame;
+		_float fTime;
+	}BLUR_EVENT_DESC;
 }

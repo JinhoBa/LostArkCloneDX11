@@ -20,6 +20,7 @@ public:
 		m_isVisibleUI = !m_isVisibleUI;
 	}
 	D3D11_VIEWPORT& Get_Veiwport();
+	void BlurBackBuffer(_float fStrength);
 
 public:
 	HRESULT Initialize();
@@ -37,7 +38,11 @@ private:
 	class CGameInstance*		m_pGameInstance = { nullptr };
 
 	_bool						m_isVisibleUI = { true };
+	_bool						m_isEnableBlur = { false };
 	_uint						m_iPassIndex = {};
+
+	_float						m_fBlurStrength = {};
+
 	_float						m_fMaxDepth = {};
 	_float						m_fWinSizeX = {};
 	_float						m_fWinSizeY = {};
@@ -69,6 +74,7 @@ private:
 	HRESULT Render_LightAcc();
 	HRESULT Render_Blur();
 	HRESULT Render_Combined();
+	HRESULT Render_BackBufferBlur();
 	void Render_NonLight();
 	void Render_Blend();
 	void Render_WorldUI();

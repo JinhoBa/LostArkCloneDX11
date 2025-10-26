@@ -61,11 +61,10 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
     m_fRimStrength = 0.f;
     m_fRimPower = 1.f;
 
-    m_fLightRange = 1.f;
+    m_fLightRange = 10.f;
     m_vLightOffset = _float3(0.f, 0.f, 0.f);
     m_vLightPosition = _float3(0.f, 0.f, 0.f);
 
-    m_pGameInstance->ToggleLight(L"SkillLight", true);
 
     return S_OK;
 }
@@ -90,8 +89,6 @@ void CWeapon_Player::Update(_float fTimeDelta)
         vPos.y = m_vLightPosition.y + m_vLightOffset.y;
         vPos.z = m_vLightPosition.z + m_vLightOffset.z;
 
-        m_pGameInstance->Update_Light_Position(L"SkillLight", &vPos);
-        m_pGameInstance->Update_Light_Range(L"SkillLight", m_fLightRange);
     }
 
     if (m_bApplyRimLight || m_fRimStrength > 0.f)
@@ -111,9 +108,6 @@ void CWeapon_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CWeapon_Player::Render()
 {
-    ImGui::SliderFloat("Range", &m_fLightRange, 0.f, 10.f);
-    ImGui::SliderFloat3("Offset", (_float*)(&m_vLightOffset), 0.f, 10.f);
-
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 

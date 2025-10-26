@@ -114,6 +114,10 @@ void CKamen::Change_Phase(PHASE ePhase)
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NavDesc)))
             return;
 
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DynamicLand"),
+            ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Land"))))
+            return ;
+
         vCenter = _float3(0.f, 0.f, -1.0f);
         vExtend = _float3(0.7f, 0.7f, 1.f);
         m_pColliderCom->Set_ColliderDesc(vCenter, vExtend);

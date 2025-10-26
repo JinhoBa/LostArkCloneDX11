@@ -7,6 +7,7 @@ NS_BEGIN(Client)
 
 class CSkill_Player abstract : public CState_Player
 {
+
 protected:
 	CSkill_Player();
 	virtual ~CSkill_Player() = default;
@@ -31,8 +32,13 @@ protected:
 
 	_float4x4*			m_pPlayerWorldMatrix = { nullptr };
 
-	vector<EFFECT_EVENT> m_EffectEvents;
+	list<EFFECT_EVENT_DESC>			m_EffectEvents;
+	list<CAMERA_SHAKE_EVENT_DESC>	m_CameraShakeEvents;
+	list<BLUR_EVENT_DESC>			m_BlurEvents;
 
+protected:
+	void	Ready_EffectTrack();
+	void	Clear_Events();
 
 public:
 	virtual void Free() override;

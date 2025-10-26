@@ -71,41 +71,21 @@ HRESULT CLevel_Tutorial::Ready_Light()
     LIGHT_DESC Desc = {};
 
     Desc.eType = LIGHT::DIRECTIONAL;
-    Desc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
-    Desc.vAmbient = _float4(0.3f, 0.3f, 0.3f, 1.f);
-    Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
-    Desc.vDirection = _float4(0.1f, -1.f, 0.1f, 0.f);
+    Desc.vDiffuse = _float4(0.7f, 0.7f, 0.7f, 1.f);
+    Desc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+    Desc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+    Desc.vDirection = _float4(0.f, -1.f, -0.1f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(L"Dircection", Desc)))
         return E_FAIL;
 
-    Desc.eType = LIGHT::POINT;
-    Desc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 1.f);
-    Desc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
-    Desc.vSpecular = Desc.vDiffuse;
-    Desc.vPosition = _float4(30.f, 5.f, 30.f, 1.f);
-    Desc.fRange = 10.f;
 
-    if (FAILED(m_pGameInstance->Add_Light(L"WorldPoint", Desc)))
-        return E_FAIL;
 
-    Desc.vPosition = _float4(50.f, 5.f, 50.f, 1.f);
-    if (FAILED(m_pGameInstance->Add_Light(L"WorldPoint2", Desc)))
-        return E_FAIL;
 
-    Desc.eType = LIGHT::POINT;
-    Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-    Desc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
-    Desc.vSpecular = _float4(0.05f, 0.05f, 0.05f, 0.5f);
-    Desc.vPosition = _float4(0.f, 0.f, 0.f, 1.f);
-    Desc.fRange = 1.f;
-
-    if (FAILED(m_pGameInstance->Add_Light(L"SkillLight", Desc)))
-        return E_FAIL;
 
     SHADOW_LIGHT_DESC ShadowDesc = {};
 
-    ShadowDesc.vEye = _float4(60.f, 30.f, 40.f, 1.f);
+    ShadowDesc.vEye = _float4(40.f, 30.f, 50.f, 1.f);
     ShadowDesc.vAt = _float4(40.f, 0.f, 40.f, 1.f);
     ShadowDesc.fFovy = XMConvertToRadians(80.f);
     ShadowDesc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;

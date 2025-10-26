@@ -7,7 +7,8 @@
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{ pContext }
-	, m_pGameInstance{CGameInstance::GetInstance()}
+	, m_pGameInstance{ CGameInstance::GetInstance() },
+	m_isEnableBlur{ false }
 {
     Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
@@ -19,6 +20,13 @@ D3D11_VIEWPORT& CRenderer::Get_Veiwport()
 	m_pContext->RSGetViewports(&m_iNumViewpprt, &m_Viewport);
 
 	return  m_Viewport;
+}
+
+void CRenderer::BlurBackBuffer(_float fStrength)
+{
+	m_fBlurStrength = fStrength;
+
+	m_isEnableBlur = true;
 }
 
 HRESULT CRenderer::Initialize()
@@ -73,6 +81,10 @@ HRESULT CRenderer::Initialize()
 		DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_BackBuffer"), (_uint)m_Viewport.Width, (_uint)m_Viewport.Height,
+		DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
 	m_fMaxDepth = m_Viewport.MaxDepth;
 
 	/* MRT GameObjects */
@@ -104,6 +116,10 @@ HRESULT CRenderer::Initialize()
 
 	/* MRT_Blur_X */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_X"), TEXT("Target_Blur_X"))))
+		return E_FAIL;
+
+	/* MRT_Blur_X */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_BackBuffer"), TEXT("Target_BackBuffer"))))
 		return E_FAIL;
 
 	m_pShaderCom = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"),
@@ -175,6 +191,12 @@ void CRenderer::Render()
 	{
 		MSG_BOX("Failed to Render Combined");
 	}
+
+	if (m_isEnableBlur)
+	{
+		Render_BackBufferBlur();
+	}
+
 	Render_NonLight();
 	Render_Blend();
 	
@@ -359,6 +381,12 @@ HRESULT CRenderer::Render_Blur()
 
 HRESULT CRenderer::Render_Combined()
 {
+	if (m_isEnableBlur)
+	{
+		if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_BackBuffer"))))
+			return E_FAIL;
+	}
+
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_OrthographicViewMatrix)))
@@ -399,8 +427,69 @@ HRESULT CRenderer::Render_Combined()
 
 	if (FAILED(m_pVIBufferCom->Bind_Resources()))
 		return E_FAIL;
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
 
-	return m_pVIBufferCom->Render();
+	if (m_isEnableBlur)
+	{
+		if (FAILED(m_pGameInstance->End_MRT()))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_BackBufferBlur()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Blur_X"))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_OrthographicViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_OrthographicMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fBlurStrength", &m_fBlurStrength, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_BackBuffer"), m_pShaderCom, "g_BlurTexture")))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(5);
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_OrthographicViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_OrthographicMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fBlurStrength", &m_fBlurStrength, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_BackBuffer"), m_pShaderCom, "g_BackBufferTexture")))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(6);
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	m_isEnableBlur = false;
+
+	return S_OK;
 }
 
 void CRenderer::Render_NonLight()

@@ -418,6 +418,12 @@
     <Filter Include="02.GameObject\Kamen_Area">
       <UniqueIdentifier>{392c7edd-9da4-4be3-af2c-b62d0597e9d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\MapObject\DynamicLand">
+      <UniqueIdentifier>{6aa138fd-0bcb-4dc1-a2d2-32b5b9fdaeba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Character\Player\States\SKill\Awake">
+      <UniqueIdentifier>{cd33fb05-da67-469a-a29f-04d4740aa1a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -828,6 +834,12 @@
     <ClInclude Include="..\public\Test_Ground_Effect.h">
       <Filter>06.Effect\Test_Ground</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\DynamicLand.h">
+      <Filter>02.GameObject\MapObject\DynamicLand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player_AwakeSkill.h">
+      <Filter>02.GameObject\Character\Player\States\SKill\Awake</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1232,6 +1244,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Test_Ground_Effect.cpp">
       <Filter>06.Effect\Test_Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DynamicLand.cpp">
+      <Filter>02.GameObject\MapObject\DynamicLand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player_AwakeSkill.cpp">
+      <Filter>02.GameObject\Character\Player\States\SKill\Awake</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -39,6 +39,8 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 
 	m_pPlayer->Set_Animation(m_iAnimationIndex++, false);
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
+
+	Ready_EffectTrack();
 }
 
 void CPlayer_ComboSkill::Update(_float fTimeDelta)

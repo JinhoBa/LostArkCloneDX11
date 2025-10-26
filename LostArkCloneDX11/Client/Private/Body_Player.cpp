@@ -118,10 +118,10 @@ void CBody_Player::Update(_float fTimeDelta)
 
 #ifdef _DEBUG
 
-    m_pGameInstance->Update_Light_Color(L"Point1", 0, &LightDesc.vDiffuse);
-    m_pGameInstance->Update_Light_Color(L"Point1", 1, &LightDesc.vAmbient);
-    m_pGameInstance->Update_Light_Color(L"Point1", 2, &LightDesc.vSpecular);
-    m_pGameInstance->Update_Light_Position(L"Point1", &m_vPosition);
+    //m_pGameInstance->Update_Light_Color(L"Point1", 0, &LightDesc.vDiffuse);
+    //m_pGameInstance->Update_Light_Color(L"Point1", 1, &LightDesc.vAmbient);
+    //m_pGameInstance->Update_Light_Color(L"Point1", 2, &LightDesc.vSpecular);
+    //m_pGameInstance->Update_Light_Position(L"Point1", &m_vPosition);
 #endif // _DEBUG
 
 }
@@ -135,20 +135,20 @@ void CBody_Player::Late_Update(_float fTimeDelta)
 HRESULT CBody_Player::Render()
 {
 #ifdef _DEBUG
-    ImGui::SliderFloat3("D", (_float*)(&LightDesc.vDiffuse),0.f, 1.f);
-    ImGui::SliderFloat3("A", (_float*)(&LightDesc.vAmbient) , 0.f, 1.f);
-    ImGui::SliderFloat3("S", (_float*)(&LightDesc.vSpecular) , 0.f, 1.f);
-    ImGui::SliderFloat3("LightPos", (_float*)(&m_vPosition) , 0.f, 150.f);
+    //ImGui::SliderFloat3("D", (_float*)(&LightDesc.vDiffuse),0.f, 1.f);
+    //ImGui::SliderFloat3("A", (_float*)(&LightDesc.vAmbient) , 0.f, 1.f);
+    //ImGui::SliderFloat3("S", (_float*)(&LightDesc.vSpecular) , 0.f, 1.f);
+    //ImGui::SliderFloat3("LightPos", (_float*)(&m_vPosition) , 0.f, 150.f);
 
-    ImGui::SliderFloat("PointRange", &m_fRange, 0.f, 50.f);
+    //ImGui::SliderFloat("PointRange", &m_fRange, 0.f, 50.f);
 
-    m_pGameInstance->Update_Light_Range(L"Point1", m_fRange);
+    //m_pGameInstance->Update_Light_Range(L"Point1", m_fRange);
 #endif // _DEBUG
 
 
 #pragma region ANIMATION_TEST
     ImGui::Checkbox("Play", &m_isDebug);
-    ImGui::SliderFloat("KeyFrmae", &m_fKeyFrame, 0.f, 300.f);
+    ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");
 
     /*ImGui::InputInt("Animation", &m_iAnimIndex);
     _int iIndex = {};

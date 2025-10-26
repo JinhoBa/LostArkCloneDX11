@@ -32,7 +32,7 @@ protected:
 	class CKamen*			m_pKamen = { nullptr };
 	_float4x4*				m_pKamenWorldMatrix = {};
 
-	vector<EFFECT_EVENT>	m_EffectEvents;
+	vector<EFFECT_EVENT_DESC>	m_EffectEvents;
 
 protected:
 	void Ready_EffectEvents();

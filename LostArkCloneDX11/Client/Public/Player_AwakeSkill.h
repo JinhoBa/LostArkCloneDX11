@@ -4,18 +4,18 @@
 
 NS_BEGIN(Client)
 
-class CPlayer_NormalSkill final : public CSkill_Player
+class CPlayer_AwakeSkill final : public CSkill_Player
 {
 public:
-	typedef struct NormalSkill_Desc
+	typedef struct AwakeSkill_Desc
 	{
 		_bool bLoop;
 		_uint iAnimationIndex;
 		_uint iSkillID;
-	}NORMALSKILL_DESC;
+	}AWAKE_SKILL_DESC;
 private:
-	CPlayer_NormalSkill();
-	virtual ~CPlayer_NormalSkill() = default;
+	CPlayer_AwakeSkill();
+	virtual ~CPlayer_AwakeSkill() = default;
 
 public:
 	virtual HRESULT Initilize(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
@@ -32,7 +32,7 @@ private:
 
 
 public:
-	static CPlayer_NormalSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
+	static CPlayer_AwakeSkill* Create(class CStateMachine* pStateMachine, STANCE* pStance, class CPlayer* pPlayer);
 	virtual void Free() override;
 };
 

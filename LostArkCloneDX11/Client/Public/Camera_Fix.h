@@ -12,6 +12,9 @@ private:
 	virtual ~CCamera_Fix() = default;
 
 public:
+	void	Start_Shake(_float fTime);
+
+public:
 	virtual HRESULT		Initialize_Prototype() override;
 	virtual HRESULT		Initialize(void* pArg) override;
 	virtual void		Priority_Update(_float fTimeDelta) override;

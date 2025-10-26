@@ -89,6 +89,11 @@ void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pW
 		m_pEffect_Manager->Add_Effects(eType, iEffectID, pWorldMatirx, eCharacter);
 }
 
+void	CGameManager::Start_ScreenBlur(_float fTime)
+{
+	m_pEffect_Manager->Start_ScreenBlur(fTime);
+}
+
 const vector<EFFECT_EVENT_DESC>& CGameManager::Get_EffectTrack(CHARACTER eType, _uint iTrackIndex)
 {
 	return m_pEffect_Manager->Get_EffectTrack(eType, iTrackIndex);
@@ -102,7 +107,15 @@ HRESULT CGameManager::Save_Effect(EFFECT eType, void* pArg, const _char* pFilePa
 	return E_FAIL;
 }
 #endif // _DEBUG
+const vector<CAMERA_SHAKE_EVENT_DESC>& CGameManager::Get_Camera_Track(_uint iTrackIndex)
+{
+	return m_pEffect_Manager->Get_Camera_Track(iTrackIndex);
+}
 
+const vector<BLUR_EVENT_DESC>& CGameManager::Get_BlurTrack(_uint iTrackIndex)
+{
+	return m_pEffect_Manager->Get_BlurTrack(iTrackIndex);
+}
 
 #pragma region DATA_MANAGER
 

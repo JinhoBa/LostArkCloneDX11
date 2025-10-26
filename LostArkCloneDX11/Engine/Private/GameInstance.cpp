@@ -356,7 +356,10 @@ void CGameInstance::Toggle_VisibleUI()
 {
 	m_pRenderer->Toggle_VisibleUI();
 }
-
+void CGameInstance::BlurBackBuffer(_float fStrength)
+{
+	m_pRenderer->BlurBackBuffer(fStrength);
+}
 #pragma endregion
 
 #pragma region PIPELINE

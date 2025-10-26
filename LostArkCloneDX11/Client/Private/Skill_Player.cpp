@@ -5,6 +5,7 @@
 #include "GameManager.h"
 #include "Player.h"
 #include "StateMachine.h"
+#include "Camera_Fix.h"
 
 CSkill_Player::CSkill_Player()
 	:CState_Player{}
@@ -71,17 +72,78 @@ void CSkill_Player::Update_Hitbox(_float fTimeDelta)
 
 void CSkill_Player::Update_EffectTrack()
 {
-	for (auto& Event : m_EffectEvents)
+	_float fTrackPosition = m_pPlayer->Get_TrackPositon();
+
+	auto iter_Effect = m_EffectEvents.begin();
+
+	for (; iter_Effect != m_EffectEvents.end();)
 	{
-		if (false == Event.isTrigge)
+		if (fTrackPosition >= (*iter_Effect).fKeyFrame)
 		{
-			if (m_pPlayer->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
-			{
-				Event.isTrigge = true;
-				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pPlayerWorldMatrix, CHARACTER::PLAYER);
-			}
+			m_pGameManager->Add_Effect((*iter_Effect).eType, (*iter_Effect).iID, m_pPlayerWorldMatrix, CHARACTER::PLAYER);
+			iter_Effect = m_EffectEvents.erase(iter_Effect);
 		}
+		else
+			++iter_Effect;
 	}
+
+	auto iter_CameraShake = m_CameraShakeEvents.begin();
+
+	for (;iter_CameraShake != m_CameraShakeEvents.end();)
+	{
+		if (fTrackPosition >= (*iter_CameraShake).fKeyFrame)
+		{
+			dynamic_cast<CCamera_Fix*>(m_pGameInstance->Find_Camera(TEXT("Camera_Fix")))->Start_Shake((*iter_CameraShake).fTime);
+			iter_CameraShake = m_CameraShakeEvents.erase(iter_CameraShake);
+		}
+		else
+			++iter_CameraShake;
+	}
+
+	auto iter_Blur = m_BlurEvents.begin();
+
+	for (;iter_Blur != m_BlurEvents.end();)
+	{
+		if (fTrackPosition >= (*iter_Blur).fKeyFrame)
+		{
+			m_pGameManager->Start_ScreenBlur((*iter_Blur).fTime);
+			iter_Blur = m_BlurEvents.erase(iter_Blur);
+		}
+		else
+			++iter_Blur;
+	}
+}
+
+void CSkill_Player::Ready_EffectTrack()
+{
+	const vector<EFFECT_EVENT_DESC>& EffectEvents = m_pGameManager->Get_EffectTrack(CHARACTER::PLAYER, m_iSkillID);
+
+	for (const auto& Track : EffectEvents)
+	{
+		m_EffectEvents.push_back(Track);
+	}
+
+	const vector<CAMERA_SHAKE_EVENT_DESC>& CameraEvents = m_pGameManager->Get_Camera_Track(m_iSkillID);
+
+	for (const auto& Track : CameraEvents)
+	{
+		m_CameraShakeEvents.push_back(Track);
+	}
+
+	const vector<BLUR_EVENT_DESC>& BlurEvents = m_pGameManager->Get_BlurTrack(m_iSkillID);
+
+	for (const auto& Track : BlurEvents)
+	{
+		m_BlurEvents.push_back(Track);
+	}
+
+}
+
+void CSkill_Player::Clear_Events()
+{
+	m_BlurEvents.clear();
+	m_CameraShakeEvents.clear();
+	m_EffectEvents.clear();
 }
 
 void CSkill_Player::Free()

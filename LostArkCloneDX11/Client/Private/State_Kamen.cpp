@@ -47,22 +47,23 @@ void CState_Kamen::Ready_EffectEvents()
 
 	for (const auto& Track : EffectEvents)
 	{
-		m_EffectEvents.push_back({ false, Track });
+		m_EffectEvents.push_back(Track);
 	}
 }
 
 void CState_Kamen::Update_EffectTrack()
 {
-	for (auto& Event : m_EffectEvents)
+	auto iter = m_EffectEvents.begin();
+	for ( ;iter != m_EffectEvents.end(); )
 	{
-		if (false == Event.isTrigge)
+		if (m_pKamen->Get_TrackPositon() >= (*iter).fKeyFrame)
 		{
-			if (m_pKamen->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
-			{
-				Event.isTrigge = true;
-				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pKamenWorldMatrix, CHARACTER::BOSS);
-			}
+			m_pGameManager->Add_Effect((*iter).eType, (*iter).iID, m_pKamenWorldMatrix, CHARACTER::BOSS);
+
+			iter = m_EffectEvents.erase(iter);
 		}
+		else
+			++iter;
 	}
 }
 

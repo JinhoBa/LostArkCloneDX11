@@ -15,6 +15,14 @@ CCamera_Fix::CCamera_Fix(const CCamera_Fix& Prototype)
 {
 }
 
+void CCamera_Fix::Start_Shake(_float fTime)
+{
+    m_isShake = true;
+    m_fDuration = 0.2f;
+    m_fChangeDuration = 0.2f;
+    m_fTimeAcc = 0.f;
+}
+
 HRESULT CCamera_Fix::Initialize_Prototype()
 {
     return S_OK;
@@ -74,14 +82,6 @@ void CCamera_Fix::Update_Camera_Position(_float fTimeDelta)
         XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f) + XMLoadFloat3(&m_vDirection));
 
     m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&m_vTargetPosition), 1.f));
-
-    if (m_pGameInstance->Get_KeyDown(DIK_U))
-    {
-        m_isShake = true;
-        m_fDuration = 0.2f;
-        m_fChangeDuration = 0.2f;
-        m_fTimeAcc = 0.f;
-    }
 
     Shake(fTimeDelta);
 }

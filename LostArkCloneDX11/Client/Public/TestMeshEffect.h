@@ -30,6 +30,7 @@ private:
 	_uint		m_iEffectID = {};
 
 	_float		m_fDissolveSpeed = {};
+	_float		m_fNoiseStrength = {};
 
 	CShader*	m_pShaderCom = { nullptr };
 	CTexture*	m_pTextureCom = { nullptr };

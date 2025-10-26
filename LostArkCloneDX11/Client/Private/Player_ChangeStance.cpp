@@ -43,14 +43,7 @@ void CPlayer_ChangeStance::Enter(void* pArg)
 
 	m_pPlayer->Change_Stance();
 
-	const vector<EFFECT_EVENT_DESC>& EffectEvents = m_pGameManager->Get_EffectTrack(CHARACTER::PLAYER, iEffectID);
-
-	m_EffectEvents.reserve(EffectEvents.size());
-
-	for (const auto& Track : EffectEvents)
-	{
-		m_EffectEvents.push_back({ false, Track });
-	}
+	Ready_EffectTrack();
 
 	dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
@@ -66,17 +59,7 @@ void CPlayer_ChangeStance::Update(_float fTimeDelta)
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::IDLE), nullptr);
 	}
 
-	for (auto& Event : m_EffectEvents)
-	{
-		if (false == Event.isTrigge)
-		{
-			if (m_pPlayer->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
-			{
-				Event.isTrigge = true;
-				m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, m_pPlayerWorldMatrix, CHARACTER::PLAYER);
-			}
-		}
-	}
+	Update_EffectTrack();
 }
 
 void CPlayer_ChangeStance::Exit()

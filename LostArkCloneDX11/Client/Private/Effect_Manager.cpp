@@ -28,9 +28,11 @@ HRESULT CEffect_Manager::Initialize_Prototype()
 
 HRESULT CEffect_Manager::Initialize(void* pArg)
 {
+    m_isScreenBlur = false;
+    m_vScreenBlurTime = _float2(0.f, 0.5f);
+
     if (FAILED(Add_Components()))
         return E_FAIL;
-
 
     for (_uint i = 0; i < 20; i++)
     {
@@ -93,6 +95,21 @@ void CEffect_Manager::Update(_float fTimeDelta)
     for (auto& pEffect : m_pActiveGroundEffects)
     {
         pEffect->Update(fTimeDelta);
+    }
+
+    
+
+    if (m_isScreenBlur)
+    {
+        m_vScreenBlurTime.x += fTimeDelta;
+
+        m_pGameInstance->BlurBackBuffer(1.f - abs(m_vScreenBlurTime.x / m_vScreenBlurTime.y * 2.f - 1.f));
+
+        if (m_vScreenBlurTime.x >= m_vScreenBlurTime.y)
+        {
+            m_vScreenBlurTime.x = 0.f;
+            m_isScreenBlur = false;
+        }
     }
 }
 
@@ -168,9 +185,27 @@ void CEffect_Manager::Add_Effects(EFFECT eType, _uint iEffectID, const _float4x4
         
 }
 
+void CEffect_Manager::Start_ScreenBlur(_float fTime)
+{
+    m_isScreenBlur = true;
+
+    m_vScreenBlurTime.x = 0.f;
+    m_vScreenBlurTime.y = fTime;
+}
+
 const vector<EFFECT_EVENT_DESC>& CEffect_Manager::Get_EffectTrack(CHARACTER eType, _uint iTrackIndex)
 {
     return m_EffectEvents[ENUM_TO_INT(eType)][iTrackIndex];
+}
+
+const vector<CAMERA_SHAKE_EVENT_DESC>& CEffect_Manager::Get_Camera_Track(_uint iTrackIndex)
+{
+    return m_CameraShakeEvents[iTrackIndex];
+}
+
+const vector<BLUR_EVENT_DESC>& CEffect_Manager::Get_BlurTrack(_uint iTrackIndex)
+{
+    return m_BlurEvents[iTrackIndex];
 }
 
 HRESULT CEffect_Manager::Load_Mesh_Data(const _char* pFilePath, CHARACTER eType)
@@ -406,30 +441,54 @@ HRESULT CEffect_Manager::Load_EffectTrack(CHARACTER eType, const _char* pFilePat
 
     for (auto* Skill = root->FirstChildElement("Skill"); Skill; Skill = Skill->NextSiblingElement("Skill"))
     {
-        vector<EFFECT_EVENT_DESC> EffectDescs;
+        vector<EFFECT_EVENT_DESC> EffectDesces;
+        vector<CAMERA_SHAKE_EVENT_DESC> CameraShakeDesces;
+        vector<BLUR_EVENT_DESC> BlurDesces;
 
         for (auto* Effect = Skill->FirstChildElement("Effect"); Effect; Effect = Effect->NextSiblingElement("Effect"))
         {
-            EFFECT_EVENT_DESC Desc = {};
+            EFFECT_EVENT_DESC Effect_Desc = {};
 
             const char* pName;
             Effect->QueryStringAttribute("type", &pName);
 
             if (!strcmp(pName, "mesh"))
-                Desc.eType = EFFECT::MESH;
+                Effect_Desc.eType = EFFECT::MESH;
             else if (!strcmp(pName, "ground"))
-                Desc.eType = EFFECT::GROUND;
+                Effect_Desc.eType = EFFECT::GROUND;
             else if (!strcmp(pName, "none"))
-                Desc.eType = EFFECT::MESH;
+                Effect_Desc.eType = EFFECT::MESH;
             
-            Effect->QueryFloatAttribute("keyframe", &Desc.fKeyFrame);
+            Effect->QueryFloatAttribute("keyframe", &Effect_Desc.fKeyFrame);
 
-            Effect->QueryUnsignedAttribute("effectID", &Desc.iID);
+            Effect->QueryUnsignedAttribute("effectID", &Effect_Desc.iID);
 
-            EffectDescs.push_back(Desc);
+            EffectDesces.push_back(Effect_Desc);
         }
         
-        m_EffectEvents[ENUM_TO_INT(eType)].push_back(EffectDescs);
+        m_EffectEvents[ENUM_TO_INT(eType)].push_back(EffectDesces);
+
+        for (auto* Camera = Skill->FirstChildElement("CameraShake"); Camera; Camera = Camera->NextSiblingElement("CameraShake"))
+        {
+            CAMERA_SHAKE_EVENT_DESC CameraShake_Desc = {};
+
+            Camera->QueryFloatAttribute("keyframe", &CameraShake_Desc.fKeyFrame);
+            Camera->QueryFloatAttribute("time", &CameraShake_Desc.fTime);
+
+            CameraShakeDesces.push_back(CameraShake_Desc);
+        }
+        m_CameraShakeEvents.push_back(CameraShakeDesces);
+
+        for (auto* Blur = Skill->FirstChildElement("Blur"); Blur; Blur = Blur->NextSiblingElement("Blur"))
+        {
+            BLUR_EVENT_DESC Blur_Desc = {};
+
+            Blur->QueryFloatAttribute("keyframe", &Blur_Desc.fKeyFrame);
+            Blur->QueryFloatAttribute("time", &Blur_Desc.fTime);
+
+            BlurDesces.push_back(Blur_Desc);
+        }
+        m_BlurEvents.push_back(BlurDesces);
     }
 
     return S_OK;

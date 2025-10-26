@@ -47,34 +47,13 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 
 	/* Effects */
-	const vector<EFFECT_EVENT_DESC>& EffectEvents = m_pGameManager->Get_EffectTrack(CHARACTER::PLAYER, m_iSkillID);
-
-	m_EffectEvents.reserve(EffectEvents.size());
-
-	for (const auto& Track : EffectEvents)
-	{
-		m_EffectEvents.push_back({ false, Track });
-	}
-
-	if (14 == m_iSkillID)
-	{
-		m_pPlayer->Toggle_PartObject(L"Weapon_Player");
-		
-		/* ÀÌÆåÆ® À§Ä¡ */
-		XMStoreFloat4(&m_vPickingPosition, m_pGameManager->Picking_Terrains());
-
-		_vector vDir = XMLoadFloat4(&m_vPickingPosition) - m_pPlayer->Get_Transform()->Get_Position();
-
-		if (5.f < XMVectorGetX(XMVector3Length(vDir)))
-		{
-			XMStoreFloat4(&m_vPickingPosition, m_pPlayer->Get_Transform()->Get_Position() + XMVector3Normalize(vDir) * 5.f);
-		}
-	}
+	Ready_EffectTrack();
 
 	if (m_pSkillInfo->bApplyRimLightBody)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	if (m_pSkillInfo->bApplyRimLightWeapon)
 		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
+
 }
 
 void CPlayer_NormalSkill::Update(_float fTimeDelta)
@@ -82,39 +61,8 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 	m_pPlayer->Check_Navi();
 
 	Update_Hitbox(fTimeDelta);
-	if (14 == m_iSkillID)
-	{
-		for (auto& Event : m_EffectEvents)
-		{
-			if (false == Event.isTrigge)
-			{
-				if (m_pPlayer->Get_TrackPositon() >= Event.EventDesc.fKeyFrame)
-				{
-					_float4x4 MouseWorldMartix;
-					XMStoreFloat4x4(&MouseWorldMartix, XMLoadFloat4x4(m_pPlayerWorldMatrix));
-					
-					MouseWorldMartix._41 = m_vPickingPosition.x;
-					MouseWorldMartix._43 = m_vPickingPosition.z;
-
-					Event.isTrigge = true;
-					m_pGameManager->Add_Effect(Event.EventDesc.eType, Event.EventDesc.iID, &MouseWorldMartix, CHARACTER::PLAYER);
-				}
-			}
-		}
-
-		if (false == m_isSpawWeaponEffect && 34.f <= m_pPlayer->Get_TrackPositon() && 50.f >= m_pPlayer->Get_TrackPositon())
-		{
-			m_isSpawWeaponEffect = true;
-			m_pPlayer->Toggle_PartObject(L"WeaponEffect_Player");
-		}
-		else if (true == m_isSpawWeaponEffect && 115.f <= m_pPlayer->Get_TrackPositon())
-		{
-			m_isSpawWeaponEffect = false;
-			dynamic_cast<CWeaponEffect_Player*>(m_pPlayer->Get_PartObject(L"WeaponEffect_Player"))->Shoot(&m_vPickingPosition);
-		}
-	}
-	else
-		Update_EffectTrack();
+	
+	Update_EffectTrack();
 
 	if (m_pPlayer->isAnimationFinish())
 	{
@@ -127,19 +75,19 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 
 void CPlayer_NormalSkill::Exit()
 {
-	if(14 == m_iSkillID)
-		m_pPlayer->Toggle_PartObject(L"Weapon_Player");
-
-	//m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
+	m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
 
 	if (m_pSkillInfo->bApplyRimLightBody)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	if (m_pSkillInfo->bApplyRimLightWeapon)
 		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
 
+	Clear_Events();
+
 	m_pPlayer->Set_SkillID(99);
 
 	m_EffectEvents.clear();
+
 }
 
 void CPlayer_NormalSkill::Play_SkillSound()
@@ -170,13 +118,13 @@ void CPlayer_NormalSkill::Play_SkillSound()
 	case 11:
 		m_pGameInstance->Play_Sound(L"LightBlades.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 		break;
-	case 14:
-		m_pGameInstance->Play_Sound(L"Ultimate1.wav", CHANNELID::SKILL_PLAYER, 0.4f);
-		break;
+	
 	default:
 		break;
 	}
 }
+
+
 
 CPlayer_NormalSkill* CPlayer_NormalSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)
 {

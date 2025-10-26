@@ -156,12 +156,12 @@ void CTestMeshEffect::Update(_float fTimeDelta)
         m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
         m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
 
-        m_ParentWorldMatrix = dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
-            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_Transform()->Get_WorldMatrix();
+        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
         
     }
-    else if (false == m_isLoop && dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
-        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
+    else if (false == m_isLoop && dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
     {
         m_vLifeTime.x = 0.f;
         m_pTransformCom->Set_Scale(m_vStartScale);
@@ -236,6 +236,7 @@ HRESULT CTestMeshEffect::Render()
         ImGui::InputFloat("M_OffsetU", (_float*)&m_fMaskScrollSpeedU);
         ImGui::InputFloat("M_OffsetV", (_float*)&m_fMaskScrollSpeedV);
         ImGui::SliderFloat("Dissolve", (_float*)&m_fDissolveSpeed,0.f, 1.f);
+        ImGui::SliderFloat("NoiseStr", (_float*)&m_fNoiseStrength,0.f, 1.f);
     }
     ImGui::Spacing();
 
@@ -331,7 +332,7 @@ HRESULT CTestMeshEffect::Render()
         return E_FAIL;
 
 
-    if (FAILED(m_EffectModels[m_iMeshIndex]->Render(0)))
+    if (FAILED(m_EffectModels[m_iMeshIndex]->Render(6)))
         return S_OK;
 
     return S_OK;
@@ -505,7 +506,7 @@ HRESULT CTestMeshEffect::Bind_ShaderResource()
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vMaskOffset", &m_vMaskOffset, sizeof(_float2))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_iPassIndex, sizeof(_float))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fNoiseStrength", &m_fNoiseStrength, sizeof(_float))))
         return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", m_pGameInstance->Get_Far(), sizeof(_float))))

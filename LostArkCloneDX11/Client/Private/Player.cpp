@@ -27,6 +27,7 @@
 #include "Player_NormalSkill.h"
 #include "Player_ChargeSkill.h"
 #include "Player_ComboSkill.h"
+#include "Player_AwakeSkill.h"
 #include "Player_ChangeStance.h"
 #include "Player_Dash.h"
 #include "Player_Hit.h"
@@ -239,6 +240,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     Add_Buff(1);
 
+
 #ifdef _DEBUG
     //m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
 #endif
@@ -259,6 +261,10 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 #ifdef _DEBUG
     isCollUpdate = false;
+
+
+
+
 #endif // _DEBUG
 }
 
@@ -512,18 +518,18 @@ HRESULT CPlayer::Ready_PartObjects()
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HpBar_Player"), TEXT("HPBar_Player"), &HpBar_Desc)))
         return E_FAIL;
 
- /*  CEffect::EFFECT_DESC Effect_Desc= {};
+ CEffect::EFFECT_DESC Effect_Desc= {};
      
     Effect_Desc.pParentTransform = m_pTransformCom;
     Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
     if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
-        return E_FAIL;*/
+        return E_FAIL;
 
-     /*
-    Effect_Desc.pParentTransform = m_pTransformCom;
-    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
-    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
-        return E_FAIL;*/
+    //// 
+    //Effect_Desc.pParentTransform = m_pTransformCom;
+    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
+    //    return E_FAIL;
 
  
     //Effect_Desc.pParentTransform = m_pTransformCom;
@@ -564,6 +570,7 @@ HRESULT CPlayer::Ready_States()
     m_States[CUTSCENE] = CPlayer_CutScene::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[CLASH] = CPlayer_Clash::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
     m_States[DIALOGUE] = CPlayer_Dialogue::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
+    m_States[AWAKE_SKILL] = CPlayer_AwakeSkill::Create(m_pStateMachineCom, &m_PlayerInfo.eStance, this);
 
     return S_OK;
 }

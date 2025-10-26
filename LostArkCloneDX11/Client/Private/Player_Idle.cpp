@@ -11,6 +11,7 @@
 #include "Player_ChargeSkill.h"
 #include "Player_ComboSkill.h"
 #include "Player_ChangeStance.h"
+#include "Player_AwakeSkill.h"
 
 CPlayer_Idle::CPlayer_Idle()
 	:CState_Player{}
@@ -191,6 +192,14 @@ void CPlayer_Idle::Update(_float fTimeDelta)
 			Desc.iAnimationIndex = iAnimationIndex;
 			Desc.iCount = iCount;
 			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::COMBO_SKILL), &Desc);
+		}
+		else if (SKILL_TYPE::SKILL_AWAKE == eType)
+		{
+			CPlayer_AwakeSkill::AWAKE_SKILL_DESC Desc = {};
+
+			Desc.iSkillID = iSkillID;
+			Desc.iAnimationIndex = iAnimationIndex;
+			m_pStateMachine->Change_State(m_pPlayer->Get_State(CPlayer::STATE::AWAKE_SKILL), &Desc);
 		}
 		else
 		{
