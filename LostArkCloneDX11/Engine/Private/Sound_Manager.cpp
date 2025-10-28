@@ -10,7 +10,7 @@ void CSound_Manager::Initialize()
 	m_pSystem->init(32, FMOD_INIT_NORMAL | FMOD_INIT_VOL0_BECOMES_VIRTUAL, NULL);
 
 	LoadSoundFile();
-	m_pSystem->setDriver(0);
+	result = m_pSystem->setDriver(0);
 }
 
 CSound_Manager* CSound_Manager::Create()
@@ -29,7 +29,7 @@ void CSound_Manager::Free()
 	}
 	m_mapSound.clear();
 
-	m_pSystem->release();
+	//m_pSystem->release();
 
 	m_pSystem->close();
 }

@@ -34,7 +34,7 @@ void CClash_Kamen::Enter(void* pArg)
 	
 	m_pKamen->Set_Animation(6, false);
 
-	m_iEffectID = 11;
+	m_iEffectID = 15;
 	Ready_EffectEvents();
 }
 
@@ -43,12 +43,15 @@ void CClash_Kamen::Update(_float fTimeDelta)
 	switch (m_eState)
 	{
 	case Client::CClash_Kamen::STATE::IDLE:
+		Update_EffectTrack();
 		if (m_pGameInstance->Get_KeyDown(DIK_G))
 		{
 			m_eState = STATE::START;
 			/*test*/
 			//m_pKamen->Set_Animation(7, true);
-
+			m_EffectEvents.clear();
+			m_iEffectID = 16;
+			Ready_EffectEvents();
 			m_pKamen->Set_Animation(7, false);
 			m_pKamen->Get_Transform()->TurnTo(m_pPlayerTransform->Get_Position());
 
@@ -74,6 +77,11 @@ void CClash_Kamen::Update(_float fTimeDelta)
 		{
 			m_pKamen->Set_Animation(8, true);
 			m_eState = STATE::LOOP;
+			m_pGameManager->Add_Effect(EFFECT::PARTICLE, 18, &m_pKamen->Get_Transform()->Get_WorldMatrix(), CHARACTER::BOSS);
+			m_pGameManager->Add_Effect(EFFECT::PARTICLE, 19, &m_pKamen->Get_Transform()->Get_WorldMatrix(), CHARACTER::BOSS);
+			m_EffectEvents.clear();
+			m_iEffectID = 11;
+			Ready_EffectEvents();
 		}
 		break;
 

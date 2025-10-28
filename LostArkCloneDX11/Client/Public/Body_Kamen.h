@@ -69,7 +69,7 @@ private:
 	_float					m_fKeyFrame = {};
 	_uint					m_iEffectID = {};
 
-	vector<EFFECT_EVENT_DESC>	m_EffectEvents;
+	list<EFFECT_EVENT_DESC>	m_EffectEvents;
 #endif // _DEBUG
 
 private:

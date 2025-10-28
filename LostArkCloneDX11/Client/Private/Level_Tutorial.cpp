@@ -32,8 +32,8 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
        return E_FAIL;
 
-    //if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
-    //    return E_FAIL;
+    if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
+        return E_FAIL;
 
    /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
@@ -240,8 +240,8 @@ HRESULT CLevel_Tutorial::Ready_Camera()
         PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"), &Desc)))))
         return E_FAIL;
 
-    //if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Free"))))
-    //    return E_FAIL;
+    if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Free"))))
+        return E_FAIL;
 
     Desc.fNear = 0.1f;
     Desc.fFar = 500.f;

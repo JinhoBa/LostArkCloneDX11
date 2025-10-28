@@ -30,13 +30,13 @@ void CPlayer_ChangeStance::Enter(void* pArg)
 
 	if (STANCE::FLURRY == *m_pPlayerStance)
 	{
-		iEffectID = 19;
+		m_iSkillID = 19;
 		m_pPlayer->Set_Animation(40, false);
 		m_pGameInstance->Play_Sound(L"ToFlurry3.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 	}
 	else
 	{
-		iEffectID = 20;
+		m_iSkillID = 20;
 		m_pPlayer->Set_Animation(41, false);
 		m_pGameInstance->Play_Sound(L"ToFocus3.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 	}

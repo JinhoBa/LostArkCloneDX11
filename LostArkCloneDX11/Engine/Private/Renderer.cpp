@@ -184,7 +184,7 @@ void CRenderer::Render()
 
 	if (FAILED(Render_Blur()))
 	{
-		MSG_BOX("Failed to Render Bler");
+		MSG_BOX("Failed to Render Blur");
 	}
 
 	if (FAILED(Render_Combined()))

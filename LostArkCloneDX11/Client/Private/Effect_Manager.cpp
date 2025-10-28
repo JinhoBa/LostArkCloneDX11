@@ -80,6 +80,9 @@ HRESULT CEffect_Manager::Initialize(void* pArg)
     if (FAILED(Load_EffectTrack(CHARACTER::BOSS, "../Bin/Resources/Data/Effect/Kamen_Effects_Track.xml")))
         return E_FAIL;
 
+    if (FAILED(Load_Particle_Data("../Bin/Resources/Data/Effect/Kamen_ParticleEffects.xml", CHARACTER::BOSS)))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -527,11 +530,11 @@ HRESULT CEffect_Manager::Load_Particle_Data(const _char* pFilePath, CHARACTER eT
 #pragma endregion
 
 #pragma region CENTER
-        tinyxml2::XMLElement* Position = Effect->FirstChildElement("Center");
+        tinyxml2::XMLElement* Center = Effect->FirstChildElement("Center");
 
-        Position->QueryFloatAttribute("X", &Desc.Data.vCenter.x);
-        Position->QueryFloatAttribute("Y", &Desc.Data.vCenter.y);
-        Position->QueryFloatAttribute("Z", &Desc.Data.vCenter.z);
+        Center->QueryFloatAttribute("X", &Desc.Data.vCenter.x);
+        Center->QueryFloatAttribute("Y", &Desc.Data.vCenter.y);
+        Center->QueryFloatAttribute("Z", &Desc.Data.vCenter.z);
 #pragma endregion
 
 #pragma region PIVOT
@@ -549,6 +552,22 @@ HRESULT CEffect_Manager::Load_Particle_Data(const _char* pFilePath, CHARACTER eT
         Range->QueryFloatAttribute("X", &Desc.Data.vRange.x);
         Range->QueryFloatAttribute("Y", &Desc.Data.vRange.y);
         Range->QueryFloatAttribute("Z", &Desc.Data.vRange.z);
+#pragma endregion
+
+#pragma region POSITION
+        tinyxml2::XMLElement* Position = Effect->FirstChildElement("Position");
+
+        Position->QueryFloatAttribute("X", &Desc.Data.vPosition.x);
+        Position->QueryFloatAttribute("Y", &Desc.Data.vPosition.y);
+        Position->QueryFloatAttribute("Z", &Desc.Data.vPosition.z);
+#pragma endregion
+
+#pragma region ROTATION
+        tinyxml2::XMLElement* Rotation = Effect->FirstChildElement("Rotation");
+
+        Rotation->QueryFloatAttribute("X", &Desc.Data.vRotation.x);
+        Rotation->QueryFloatAttribute("Y", &Desc.Data.vRotation.y);
+        Rotation->QueryFloatAttribute("Z", &Desc.Data.vRotation.z);
 #pragma endregion
 
 #pragma region LIFETIME
@@ -726,14 +745,14 @@ HRESULT CEffect_Manager::Save_Particle(EFFECT eType, void* pArg, const _char* pF
 
 #pragma endregion
 
-#pragma region POSITION
-    tinyxml2::XMLElement* Position = xmlDoc.NewElement("Center");
+#pragma region CENTER
+    tinyxml2::XMLElement* Center = xmlDoc.NewElement("Center");
 
-    Position->SetAttribute("X", pDesc->Data.vCenter.x);
-    Position->SetAttribute("Y", pDesc->Data.vCenter.y);
-    Position->SetAttribute("Z", pDesc->Data.vCenter.z);
+    Center->SetAttribute("X", pDesc->Data.vCenter.x);
+    Center->SetAttribute("Y", pDesc->Data.vCenter.y);
+    Center->SetAttribute("Z", pDesc->Data.vCenter.z);
 
-    Effect->InsertEndChild(Position);
+    Effect->InsertEndChild(Center);
 #pragma endregion
 
 #pragma region PIVOT
@@ -754,6 +773,26 @@ HRESULT CEffect_Manager::Save_Particle(EFFECT eType, void* pArg, const _char* pF
     Range->SetAttribute("Z", pDesc->Data.vRange.z);
 
     Effect->InsertEndChild(Range);
+#pragma endregion
+
+#pragma region POSITION
+    tinyxml2::XMLElement* Position = xmlDoc.NewElement("Position");
+
+    Position->SetAttribute("X", pDesc->Data.vPosition.x);
+    Position->SetAttribute("Y", pDesc->Data.vPosition.y);
+    Position->SetAttribute("Z", pDesc->Data.vPosition.z);
+
+    Effect->InsertEndChild(Position);
+#pragma endregion
+
+#pragma region ROTATION
+    tinyxml2::XMLElement* Rotation = xmlDoc.NewElement("Rotation");
+
+    Rotation->SetAttribute("X", pDesc->Data.vRotation.x);
+    Rotation->SetAttribute("Y", pDesc->Data.vRotation.y);
+    Rotation->SetAttribute("Z", pDesc->Data.vRotation.z);
+
+    Effect->InsertEndChild(Rotation);
 #pragma endregion
 
 #pragma region LIFETIME

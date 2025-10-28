@@ -331,6 +331,67 @@ void CVIBuffer_Point_Instance::Set_Circle(_bool isLoop, _float3& vPosition, _flo
 	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
+void CVIBuffer_Point_Instance::Set_Corn(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize)
+{
+	m_isLoop = isLoop;
+	m_vPivot = vPivot;
+
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	for (_uint i = 0; i < m_iNumInstance; ++i)
+	{
+		_float	fScale = m_pGameInstance->Random(vSize.x, vSize.y);
+
+		_float	fAngle = (i * vRange.y / (_float)(m_iNumInstance - 1)) + vRange.z;
+
+		pVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
+		pVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
+		pVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
+		pVertices[i].vLifeTime = _float2(0.0f, m_pGameInstance->Random(vLifeTime.x, vLifeTime.y));
+		pVertices[i].vTranslation = _float4(
+			vPosition.x + sinf(fAngle) * vRange.x,
+			vPosition.y,
+			vPosition.z + cosf(fAngle) * vRange.x,
+			1.f);
+
+		m_pSpeed[i] = m_pGameInstance->Random(vSpeed.x, vSpeed.y);
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::Set_Round(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize)
+{
+	m_iRoundIndex = 0;
+	m_isLoop = isLoop;
+	m_vPivot = vPivot;
+
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	for (_uint i = 0; i < m_iNumInstance; ++i)
+	{
+		_float			fScale = m_pGameInstance->Random(vSize.x, vSize.y);
+
+		pVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
+		pVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
+		pVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
+		pVertices[i].vLifeTime = _float2(0.f, m_pGameInstance->Random(vLifeTime.x, vLifeTime.y));
+		pVertices[i].vTranslation = _float4(0.f,-10.f, 0.f, 1.f);
+
+		m_pSpeed[i] = m_pGameInstance->Random(vSpeed.x, vSpeed.y);
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
 void CVIBuffer_Point_Instance::Spread(_float3& vPosition, _float3& vRange, _float fTimeDelta)
 {
 	D3D11_MAPPED_SUBRESOURCE SubResource{};
@@ -355,6 +416,107 @@ void CVIBuffer_Point_Instance::Spread(_float3& vPosition, _float3& vRange, _floa
 				m_pGameInstance->Random(vPosition.x - vRange.x * 0.5f, vPosition.x + vRange.x * 0.5f),
 				m_pGameInstance->Random(vPosition.y - vRange.y * 0.5f, vPosition.y + vRange.y * 0.5f),
 				m_pGameInstance->Random(vPosition.z - vRange.z * 0.5f, vPosition.z + vRange.z * 0.5f),
+				1.f);
+		}
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::Up(_float3& vPosition, _float3& vRange, _float fTimeDelta)
+{
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+
+	for (_uint i = 0; i < m_iNumInstance; ++i)
+	{
+		_vector vDir = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+
+		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeed[i] * fTimeDelta);
+
+		pVertices[i].vLifeTime.x += fTimeDelta;
+
+		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
+		{
+			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vTranslation = _float4(
+				m_pGameInstance->Random(vPosition.x - vRange.x * 0.5f, vPosition.x + vRange.x * 0.5f),
+				m_pGameInstance->Random(vPosition.y - vRange.y * 0.5f, vPosition.y + vRange.y * 0.5f),
+				m_pGameInstance->Random(vPosition.z - vRange.z * 0.5f, vPosition.z + vRange.z * 0.5f),
+				1.f);
+		}
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::Round(_float3& vPosition, _float3& vRange, _float fTimeDelta)
+{
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+	for (_uint i = 0; i < m_iRoundIndex + 5; ++i)
+	{
+		_vector vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
+
+		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeed[i] * fTimeDelta);
+
+		pVertices[i].vLifeTime.x += fTimeDelta;
+
+		if(pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
+			++m_iRoundIndex;
+		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
+		{
+			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vTranslation = _float4(
+				vPosition.x + sinf((i % 5) * 2.f * XM_PI / (_float)(m_iNumInstance / 5)) * vRange.x,
+				vPosition.y,
+				vPosition.z + cosf((i % 5) * 2.f * XM_PI / (_float)(m_iNumInstance / 5)) * vRange.x,
+				1.f);
+		}
+	}
+
+	
+
+	if (m_iNumInstance - 5 <= m_iRoundIndex)
+		m_iRoundIndex = 0;
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+}
+
+void CVIBuffer_Point_Instance::Corn(_float3& vPosition, _float3& vRange, _float fTimeDelta)
+{
+	D3D11_MAPPED_SUBRESOURCE SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTX_INSTANCE_PARTICLE* pVertices = static_cast<VTX_INSTANCE_PARTICLE*>(SubResource.pData);
+
+
+	for (_uint i = 0; i < m_iNumInstance; ++i)
+	{
+		_vector vDir = XMVectorSetW(XMLoadFloat4(&pVertices[i].vTranslation) - XMLoadFloat3(&m_vPivot), 0.f);
+
+		XMStoreFloat4(&pVertices[i].vTranslation, XMLoadFloat4(&pVertices[i].vTranslation) + XMVector3Normalize(vDir) * m_pSpeed[i] * fTimeDelta);
+
+		pVertices[i].vLifeTime.x += fTimeDelta;
+
+		if (true == m_isLoop && pVertices[i].vLifeTime.x >= pVertices[i].vLifeTime.y)
+		{
+			_float	fAngle = (i * vRange.y / (_float)(m_iNumInstance - 1)) + vRange.z;
+
+			pVertices[i].vLifeTime.x = 0.f;
+			pVertices[i].vTranslation = _float4(
+				vPosition.x + sinf(fAngle) * vRange.x,
+				vPosition.y,
+				vPosition.z + cosf(fAngle) * vRange.x,
 				1.f);
 		}
 	}

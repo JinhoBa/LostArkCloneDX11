@@ -34,7 +34,12 @@ public:
 	void Scaling(_float fTimeDelta, LERP eLerpType, _float3 vPivot, _float fSpeed);
 	void Set_Spread(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
 	void Set_Circle(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
+	void Set_Corn(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
+	void Set_Round(_bool isLoop, _float3& vPosition, _float3 vPivot, _float3 vRange, _float2 vLifeTime, _float2 vSpeed, _float2 vSize);
 	void Spread(_float3& vPosition, _float3& vRange, _float fTimeDelta);
+	void Up(_float3& vPosition, _float3& vRange, _float fTimeDelta);
+	void Round(_float3& vPosition, _float3& vRange, _float fTimeDelta);
+	void Corn(_float3& vPosition, _float3& vRange, _float fTimeDelta);
 	void Trail(_float fTimeDelta);
 	void Reset();
 	void Circle(_float3& vPosition, _float3& vRange, _float fTimeDelta);
@@ -47,6 +52,7 @@ private:
 	_float2					m_vSize = {};
 	_float3					m_vPivot = {};
 	_float*					m_pSpeed = { nullptr };
+	_uint					m_iRoundIndex = {};
 
 private:
 	_float Lerp(_float fStart, _float fEnd, _float fTime);

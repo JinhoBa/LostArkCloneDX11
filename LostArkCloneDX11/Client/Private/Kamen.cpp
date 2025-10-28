@@ -190,10 +190,10 @@ HRESULT CKamen::Initialize(void* pArg)
     m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 2.9f, 71.f, 1.f));
     m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
 
-//#ifdef _DEBUG
-//    static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
-//        dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wp_1"));
-//#endif // _DEBUG
+#ifdef _DEBUG
+    static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
+        dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wp_1"));
+#endif // _DEBUG
 
 
 
@@ -219,12 +219,12 @@ void CKamen::Priority_Update(_float fTimeDelta)
 
 void CKamen::Update(_float fTimeDelta)
 {
-    m_pStateMachineCom->Upadte(fTimeDelta);
+    //m_pStateMachineCom->Upadte(fTimeDelta);
 
-    if(PHASE::INTRO != m_ePhase)
-        Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);
+  /*  if(PHASE::INTRO != m_ePhase)
+        Check_Navigation(m_pNavigationCom, m_pRootBoneMatrix);*/
 
-    m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
+    //m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
     m_pHitBoxCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
     m_pHitBoxShpereCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
@@ -253,10 +253,10 @@ void CKamen::Late_Update(_float fTimeDelta)
 HRESULT CKamen::Render()
 {
 #ifdef _DEBUG
-    if (isCollUpdate)
+    //if (isCollUpdate)
         m_pHitBoxCom->Render();
    
-    if(isSphereUpdate)
+    //if(isSphereUpdate)
         m_pHitBoxShpereCom->Render();
 
     _float dis = XMVector3Length(XMVectorSetY(m_pTransformCom->Get_Position(), 0.f) - XMVectorSetY(dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
@@ -270,6 +270,7 @@ HRESULT CKamen::Render()
    m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
 #endif
    m_pColliderCom->Render();
+
     return S_OK;
 }
 
@@ -307,6 +308,8 @@ _bool CKamen::Reposition()
     if(15.f <= XMVectorGetX(XMVector3Length(XMVectorSet(35.f, 0.1f, 50.f, 1.f) - m_pTransformCom->Get_Position())))
     {
         m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 50.f, 1.f));
+        m_pGameManager->Add_Effect(EFFECT::PARTICLE, 8, &m_pTransformCom->Get_WorldMatrix(), CHARACTER::BOSS);
+        m_pGameManager->Add_Effect(EFFECT::PARTICLE, 9, &m_pTransformCom->Get_WorldMatrix(), CHARACTER::BOSS);
         return true;
     }
 
@@ -324,10 +327,10 @@ HRESULT CKamen::Reay_Component()
 
     Navi_Desc.iCurrentIndex = 0;
 
-    /* Navigation */
-    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Kamen"),
-        TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Navi_Desc)))
-        return E_FAIL;
+    ///* Navigation */
+    //if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Navigation_Kamen"),
+    //    TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &Navi_Desc)))
+    //    return E_FAIL;
 
     /* Collider */CBounding_OBB::BOUNDING_OBB_DESC ColliderDesc = {};
     ColliderDesc.eColliderType = COLLIDERTYPE::COLLIDER;
@@ -459,12 +462,12 @@ HRESULT CKamen::Ready_PartObjects()
         TEXT("Prototype_GameObject_Weapon_Kamen"), TEXT("Weapon_Kamen"), &Weapon_Desc)))
         return E_FAIL;
 
-    //CEffect::EFFECT_DESC Effect_Desc = {};
+    CEffect::EFFECT_DESC Effect_Desc = {};
 
-    //Effect_Desc.pParentTransform = m_pTransformCom;
-    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02");
-    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
-    //    return E_FAIL;
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wpn_02");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
+        return E_FAIL;
 
     return S_OK;
 }

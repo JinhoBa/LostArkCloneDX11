@@ -174,6 +174,8 @@ namespace Client
 		_float3		vCenter;
 		_float3		vRange;
 		_float3		vPivot;
+		_float3		vPosition;
+		_float3		vRotation;
 	}EFFECT_PARTICLE_DATA;
 
 	typedef struct tagEffectParticleDesc

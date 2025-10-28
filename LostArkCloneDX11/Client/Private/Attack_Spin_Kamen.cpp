@@ -30,17 +30,10 @@ void CAttack_Spin_Kamen::Enter(void* pArg)
 
 	m_pSkillDesc = m_pGameManager->Get_KamenData(ENUM_TO_INT(*m_pPhase), m_iSkillID);
 
-	_float fDot = XMVectorGetX(XMVector3Dot(
-		m_pKamen->Get_Transform()->Get_State(STATE::RIGHT), m_pPlayerTransform->Get_Position()));
-
 	m_iEffectID = 3;
 
-	if(-0.5f >= fDot)
-		m_pKamen->Set_Animation(4, false);
-	else if(0.5f <= fDot)
-		m_pKamen->Set_Animation(3, false);
-	else
-		m_pKamen->Set_Animation(2, false);
+	
+	m_pKamen->Set_Animation(29, false);
 
 	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
 

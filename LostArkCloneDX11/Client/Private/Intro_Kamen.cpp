@@ -39,7 +39,7 @@ void CIntro_Kamen::Enter(void* pArg)
 	case PHASE::PHASE2:
 		m_iEffectID = 8;
 		m_pKamen->Set_Animation(0, false);
-		m_pKamen->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
+		m_pKamen->Get_Transform()->Set_State(STATE::POSITION, XMVectorSet(35.f, 0.1f, 65.f, 1.f));
 		break;
 
 	case PHASE::PHASE3:

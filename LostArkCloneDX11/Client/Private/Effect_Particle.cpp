@@ -44,6 +44,8 @@ HRESULT CEffect_Particle::Initialize(void* pArg)
     m_Particle_Data.vRange = _float3(1.f, 1.f, 1.f);
     m_Particle_Data.vLifeTime = _float2(0.5f, 0.5f);
     m_Particle_Data.vPivot = _float3(0.f, 0.f, 0.f);
+    m_Particle_Data.vPosition = _float3(0.f, 0.f, 0.f);
+    m_Particle_Data.vRotation = _float3(0.f, 0.f, 0.f);
 
     m_isActive = false;
     m_fTimeAcc = 0.f;
@@ -81,6 +83,10 @@ void CEffect_Particle::Update(_float fTimeDelta)
         m_pVIBufferCom->Circle(m_Particle_Data.vCenter, m_Particle_Data.vRange, fTimeDelta);
         break;
 
+    case Engine::PARTICLE::CORN:
+        m_pVIBufferCom->Corn(m_Particle_Data.vCenter, m_Particle_Data.vRange, fTimeDelta);
+        break;
+
     default:
         break;
     }
@@ -89,6 +95,10 @@ void CEffect_Particle::Update(_float fTimeDelta)
         m_isDead = true;
     else if(m_fTimeAcc > m_Particle_Data.fActiveTime)
         m_isDead = true;
+
+    _matrix matRotation = XMMatrixRotationRollPitchYaw(XMConvertToRadians(m_Particle_Data.vRotation.x), XMConvertToRadians(m_Particle_Data.vRotation.y), XMConvertToRadians(m_Particle_Data.vRotation.z));
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * matRotation * XMLoadFloat4x4(&m_ParentWorldMatrix));
 }
 
 void CEffect_Particle::Late_Update(_float fTimeDelta)
@@ -146,7 +156,11 @@ HRESULT CEffect_Particle::Start(const _float4x4* pWorldMatrix, void* pArg)
     m_strMaskTexture = pDesc->strMaskTexture;
     m_strNoiseTexture = pDesc->strNoiseTexture;
 
-    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(&m_ParentWorldMatrix));
+    _matrix matRotation = XMMatrixRotationRollPitchYaw(XMConvertToRadians(m_Particle_Data.vRotation.x), XMConvertToRadians(m_Particle_Data.vRotation.y), XMConvertToRadians(m_Particle_Data.vRotation.z));
+
+    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSetW(XMLoadFloat3(&m_Particle_Data.vPosition), 1.f));
+
+    XMStoreFloat4x4(&m_CombinedWorldMatrix, XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * matRotation * XMLoadFloat4x4(& m_ParentWorldMatrix));
 
     m_pVIBufferCom->Set_NumInstance(m_Particle_Data.iNumInstance);
 
@@ -154,6 +168,8 @@ HRESULT CEffect_Particle::Start(const _float4x4* pWorldMatrix, void* pArg)
         m_pVIBufferCom->Set_Spread(m_Particle_Data.isLoop, m_Particle_Data.vCenter, m_Particle_Data.vPivot, m_Particle_Data.vRange, m_Particle_Data.vLifeTime, m_Particle_Data.vSpeed, m_Particle_Data.vSize);
     else if(PARTICLE::CIRCLE == m_Particle_Data.eType)
         m_pVIBufferCom->Set_Circle(m_Particle_Data.isLoop, m_Particle_Data.vCenter, m_Particle_Data.vPivot, m_Particle_Data.vRange, m_Particle_Data.vLifeTime, m_Particle_Data.vSpeed, m_Particle_Data.vSize);
+    else if(PARTICLE::CORN == m_Particle_Data.eType)
+        m_pVIBufferCom->Set_Corn(m_Particle_Data.isLoop, m_Particle_Data.vCenter, m_Particle_Data.vPivot, m_Particle_Data.vRange, m_Particle_Data.vLifeTime, m_Particle_Data.vSpeed, m_Particle_Data.vSize);
 
     m_Particle_Data.vLifeTime.x = 0.f;
 

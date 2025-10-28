@@ -57,9 +57,15 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 		{
 			m_eState = STATE::LOOP;
 			if (PHASE::PHASE1 == (*m_pPhase))
+			{
 				m_pKamen->Set_Animation(37, false);
+				m_pGameManager->Add_Effect(EFFECT::PARTICLE, 11, &(m_pKamen->Get_Transform()->Get_WorldMatrix()), CHARACTER::BOSS);
+			}
 			else
+			{
+				m_pGameManager->Add_Effect(EFFECT::MESH, 33, &m_pKamen->Get_Transform()->Get_WorldMatrix(), CHARACTER::BOSS);
 				m_pKamen->Set_Animation(45, false);
+			}
 		}
 		break;
 

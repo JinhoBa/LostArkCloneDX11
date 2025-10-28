@@ -59,6 +59,11 @@ private:
 	_float						m_fSizeX = {};
 	_float						m_fSizeY = {};
 
+	_float						m_fRotationSpeed = {};
+	_float						m_fRotationAngle = {};
+	_float3						m_vPosition = {};
+	_float3						m_vRotation = {};
+
 private:
 	HRESULT		Add_Components();
 
