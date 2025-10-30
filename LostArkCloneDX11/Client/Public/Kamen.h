@@ -30,8 +30,9 @@ public:
 	const ENEMY_INFO* Get_InfoPtr() { return &m_EnemyInfo; };
 	CState* Get_State(KAMENSTATE eState) const { return m_States[ENUM_TO_INT(eState)]; }
 	_float	Get_TrackPositon();
+	CPartObject* Get_PartObject(const _tchar* PartObjectTag);
 	void	Set_Animation(_uint iIndex, _bool bLoop = false, _float fLerpTime = 0.2f);
-	void	Set_HitBox(_float3& vCenter, _float3& vExtends, COLLIDER eHitboxType = COLLIDER::OBB);
+	void	Set_HitBox(_float3& vCenter, _float3& vExtends, _float3& vOrientation, COLLIDER eHitboxType = COLLIDER::OBB);
 	void	Change_Phase(PHASE ePhase);
 	
 	_bool Turn(_float fTimeDelta) {
@@ -51,13 +52,17 @@ public:
 	_bool				MoveToPlayer(_float fTimeDelta);
 	_bool				Reposition();
 	void				Chase(_float fTimeDelta);
+	void				HitBox_Event(_uint iSkillID, _uint m_iHitIndex);
 
 private:
 #ifdef _DEBUG
-	_bool isCollUpdate = { false };
-	_bool isSphereUpdate = { false };
-	_float3 m_vHitBoxCenter = {};
-	_float3 m_vHitBoxExtents = {};
+	KAMENSTATE m_eType = {};
+
+	_bool			isCollUpdate = { false };
+	_bool			isSphereUpdate = { false };
+	_float3			m_vHitBoxCenter = {};
+	_float3			m_vHitBoxExtents = {};
+	_float3			m_vOrientation = {};
 #endif // _DEBUG
 	PHASE				m_ePhase = { PHASE::END };
 

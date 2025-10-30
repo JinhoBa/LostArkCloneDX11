@@ -102,8 +102,6 @@ HRESULT CMainApp::Initialize()
     ImGui_ImplDX11_Init(m_pDevice, m_pContext);
 #pragma endregion
 
-    g_fTestDeltaTime = 1.f;
-
     return S_OK;
 }
 
@@ -120,8 +118,7 @@ void CMainApp::Update(_float fTimeDelta)
         m_pGameInstance->Update_Level(ENUM_TO_INT(LEVEL::LOADING), fTimeDelta);
     else
     {
-       // m_pGameInstance->Update_Engine(fTimeDelta);
-       m_pGameInstance->Update_Engine(1.f/60.f * g_fTestDeltaTime);
+       m_pGameInstance->Update_Engine(fTimeDelta);
     }
 
     m_fTimeAcc += fTimeDelta;

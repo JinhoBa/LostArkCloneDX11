@@ -76,10 +76,10 @@ void CCamera_Clash::Set_Position(_fvector vPosistion)
         vPlayerPosition.x - 1.7f, vPlayerPosition.y + 5.f, vPlayerPosition.z - 1.0f, 1.f));
 
     XMStoreFloat3(&m_vEndPosition, XMVectorSet(
-        vPlayerPosition.x + 1.8f, vPlayerPosition.y + 0.8f, vPlayerPosition.z - 1.2f, 1.f));
+        vPlayerPosition.x + 1.8f, vPlayerPosition.y + 1.f, vPlayerPosition.z - 1.5f, 1.f));
 
     XMStoreFloat3(&m_vClashingPosition, XMVectorSet(
-        m_vEndPosition.x -0.2f, m_vEndPosition.y - 0.6f, m_vEndPosition.z - 0.2f, 1.f));
+        m_vEndPosition.x -0.2f, m_vEndPosition.y - 0.6f, m_vEndPosition.z - 0.5f, 1.f));
 
 }
 

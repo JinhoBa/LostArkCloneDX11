@@ -7,6 +7,7 @@
 #include "Kamen.h"
 #include "Player.h"
 #include "Camera_Clash.h"
+#include "Body_Kamen.h"
 
 CClash_Kamen::CClash_Kamen()
 	:CState_Kamen{}
@@ -36,6 +37,8 @@ void CClash_Kamen::Enter(void* pArg)
 
 	m_iEffectID = 15;
 	Ready_EffectEvents();
+
+	dynamic_cast<CBody_Kamen*>(m_pKamen->Get_PartObject(TEXT("Body_Kamen")))->Trigger_RimLight(1, 3.f);
 }
 
 void CClash_Kamen::Update(_float fTimeDelta)
@@ -52,16 +55,17 @@ void CClash_Kamen::Update(_float fTimeDelta)
 			m_EffectEvents.clear();
 			m_iEffectID = 16;
 			Ready_EffectEvents();
-			m_pKamen->Set_Animation(7, false);
-			m_pKamen->Get_Transform()->TurnTo(m_pPlayerTransform->Get_Position());
-
-			m_pPlayerTransform->TurnTo(m_pKamen->Get_Transform()->Get_Position());
 
 			dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
 				ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Set_State(CPlayer::CLASH);
 
 			dynamic_cast<CCamera_Clash*>(m_pGameInstance->Find_Camera(TEXT("Camera_Clash"))
 				)->Set_Position(m_pPlayerTransform->Get_Position());
+
+			m_pKamen->Set_Animation(7, false);
+			m_pKamen->Get_Transform()->TurnTo(m_pPlayerTransform->Get_Position());
+
+			m_pPlayerTransform->TurnTo(m_pKamen->Get_Transform()->Get_Position());
 
 			m_pGameInstance->Bind_Camera(TEXT("Camera_Clash"));
 		}
@@ -72,7 +76,7 @@ void CClash_Kamen::Update(_float fTimeDelta)
 		break;
 
 	case Client::CClash_Kamen::STATE::START:
-
+		Update_EffectTrack();
 		if (m_pKamen->isAnimationFinish())
 		{
 			m_pKamen->Set_Animation(8, true);
@@ -92,11 +96,13 @@ void CClash_Kamen::Update(_float fTimeDelta)
 
 		if (1 == iResult)
 		{
+			m_pGameInstance->StopSound(CHANNELID::SKILL_BOSS2);
 			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::CRITICAL), nullptr);
 			m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), false, 1.5f);
 		}
 		else if (2 == iResult)
 		{
+			m_pGameInstance->StopSound(CHANNELID::SKILL_BOSS2);
 			m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
 			m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), false, 1.5f);
 		}

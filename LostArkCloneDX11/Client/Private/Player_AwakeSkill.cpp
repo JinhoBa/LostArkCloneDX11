@@ -35,14 +35,11 @@ void CPlayer_AwakeSkill::Enter(void* pArg)
 
 	m_iSkillID = m_pSkill_Desc->iSkillID;
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_pSkill_Desc->iSkillID);
+	m_eHitboxType = COLLIDER::SPHERE;
 
 	m_pPlayer->Set_Animation(m_pSkill_Desc->iAnimationIndex, m_pSkill_Desc->bLoop);
 
-	/* Sound */
-	Play_SkillSound();
 
-	/* HitBox */
-	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
 
 	/* Effects */
 	Ready_EffectTrack();
@@ -59,6 +56,14 @@ void CPlayer_AwakeSkill::Enter(void* pArg)
 	{
 		XMStoreFloat4(&m_vPickingPosition, m_pPlayer->Get_Transform()->Get_Position() + XMVector3Normalize(vDir) * 5.f);
 	}
+
+	_float3 vHitBoxPostition = _float3(m_vPickingPosition.x, m_vPickingPosition.y, m_vPickingPosition.z);
+	
+	// XMStoreFloat3(&vHitBoxOffset, XMVectorGetX(XMVector3Length(vDir))* XMVectorSet(1.f, 0.f, 0.f, 0.f));
+
+
+	/* HitBox */
+	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends, vHitBoxPostition, COLLIDER::SPHERE);
 
 	if (m_pSkillInfo->bApplyRimLightBody)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
@@ -121,6 +126,20 @@ void CPlayer_AwakeSkill::Update(_float fTimeDelta)
 			++iter_Blur;
 	}
 
+	/* Sound */
+	auto iter_Sound = m_SoundEvents.begin();
+
+	for (; iter_Sound != m_SoundEvents.end();)
+	{
+		if (fTrackPosition >= (*iter_Sound).fKeyFrame)
+		{
+			m_pGameInstance->Play_Sound((*iter_Sound).strFileName.data(), CHANNELID::SKILL_PLAYER, (*iter_Sound).fVolume);
+			iter_Sound = m_SoundEvents.erase(iter_Sound);
+		}
+		else
+			++iter_Sound;
+	}
+
 	if (false == m_isSpawWeaponEffect && 34.f <= fTrackPosition && 50.f >= fTrackPosition)
 	{
 		m_isSpawWeaponEffect = true;
@@ -146,13 +165,6 @@ void CPlayer_AwakeSkill::Exit()
 {
 	m_pPlayer->Toggle_PartObject(L"Weapon_Player");
 
-	m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
-
-	if (m_pSkillInfo->bApplyRimLightBody)
-		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
-	if (m_pSkillInfo->bApplyRimLightWeapon)
-		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
-
 	Clear_Events();
 
 	m_pPlayer->Set_SkillID(99);
@@ -160,7 +172,7 @@ void CPlayer_AwakeSkill::Exit()
 
 void CPlayer_AwakeSkill::Play_SkillSound()
 {
-	m_pGameInstance->Play_Sound(L"Ultimate1.wav", CHANNELID::SKILL_PLAYER, 0.4f);
+	//m_pGameInstance->Play_Sound(L"Player_Ultimate1_Ready.wav", CHANNELID::SKILL_PLAYER, 0.8f);
 }
 
 CPlayer_AwakeSkill* CPlayer_AwakeSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

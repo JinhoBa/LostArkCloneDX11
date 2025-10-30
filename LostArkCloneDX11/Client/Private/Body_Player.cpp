@@ -29,10 +29,9 @@ _float CBody_Player::Get_TrackPoisiton()
 }
 void CBody_Player::Toggle_RimLight()
 {
-    m_bApplyRimLight = !m_bApplyRimLight;
+    m_bApplyRimLight = true;
 
-    if(m_bApplyRimLight)
-        m_fRimStrength = 1.f;
+    m_fRimStrength = 1.f;
 }
 HRESULT CBody_Player::Initialize_Prototype()
 {
@@ -82,6 +81,7 @@ HRESULT CBody_Player::Initialize(void* pArg)
     LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
     m_fRange = 1.f;
     m_vPosition = _float3(0.f, 0.f, 0.f);
+
 #endif // _DEBUG
 
 
@@ -113,15 +113,14 @@ void CBody_Player::Update(_float fTimeDelta)
     {
         m_fRimStrength -= fTimeDelta * 0.5f;
         if (m_fRimStrength < 0.f)
+        {
             m_fRimStrength = 0.f;
+            m_bApplyRimLight = false;
+        }
     }
 
 #ifdef _DEBUG
 
-    //m_pGameInstance->Update_Light_Color(L"Point1", 0, &LightDesc.vDiffuse);
-    //m_pGameInstance->Update_Light_Color(L"Point1", 1, &LightDesc.vAmbient);
-    //m_pGameInstance->Update_Light_Color(L"Point1", 2, &LightDesc.vSpecular);
-    //m_pGameInstance->Update_Light_Position(L"Point1", &m_vPosition);
 #endif // _DEBUG
 
 }
@@ -135,21 +134,62 @@ void CBody_Player::Late_Update(_float fTimeDelta)
 HRESULT CBody_Player::Render()
 {
 #ifdef _DEBUG
-    //ImGui::SliderFloat3("D", (_float*)(&LightDesc.vDiffuse),0.f, 1.f);
-    //ImGui::SliderFloat3("A", (_float*)(&LightDesc.vAmbient) , 0.f, 1.f);
-    //ImGui::SliderFloat3("S", (_float*)(&LightDesc.vSpecular) , 0.f, 1.f);
-    //ImGui::SliderFloat3("LightPos", (_float*)(&m_vPosition) , 0.f, 150.f);
+  /*  ImGui::InputFloat3("D", (_float*)(&LightDesc.vDiffuse));
+    ImGui::InputFloat3("A", (_float*)(&LightDesc.vAmbient));
+    ImGui::InputFloat3("S", (_float*)(&LightDesc.vSpecular));
+    ImGui::InputFloat3("LightPos", (_float*)(&LightDesc.vDirection));
 
-    //ImGui::SliderFloat("PointRange", &m_fRange, 0.f, 50.f);
+    m_pGameInstance->Update_Light_Color(L"Dircection", 0, &LightDesc.vDiffuse);
+    m_pGameInstance->Update_Light_Color(L"Dircection", 1, &LightDesc.vAmbient);
+    m_pGameInstance->Update_Light_Color(L"Dircection", 2, &LightDesc.vSpecular);
+    m_pGameInstance->Update_Light_Position(L"Dircection", reinterpret_cast<_float3*>(&LightDesc.vDirection));
+*/
+
+   // ImGui::InputFloat("PointRange", &m_fRange);
 
     //m_pGameInstance->Update_Light_Range(L"Point1", m_fRange);
+
+
+    //ImGui::InputFloat3("D", (_float*)(&LightDesc.vDiffuse));
+    //ImGui::InputFloat3("A", (_float*)(&LightDesc.vAmbient));
+    //ImGui::InputFloat3("S", (_float*)(&LightDesc.vSpecular));
+    //ImGui::InputFloat3("LightPos", (_float*)(&m_vPosition));
 #endif // _DEBUG
 
 
 #pragma region ANIMATION_TEST
     ImGui::Checkbox("Play", &m_isDebug);
     ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");
+    //ImGui::DragFloat("SoundKey", &m_fSoundKey);
+    //ImGui::DragFloat("m_fVolume", &m_fVolume);
+    //ImGui::DragFloat("m_fTestSoundKey", &m_fTestSoundKey);
 
+    //if(ImGui::BeginCombo("SoundName", ""))
+    //{
+
+    //    for (int i = 0; i < m_SoundNames.size(); ++i)
+    //    {
+    //        bool isSelected = (m_currentIndex == i);
+    //        if (ImGui::Selectable(m_SoundNames[i].c_str(), isSelected))
+    //        {
+    //            m_currentIndex = i;
+    //            ImGui::SetClipboardText(m_SoundNames[i].c_str());
+    //        }
+
+    //        if (isSelected)
+    //            ImGui::SetItemDefaultFocus();
+    //    }
+
+    //    ImGui::EndCombo();
+    //}
+    //_float fFrame = m_pModelCom->Get_TrackPosition();
+    //if ((m_isDebug && m_fTestSoundKey <= fFrame) && (false == m_isTrigge))
+    //{
+    //    m_isTrigge = true;
+    //    m_pGameInstance->Play_Sound(m_pGameInstance->Utf8ToWstring(m_SoundNames[m_currentIndex].c_str()).c_str(), CHANNELID::SKILL_PLAYER, m_fVolume);
+    //}
+
+  
     /*ImGui::InputInt("Animation", &m_iAnimIndex);
     _int iIndex = {};
 
@@ -185,9 +225,6 @@ HRESULT CBody_Player::Render()
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(0)))
-            return E_FAIL;
-
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_NormalTexture", TEXTURE::NORMAL, 0)))
         {
             if (FAILED(m_pShaderCom->Begin(0)))
@@ -195,7 +232,7 @@ HRESULT CBody_Player::Render()
         }
         else
         {
-            if(false == m_bApplyRimLight && m_fRimStrength < 0.f)
+            if(false == m_bApplyRimLight && m_fRimStrength <= 0.f)
             {
                 if (FAILED(m_pShaderCom->Begin(2)))
                     return E_FAIL;

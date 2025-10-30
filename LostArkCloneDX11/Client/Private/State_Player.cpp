@@ -21,7 +21,7 @@ HRESULT CState_Player::Initilize(CStateMachine* pStateMachine, STANCE* pStance, 
 	m_pStateMachine = pStateMachine;
 	m_pPlayer = pPlayer;
 
-	//Safe_AddRef(m_pStateMachine);
+	Safe_AddRef(m_pStateMachine);
 	//Safe_AddRef(m_pPlayer);
 
 	return S_OK;
@@ -43,7 +43,11 @@ _bool CState_Player::Check_Dash()
 {
 	if (m_pGameInstance->Get_KeyDown(DIK_SPACE))
 	{
-		return m_pGameManager->Use_Skill(16);
+		_bool isUsed = m_pGameManager->Use_Skill(16);
+
+		if (isUsed)
+			m_pGameInstance->Play_Sound(L"Dash_Flurry.wav", CHANNELID::SKILL_PLAYER, 0.8f);
+		return isUsed;
 	}
 
 	return false;
@@ -62,6 +66,6 @@ void CState_Player::Free()
 	__super::Free();
 
 	//Safe_Release(m_pPlayer);
-	//Safe_Release(m_pStateMachine);
+	Safe_Release(m_pStateMachine);
 	Safe_Release(m_pGameManager);
 }

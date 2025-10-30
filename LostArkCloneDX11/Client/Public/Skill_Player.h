@@ -22,6 +22,7 @@ public:
 	void Update_EffectTrack();
 
 protected:
+	COLLIDER			m_eHitboxType = {};
 	_bool				m_isStartHit = {};
 	_bool				m_isActiveHitBox = {};
 	_uint				m_iSkillID = {};
@@ -35,6 +36,7 @@ protected:
 	list<EFFECT_EVENT_DESC>			m_EffectEvents;
 	list<CAMERA_SHAKE_EVENT_DESC>	m_CameraShakeEvents;
 	list<BLUR_EVENT_DESC>			m_BlurEvents;
+	list<SOUND_EVENT_DESC>			m_SoundEvents;
 
 protected:
 	void	Ready_EffectTrack();

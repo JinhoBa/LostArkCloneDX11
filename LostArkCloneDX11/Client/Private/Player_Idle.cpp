@@ -40,6 +40,14 @@ void CPlayer_Idle::Enter(void* pArg)
 
 void CPlayer_Idle::Update(_float fTimeDelta)
 {
+#ifdef _DEBUG
+	if (m_pGameInstance->Get_KeyDown(DIK_8))
+	{
+		Toggle_HUD();
+	}
+#endif // _DEBUG
+
+
 	m_pPlayer->Check_Navi();
 
 	if(__super::Check_Dash())

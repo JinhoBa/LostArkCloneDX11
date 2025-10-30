@@ -97,7 +97,10 @@ void CWeapon_Player::Update(_float fTimeDelta)
         if (m_fRimStrength < 0.f)
             m_fRimStrength = 0.f;
     }
+    _float3 vPos = {};
+    memcpy(&vPos, m_CombinedWorldMatrix.m[3], sizeof(_float3));
 
+    m_pGameInstance->Update_Light_Position(L"Point1", &vPos);
 }
 
 void CWeapon_Player::Late_Update(_float fTimeDelta)

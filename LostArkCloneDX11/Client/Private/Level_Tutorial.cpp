@@ -32,8 +32,8 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
        return E_FAIL;
 
-    if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
-        return E_FAIL;
+    //if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
+    //    return E_FAIL;
 
    /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
@@ -48,6 +48,7 @@ HRESULT CLevel_Tutorial::Initialize()
         return E_FAIL;
 
     m_pGameInstance->PlayBGM(L"Trision_BGM.wav", 0.1f);
+    //m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
 
     return S_OK;
 }
@@ -72,15 +73,21 @@ HRESULT CLevel_Tutorial::Ready_Light()
 
     Desc.eType = LIGHT::DIRECTIONAL;
     Desc.vDiffuse = _float4(0.7f, 0.7f, 0.7f, 1.f);
-    Desc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-    Desc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+    Desc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+    Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
     Desc.vDirection = _float4(0.f, -1.f, -0.1f, 0.f);
 
     if (FAILED(m_pGameInstance->Add_Light(L"Dircection", Desc)))
         return E_FAIL;
 
+    Desc.eType = LIGHT::POINT;
+    Desc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
+    Desc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+    Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    Desc.vPosition = _float4(0.f, 0.f, 0.f, 1.f);
 
-
+    if (FAILED(m_pGameInstance->Add_Light(L"Point1", Desc)))
+        return E_FAIL;
 
 
     SHADOW_LIGHT_DESC ShadowDesc = {};
@@ -240,8 +247,8 @@ HRESULT CLevel_Tutorial::Ready_Camera()
         PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::STATIC), TEXT("Prototype_GameObject_Camera_Free"), &Desc)))))
         return E_FAIL;
 
-    if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Free"))))
-        return E_FAIL;
+    //if (FAILED(m_pGameInstance->Bind_Camera(TEXT("Camera_Free"))))
+    //    return E_FAIL;
 
     Desc.fNear = 0.1f;
     Desc.fFar = 500.f;
@@ -299,12 +306,15 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
-    // 2 : HoldingSkillUI
+    // 3 : HoldingSkillUI
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HoldingSkillUI"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
         return E_FAIL;
 
-
+    // Screen Effect
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_CScreen_Effect"),
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Screen_Effect"))))
+        return E_FAIL;
 
     return S_OK;
 }

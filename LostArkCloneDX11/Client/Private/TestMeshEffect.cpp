@@ -7,6 +7,7 @@
 #include "Skill.h"
 #include "Player.h"
 #include "Kamen.h"
+#include "Kamen_Area.h"
 
 CTestMeshEffect::CTestMeshEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     :CEffect{ pDevice, pContext }
@@ -79,7 +80,6 @@ HRESULT CTestMeshEffect::Initialize(void* pArg)
 
     m_fSpeed = 0.f;
     m_fDissolveSpeed = 1.f;
-    g_fTestDeltaTime = 1.f;
 
     XMStoreFloat4x4(&m_ParentWorldMatrix, XMMatrixIdentity());
 
@@ -156,12 +156,13 @@ void CTestMeshEffect::Update(_float fTimeDelta)
         m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
         m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
 
-        m_ParentWorldMatrix = dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
-            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_Transform()->Get_WorldMatrix();
+        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
+      
         
     }
-    else if (false == m_isLoop && dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
-        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
+    else if (false == m_isLoop && dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+        ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_TrackPositon() >= m_fResetFrame && m_vLifeTime.y < m_vLifeTime.x)
     {
         m_vLifeTime.x = 0.f;
         m_pTransformCom->Set_Scale(m_vStartScale);
@@ -171,8 +172,8 @@ void CTestMeshEffect::Update(_float fTimeDelta)
         m_vDiffuseOffset.x = m_vDiffuseOffset.y = 0.f;
         m_vMaskOffset.x = m_vMaskOffset.y = 0.f;
 
-        m_ParentWorldMatrix = dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(
-            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Get_Transform()->Get_WorldMatrix();
+        m_ParentWorldMatrix = dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(
+            ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Get_Transform()->Get_WorldMatrix();
     }
     
 
@@ -188,7 +189,6 @@ void CTestMeshEffect::Late_Update(_float fTimeDelta)
 HRESULT CTestMeshEffect::Render()
 {
 #ifdef _DEBUG
-    ImGui::SliderFloat("PerTestDeltaTime", &g_fTestDeltaTime, 0.f, 1.f);
     ImGui::InputInt("ID", (_int*)&m_iEffectID);
     ImGui::Spacing();
 
@@ -476,6 +476,13 @@ HRESULT CTestMeshEffect::Add_Components()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Bendplane1"),
         TEXT("Com_Bendpane1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 19 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_KamenBack"),
+        TEXT("Com_KamenBack"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+
     m_EffectModels.push_back(pModelCom);
 #pragma endregion
     return S_OK;

@@ -182,6 +182,8 @@ void CCollider::Set_ColliderDesc(_float3& vCenter, _float3& vExtents, _float3 vO
 
 HRESULT CCollider::Render()
 {
+	m_pContext->GSSetShader(nullptr, nullptr, 0);
+
 	m_pEffect->SetWorld(XMMatrixIdentity());
 	m_pEffect->SetView(m_pGameInstance->Get_Transform_Matrix(D3DTS::VIEW));
 	m_pEffect->SetProjection(m_pGameInstance->Get_Transform_Matrix(D3DTS::PROJ));

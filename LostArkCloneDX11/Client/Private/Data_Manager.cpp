@@ -378,6 +378,12 @@ HRESULT CData_Manager::Load_SkillData(const _char* pFilePath)
         Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
         Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
 
+        tinyxml2::XMLElement* Rotation = HitBox->FirstChildElement("Rotation");
+
+        Rotation->QueryFloatAttribute("x", &HitBox_Desc.vOrientation.x);
+        Rotation->QueryFloatAttribute("y", &HitBox_Desc.vOrientation.y);
+        Rotation->QueryFloatAttribute("z", &HitBox_Desc.vOrientation.z);
+
         memcpy(&Skill_Info.HitBoxDesc, &HitBox_Desc, sizeof(HITBOX_DESC));
 
         /*Skill Damage */
@@ -476,6 +482,12 @@ HRESULT CData_Manager::Load_Monster_SkillData(const _char* pFilePath)
                 Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
                 Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
                 Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+                tinyxml2::XMLElement* Rotation = HitBox->FirstChildElement("Rotation");
+
+                Rotation->QueryFloatAttribute("x", &HitBox_Desc.vOrientation.x);
+                Rotation->QueryFloatAttribute("y", &HitBox_Desc.vOrientation.y);
+                Rotation->QueryFloatAttribute("z", &HitBox_Desc.vOrientation.z);
 
                 Skill_Info.HitBoxDescs.push_back(HitBox_Desc);
             }
@@ -701,6 +713,12 @@ HRESULT CData_Manager::Load_KamenData(const _char* pFilePath)
                 Size->QueryFloatAttribute("x", &HitBox_Desc.vExtends.x);
                 Size->QueryFloatAttribute("y", &HitBox_Desc.vExtends.y);
                 Size->QueryFloatAttribute("z", &HitBox_Desc.vExtends.z);
+
+                tinyxml2::XMLElement* Orientation = HitBox->FirstChildElement("Rotation");
+
+                Orientation->QueryFloatAttribute("x", &HitBox_Desc.vOrientation.x);
+                Orientation->QueryFloatAttribute("y", &HitBox_Desc.vOrientation.y);
+                Orientation->QueryFloatAttribute("z", &HitBox_Desc.vOrientation.z);
 
                 Skill_Info.HitBoxDescs.push_back(HitBox_Desc);
             }

@@ -34,6 +34,7 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 
 	m_iSkillID = m_pSkill_Desc->iSkillID;
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_pSkill_Desc->iSkillID);
+	m_eHitboxType = COLLIDER::OBB;
 
 	if(10 == m_iSkillID)
 		m_pPlayer->Set_Animation(m_pSkill_Desc->iAnimationIndex, m_pSkill_Desc->bLoop, 0.f);
@@ -41,10 +42,10 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 		m_pPlayer->Set_Animation(m_pSkill_Desc->iAnimationIndex, m_pSkill_Desc->bLoop);
 
 	/* Sound */
-	Play_SkillSound();
+	//Play_SkillSound();
 
 	/* HitBox */
-	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
+	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends, m_pSkillInfo->HitBoxDesc.vOrientation);
 
 	/* Effects */
 	Ready_EffectTrack();
@@ -53,7 +54,7 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	if (m_pSkillInfo->bApplyRimLightWeapon)
 		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
-
+	
 }
 
 void CPlayer_NormalSkill::Update(_float fTimeDelta)
@@ -75,13 +76,6 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 
 void CPlayer_NormalSkill::Exit()
 {
-	m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
-
-	if (m_pSkillInfo->bApplyRimLightBody)
-		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
-	if (m_pSkillInfo->bApplyRimLightWeapon)
-		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
-
 	Clear_Events();
 
 	m_pPlayer->Set_SkillID(99);
@@ -104,7 +98,7 @@ void CPlayer_NormalSkill::Play_SkillSound()
 		m_pGameInstance->Play_Sound(L"DescentOfMoon.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 		break;
 	case 5:
-		m_pGameInstance->Play_Sound(L"EclipsePath.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		m_pGameInstance->Play_Sound(L"Player_EclipsePath.wav", CHANNELID::SKILL_PLAYER, 0.2f);
 		break;
 	case 6:
 		m_pGameInstance->Play_Sound(L"SkyWheel.wav", CHANNELID::SKILL_PLAYER, 0.2f);

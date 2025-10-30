@@ -31,6 +31,20 @@ HRESULT CLight_Manager::Add_Light(const _tchar* pLightTag, const LIGHT_DESC& Lig
 	return S_OK;
 }
 
+HRESULT CLight_Manager::Delete_Light(const _tchar* pLightTag)
+{
+	auto iter = m_Lights.find(pLightTag);
+
+	if (iter == m_Lights.end())
+		return E_FAIL;
+
+	Safe_Release((iter->second));
+
+	m_Lights.erase(pLightTag);
+
+	return S_OK;
+}
+
 HRESULT CLight_Manager::Render_Lights(CShader* pShader, CVIBuffer* pVIBuffer)
 {
 	for (auto& pair : m_Lights)

@@ -7,6 +7,7 @@ NS_BEGIN(Engine)
 class CCamera;
 class CGameInstance;
 class CGameObject;
+class CTexture;
 NS_END
 
 NS_BEGIN(Client)
@@ -23,16 +24,22 @@ public:
 
 	void	Set_Level(LEVEL eLevel) { m_eCurLevel = eLevel; }
 	LEVEL	Get_CurrentLevel() const { return m_eCurLevel; }
+
+
 public:
 	HRESULT Initialize_Manager();
 	void Destory_GameManager();
 
 	HRESULT Initialize_Effect_Manager();
+	void	FadeOut(_float fDuration);
 	void	Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, CHARACTER eCharacter = CHARACTER::PLAYER);
 	void	Start_ScreenBlur(_float fTime);
+
 	const vector<EFFECT_EVENT_DESC>& Get_EffectTrack(CHARACTER eType, _uint iTrackIndex);
 	const vector<CAMERA_SHAKE_EVENT_DESC>& Get_Camera_Track(_uint iTrackIndex);
 	const vector<BLUR_EVENT_DESC>& Get_BlurTrack(_uint iTrackIndex);
+	const vector<SOUND_EVENT_DESC>& Get_SoundTrack(CHARACTER eType, _uint iTrackIndex);
+	HRESULT Bind_Effect_Resource(class CTexture** pTextureCom, class CTexture**pMaskTextureCom, class CTexture** pNoiseTextureCom);
 
 #ifdef _DEBUG
 public:

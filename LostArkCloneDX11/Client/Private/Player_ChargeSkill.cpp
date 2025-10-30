@@ -30,6 +30,7 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 
 	m_iSkillID = m_pSkill_Desc->iSkillID;
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(m_iSkillID);
+	m_eHitboxType = COLLIDER::OBB;
 
 	m_iKey = m_pSkill_Desc->iKey;
 	
@@ -44,7 +45,7 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 		m_iAnimStart = 126;
 		m_iAnimLoop = 125;
 		m_iAnimEnd = 124;
-		m_pGameInstance->Play_Sound(L"RedDragonFlight_Start.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		m_pGameInstance->Play_Sound(L"RedDragonFlight_Start.wav", CHANNELID::SKILL_PLAYER, 0.8f);
 	}
 	else
 	{
@@ -52,11 +53,11 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 		m_iAnimStart = 133;
 		m_iAnimLoop = 134;
 		m_iAnimEnd = 135;
-		m_pGameInstance->Play_Sound(L"ScorchingWaveCharge1.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		m_pGameInstance->Play_Sound(L"ScorchingWaveCharge1.wav", CHANNELID::SKILL_PLAYER, 0.8f);
 	}
 
 	m_pPlayer->Set_Animation(m_iAnimStart, false);
-	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
+	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends, m_pSkillInfo->HitBoxDesc.vOrientation);
 
 	Ready_EffectTrack();
 
@@ -83,7 +84,7 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 			m_fChargeTime = 0.f;
 			m_pGameInstance->Bind_Camera(TEXT("Camera_ChargeSkill"));
 
-			m_pGameInstance->Play_Sound(L"RedDragonFlight_Charge.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+			m_pGameInstance->Play_Sound(L"RedDragonFlight_Charge.wav", CHANNELID::SKILL_PLAYER, 0.8f);
 		}
 		break;
 
@@ -101,14 +102,14 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 				m_pPlayer->Set_Animation(m_iAnimEnd, false);
 
 				m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
-				m_pGameInstance->Play_Sound(L"RedDragonFlight_Shoot.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+				m_pGameInstance->Play_Sound(L"RedDragonFlight_Shoot.wav", CHANNELID::SKILL_PLAYER, 0.8f);
 			}
 			else
 			{
 				m_eState = CPlayer_ChargeSkill::ATTACK;
 				m_pPlayer->Set_Animation(m_iAnimLoop, false, 0.f);
 
-				m_pGameInstance->Play_Sound(L"ScorchingWave_Shoot.wav", CHANNELID::SKILL_PLAYER, 0.4f);
+				m_pGameInstance->Play_Sound(L"ScorchingWave_Shoot.wav", CHANNELID::SKILL_PLAYER, 0.8f);
 			}
 		}
 		break;
@@ -151,15 +152,8 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 void CPlayer_ChargeSkill::Exit()
 {
-	m_pGameInstance->StopSound(CHANNELID::SKILL_PLAYER);
-
 	if (12 == m_iSkillID)
 		m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), true);
-
-	if (m_pSkillInfo->bApplyRimLightBody)
-		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
-	if (m_pSkillInfo->bApplyRimLightWeapon)
-		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
 
 	m_EffectEvents.clear();
 }

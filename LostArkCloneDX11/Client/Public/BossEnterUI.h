@@ -22,11 +22,14 @@ public:
 
 private:
 	_bool					m_isVisible = {};
+
+	_uint					m_iPreCount = {};
 	_float					m_fTimeAcc = {};
 
 	FONT_DESC				m_MessageFontDesc = {};
 	FONT_DESC				m_CountFontDesc = {};
-	CTransform*				m_pPlayerTransformCom = { nullptr };
+	
+	class CEffect_BossEnter* m_pBossEnterEffect = { nullptr };
 
 private:
 	HRESULT		Ready_Font();

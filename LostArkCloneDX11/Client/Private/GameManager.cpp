@@ -15,6 +15,7 @@
 #include "Terrain.h"
 #include "Buff.h"
 #include "Effect_Manager.h"
+#include "Screen_Effect.h"
 
 IMPLEMENT_SINGLETON(CGameManager)
 
@@ -83,6 +84,12 @@ HRESULT CGameManager::Initialize_Effect_Manager()
 	return S_OK;
 }
 
+void CGameManager::FadeOut(_float fDuration)
+{
+	dynamic_cast<CScreen_Effect*>(
+		m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Screen_Effect")).back())->Trigger_FadeOut(fDuration);
+}
+
 void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pWorldMatirx, CHARACTER eCharacter)
 {
 	if (nullptr != m_pEffect_Manager)
@@ -116,6 +123,17 @@ const vector<BLUR_EVENT_DESC>& CGameManager::Get_BlurTrack(_uint iTrackIndex)
 {
 	return m_pEffect_Manager->Get_BlurTrack(iTrackIndex);
 }
+
+const vector<SOUND_EVENT_DESC>& CGameManager::Get_SoundTrack(CHARACTER eType, _uint iTrackIndex)
+{
+	return m_pEffect_Manager->Get_SoundTrack(eType, iTrackIndex);
+}
+
+HRESULT CGameManager::Bind_Effect_Resource(class CTexture** ppTextureCom, class CTexture** ppMaskTextureCom, class CTexture** ppNoiseTextureCom)
+{
+	return m_pEffect_Manager->Bind_Effect_Resource(ppTextureCom, ppMaskTextureCom, ppNoiseTextureCom);
+}
+
 
 #pragma region DATA_MANAGER
 

@@ -52,4 +52,3 @@ using namespace Client;
 
 extern HINSTANCE g_hInstance;
 extern HWND g_hWnd;
-extern float g_fTestDeltaTime;

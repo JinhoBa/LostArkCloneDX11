@@ -97,6 +97,10 @@ HRESULT CDynamicLand::Render()
 
     if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTexture", m_pNoiseTextureCom->Get_SRV(0))))
         return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_NoiseTextureY", m_pNoiseTextureCom->Get_SRV(1))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Resource("g_NormalTexture", m_pNormalTextureCom->Get_SRV(0))))
+        return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fTimeRatio", &m_vLifeTime.x, sizeof(_float))))
         return E_FAIL;
@@ -165,6 +169,11 @@ HRESULT CDynamicLand::Add_Components()
         TEXT("Com_NoiseTexture"), reinterpret_cast<CComponent**>(&m_pNoiseTextureCom))))
         return E_FAIL;
 
+    /*Texture*/
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WaterNoromal"),
+        TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pNormalTextureCom))))
+        return E_FAIL;
+
     return S_OK;
 }
 CDynamicLand* CDynamicLand::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -202,4 +211,5 @@ void CDynamicLand::Free()
     Safe_Release(m_pModelCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pNoiseTextureCom);
+    Safe_Release(m_pNormalTextureCom);
 }

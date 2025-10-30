@@ -125,7 +125,7 @@ HRESULT CTest_Effect::Render()
     if (m_isBlur)
     {
 #ifdef _DEBUG
-        if (ImGui::Button("Change"))
+        if (ImGui::Button("ChangeEffect"))
         {
             m_pVIBufferCom->Set_NumInstance(m_iNumInstance);
             if(m_eType == PARTICLE::SPREAD)

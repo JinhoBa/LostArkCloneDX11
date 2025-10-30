@@ -347,6 +347,12 @@ HRESULT CEffect_Mesh::Add_Components()
         TEXT("Com_Bendpane1_Model"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
     m_EffectModels.push_back(pModelCom);
+
+    /* 19 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_KamenBack"),
+        TEXT("Com_KamenBack"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
 #pragma endregion
 
     return S_OK;

@@ -25,6 +25,7 @@ public:
 
 protected:
 	_uint					m_iEffectID = {};
+	_uint					m_iSoundIndex = {};
 
 	class CGameManager*		m_pGameManager = { nullptr };
 
@@ -32,7 +33,8 @@ protected:
 	class CKamen*			m_pKamen = { nullptr };
 	_float4x4*				m_pKamenWorldMatrix = {};
 
-	vector<EFFECT_EVENT_DESC>	m_EffectEvents;
+	list<EFFECT_EVENT_DESC>	m_EffectEvents;
+	list<SOUND_EVENT_DESC>	m_SoundEvents;
 
 protected:
 	void Ready_EffectEvents();

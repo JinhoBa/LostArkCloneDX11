@@ -27,6 +27,7 @@ void CSkill_Player::Enter(void* pArg)
 	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
 	m_fTimeAcc = 0.f;
+	m_eHitboxType = COLLIDER::OBB;
 }
 
 void CSkill_Player::Update(_float fTimeDelta)
@@ -49,7 +50,7 @@ void CSkill_Player::Update_Hitbox(_float fTimeDelta)
 		if (m_isActiveHitBox)
 		{
 			m_fTimeAcc += fTimeDelta;
-			m_pPlayer->Update_HitBox(m_iSkillID, m_iAttackCount);
+			m_pPlayer->Update_HitBox(m_iSkillID, m_iAttackCount, m_eHitboxType);
 
 			if (m_pSkillInfo->HitBoxDesc.fDuration <= m_fTimeAcc)
 			{
@@ -112,6 +113,20 @@ void CSkill_Player::Update_EffectTrack()
 		else
 			++iter_Blur;
 	}
+
+	/* Sound */
+	auto iter_Sound = m_SoundEvents.begin();
+
+	for (; iter_Sound != m_SoundEvents.end();)
+	{
+		if (fTrackPosition >= (*iter_Sound).fKeyFrame)
+		{
+			m_pGameInstance->Play_Sound((*iter_Sound).strFileName.data(),  CHANNELID::SKILL_PLAYER, (*iter_Sound).fVolume);
+			iter_Sound = m_SoundEvents.erase(iter_Sound);
+		}
+		else
+			++iter_Sound;
+	}
 }
 
 void CSkill_Player::Ready_EffectTrack()
@@ -137,6 +152,12 @@ void CSkill_Player::Ready_EffectTrack()
 		m_BlurEvents.push_back(Track);
 	}
 
+	const vector<SOUND_EVENT_DESC>& SoundEvents = m_pGameManager->Get_SoundTrack(CHARACTER::PLAYER ,m_iSkillID);
+
+	for (const auto& Track : SoundEvents)
+	{
+		m_SoundEvents.push_back(Track);
+	}
 }
 
 void CSkill_Player::Clear_Events()

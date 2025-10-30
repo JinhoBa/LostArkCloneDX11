@@ -42,6 +42,7 @@ public:
 	virtual HRESULT		Render() override;
 	virtual HRESULT		Render_Shadow() override;
 
+
 private:
 	_bool					m_isAnimationFinish = {};
 	_bool					m_bApplyRimLight = {};

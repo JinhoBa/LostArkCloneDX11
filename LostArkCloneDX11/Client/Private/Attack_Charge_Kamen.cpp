@@ -43,7 +43,7 @@ void CAttack_Charge_Kamen::Enter(void* pArg)
 		m_iEffectID = 13;
 		m_pKamen->Set_Animation(44, false);
 	}
-	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOrientation);
 
 	Ready_EffectEvents();
 }
@@ -60,6 +60,7 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 			{
 				m_pKamen->Set_Animation(37, false);
 				m_pGameManager->Add_Effect(EFFECT::PARTICLE, 11, &(m_pKamen->Get_Transform()->Get_WorldMatrix()), CHARACTER::BOSS);
+				m_pGameInstance->Play_Sound(L"Kamen1_Skill_4_0.wav", CHANNELID::EFFECT, 0.7f);
 			}
 			else
 			{
@@ -85,8 +86,7 @@ void CAttack_Charge_Kamen::Update(_float fTimeDelta)
 
 		if (PHASE::PHASE1 == (*m_pPhase))
 		{
-			if (m_iAttackCount > 0)
-				m_eHitboxType = COLLIDER::SPHERE;
+	
 		}
 		Update_HitBox(fTimeDelta);
 		Update_EffectTrack();

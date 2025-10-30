@@ -35,7 +35,7 @@ HRESULT CEffect_Manager::Initialize(void* pArg)
     if (FAILED(Add_Components()))
         return E_FAIL;
 
-    for (_uint i = 0; i < 10; i++)
+    for (_uint i = 0; i < 20; i++)
     {
         CEffect_Ground* pEffect = dynamic_cast<CEffect_Ground*>(m_pGameInstance->Clone_Prototype(
             PROTOTYPE::GAMEOBJECT, ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Effect_Ground")));
@@ -54,7 +54,7 @@ HRESULT CEffect_Manager::Initialize(void* pArg)
         );
     }
 
-    for (_uint i = 0; i < 10; i++)
+    for (_uint i = 0; i < 20; i++)
     {
         m_ParticleEffects.push_back(
             dynamic_cast<CEffect_Particle*>(m_pGameInstance->Clone_Prototype(
@@ -75,6 +75,9 @@ HRESULT CEffect_Manager::Initialize(void* pArg)
         return E_FAIL;
 
     if (FAILED(Load_Mesh_Data("../Bin/Resources/Data/Effect/Kamen_Effects.xml", CHARACTER::BOSS)))
+        return E_FAIL;
+
+    if (FAILED(Load_Ground_Data("../Bin/Resources/Data/Effect/Kamen_GroundEffects.xml", CHARACTER::BOSS)))
         return E_FAIL;
 
     if (FAILED(Load_EffectTrack(CHARACTER::BOSS, "../Bin/Resources/Data/Effect/Kamen_Effects_Track.xml")))
@@ -249,6 +252,24 @@ const vector<CAMERA_SHAKE_EVENT_DESC>& CEffect_Manager::Get_Camera_Track(_uint i
 const vector<BLUR_EVENT_DESC>& CEffect_Manager::Get_BlurTrack(_uint iTrackIndex)
 {
     return m_BlurEvents[iTrackIndex];
+}
+
+const vector<SOUND_EVENT_DESC>& CEffect_Manager::Get_SoundTrack(CHARACTER eType, _uint iTrackIndex)
+{
+    return m_SoundEvents[ENUM_TO_INT(eType)][iTrackIndex];
+}
+
+HRESULT CEffect_Manager::Bind_Effect_Resource(CTexture** pTextureCom, CTexture** pMaskTextureCom, CTexture** pNoiseTextureCom)
+{
+    *pTextureCom = m_pTextureCom;
+    *pMaskTextureCom = m_pMaskTextureCom;
+    *pNoiseTextureCom = m_pNoiseTextureCom;
+
+    Safe_AddRef(m_pTextureCom);
+    Safe_AddRef(m_pMaskTextureCom);
+    Safe_AddRef(m_pNoiseTextureCom);
+
+    return S_OK;
 }
 
 HRESULT CEffect_Manager::Load_Mesh_Data(const _char* pFilePath, CHARACTER eType)
@@ -611,6 +632,7 @@ HRESULT CEffect_Manager::Load_EffectTrack(CHARACTER eType, const _char* pFilePat
         vector<EFFECT_EVENT_DESC> EffectDesces;
         vector<CAMERA_SHAKE_EVENT_DESC> CameraShakeDesces;
         vector<BLUR_EVENT_DESC> BlurDesces;
+        vector<SOUND_EVENT_DESC> SoundDesces;
 
         for (auto* Effect = Skill->FirstChildElement("Effect"); Effect; Effect = Effect->NextSiblingElement("Effect"))
         {
@@ -658,6 +680,21 @@ HRESULT CEffect_Manager::Load_EffectTrack(CHARACTER eType, const _char* pFilePat
             BlurDesces.push_back(Blur_Desc);
         }
         m_BlurEvents.push_back(BlurDesces);
+
+        for (auto* Sound = Skill->FirstChildElement("Sound"); Sound; Sound = Sound->NextSiblingElement("Sound"))
+        {
+            SOUND_EVENT_DESC Sound_Desc = {};
+
+            const char* pName;
+            Sound->QueryStringAttribute("FileName", &pName);
+            Sound_Desc.strFileName = m_pGameInstance->Utf8ToWstring(pName);
+
+            Sound->QueryFloatAttribute("Keyframe", &Sound_Desc.fKeyFrame);
+            Sound->QueryFloatAttribute("volume", &Sound_Desc.fVolume);
+
+            SoundDesces.push_back(Sound_Desc);
+        }
+        m_SoundEvents[ENUM_TO_INT(eType)].push_back(SoundDesces);
     }
 
     return S_OK;

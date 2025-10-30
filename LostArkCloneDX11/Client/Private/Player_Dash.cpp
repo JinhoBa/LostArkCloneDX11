@@ -64,9 +64,6 @@ void CPlayer_Dash::Update(_float fTimeDelta)
 
 void CPlayer_Dash::Exit()
 {
-	dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
-	dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
-
 	m_pPlayer->Set_SkillID(99);
 }
 

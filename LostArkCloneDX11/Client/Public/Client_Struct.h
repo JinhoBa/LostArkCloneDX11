@@ -12,6 +12,7 @@ namespace Client
 		_float fInterval;
 		_float3 vOffset;
 		_float3 vExtends;
+		_float3 vOrientation;
 	}HITBOX_DESC;
 
 	typedef struct tagSkill_Info
@@ -271,4 +272,11 @@ namespace Client
 		_float fKeyFrame;
 		_float fTime;
 	}BLUR_EVENT_DESC;
+
+	typedef struct tagSoundEventDesc
+	{
+		_wstring	strFileName;
+		_float		fKeyFrame;
+		_float		fVolume;
+	}SOUND_EVENT_DESC;
 }

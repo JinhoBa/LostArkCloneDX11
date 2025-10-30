@@ -340,6 +340,13 @@ void CGameInstance::SetChannelVolume(CHANNELID eID, float fVolume)
 	m_pSound_Manager->SetChannelVolume(eID, fVolume);
 }
 
+#ifdef _DEBUG
+const map<TCHAR*, FMOD::Sound*>& CGameInstance::Get_SoundMap()
+{
+	return m_pSound_Manager->Get_SoundMap();
+}
+#endif // _DEBUG
+
 #pragma endregion
 
 #pragma region RENDERER
@@ -359,6 +366,10 @@ void CGameInstance::Toggle_VisibleUI()
 void CGameInstance::BlurBackBuffer(_float fStrength)
 {
 	m_pRenderer->BlurBackBuffer(fStrength);
+}
+HRESULT CGameInstance::Add_DebugComponent(CComponent* pDebugCom)
+{
+	return m_pRenderer->Add_DebugComponent(pDebugCom);
 }
 #pragma endregion
 
@@ -476,6 +487,11 @@ void CGameInstance::Update_Light_Color(const _tchar* pLightTag, _uint iColorType
 HRESULT CGameInstance::Add_Light(const _tchar* pLightTag, const LIGHT_DESC& LightDesc)
 {
 	return m_pLight_Manager->Add_Light(pLightTag, LightDesc);
+}
+
+HRESULT CGameInstance::Delete_Light(const _tchar* pLightTag)
+{
+	return m_pLight_Manager->Delete_Light(pLightTag);
 }
 
 HRESULT CGameInstance::Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer)

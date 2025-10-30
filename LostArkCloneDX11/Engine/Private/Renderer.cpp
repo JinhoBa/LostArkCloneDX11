@@ -81,6 +81,10 @@ HRESULT CRenderer::Initialize()
 		DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Blur_Emissive"), (_uint)m_Viewport.Width, (_uint)m_Viewport.Height,
+		DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.0f, 0.0f, 0.0f))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_BackBuffer"), (_uint)m_Viewport.Width, (_uint)m_Viewport.Height,
 		DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
@@ -119,6 +123,10 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	/* MRT_Blur_X */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Blur_Emissive"), TEXT("Target_Blur_Emissive"))))
+		return E_FAIL;
+
+	/* MRT_Blur_BACKBUFFER */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_BackBuffer"), TEXT("Target_BackBuffer"))))
 		return E_FAIL;
 
@@ -136,10 +144,10 @@ HRESULT CRenderer::Initialize()
 	XMStoreFloat4x4(&m_OrthographicMatrix, (XMMatrixOrthographicLH(m_Viewport.Width, m_Viewport.Height, 0.f, 1.f)));
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shadow"), 75.f, 75.f, 150.f, 150.f)))
+	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shade"), 50.f, 50.f, 100.f, 100.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Depth"), 75.f, 225.f, 150.f, 150.f)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Normal"), 150.f, 450.f, 300.f, 300.f)))
+	//	return E_FAIL;
 	/*if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_RimLight"), 75.f, 225.f, 150.f, 150.f)))
 		return E_FAIL;*/
 	//if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shadow"), 1280.f - 150.f, 150.f, 300.f, 300.f)))
@@ -362,10 +370,33 @@ HRESULT CRenderer::Render_Blur()
 
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur"), m_pShaderCom, "g_BlurTexture")))
 		return E_FAIL;
+
+	m_pShaderCom->Begin(4);
+
+	if (FAILED(m_pVIBufferCom->Bind_Resources()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	/* Emissive */
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Blur_Emissive"))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_OrthographicViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_OrthographicMatrix)))
+		return E_FAIL;
+	
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Emissive"), m_pShaderCom, "g_EmissiveTexture")))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(4);
+	m_pShaderCom->Begin(7);
 
 	if (FAILED(m_pVIBufferCom->Bind_Resources()))
 		return E_FAIL;
@@ -415,7 +446,7 @@ HRESULT CRenderer::Render_Combined()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Shadow"), m_pShaderCom, "g_ShadowTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Emissive"), m_pShaderCom, "g_EmissiveTexture")))
+	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_Emissive"), m_pShaderCom, "g_EmissiveTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RenderTarget(TEXT("Target_Blur_X"), m_pShaderCom, "g_BlurHorizontalTexture")))
 		return E_FAIL;

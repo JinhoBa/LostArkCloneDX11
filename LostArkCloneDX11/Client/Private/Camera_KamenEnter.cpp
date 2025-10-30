@@ -89,12 +89,12 @@ void CCamera_KamenEnter::Update(_float fTimeDelta)
 
 void CCamera_KamenEnter::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CCamera_KamenEnter::Render()
 {
-    ImGui::Checkbox("isLoop", &m_anim[m_iAnimationIndex].isLoop);
+    //ImGui::Checkbox("isLoop", &m_anim[m_iAnimationIndex].isLoop);
     //
     //ImGui::InputFloat("fDuration", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].fDuration));
     //ImGui::InputFloat("fSpeed", reinterpret_cast<_float*>(&m_anim[m_iAnimationIndex].fSpeed));

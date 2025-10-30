@@ -35,7 +35,7 @@ void CAttack_Spin_Kamen::Enter(void* pArg)
 	
 	m_pKamen->Set_Animation(29, false);
 
-	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends);
+	m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOrientation);
 
 	Ready_EffectEvents();
 }

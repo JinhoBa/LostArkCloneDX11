@@ -75,6 +75,11 @@ public:
 	void StopSound(CHANNELID eID);
 	void StopAll();
 	void SetChannelVolume(CHANNELID eID, float fVolume);
+#ifdef _DEBUG
+	const map<TCHAR*, FMOD::Sound*>& Get_SoundMap();
+#endif // _DEBUG
+
+
 #pragma endregion
 
 #pragma region RENDERER
@@ -82,6 +87,7 @@ public:
 	void		Toggle_VisibleUI();
 	HRESULT		Add_RenderGroup(RENDER eRenderGroup, class CGameObject* pRenderObject);
 	void		BlurBackBuffer(_float fStrength);
+	HRESULT		Add_DebugComponent(CComponent* pDebugCom);
 #pragma endregion
 
 #pragma region PIPELINE
@@ -116,6 +122,7 @@ public:
 	void				Update_Light_Range(const _tchar* pLightTag, _float fRange);
 	void				Update_Light_Color(const _tchar* pLightTag, _uint iColorType, _float4* pColor);
 	HRESULT				Add_Light(const _tchar* pLightTag, const LIGHT_DESC& LightDesc);
+	HRESULT				Delete_Light(const _tchar* pLightTag);
 	HRESULT				Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 #pragma endregion
 

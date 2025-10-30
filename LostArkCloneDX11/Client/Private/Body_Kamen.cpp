@@ -47,12 +47,30 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     m_iCurModelIndex = 0;
     m_iAnimIndex = 193;
 
+    m_bApplyRimLight = false;
+
+    m_fRimStrength = 0.f;
+    m_fRimPower = 1.f;
+
+    m_vRimColor[0] = _float4(0.81f, 0.79f, 0.7f, 1.f);
+    m_vRimColor[1] = _float4(0.168f, 0.41f, 1.f, 1.f);
+
 #ifdef _DEBUG
-    m_iCurModelIndex = 2;
+    m_iCurModelIndex = 0;
     m_iAnimIndex = 0;
     m_isDebug = true;
     m_fKeyFrame = 0.f;
     m_vPos = _float3(42.f, 0.f, 42.f);
+
+    m_fVolume = 1.f;
+
+    m_isTrigge = true;
+
+    /*for (auto& pair : m_pGameInstance->Get_SoundMap())
+    {
+        _wstring strName = _wstring(pair.first);
+        m_SoundNames.push_back(m_pGameInstance->WstringToUtf8(strName));
+    }*/
 #endif // _DEBUG
 
     m_iNumMesh = m_pModelComs[m_iCurModelIndex]->Get_NumMeshes();
@@ -69,7 +87,7 @@ HRESULT CBody_Kamen::Initialize(void* pArg)
     m_pCameraTargetBoneMatrix = m_pModelComs[1]->Get_BoneMatrixPrt("b_cameratarget");
     pCamera->Set_CameraTargetBone(&m_CameraTargetBoneWorldMatrix);
 
-    g_fTestDeltaTime = 1.f;
+
 
 
 
@@ -98,8 +116,17 @@ void CBody_Kamen::Update(_float fTimeDelta)
     XMStoreFloat4x4(&m_CameraTargetBoneWorldMatrix,
         XMLoadFloat4x4(m_pCameraTargetBoneMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 
+    /* RimLight Update */
+    if (m_bApplyRimLight || m_fRimStrength > 0.f)
+    {
+        m_fRimStrength -= fTimeDelta * m_fDecreasePerSec;
+        if (m_fRimStrength < 0.f)
+            m_fRimStrength = 0.f;
+    }
+
 #ifdef _DEBUG
-   if (m_pModelComs[m_iCurModelIndex]->Get_LoopFlag())
+
+  /* if (m_pModelComs[m_iCurModelIndex]->Get_LoopFlag())
     {
         m_EffectEvents.clear();
         const vector<EFFECT_EVENT_DESC>& EffectEvents = CGameManager::GetInstance()->Get_EffectTrack(CHARACTER::BOSS, m_iEffectID);
@@ -122,7 +149,7 @@ void CBody_Kamen::Update(_float fTimeDelta)
         else
             ++iter;
         
-    }
+    }*/
    
 #endif // _DEBUG
 
@@ -131,6 +158,7 @@ void CBody_Kamen::Update(_float fTimeDelta)
 void CBody_Kamen::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::SHADOW, this);
 }
 
 HRESULT CBody_Kamen::Render()
@@ -141,8 +169,9 @@ HRESULT CBody_Kamen::Render()
     ImGui::InputInt("EffectID", (_int*)(&m_iEffectID));
     ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");
     ImGui::InputFloat3("Pos", (_float*)(&m_vPos), "%.2f");
-    ImGui::InputInt("Animation", &m_iAnimIndex);
-    _int iIndex = {};
+
+  /*  ImGui::InputInt("Animation", &m_iAnimIndex);*/
+    /*_int iIndex = {};
     for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
     {
         if (ImGui::Button(to_string(iIndex).c_str()))
@@ -162,7 +191,36 @@ HRESULT CBody_Kamen::Render()
         ++iIndex;
         ImGui::SameLine();
         ImGui::Text(pName);
-    }
+    }*/
+
+    //ImGui::DragFloat("m_fVolume", &m_fVolume);
+    //ImGui::DragFloat("m_fTestSoundKey", &m_fTestSoundKey);
+
+    //if (ImGui::BeginCombo("SoundName", ""))
+    //{
+
+    //    for (int i = 0; i < m_SoundNames.size(); ++i)
+    //    {
+    //        bool isSelected = (m_currentIndex == i);
+    //        if (ImGui::Selectable(m_SoundNames[i].c_str(), isSelected))
+    //        {
+    //            m_currentIndex = i;
+    //            ImGui::SetClipboardText(m_SoundNames[i].c_str());
+    //        }
+
+    //        if (isSelected)
+    //            ImGui::SetItemDefaultFocus();
+    //    }
+
+    //    ImGui::EndCombo();
+    //}
+    //_float fFrame = m_pModelComs[m_iCurModelIndex]->Get_TrackPosition();
+    //if ((m_isDebug && m_fTestSoundKey <= fFrame) && (false == m_isTrigge))
+    //{
+    //    m_isTrigge = true;
+    //    m_pGameInstance->Play_Sound(m_pGameInstance->Utf8ToWstring(m_SoundNames[m_currentIndex].c_str()).c_str(), CHANNELID::SKILL_PLAYER, m_fVolume);
+    //}
+
     ImGui::End();
 #pragma endregion
     m_iPassIndex = 1;
@@ -191,7 +249,7 @@ HRESULT CBody_Kamen::Render()
                 return E_FAIL;
             if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_EmissiveTexture", TEXTURE::EMISSIVE)))
             {
-                m_iPassIndex = 0;
+                m_iPassIndex = 2;
                 if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &m_vClearColor, sizeof(_float4))))
                     return E_FAIL;
             }
@@ -200,21 +258,80 @@ HRESULT CBody_Kamen::Render()
                 if (FAILED(m_pShaderCom->Bind_RawValue("g_EmissiveColor", &m_vBaseColor, sizeof(_float4))))
                     return E_FAIL;
             }
-            
         }
+
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_Material(i, m_pShaderCom, "g_NormalTexture", TEXTURE::NORMAL, 0)))
+            return E_FAIL;
 
         if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
-        if (FAILED(m_pShaderCom->Begin(1)))
-            return E_FAIL;
+        if (false == m_bApplyRimLight && m_fRimStrength <= 0.f)
+        {
+            if (FAILED(m_pShaderCom->Begin(m_iPassIndex)))
+                return E_FAIL;
+        }
+        else
+        {
+            if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_Camera_Position(), sizeof(_float4))))
+                return E_FAIL;
 
+            if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimColor", &m_vRimColor[0], sizeof(_float4))))
+                return E_FAIL;
+
+            if (FAILED(m_pShaderCom->Bind_RawValue("g_fRimStrength", &m_fRimStrength, sizeof(_float))))
+                return E_FAIL;
+
+            if (FAILED(m_pShaderCom->Bind_RawValue("g_fRimPower", &m_fRimPower, sizeof(_float))))
+                return E_FAIL;
+
+            if (FAILED(m_pShaderCom->Begin(3)))
+                return E_FAIL;
+        }
 
         if (FAILED(m_pModelComs[m_iCurModelIndex]->Render(i)))
             return E_FAIL;
     }
 
     return S_OK;
+}
+
+HRESULT CBody_Kamen::Render_Shadow()
+{
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_pParentTransformCom->Get_WorldMatrix())))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ViewMatrix", D3DTS::VIEW)))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Bind_Shadow_Resource(m_pShaderCom, "g_ProjMatrix", D3DTS::PROJ)))
+        return E_FAIL;
+
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", m_pGameInstance->Get_Far(), sizeof(_float))))
+        return E_FAIL;
+
+    for (_uint i = 0; i < m_iNumMesh; i++)
+    {
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+            return E_FAIL;
+
+        if (FAILED(m_pShaderCom->Begin(4)))
+            return E_FAIL;
+
+        if (FAILED(m_pModelComs[m_iCurModelIndex]->Render(i)))
+            return E_FAIL;
+    }
+
+    return S_OK;
+}
+
+void CBody_Kamen::Trigger_RimLight(_uint iColorIndex, _float fDecreasePerSec)
+{
+    m_iRimLightColorIndex = iColorIndex;
+    m_fDecreasePerSec = fDecreasePerSec;
+
+    m_bApplyRimLight = true;
+    m_fRimStrength = 1.f;
 }
 
 void CBody_Kamen::Set_Animation(_uint iAnimationIdex, _bool bLoop, _float fLerpTime)

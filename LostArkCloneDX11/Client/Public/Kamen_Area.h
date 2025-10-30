@@ -1,6 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "ContainerObject.h"
 
 NS_BEGIN(Engine)
 class CTexture;
@@ -10,7 +10,7 @@ NS_END
 
 NS_BEGIN(Client)
 
-class CKamen_Area : public CGameObject
+class CKamen_Area : public CContainerObject
 {
 private:
 	CKamen_Area(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -30,7 +30,7 @@ public:
 
 private:
 	_uint			m_iNumMesh = {};
-
+	_float			m_fTimeAcc = {};
 	CShader*		m_pShaderCom = { nullptr };
 	CModel*			m_pModelCom = { nullptr };
 	CTexture*		m_pTextureCom = { nullptr };

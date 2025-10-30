@@ -42,8 +42,6 @@ HRESULT CTest_Ground_Effect::Initialize(void* pArg)
     m_fRotationSpeed = 1.f;
     m_iPassIndex = 1;
 
-    g_fTestDeltaTime = 1.f;
-
     if (nullptr != pArg)
     {
         CEffect::Effect_Desc* pDesc = static_cast<CEffect::Effect_Desc*>(pArg);
@@ -94,7 +92,6 @@ void CTest_Ground_Effect::Late_Update(_float fTimeDelta)
 HRESULT CTest_Ground_Effect::Render()
 {
 #ifdef _DEBUG
-    ImGui::InputFloat("DeltaTime", (_float*)(&g_fTestDeltaTime));
 
     const char* LerpNames[] = { "Linear", "EaseIn", "EaseOut", "EaseInOut" };
     int currentIndex = static_cast<int>(m_eLerpType);
@@ -189,8 +186,10 @@ HRESULT CTest_Ground_Effect::Render()
         Desc.strMaskTexture = m_strMaskTexture;
         Desc.strNoiseTexture = m_strNoiseTexture;
 
-        if (FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::GROUND, &Desc, "../Bin/Resources/Data/Effect/Player_GroundEffects.xml", m_iEffectID)))
+        if (FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::GROUND, &Desc, "../Bin/Resources/Data/Effect/Kamen_GroundEffects.xml", m_iEffectID)))
             MSG_BOX("저장 실패");
+        else
+            MSG_BOX("저장 완료");
     }
 
 #endif // _DEBUG

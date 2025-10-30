@@ -19,6 +19,10 @@ public:
 	void StopAll();
 	void SetChannelVolume(CHANNELID eID, float fVolume);
 
+#ifdef _DEBUG
+	const map<TCHAR*, FMOD::Sound*>& Get_SoundMap() { return m_mapSound; }
+#endif // _DEBUG
+
 private:
 	// 사운드 리소스 정보를 갖는 객체 
 	map<TCHAR*, FMOD::Sound*> m_mapSound;

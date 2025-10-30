@@ -72,9 +72,15 @@ void CPlayer::Set_Animation(_uint iIndex, _bool bLoop, _float fLerpTime)
     static_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Set_Animation(iIndex, bLoop, fLerpTime);
 }
 
-void CPlayer::Set_HitBox(_float3& vCenter, _float3& vExtends)
+void CPlayer::Set_HitBox(_float3& vCenter, _float3& vExtends, _float3& vOrientation, COLLIDER eType)
 {
-    m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends);
+    if(COLLIDER::OBB == eType)
+        m_pHitBoxCom->Set_ColliderDesc(vCenter, vExtends, vOrientation);
+    else if(COLLIDER::SPHERE == eType)
+    {
+        m_pHitSphereCom->Set_ColliderDesc(vCenter, vExtends);
+        m_pHitSphereCom->Update(XMMatrixTranslationFromVector(XMVectorSetW(XMLoadFloat3(&vOrientation), 1.f)));
+    }
 }
 
 _bool CPlayer::isAnimationFinish()
@@ -261,6 +267,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 #ifdef _DEBUG
     isCollUpdate = false;
+    isHitSphereUpdate = false;
 
 
 
@@ -293,10 +300,14 @@ void CPlayer::Update(_float fTimeDelta)
     m_pNavigationCom->Update_WorldMatrix(XMMatrixIdentity());
 
     m_pHitBoxCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+   
     m_pColliderCom->Update(XMLoadFloat4x4(m_pRootBoneMatrix) * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
 
     if (isCollUpdate)
         m_pGameInstance->Check_Collider(m_pHitBoxCom, TEXT("Monster"));
+
+    if (isHitSphereUpdate)
+        m_pGameInstance->Check_Collider(m_pHitSphereCom, TEXT("Monster"));
 
    // m_isColl = m_pGameInstance->Check_Collider(m_pColliderCom, TEXT("Monster"));
     //
@@ -319,7 +330,12 @@ void CPlayer::Late_Update(_float fTimeDelta)
     m_pColliderCom->Update_OnCollision();
 
 #ifdef _DEBUG
-   
+    if (isCollUpdate)
+        m_pGameInstance->Add_DebugComponent(m_pHitBoxCom);
+    if (isHitSphereUpdate)
+        m_pGameInstance->Add_DebugComponent(m_pHitSphereCom);
+
+    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
 #endif // _DEBUG
 
 }
@@ -327,15 +343,12 @@ void CPlayer::Late_Update(_float fTimeDelta)
 HRESULT CPlayer::Render()
 {
 #ifdef _DEBUG
-    if (isCollUpdate)
-        m_pHitBoxCom->Render();
-  
     /* TEST */
   /* ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
    ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);
     m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
   
-    m_pColliderCom->Render();
+
 #endif // _DEBUG
  
   
@@ -423,7 +436,7 @@ HRESULT CPlayer::Ready_Components()
     OBB_Desc.pOwner = this;
 
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_OBB"),
-        TEXT("Com_HitBox_AABB"), reinterpret_cast<CComponent**>(&m_pHitBoxCom), &OBB_Desc)))
+        TEXT("Com_HitBox_OBB"), reinterpret_cast<CComponent**>(&m_pHitBoxCom), &OBB_Desc)))
         return E_FAIL;
 
 
@@ -474,6 +487,65 @@ HRESULT CPlayer::Ready_Components()
         
         });
 
+    /* HITBOX */
+    CBounding_Sphere::BOUNDING_SPHERE_DESC Sphere_Desc = {};
+    Sphere_Desc.eColliderType = COLLIDERTYPE::HITBOX;
+    Sphere_Desc.vCenter = _float3(0.f, 0.5f, 0.f);
+    Sphere_Desc.fRadius = 1.f;
+    Sphere_Desc.pOwner = this;
+
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_HitBox_Sphere"), reinterpret_cast<CComponent**>(&m_pHitSphereCom), &Sphere_Desc)))
+        return E_FAIL;
+
+
+    m_pHitSphereCom->Set_OnCollisionEnter([&]() {
+
+        deque<CGameObject*>& Objects = m_pHitSphereCom->Get_HitObjects();
+
+        if (99 == m_iCurSkillID)
+            return;
+
+        SKILL_INFO* pSkill = m_pGameManager->Get_SkillInfo_Prt(m_iCurSkillID);
+
+        ATTACK_DESC Desc = {};
+        Desc.eAttackType = pSkill->eAttackType;
+        Desc.eHitType = pSkill->eHitType;
+
+        _float fDamage = pSkill->Damages[m_iCurHitIndex];
+
+        m_PlayerInfo.fIdentity = min(MAX_IDENTITY, m_PlayerInfo.fIdentity + 30.f);
+
+        while (!Objects.empty())
+        {
+            if (m_PlayerInfo.Critical_Probability > m_pGameInstance->Random_Normal())
+            {
+                Desc.isCritial = true;
+                Desc.fDamage = m_PlayerInfo.Critical_Damage * (fDamage + m_PlayerInfo.fAttack);
+
+            }
+            else
+            {
+                Desc.isCritial = false;
+                Desc.fDamage = fDamage + m_PlayerInfo.fAttack;
+            }
+            DAMAGEFONT eDamageType = Desc.isCritial == true ? DAMAGEFONT::CRITICAL : DAMAGEFONT::NORMAL;
+            _float fFontDamage = Desc.fDamage;
+            _float3 vPosition;
+            XMStoreFloat3(&vPosition, Objects.front()->Get_Transform()->Get_Position());
+
+            _uint iEffectID = m_PlayerInfo.eStance == STANCE::FLURRY ? 13 : 12;
+
+            m_pGameManager->Add_Effect(EFFECT::GROUND, iEffectID, &Objects.front()->Get_Transform()->Get_WorldMatrix());
+            m_pGameManager->Add_Effect(EFFECT::PARTICLE, 11, &Objects.front()->Get_Transform()->Get_WorldMatrix());
+
+            m_pGameManager->Add_DamageFont(eDamageType, fFontDamage, vPosition);
+            dynamic_cast<CEnemy*>(Objects.front())->OnHit(Desc);
+            Objects.pop_front();
+        }
+
+        });
+
     /* Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderDesc = {};
     ColliderDesc.eColliderType = COLLIDERTYPE::COLLIDER;
@@ -484,6 +556,7 @@ HRESULT CPlayer::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
+
 
     return S_OK;
 }
@@ -526,11 +599,11 @@ HRESULT CPlayer::Ready_PartObjects()
     //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"), TEXT("Test_Effect"), &Effect_Desc)))
     //    return E_FAIL;
 
-    //// 
-    //Effect_Desc.pParentTransform = m_pTransformCom;
-    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
-    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
-    //    return E_FAIL;
+    // 
+    Effect_Desc.pParentTransform = m_pTransformCom;
+    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
+        return E_FAIL;
 
  
     //Effect_Desc.pParentTransform = m_pTransformCom;
@@ -650,13 +723,21 @@ void CPlayer::Add_Buff(_uint iBuffID)
     m_Buffs.push_back(m_pGameManager->Add_Buff(iBuffID));
 }
 
-void CPlayer::Update_HitBox(_uint iSkillID, _uint iHitIndex)
+void CPlayer::Update_HitBox(_uint iSkillID, _uint iHitIndex, COLLIDER eType)
 {
-    isCollUpdate = true;
     m_iCurSkillID = iSkillID;
     m_iCurHitIndex = iHitIndex;
   
-    m_pGameInstance->Add_Collider(TEXT("Player"), m_pHitBoxCom);
+    if(COLLIDER::OBB == eType)
+    {
+        isCollUpdate = true;
+        m_pGameInstance->Add_Collider(TEXT("Player"), m_pHitBoxCom);
+    }
+    else
+    {
+        isHitSphereUpdate = true;
+        m_pGameInstance->Add_Collider(TEXT("Player"), m_pHitSphereCom);
+    }
 }
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -705,4 +786,5 @@ void CPlayer::Free()
     Safe_Release(m_pNavigationCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pHitBoxCom);
+    Safe_Release(m_pHitSphereCom);
 }

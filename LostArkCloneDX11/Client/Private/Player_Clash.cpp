@@ -27,6 +27,15 @@ void CPlayer_Clash::Enter(void* pArg)
 
 	m_eState = STATE::WAIT;
 
+	if (STANCE::FLURRY == *m_pPlayerStance)
+	{
+		m_pPlayer->Set_Animation(35, true);
+	}
+	else
+	{
+		m_pPlayer->Set_Animation(36, true);
+	}
+
 	m_pPlayer->Get_Transform()->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 48.f, 1.f));
 	m_pPlayer->Toggle_PartObject(TEXT("HPBar_Player"));
 	Toggle_HUD();

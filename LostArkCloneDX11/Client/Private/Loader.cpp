@@ -50,7 +50,10 @@
 #include "Effect_Trail.h"
 #include "Effect_Mesh.h"
 #include "Effect_Particle.h"
+#include "Area_Effect.h"
+#include "Screen_Effect.h"
 #include "Effect_Manager.h"
+#include "Effect_BossEnter.h"
 
 #include "Body_Monster.h"
 #include "HpBar_Monster.h"
@@ -311,13 +314,19 @@ HRESULT CLoader::Loading_For_GamePlay()
 
 	/* For.Prototype_Component_Texture_Water */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Water"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_x_water_002_1.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_k_liquid_02.dds"), 1))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_WaterNoise */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WaterNoise"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Noise/fx_s_waternoise_01.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Noise/fx_s_waternoise_0%d.dds"), 2))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_WaterNoromal */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_WaterNoromal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effects/fx_k_liquid_02_n.dds"), 1))))
+		return E_FAIL;
+
 
 #pragma endregion
 
@@ -611,6 +620,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/fm_bendplane_1.fbx"))))
 		return E_FAIL;
 
+	/*For Prototype_Component_Model_KamenBack*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_KamenBack"),
+		CModel::Create(m_pDevice, m_pContext, MODEL::MESH, "../Bin/Resources/EffectMesh/Kamen3Back.fbx"))))
+		return E_FAIL;
+
 #pragma endregion
 
 
@@ -671,6 +685,19 @@ HRESULT CLoader::Loading_For_GamePlay()
 	Point_Desc.vPivot = _float3(3.f, 3.f, 3.f);
 	/*For Prototype_Component_VIBuffer_Point_Instance_TestEffect*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_TestEffect"),
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &Point_Desc))))
+		return E_FAIL;
+
+	Point_Desc.iNumInstance = 1000;
+	Point_Desc.vCenter = _float3(0.f, -55.f, 0.f);
+	Point_Desc.vRange = _float3(20.f, 3.f, 3.f);
+	Point_Desc.vSize = _float2(1.f, 3.f);
+	Point_Desc.isLoop = true;
+	Point_Desc.vLifeTime = _float2(2.0f, 5.f);
+	Point_Desc.vSpeed = _float2(-2.f, -1.f);
+	Point_Desc.vPivot = _float3(0.f, -55.f, 0.f);
+	/*For Prototype_Component_VIBuffer_Point_Instance_AreaEffect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Point_Instance_AreaEffect"),
 		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, &Point_Desc))))
 		return E_FAIL;
 
@@ -790,6 +817,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_Test_Effect*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_Effect"),
 		CTest_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Kamen_Area_Effect*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Kamen_Area_Effect"),
+		CArea_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Test_MeshEffect*/
@@ -934,6 +966,11 @@ HRESULT CLoader::Loading_For_GamePlay()
 	/* For.Prototype_GameObject_BuffUI */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_BuffUI"),
 		CBuffUI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_CScreen_Effect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_CScreen_Effect"),
+		CScreen_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
@@ -1158,6 +1195,7 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_skybox_eclipse"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/SkyBox/Texture2D/lv_skybox_eclipse_01_d.dds"), 1))))
 		return E_FAIL;
+
 
 	/* For.Prototype_Component_Texture_Sword_Kamen_Diffuse */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_Component_Texture_Sword_Kamen_Diffuse"),
@@ -1506,6 +1544,11 @@ HRESULT CLoader::Loading_For_Boss()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Kamen_Area"),
 		CKamen_Area::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/*For Prototype_GameObject_Effect_BossEnter*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::BOSS), TEXT("Prototype_GameObject_Effect_BossEnter"),
+		CEffect_BossEnter::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region UI
@@ -1547,7 +1590,7 @@ HRESULT CLoader::Loading_For_Boss()
 
 HRESULT CLoader::Loading_For_MapEditor()
 {
-	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen_Phase2.xml")))
+	if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen.xml")))
 		return E_FAIL;
 
 	/*if (FAILED(CGameManager::GetInstance()->Load_MapData("../Bin/Resources/Data/MapData/Kamen.xml")))

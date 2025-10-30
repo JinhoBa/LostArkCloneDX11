@@ -17,7 +17,10 @@ HRESULT CLight::Initialize(const LIGHT_DESC& LightDesc)
 
 void CLight::Update_Position(_float3* pPosition)
 {
-	memcpy(&m_LightDesc.vPosition, pPosition, sizeof(_float3));
+	if(LIGHT::POINT == m_LightDesc.eType)
+		memcpy(&m_LightDesc.vPosition, pPosition, sizeof(_float3));
+	else if(LIGHT::DIRECTIONAL == m_LightDesc.eType)
+		memcpy(&m_LightDesc.vDirection, pPosition, sizeof(_float3));
 }
 
 void CLight::Update_Range(_float fRange)

@@ -46,6 +46,7 @@ protected:
 	CModel*		m_pModelCom = { nullptr };
 	CTexture*	m_pTextureCom = { nullptr };
 	CTexture*	m_pNoiseTextureCom = { nullptr };
+	CTexture*	m_pNormalTextureCom = { nullptr };
 
 
 	_wstring	m_strDiffuseTexture;

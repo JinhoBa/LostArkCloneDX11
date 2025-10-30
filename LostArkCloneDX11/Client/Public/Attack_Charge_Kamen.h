@@ -21,7 +21,7 @@ private:
 	STATE		m_eState = {};
 
 	_float		m_fTimeAcc = {};
-
+	
 public:
 	static CAttack_Charge_Kamen* Create(STATE_KAMEN_DESC* pDesc);
 	virtual void Free() override;

@@ -62,7 +62,7 @@ void CAttack_Kamen::Update_HitBox(_float fTimeDelta)
 			{
 				m_isActiveHitBox = true;
 				m_fTimeAcc = 0.f;
-				m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends, m_eHitboxType);
+				m_pKamen->Set_HitBox(m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOffset, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vExtends, m_pSkillDesc->HitBoxDescs[m_iAttackCount].vOrientation, m_eHitboxType);
 			}
 		}
 	}

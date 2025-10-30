@@ -21,7 +21,6 @@ HRESULT CAttack_Sword_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 
 void CAttack_Sword_Kamen::Enter(void* pArg)
 {
-	m_eHitboxType = COLLIDER::OBB;
 	m_iSkillID = 4;
 	m_isStartHit = m_isActiveHitBox = false;
 	m_iAttackCount = 0;
@@ -30,18 +29,21 @@ void CAttack_Sword_Kamen::Enter(void* pArg)
 	switch (*m_pPhase)
 	{
 	case PHASE::PHASE1:
+		m_eHitboxType = COLLIDER::SPHERE;
 		m_iEffectID = 6;
 		m_pKamen->Set_Animation(20, false);
 		break;
 
 	case PHASE::PHASE2:
 		m_iEffectID = 10;
+		m_eHitboxType = COLLIDER::OBB;
 		m_pKamen->Set_Animation(16, false);
 		break;
 
 	case PHASE::PHASE3:
 		m_iSkillID = 0;
 		m_iEffectID = 14;
+		m_eHitboxType = COLLIDER::OBB;
 		m_pKamen->Set_Animation(187, false);
 		break;
 

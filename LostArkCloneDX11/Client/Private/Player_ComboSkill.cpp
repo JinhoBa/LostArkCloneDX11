@@ -28,6 +28,7 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 
 	m_iSkillID = pSkill_Desc->iSkillID;
 	m_pSkillInfo = m_pGameManager->Get_SkillInfo_Prt(pSkill_Desc->iSkillID);
+	m_eHitboxType = COLLIDER::OBB;
 
 	m_iKey = pSkill_Desc->iKey;
 	m_iMaxCount = pSkill_Desc->iCount;
@@ -38,7 +39,7 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 	m_iCount = { 1 };
 
 	m_pPlayer->Set_Animation(m_iAnimationIndex++, false);
-	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends);
+	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends, m_pSkillInfo->HitBoxDesc.vOrientation);
 
 	Ready_EffectTrack();
 }

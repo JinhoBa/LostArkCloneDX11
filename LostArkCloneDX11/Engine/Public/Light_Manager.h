@@ -13,6 +13,7 @@ public:
 	const LIGHT_DESC* Get_Desc(const _tchar* pLightTag);
 public:
 	HRESULT Add_Light(const _tchar* pLightTag, const LIGHT_DESC& LightDesc);
+	HRESULT Delete_Light(const _tchar* pLightTag);
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer* pVIBuffer);
 
 	void ToggleLight(const _tchar* pLightTag,_bool bEnable);

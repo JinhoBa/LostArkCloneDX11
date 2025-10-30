@@ -93,7 +93,7 @@ void CEffect_Particle::Update(_float fTimeDelta)
 
     if (false == m_Particle_Data.isLoop && m_Particle_Data.vLifeTime.y < m_Particle_Data.vLifeTime.x)
         m_isDead = true;
-    else if(m_fTimeAcc > m_Particle_Data.fActiveTime)
+    else if(true == m_Particle_Data.isLoop && m_fTimeAcc > m_Particle_Data.fActiveTime)
         m_isDead = true;
 
     _matrix matRotation = XMMatrixRotationRollPitchYaw(XMConvertToRadians(m_Particle_Data.vRotation.x), XMConvertToRadians(m_Particle_Data.vRotation.y), XMConvertToRadians(m_Particle_Data.vRotation.z));

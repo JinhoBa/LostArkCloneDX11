@@ -18,7 +18,12 @@ public:
 	virtual void Exit()override;
 
 private:
-	STATE m_eState = {};
+	STATE		m_eState = {};
+	_bool		m_Triggers[3];
+	_float      m_KeyFrames[3];
+
+private:
+	void Update_HitRange(_float fTimeDelta);
 
 public:
 	static CAttack_Combo_Kamen* Create(STATE_KAMEN_DESC* pDesc);

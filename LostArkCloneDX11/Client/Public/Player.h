@@ -40,7 +40,7 @@ public:
 	void			Set_State(STATE eState, void* pArg = nullptr);
 	void			Set_ChargeSkill_Desc(_bool isUsing, _float fChargingTime);
 	void			Set_Animation(_uint iIndex, _bool bLoop = false,_float fLerpTime = 0.1f);
-	void			Set_HitBox(_float3& vCenter, _float3& vExtends);
+	void			Set_HitBox(_float3& vCenter, _float3& vExtends, _float3& vOrientation, COLLIDER eType = COLLIDER::OBB);
 	void			Set_SkillID(_uint iSkillID) { m_iCurSkillID = iSkillID; }
 
 	_bool			isAnimationFinish();
@@ -65,7 +65,7 @@ public:
 	void				TurnToCursor();
 	void				Change_Stance();
 	void				Add_Buff(_uint iBuffID);
-	void				Update_HitBox(_uint iSkillID, _uint iHitIndex);
+	void				Update_HitBox(_uint iSkillID, _uint iHitIndex, COLLIDER eType = COLLIDER::OBB);
 
 private:
 	PLAYER_INFO				m_DefaultInfo = {};
@@ -81,6 +81,7 @@ private:
 	CState*					m_States[STATE_END] = {};
 	CNavigation*			m_pNavigationCom = { nullptr };
 	CCollider*				m_pHitBoxCom = { nullptr };
+	CCollider*				m_pHitSphereCom = { nullptr };
 	CCollider*				m_pColliderCom = { nullptr };
 
 	const _float4x4*		m_pRootBoneMatrix = { nullptr };
@@ -89,6 +90,7 @@ private:
 
 #ifdef _DEBUG
 	_bool isCollUpdate = {false};
+	_bool isHitSphereUpdate = {false};
 	_float3 m_vHitBoxCenter = {};
 	_float3 m_vHitBoxExtents = {};
 #endif // _DEBUG

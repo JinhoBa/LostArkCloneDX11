@@ -14,7 +14,7 @@ void CBounding_OBB::Set_Desc(_float3& vCenter, _float3& vExtents, _float3 vOrien
 	m_pOriginal_Desc->Center = vCenter;
 	m_pOriginal_Desc->Extents = vExtents;
 
-	XMStoreFloat4(&m_pOriginal_Desc->Orientation, XMQuaternionRotationRollPitchYaw(vOrientation.x, vOrientation.y, vOrientation.z));
+	XMStoreFloat4(&m_pOriginal_Desc->Orientation, XMQuaternionRotationRollPitchYaw(XMConvertToRadians(vOrientation.x), XMConvertToRadians(vOrientation.y), XMConvertToRadians(vOrientation.z)));
 }
 
 HRESULT CBounding_OBB::Initialize(const void* pArg)

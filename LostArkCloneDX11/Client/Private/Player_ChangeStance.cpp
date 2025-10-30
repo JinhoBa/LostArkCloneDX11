@@ -32,13 +32,13 @@ void CPlayer_ChangeStance::Enter(void* pArg)
 	{
 		m_iSkillID = 19;
 		m_pPlayer->Set_Animation(40, false);
-		m_pGameInstance->Play_Sound(L"ToFlurry3.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		m_pGameInstance->Play_Sound(L"ToFlurry3.wav", CHANNELID::SKILL_PLAYER, 0.5f);
 	}
 	else
 	{
 		m_iSkillID = 20;
 		m_pPlayer->Set_Animation(41, false);
-		m_pGameInstance->Play_Sound(L"ToFocus3.wav", CHANNELID::SKILL_PLAYER, 0.2f);
+		m_pGameInstance->Play_Sound(L"ToFocus3.wav", CHANNELID::SKILL_PLAYER, 0.5f);
 	}
 
 	m_pPlayer->Change_Stance();
@@ -64,9 +64,6 @@ void CPlayer_ChangeStance::Update(_float fTimeDelta)
 
 void CPlayer_ChangeStance::Exit()
 {
-	dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
-	dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
-
 	m_EffectEvents.clear();
 }
 

@@ -33,6 +33,10 @@ public:
 	const vector<EFFECT_EVENT_DESC>& Get_EffectTrack(CHARACTER eType, _uint iTrackIndex);
 	const vector<CAMERA_SHAKE_EVENT_DESC>& Get_Camera_Track(_uint iTrackIndex);
 	const vector<BLUR_EVENT_DESC>& Get_BlurTrack(_uint iTrackIndex);
+	const vector<SOUND_EVENT_DESC>& Get_SoundTrack(CHARACTER eType, _uint iTrackIndex);
+
+	HRESULT Bind_Effect_Resource(class CTexture** pTextureCom, class CTexture** pMaskTextureCom, class CTexture** pNoiseTextureCom);
+
 	HRESULT Load_Mesh_Data(const _char* pFilePath, CHARACTER eType);
 	HRESULT Load_Ground_Data(const _char* pFilePath, CHARACTER eType);
 	HRESULT Load_Particle_Data(const _char* pFilePath, CHARACTER eType);
@@ -58,6 +62,7 @@ private:
 	vector<vector<EFFECT_EVENT_DESC>>			m_EffectEvents[ENUM_TO_INT(CHARACTER::END)];
 	vector<vector<CAMERA_SHAKE_EVENT_DESC>>		m_CameraShakeEvents;
 	vector<vector<BLUR_EVENT_DESC>>				m_BlurEvents;
+	vector<vector<SOUND_EVENT_DESC>>			m_SoundEvents[ENUM_TO_INT(CHARACTER::END)];
 
 	vector<EFFECT_GROUND_DESC>		m_GroundEffectData[ENUM_TO_INT(CHARACTER::END)];
 	vector<EFFECT_MESH_DESC>		m_MeshEffect_Datas[ENUM_TO_INT(CHARACTER::END)];

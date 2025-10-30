@@ -85,6 +85,8 @@ private:
 	void Sort_AlphaObject();
 	void Sort_UI();
 	HRESULT Ready_DepthStencilView(_uint iSizeX, _uint iSizeY);
+
+
 #ifdef _DEBUG
 private:
 	HRESULT Render_Debug();

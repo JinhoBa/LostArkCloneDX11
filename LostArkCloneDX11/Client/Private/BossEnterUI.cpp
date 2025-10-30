@@ -2,8 +2,10 @@
 #include "BossEnterUI.h"
 
 #include "GameInstance.h"
-#include "Player.h"
+#include "GameManager.h"
 #include "Kamen.h"
+#include "Player.h"
+#include "Effect_BossEnter.h"
 
 CBossEnterUI::CBossEnterUI(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel{ pDevice, pContext }
@@ -45,13 +47,11 @@ HRESULT CBossEnterUI::Initialize(void* pArg)
 	if (FAILED(Ready_Font()))
 		return E_FAIL;
 
-	m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
-		ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	m_pBossEnterEffect = dynamic_cast<CEffect_BossEnter*>(
+		m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_BossEnter")).back());
 
-	if (nullptr == m_pPlayerTransformCom)
+	if (nullptr == m_pBossEnterEffect)
 		return E_FAIL;
-
-	Safe_AddRef(m_pPlayerTransformCom);
 
 	return S_OK;
 }
@@ -62,7 +62,7 @@ void CBossEnterUI::Priority_Update(_float fTimeDelta)
 
 void CBossEnterUI::Update(_float fTimeDelta)
 {
-	if (3.f >= XMVectorGetX(XMVector3Length(m_pPlayerTransformCom->Get_Position() - XMVectorSet(37.f, 13.9f, 12.5f, 1.f))))
+	if (m_pBossEnterEffect->isEnter())
 	{
 		m_fTimeAcc += fTimeDelta;
 		_uint iCount = 5 - (_uint)m_fTimeAcc;
@@ -71,9 +71,16 @@ void CBossEnterUI::Update(_float fTimeDelta)
 
 		if (0 == iCount)
 		{
+			m_pBossEnterEffect->Set_Dead();
 			Enter_Boss();
 			m_isDead = true;
 		}
+		else if (m_iPreCount != iCount)
+		{
+			m_pGameInstance->Play_Sound(L"ClockSingle.wav", CHANNELID::SYSTEM, 1.f);
+			m_iPreCount = iCount;
+		}
+
 	}
 	else
 	{
@@ -165,6 +172,8 @@ HRESULT CBossEnterUI::Add_Components()
 
 HRESULT CBossEnterUI::Enter_Boss()
 {
+	CGameManager::GetInstance()->FadeOut(2.f);
+
 	m_pGameInstance->Bind_Camera(TEXT("Camera_Enter"));
 
 	dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->EnterBoss();
@@ -203,5 +212,5 @@ void CBossEnterUI::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pPlayerTransformCom);
+	Safe_Release(m_pBossEnterEffect);
 }
