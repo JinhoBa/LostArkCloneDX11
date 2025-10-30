@@ -427,6 +427,15 @@
     <Filter Include="06.Effect\03. Particle">
       <UniqueIdentifier>{d5c42b35-cc73-4edf-874a-ea3b6184a15d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Kamen_Area\Effect">
+      <UniqueIdentifier>{b491d7ba-610d-47b4-9207-a8f14299a88a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\ScreenEffect">
+      <UniqueIdentifier>{95bf879b-ee3b-4543-a0a6-94ed93071340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BossEnter">
+      <UniqueIdentifier>{4d3d8ac8-71eb-4ab7-9b33-910196c9605f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -846,6 +855,15 @@
     <ClInclude Include="..\public\Effect_Particle.h">
       <Filter>06.Effect\03. Particle</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Area_Effect.h">
+      <Filter>02.GameObject\Kamen_Area\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Screen_Effect.h">
+      <Filter>03.UIObject\ScreenEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect_BossEnter.h">
+      <Filter>02.GameObject\BossEnter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1259,6 +1277,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Effect_Particle.cpp">
       <Filter>06.Effect\03. Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Area_Effect.cpp">
+      <Filter>02.GameObject\Kamen_Area\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Screen_Effect.cpp">
+      <Filter>03.UIObject\ScreenEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_BossEnter.cpp">
+      <Filter>02.GameObject\BossEnter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

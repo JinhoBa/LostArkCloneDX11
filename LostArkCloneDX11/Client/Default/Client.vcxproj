@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\public\ActiveSlot.h" />
+    <ClInclude Include="..\public\Area_Effect.h" />
     <ClInclude Include="..\public\Attack_Charge_Kamen.h" />
     <ClInclude Include="..\public\Attack_Combo_Kamen.h" />
     <ClInclude Include="..\public\Attack_Kamen.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="..\public\DynamicLand.h" />
     <ClInclude Include="..\public\Dynamic_SkyBox.h" />
     <ClInclude Include="..\public\Effect.h" />
+    <ClInclude Include="..\public\Effect_BossEnter.h" />
     <ClInclude Include="..\public\Effect_Ground.h" />
     <ClInclude Include="..\public\Effect_Manager.h" />
     <ClInclude Include="..\public\Effect_Mesh.h" />
@@ -269,6 +271,7 @@
     <ClInclude Include="..\public\Player_Hit.h" />
     <ClInclude Include="..\public\Player_Move.h" />
     <ClInclude Include="..\public\Player_NormalSkill.h" />
+    <ClInclude Include="..\public\Screen_Effect.h" />
     <ClInclude Include="..\public\State_Player.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\ServerListPanel.h" />
@@ -308,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\ActiveSlot.cpp" />
+    <ClCompile Include="..\private\Area_Effect.cpp" />
     <ClCompile Include="..\private\Attack_Charge_Kamen.cpp" />
     <ClCompile Include="..\private\Attack_Combo_Kamen.cpp" />
     <ClCompile Include="..\private\Attack_Kamen.cpp" />
@@ -340,6 +344,7 @@
     <ClCompile Include="..\private\DynamicLand.cpp" />
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp" />
     <ClCompile Include="..\private\Effect.cpp" />
+    <ClCompile Include="..\private\Effect_BossEnter.cpp" />
     <ClCompile Include="..\private\Effect_Ground.cpp" />
     <ClCompile Include="..\private\Effect_Manager.cpp" />
     <ClCompile Include="..\private\Effect_Mesh.cpp" />
@@ -438,6 +443,7 @@
     <ClCompile Include="..\private\Player_Hit.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />
     <ClCompile Include="..\private\Player_NormalSkill.cpp" />
+    <ClCompile Include="..\private\Screen_Effect.cpp" />
     <ClCompile Include="..\private\State_Player.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\ServerListPanel.cpp" />
