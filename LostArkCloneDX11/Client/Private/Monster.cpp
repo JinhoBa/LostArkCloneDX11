@@ -46,7 +46,7 @@ void CMonster::Chase(_float fTimeDelta)
 {
 	_uint iNumMonster = {};
 
-	list<CGameObject*> Monsters = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Monster"));
+	list<CGameObject*> Monsters = m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Monster"));
 
 	_vector vOwnPositon = m_pTransformCom->Get_Position();
 	_vector vSepration = XMVectorSet(0.f, 0.f, 0.f, 0.f);
@@ -57,7 +57,7 @@ void CMonster::Chase(_float fTimeDelta)
 		if (this == pMonster)
 			continue;
 
-		if(5.f <= XMVectorGetX(XMVector3Length(pMonster->Get_Transform()->Get_Position() - m_pTransformCom->Get_Position())))
+		if(10.f <= XMVectorGetX(XMVector3Length(pMonster->Get_Transform()->Get_Position() - m_pTransformCom->Get_Position())))
 			continue;
 
 		if (false == dynamic_cast<CMonster*>(pMonster)->isInBattle())
@@ -71,7 +71,7 @@ void CMonster::Chase(_float fTimeDelta)
 		_vector vDir = vOwnPositon - vNeighborPositon;
 
 		vDir = XMVectorSet(vDir.m128_f32[0], 0.f, vDir.m128_f32[2], 0.f);
-		vSepration += vDir* (1.f / XMVectorGetX(XMVector3Length(vDir)));
+		vSepration += vDir * (1.f / (XMVectorGetX(XMVector3Length(vDir))));
 
 		/* Cohesion */
 		vCohesion += vNeighborPositon;
@@ -83,7 +83,7 @@ void CMonster::Chase(_float fTimeDelta)
 		vSepration = vSepration / (_float)iNumMonster;
 
 		_vector vToTarget = (m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()) * 0.3f +
-			vSepration * 1.f + vCohesion * 0.3f;
+			vSepration * 1.5f + vCohesion * 0.3f;
 
 		m_pTransformCom->Chase(fTimeDelta, XMVector3Normalize(vToTarget), vOwnPositon + vToTarget, m_fSpeed, m_pNavigationCom);
 	}

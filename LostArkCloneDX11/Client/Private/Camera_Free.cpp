@@ -76,12 +76,12 @@ void CCamera_Free::Update(_float fTimeDelta)
 
 void CCamera_Free::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
+    //m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
 HRESULT CCamera_Free::Render()
 {
-    ImGui::InputFloat3("CameraPos", reinterpret_cast<_float*>(&m_vPosition));
+    //ImGui::InputFloat3("CameraPos", reinterpret_cast<_float*>(&m_vPosition));
 
     return S_OK;
 }

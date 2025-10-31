@@ -41,7 +41,9 @@ HRESULT CNpc::Initialize(void* pArg)
 
     m_ePreState = { STATE::END };
     m_eCurState = { STATE::FEAR };
+
     m_fWalkSpeed = 0.7f;
+    m_fLightRange = 0.f;
 
     m_pPlayerTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
         ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")));
@@ -69,7 +71,7 @@ void CNpc::Update(_float fTimeDelta)
     {
     case Client::CNpc::IDLE:
         if (m_pGameInstance->Get_KeyDown(DIK_G) && 
-            1.f >= XMVector3Length(m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()).m128_f32[0])
+            2.f >= XMVector3Length(m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()).m128_f32[0])
         {
             m_eCurState = STATE::TALK;
             m_pGameManager->Start_Dialogue(0, m_pTransformCom->Get_Position());
@@ -82,18 +84,36 @@ void CNpc::Update(_float fTimeDelta)
         {
             m_eCurState = STATE::IDLE;
             CGameManager::GetInstance()->End_Dialogue();
+
+            if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Potal"),
+                ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Potal"))))
+                return;
         }
         break;
 
     case Client::CNpc::WALK:
         if (false == m_pTransformCom->MoveTo(fTimeDelta, XMVectorSet(40.f, 0.f, 39.f, 1.f), m_fWalkSpeed, m_pNavigationCom))
             m_eCurState = STATE::IDLE;
+
+        if (m_fLightRange < 4.f)
+        {
+            m_fLightRange += fTimeDelta * 0.5f;
+            m_pGameInstance->Update_Light_Range(L"Npc_Light", m_fLightRange);
+            _float3 vPosition = {};
+            XMStoreFloat3(&vPosition, m_pTransformCom->Get_Position());
+            vPosition.y += 1.f;
+            m_pGameInstance->Update_Light_Position(L"Npc_Light", &vPosition);
+        }
+
+
         break;
 
     case Client::CNpc::FEAR:
         if (0 == (_uint)m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Monster")).size())
         {
             m_eCurState = STATE::WALK;
+            m_pGameInstance->ToggleLight(L"Npc_Light", true);
+            
         }
 
         break;
@@ -137,16 +157,24 @@ HRESULT CNpc::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", m_pGameInstance->Get_Transform_Float4x4(D3DTS::PROJ))))
         return E_FAIL;
 
-    for (_uint i = 0; i < m_iNumMesh; i++)
+    for (_uint i = 0; i < 6; i++)
     {
         if (FAILED(m_pModelCom->Bind_BoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
             return E_FAIL;
 
         if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_DiffuseTexture", TEXTURE::DIFFUSE, 0, "g_DiffuseColor")))
-            return E_FAIL;
+            continue;
 
-        if (FAILED(m_pShaderCom->Begin(0)))
-            return E_FAIL;
+        if (FAILED(m_pModelCom->Bind_Material(i, m_pShaderCom, "g_NormalTexture", TEXTURE::NORMAL, 0)))
+        {
+            if (FAILED(m_pShaderCom->Begin(0)))
+                return E_FAIL;
+        }
+        else
+        {
+            if (FAILED(m_pShaderCom->Begin(2)))
+                return E_FAIL;
+        }
 
         if (FAILED(m_pModelCom->Render(i)))
             return E_FAIL;

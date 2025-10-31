@@ -15,6 +15,7 @@
 
 CLevel_Tutorial::CLevel_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVEL eLevelID)
     :CLevel{pDevice, pContext, ENUM_TO_INT(eLevelID)}
+    , m_isChangeLevel{ false }
 {
 }
 
@@ -32,14 +33,11 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
        return E_FAIL;
 
-    //if (FAILED(Ready_Layer_Kamen(TEXT("Layer_Kamen"))))
-    //    return E_FAIL;
-
-   /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
         return E_FAIL;
 
     if (FAILED(Ready_Layer_Npc(TEXT("Layer_Npc"))))
-        return E_FAIL;*/
+        return E_FAIL;
 
     if (FAILED(Ready_Layer_Canvas(TEXT("Layer_Canvars"))))
         return E_FAIL;
@@ -47,8 +45,10 @@ HRESULT CLevel_Tutorial::Initialize()
     if (FAILED(Ready_Layer_Effect(TEXT("Layer_Effect_Manager"))))
         return E_FAIL;
 
-    m_pGameInstance->PlayBGM(L"Trision_BGM.wav", 0.1f);
+    m_pGameInstance->PlayBGM(L"Trision_BGM.wav", 0.6f);
     //m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
+
+  
 
     return S_OK;
 }
@@ -57,6 +57,7 @@ void CLevel_Tutorial::Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Get_KeyDown(DIK_F1))
     {
+        m_pGameInstance->StopAll();
         m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::BOSS));
     }
 }
@@ -65,6 +66,11 @@ HRESULT CLevel_Tutorial::Render()
 {
 
     return S_OK;
+}
+
+void CLevel_Tutorial::Change_Level()
+{
+    m_isChangeLevel = true;
 }
 
 HRESULT CLevel_Tutorial::Ready_Light()
@@ -81,14 +87,28 @@ HRESULT CLevel_Tutorial::Ready_Light()
         return E_FAIL;
 
     Desc.eType = LIGHT::POINT;
-    Desc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
-    Desc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
-    Desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    Desc.vDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+    Desc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+    Desc.vSpecular = _float4(0.1f, 0.1f, 0.1f, 1.f);
     Desc.vPosition = _float4(0.f, 0.f, 0.f, 1.f);
+    Desc.fRange = 3.f;
 
-    if (FAILED(m_pGameInstance->Add_Light(L"Point1", Desc)))
+    if (FAILED(m_pGameInstance->Add_Light(L"Skill_Light", Desc)))
         return E_FAIL;
 
+    m_pGameInstance->ToggleLight(L"Skill_Light", false);
+
+    Desc.eType = LIGHT::POINT;
+    Desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+    Desc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    Desc.vSpecular = _float4(0.3f, 0.3f, 0.3f, 1.f);
+    Desc.vPosition = _float4(0.f, 0.f, 0.f, 1.f);
+    Desc.fRange = 0.f;
+
+    if (FAILED(m_pGameInstance->Add_Light(L"Npc_Light", Desc)))
+        return E_FAIL;
+
+    m_pGameInstance->ToggleLight(L"Npc_Light", false);
 
     SHADOW_LIGHT_DESC ShadowDesc = {};
 
@@ -149,7 +169,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
     Desc.fAttack = 500.f;
     Desc.fAttackRange = 1.5f;
     Desc.fDetectDistance = 3.f;
-    Desc.fMaxHp = Desc.fHp = 100000.f;
+    Desc.fMaxHp = Desc.fHp = 500000.f;
     Desc.fSpeedPersec = 3.f;
     Desc.fRotatePersec = 5.f;
     Desc.vPosition = _float4(40.f, 0.f, 38.f, 1.f);
@@ -162,7 +182,7 @@ HRESULT CLevel_Tutorial::Ready_Layer_Monster(const _wstring& strLayerTag)
 
     Desc.iMonsterID = 1;
     Desc.iNumAttack = 2;
-    Desc.fMaxHp = Desc.fHp = 50000.f;
+    Desc.fMaxHp = Desc.fHp = 250000.f;
     Desc.fAttackRange = 2.f;
     Desc.strModelPrototypeTag = L"Prototype_Component_Model_Monster2";
 
@@ -309,6 +329,11 @@ HRESULT CLevel_Tutorial::Ready_Layer_Canvas(const _wstring& strLayerTag)
     // 3 : HoldingSkillUI
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_HoldingSkillUI"),
         ENUM_TO_INT(LEVEL::GAMEPLAY), strLayerTag)))
+        return E_FAIL;
+
+    // 4 : Interaction
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Interaction"),
+        ENUM_TO_INT(LEVEL::TUTORIAL), strLayerTag)))
         return E_FAIL;
 
     // Screen Effect

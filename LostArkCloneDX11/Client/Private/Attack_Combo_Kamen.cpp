@@ -83,7 +83,7 @@ void CAttack_Combo_Kamen::Update(_float fTimeDelta)
 
 	case Client::CAttack_Combo_Kamen::STATE::ATTACK:
 		Update_EffectTrack();
-		//Update_HitRange(fTimeDelta);
+		Update_HitRange(fTimeDelta);
 
 		if (m_pKamen->isAnimationFinish())
 		{
@@ -121,9 +121,9 @@ void CAttack_Combo_Kamen::Update_HitRange(_float fTimeDelta)
 			_float fDistance = XMVectorGetX(XMVector3Length(m_pPlayerTransform->Get_Position() - m_pKamen->Get_Transform()->Get_Position()));
 
 			/* 범위 확인 */
-			if(0 == i && 3.f >= fDistance )
+			if(0 == i && 3.3f >= fDistance )
 				m_pKamen->HitBox_Event(m_iSkillID, i);
-			else if ((1 == i || 2 == i) && 3.f <= fDistance)
+			else if ((1 == i || 2 == i) && 3.3f < fDistance)
 				m_pKamen->HitBox_Event(m_iSkillID, i);
 		}
 	}

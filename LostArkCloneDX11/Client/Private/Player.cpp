@@ -201,7 +201,7 @@ HRESULT CPlayer::Initialize_Prototype()
 HRESULT CPlayer::Initialize(void* pArg)
 {
     m_DefaultInfo.eStance = STANCE::FLURRY;
-    m_DefaultInfo.fHp = m_DefaultInfo.fMaxHp = 10000.f;
+    m_DefaultInfo.fHp = m_DefaultInfo.fMaxHp = 50000.f;
     m_DefaultInfo.fMp = m_DefaultInfo.fMaxMp = 8000.f;
     m_DefaultInfo.fIdentity = 80.f;
     m_DefaultInfo.fAttack = 10000.f;
@@ -281,14 +281,17 @@ void CPlayer::Update(_float fTimeDelta)
     {
         m_PlayerInfo.fIdentity += 2.f * fTimeDelta;
     }
-
+    if (m_pGameInstance->Get_KeyDown(DIK_1))
+    {
+        m_PlayerInfo.fHp = max(m_PlayerInfo.fMaxHp, m_PlayerInfo.fHp + m_PlayerInfo.fMaxHp * 0.3f);
+    }
     if (m_PlayerInfo.fMaxMp < m_PlayerInfo.fMp)
     {
         m_PlayerInfo.fMp = m_PlayerInfo.fMaxMp;
     }
     else
     {
-        m_PlayerInfo.fMp += fTimeDelta * 300.f;
+        m_PlayerInfo.fMp += fTimeDelta * 150.f;
     }
 
     __super::Update(fTimeDelta);
@@ -324,32 +327,14 @@ void CPlayer::Update(_float fTimeDelta)
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     /* TEST */
-    m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
     __super::Late_Update(fTimeDelta);
  
     m_pColliderCom->Update_OnCollision();
-
-#ifdef _DEBUG
-    if (isCollUpdate)
-        m_pGameInstance->Add_DebugComponent(m_pHitBoxCom);
-    if (isHitSphereUpdate)
-        m_pGameInstance->Add_DebugComponent(m_pHitSphereCom);
-
-    m_pGameInstance->Add_DebugComponent(m_pColliderCom);
-#endif // _DEBUG
 
 }
 
 HRESULT CPlayer::Render()
 {
-#ifdef _DEBUG
-    /* TEST */
-  /* ImGui::SliderFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
-   ImGui::SliderFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);
-    m_pColliderCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents);*/
-  
-
-#endif // _DEBUG
  
   
 
@@ -600,10 +585,10 @@ HRESULT CPlayer::Ready_PartObjects()
     //    return E_FAIL;
 
     // 
-    Effect_Desc.pParentTransform = m_pTransformCom;
-    Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
-    if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
-        return E_FAIL;
+    //Effect_Desc.pParentTransform = m_pTransformCom;
+    //Effect_Desc.pSocketMatrix = dynamic_cast<CBody_Player*>(Find_PartObject(TEXT("Body_Player")))->Get_BoneMatrixPtr("b_weapon_rhand");
+    //if (FAILED(__super::Add_PartObject(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Test_MeshEffect"), TEXT("Test_Effect"), &Effect_Desc)))
+    //    return E_FAIL;
 
  
     //Effect_Desc.pParentTransform = m_pTransformCom;

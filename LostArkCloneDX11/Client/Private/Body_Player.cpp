@@ -158,8 +158,8 @@ HRESULT CBody_Player::Render()
 
 
 #pragma region ANIMATION_TEST
-    ImGui::Checkbox("Play", &m_isDebug);
-    ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");
+   /* ImGui::Checkbox("Play", &m_isDebug);
+    ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");*/
     //ImGui::DragFloat("SoundKey", &m_fSoundKey);
     //ImGui::DragFloat("m_fVolume", &m_fVolume);
     //ImGui::DragFloat("m_fTestSoundKey", &m_fTestSoundKey);
@@ -189,8 +189,8 @@ HRESULT CBody_Player::Render()
     //    m_pGameInstance->Play_Sound(m_pGameInstance->Utf8ToWstring(m_SoundNames[m_currentIndex].c_str()).c_str(), CHANNELID::SKILL_PLAYER, m_fVolume);
     //}
 
-  
-    /*ImGui::InputInt("Animation", &m_iAnimIndex);
+  /*
+    ImGui::InputInt("Animation", &m_iAnimIndex);
     _int iIndex = {};
 
     for (auto pName : m_pModelCom->Get_AnimationNames())

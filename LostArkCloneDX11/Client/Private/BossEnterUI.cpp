@@ -179,6 +179,9 @@ HRESULT CBossEnterUI::Enter_Boss()
 	dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->EnterBoss();
 	dynamic_cast<CKamen*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Kamen")).back())->Set_Animation(182, false);
 
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"Kamen1_BGM.ogg", 0.6f);
+
 	return S_OK;
 }
 

@@ -86,6 +86,7 @@ void CHpBar_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CHpBar_Player::Render()
 {
+
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;
 

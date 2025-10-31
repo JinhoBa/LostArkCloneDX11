@@ -82,30 +82,14 @@ void CMonster_Named::Update(_float fTimeDelta)
 
 void CMonster_Named::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 	m_pColliderCom->Update_OnCollision();
 	m_pHitBoxCom->Update_OnCollision();
-
-
 
 	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CMonster_Named::Render()
 {
-#ifdef _DEBUG
-	
-	/* TEST *//*
-	ImGui::SliderFloat3("HitPos1", reinterpret_cast<_float*>(&m_vHitBoxCenter), -3.f, 3.f);
-	ImGui::SliderFloat3("HitExtents1", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.3f, 3.f);*/
-
-	if(isCollUpdate)
-		m_pHitBoxCom->Render();
-	//m_pNavigationCom->Render();
-
-#endif // _DEBUG
-	m_pColliderCom->Render();
-
 	return S_OK;
 }
 HRESULT CMonster_Named::Ready_Components()

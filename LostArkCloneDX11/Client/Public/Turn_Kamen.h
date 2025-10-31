@@ -27,6 +27,9 @@ private:
 	_uint		m_iKamenStateID = {};
 	_float		m_fDistance = {};
 
+	_uint		m_iAttackCount = {};
+	//_uint		m_StateID[12][ENUM_TO_INT(CKamen::KAMENSTATE::CLASH)];
+
 public:
 	static CTurn_Kamen* Create(STATE_KAMEN_DESC* pDesc);
 	virtual void Free() override;

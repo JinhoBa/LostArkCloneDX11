@@ -65,6 +65,8 @@ void CPlayer_ChargeSkill::Enter(void* pArg)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	if (m_pSkillInfo->bApplyRimLightWeapon)
 		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
+
+	m_pGameInstance->ToggleLight(L"Skill_Light", true);
 }
 
 void CPlayer_ChargeSkill::Update(_float fTimeDelta)
@@ -152,13 +154,15 @@ void CPlayer_ChargeSkill::Update(_float fTimeDelta)
 
 void CPlayer_ChargeSkill::Exit()
 {
+	m_pPlayer->Set_ChargeSkill_Desc(false, 0.f);
+
+	m_pGameInstance->ToggleLight(L"Skill_Light", false);
+
 	if (12 == m_iSkillID)
 		m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), true);
 
 	m_EffectEvents.clear();
 }
-
-
 
 CPlayer_ChargeSkill* CPlayer_ChargeSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)
 {

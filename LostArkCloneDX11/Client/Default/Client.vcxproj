@@ -202,6 +202,7 @@
     <ClInclude Include="..\public\Enemy.h" />
     <ClInclude Include="..\public\DamageFont_Manager.h" />
     <ClInclude Include="..\public\Idle_Kamen.h" />
+    <ClInclude Include="..\public\Interaction.h" />
     <ClInclude Include="..\public\Intro_Kamen.h" />
     <ClInclude Include="..\public\Kamen.h" />
     <ClInclude Include="..\public\Buff.h" />
@@ -271,6 +272,7 @@
     <ClInclude Include="..\public\Player_Hit.h" />
     <ClInclude Include="..\public\Player_Move.h" />
     <ClInclude Include="..\public\Player_NormalSkill.h" />
+    <ClInclude Include="..\public\Potal.h" />
     <ClInclude Include="..\public\Screen_Effect.h" />
     <ClInclude Include="..\public\State_Player.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
@@ -353,6 +355,7 @@
     <ClCompile Include="..\private\Enemy.cpp" />
     <ClCompile Include="..\private\DamageFont_Manager.cpp" />
     <ClCompile Include="..\private\Idle_Kamen.cpp" />
+    <ClCompile Include="..\private\Interaction.cpp" />
     <ClCompile Include="..\private\Intro_Kamen.cpp" />
     <ClCompile Include="..\private\Kamen.cpp" />
     <ClCompile Include="..\private\Buff.cpp" />
@@ -443,6 +446,7 @@
     <ClCompile Include="..\private\Player_Hit.cpp" />
     <ClCompile Include="..\private\Player_Move.cpp" />
     <ClCompile Include="..\private\Player_NormalSkill.cpp" />
+    <ClCompile Include="..\private\Potal.cpp" />
     <ClCompile Include="..\private\Screen_Effect.cpp" />
     <ClCompile Include="..\private\State_Player.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />

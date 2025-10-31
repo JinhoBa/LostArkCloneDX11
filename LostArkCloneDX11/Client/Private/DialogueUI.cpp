@@ -27,10 +27,11 @@ HRESULT CDialogueUI::Initialize(void* pArg)
 
     Desc.fX = 640.f;
     Desc.fY = 630.f;
-    Desc.fZ = 0.1f;
+    Desc.fZ = 0.12f;
     Desc.pParent_TransformCom = nullptr;
-    Desc.fSizeX = 1281.f;
-    Desc.fSizeY = 351.f;
+    Desc.fSizeX = 1280.f;
+    Desc.fSizeY = 354.f;
+
 
     if (FAILED(__super::Initialize(&Desc)))
         return E_FAIL;
@@ -74,8 +75,12 @@ void CDialogueUI::Update(_float fTimeDelta)
 {
     if (m_pGameInstance->Get_KeyDown(DIK_G))
     {
+
         if (m_iScriptIndex < (_uint)m_Scripts.size() - 1)
+        {
             ++m_iScriptIndex;
+            m_pGameInstance->Play_Sound(L"UI_Next.wav", CHANNELID::SYSTEM, 1.f);
+        }
 
         if (m_iScriptIndex == (_uint)m_Scripts.size() - 1)
             m_iTextureIndex = 1;
@@ -94,39 +99,6 @@ void CDialogueUI::Late_Update(_float fTimeDelta)
 
 HRESULT CDialogueUI::Render()
 {
-//#pragma region TEST_CODE
-//    m_pTransformCom->Set_State(STATE::POSITION, XMVectorSet(m_fX - (_float)g_iWinSizeX * 0.5f, -m_fY + (_float)g_iWinSizeY * 0.5f, 1.f, 1.f));
-//    m_pTransformCom->Set_Scale(_float3(m_fSizeX, m_fSizeY, 1.f));
-//
-//    ImGui::InputFloat("eX", &m_fX, 1.f, 10.f);
-//    ImGui::InputFloat("eY", &m_fY, 1.f, 10.f);
-//    ImGui::InputFloat("eSIZE X", &m_fSizeX, 1.f, 10.f);
-//    ImGui::InputFloat("eSIZE Y", &m_fSizeY, 1.f, 10.f);
-//
-//    FONT_DESC* pFontDesc = &m_NameFontDesc;
-//    ImGui::InputFloat("X", &pFontDesc->vPositon.x, 1.f, 10.f);
-//    ImGui::InputFloat("Y", &pFontDesc->vPositon.y, 1.f, 10.f);
-//    ImGui::InputFloat("Size", &pFontDesc->fScale, 0.01f, 0.1f);
-//    ImGui::ColorEdit4(
-//        "Color", (float*)&pFontDesc->vColor,
-//        ImGuiColorEditFlags_AlphaBar
-//        | ImGuiColorEditFlags_AlphaPreviewHalf
-//        | ImGuiColorEditFlags_DisplayRGB
-//        | ImGuiColorEditFlags_PickerHueWheel);
-//
-//    FONT_DESC* pFontDesc2 = &m_ScriptFontDesc;
-//    ImGui::InputFloat("X2", &pFontDesc2->vPositon.x, 1.f, 10.f);
-//    ImGui::InputFloat("Y2", &pFontDesc2->vPositon.y, 1.f, 10.f);
-//    ImGui::InputFloat("Size2", &pFontDesc2->fScale, 0.01f, 0.1f);
-//    ImGui::ColorEdit4(
-//        "Color2", (float*)&pFontDesc2->vColor,
-//        ImGuiColorEditFlags_AlphaBar
-//        | ImGuiColorEditFlags_AlphaPreviewHalf
-//        | ImGuiColorEditFlags_DisplayRGB
-//        | ImGuiColorEditFlags_PickerHueWheel);
-//
-//#pragma endregion
-
     // UI
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
         return E_FAIL;

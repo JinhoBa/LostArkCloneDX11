@@ -13,18 +13,6 @@
     <Filter Include="98.Defualt\Client">
       <UniqueIdentifier>{a8bd9ad7-ae6d-4f49-bd75-f579d475104a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Level">
-      <UniqueIdentifier>{4b282384-d898-4020-8198-d54ba01ddb98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\Logo">
-      <UniqueIdentifier>{a0dba2e5-a4f7-4c67-a390-4f0bd5416acd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\Loading">
-      <UniqueIdentifier>{f672e1ed-459b-4367-a446-176e68b89f54}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\Loading\Loader">
-      <UniqueIdentifier>{29fe1fb8-8cc9-4d89-82aa-1afa63521a85}</UniqueIdentifier>
-    </Filter>
     <Filter Include="IMGUI">
       <UniqueIdentifier>{00a0265f-15d3-4b9c-839d-a58c05e6ea43}</UniqueIdentifier>
     </Filter>
@@ -48,9 +36,6 @@
     </Filter>
     <Filter Include="03.UIObject\Logo">
       <UniqueIdentifier>{536a8ecb-e1ed-4831-80a1-dbfdfcb26522}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\Tutorial">
-      <UniqueIdentifier>{2a282cb0-7dce-414b-913a-33b00b94506e}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.UIObject\GamePlay">
       <UniqueIdentifier>{101c2c11-b160-412b-8de2-29dee46818a2}</UniqueIdentifier>
@@ -96,9 +81,6 @@
     </Filter>
     <Filter Include="tinyxml2">
       <UniqueIdentifier>{7ed9b398-637a-42d5-9540-0f19d4828884}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\MapEdit">
-      <UniqueIdentifier>{a059223b-f1e2-49f6-851d-a60d99a531aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.UIObject\Logo\Background">
       <UniqueIdentifier>{6a154a68-55e8-4446-ba23-0d7bc935ca6c}</UniqueIdentifier>
@@ -166,9 +148,6 @@
     <Filter Include="03.UIObject\GamePlay\HUD\BuffUI">
       <UniqueIdentifier>{066c8c72-ecf0-4620-93e0-90ec17e5abd7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Level\Boss">
-      <UniqueIdentifier>{fb2f1120-0878-411e-be03-0b00499fd8d9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="93.DamageFont_Manager">
       <UniqueIdentifier>{5b383911-782a-46a9-9f8a-d5ae3163d5d7}</UniqueIdentifier>
     </Filter>
@@ -207,9 +186,6 @@
     </Filter>
     <Filter Include="06.Effect\Test_MeshEffect">
       <UniqueIdentifier>{335ed4f0-eb23-4882-8d90-5291f98bd72e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Level\Boss\GamePlay">
-      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
     </Filter>
     <Filter Include="06.Effect\00.Manager">
       <UniqueIdentifier>{c36314b1-ef2a-494b-9df2-ec2e278b28ef}</UniqueIdentifier>
@@ -436,6 +412,36 @@
     <Filter Include="02.GameObject\BossEnter">
       <UniqueIdentifier>{4d3d8ac8-71eb-4ab7-9b33-910196c9605f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\01.Level">
+      <UniqueIdentifier>{4b282384-d898-4020-8198-d54ba01ddb98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\Logo">
+      <UniqueIdentifier>{a0dba2e5-a4f7-4c67-a390-4f0bd5416acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\Loading">
+      <UniqueIdentifier>{f672e1ed-459b-4367-a446-176e68b89f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\Loading\Loader">
+      <UniqueIdentifier>{29fe1fb8-8cc9-4d89-82aa-1afa63521a85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\Tutorial">
+      <UniqueIdentifier>{2a282cb0-7dce-414b-913a-33b00b94506e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\MapEdit">
+      <UniqueIdentifier>{a059223b-f1e2-49f6-851d-a60d99a531aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\Boss">
+      <UniqueIdentifier>{fb2f1120-0878-411e-be03-0b00499fd8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01.Level\Boss\GamePlay">
+      <UniqueIdentifier>{c88a494f-1fa1-44dd-8d87-499668bc4d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Potal">
+      <UniqueIdentifier>{66ce5fef-797c-48b9-94d0-59631ed03fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.UIObject\Interaction">
+      <UniqueIdentifier>{816f5926-f36c-4565-8db3-30dd5b85cd7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -454,16 +460,16 @@
       <Filter>00.MainApp</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Logo.h">
-      <Filter>01.Level\Logo</Filter>
+      <Filter>02.GameObject\01.Level\Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Loading.h">
-      <Filter>01.Level\Loading</Filter>
+      <Filter>02.GameObject\01.Level\Loading</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Loader.h">
-      <Filter>01.Level\Loading\Loader</Filter>
+      <Filter>02.GameObject\01.Level\Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\pch.h">
       <Filter>97.pch</Filter>
@@ -514,7 +520,7 @@
       <Filter>03.UIObject\GamePlay\Loading\Wallpaper</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Tutorial.h">
-      <Filter>01.Level\Tutorial</Filter>
+      <Filter>02.GameObject\01.Level\Tutorial</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ExpBar.h">
       <Filter>03.UIObject\GamePlay\EPXbar</Filter>
@@ -571,7 +577,7 @@
       <Filter>tinyxml2</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_MapEditor.h">
-      <Filter>01.Level\MapEdit</Filter>
+      <Filter>02.GameObject\01.Level\MapEdit</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Iden_Gauge.h">
       <Filter>03.UIObject\GamePlay\HUD\Iden_Gauge</Filter>
@@ -694,7 +700,7 @@
       <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Boss.h">
-      <Filter>01.Level\Boss</Filter>
+      <Filter>02.GameObject\01.Level\Boss</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Dynamic_SkyBox.h">
       <Filter>02.GameObject\Sky\Dynamic</Filter>
@@ -864,6 +870,12 @@
     <ClInclude Include="..\public\Effect_BossEnter.h">
       <Filter>02.GameObject\BossEnter</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Potal.h">
+      <Filter>02.GameObject\Potal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Interaction.h">
+      <Filter>03.UIObject\Interaction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -886,13 +898,13 @@
       <Filter>00.MainApp</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Logo.cpp">
-      <Filter>01.Level\Logo</Filter>
+      <Filter>02.GameObject\01.Level\Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Loading.cpp">
-      <Filter>01.Level\Loading</Filter>
+      <Filter>02.GameObject\01.Level\Loading</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Loader.cpp">
-      <Filter>01.Level\Loading\Loader</Filter>
+      <Filter>02.GameObject\01.Level\Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\pch.cpp">
       <Filter>97.pch</Filter>
@@ -940,7 +952,7 @@
       <Filter>03.UIObject\GamePlay\Loading\Wallpaper</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Tutorial.cpp">
-      <Filter>01.Level\Tutorial</Filter>
+      <Filter>02.GameObject\01.Level\Tutorial</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ExpBar.cpp">
       <Filter>03.UIObject\GamePlay\EPXbar</Filter>
@@ -994,7 +1006,7 @@
       <Filter>tinyxml2</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_MapEditor.cpp">
-      <Filter>01.Level\MapEdit</Filter>
+      <Filter>02.GameObject\01.Level\MapEdit</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Iden_Gauge.cpp">
       <Filter>03.UIObject\GamePlay\HUD\Iden_Gauge</Filter>
@@ -1117,7 +1129,7 @@
       <Filter>02.GameObject\Character\Kamen\Body</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Boss.cpp">
-      <Filter>01.Level\Boss</Filter>
+      <Filter>02.GameObject\01.Level\Boss</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Dynamic_SkyBox.cpp">
       <Filter>02.GameObject\Sky\Dynamic</Filter>
@@ -1286,6 +1298,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Effect_BossEnter.cpp">
       <Filter>02.GameObject\BossEnter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Potal.cpp">
+      <Filter>02.GameObject\Potal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Interaction.cpp">
+      <Filter>03.UIObject\Interaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

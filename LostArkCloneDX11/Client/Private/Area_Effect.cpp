@@ -94,18 +94,11 @@ void CArea_Effect::Update(_float fTimeDelta)
 void CArea_Effect::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDER::BLEND, this);
-    //m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
+    m_pGameInstance->Add_RenderGroup(RENDER::BLUR, this);
 }
 
 HRESULT CArea_Effect::Render()
 {
-    ImGui::InputFloat3("vRange", (_float*)&m_vRange);
-    ImGui::InputFloat3("vCenter", (_float*)&m_vCenter);
-    ImGui::InputFloat3("Pivot", (_float*)&m_vPivot);
-    if (ImGui::Button("ChangeEffect"))
-    {
-        m_pVIBufferCom->Set_Circle(m_isLoop, m_vCenter, m_vPivot, m_vRange, m_vLifeTime, m_vSpeed, m_vSize);
-    }
 
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_CombinedWorldMatrix)))
         return E_FAIL;

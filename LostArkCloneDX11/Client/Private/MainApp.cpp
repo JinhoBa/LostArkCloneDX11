@@ -138,16 +138,16 @@ HRESULT CMainApp::Render()
 
     m_pGameInstance->Render_Begin(&vClearColor);
 
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
+    //ImGui_ImplDX11_NewFrame();
+    //ImGui_ImplWin32_NewFrame();
+    //ImGui::NewFrame();
 
     m_pGameInstance->Draw();
-    ImGui::Begin("FPS");
-    ImGui::Text("%d", m_iFps);
-    ImGui::End();
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    //ImGui::Begin("FPS");
+    //ImGui::Text("%d", m_iFps);
+    //ImGui::End();
+    //ImGui::Render();
+    //ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
     m_pGameInstance->Render_End();
 

@@ -37,6 +37,7 @@ private:
 
 	_uint			m_iNumMesh = {};
 	_float			m_fWalkSpeed = {};
+	_float			m_fLightRange = {};
 
 	CShader*		m_pShaderCom = { nullptr };
 	CModel*			m_pModelCom = { nullptr };

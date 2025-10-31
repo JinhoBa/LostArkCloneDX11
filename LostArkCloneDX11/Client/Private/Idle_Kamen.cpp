@@ -62,11 +62,6 @@ void CIdle_Kamen::Update(_float fTimeDelta)
 
 	CTurn_Kamen::TURN_KAMEN_DESC TurnDesc = {};
 
-#ifdef _DEBUG
-	return;
-#endif // _DEBUG
-
-
 	switch (*m_pPhase)
 	{
 	case PHASE::INTRO:
@@ -108,7 +103,7 @@ void CIdle_Kamen::Update(_float fTimeDelta)
 		}
 		else
 		{
-			if (2.f <= m_fTimeAcc)
+			if (1.f <= m_fTimeAcc)
 			{
 				switch (m_iSkillID)
 				{

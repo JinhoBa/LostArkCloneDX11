@@ -22,7 +22,7 @@ HRESULT CSkill::Initialize(_uint iSkillID)
 }
 void CSkill::Update(_float fTimeDelta)
 {
-	/*if (false == m_bUse )
+	if (false == m_bUse )
 	{
 		m_fCoolTime -= fTimeDelta;
 
@@ -31,11 +31,11 @@ void CSkill::Update(_float fTimeDelta)
 			m_bUse = true;
 			m_fCoolTime = 0.f;
 		}
-	}*/
-#ifdef _DEBUG
-	m_bUse = true;
-	m_fCoolTime = 0.f;
-#endif // DEBUG
+	}
+//#ifdef _DEBUG
+//	m_bUse = true;
+//	m_fCoolTime = 0.f;
+//#endif // DEBUG
 
 }
 

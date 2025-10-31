@@ -34,6 +34,8 @@ void CMonster_Attack::Enter(void* pArg)
 	m_fTimeAcc = 0.f;
 
 	m_pSkill_Info = m_pGameManager->Get_Monster_SkillInfo_Prt(m_pInfo->iMonsterID, m_iAttackIndex);
+
+	//Play_Sound();
 }
 
 void CMonster_Attack::Update(_float fTimeDelta)
@@ -60,6 +62,8 @@ void CMonster_Attack::Update(_float fTimeDelta)
 				m_isActive = true;
 				m_fTimeAcc = 0.f;
 				m_pMonster->Set_HitBox(m_pSkill_Info->HitBoxDescs[m_iNumHit].vOffset, m_pSkill_Info->HitBoxDescs[m_iNumHit].vExtends);
+				m_pGameInstance->Play_Sound(m_pSkill_Info->SoundDescs[m_iNumHit].strFileName.c_str(), CHANNELID::SKILL_MONSTER, m_pSkill_Info->SoundDescs[m_iNumHit].fVolume);
+
 			}
 		}
 	}
@@ -78,6 +82,50 @@ void CMonster_Attack::Exit()
 		m_iAttackIndex = 0;
 }
 
+
+void CMonster_Attack::Play_Sound()
+{
+	if (0 == m_pInfo->iMonsterID)
+	{
+		switch (m_iAttackIndex)
+		{
+		case 0:
+			m_pGameInstance->Play_Sound(L"Monster0_0.ogg", CHANNELID::SKILL_MONSTER, 0.5f);
+			break;
+
+		case 1:
+			m_pGameInstance->Play_Sound(L"Monster0_1.ogg", CHANNELID::SKILL_MONSTER, 1.f);
+			break;
+
+		case 2:
+			m_pGameInstance->Play_Sound(L"Monster0_1.ogg", CHANNELID::SKILL_MONSTER, 1.f);
+			break;
+
+		case 3:
+			m_pGameInstance->Play_Sound(L"Monster0_1.ogg", CHANNELID::SKILL_MONSTER, 1.f);
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if(1 == m_pInfo->iMonsterID)
+	{
+		switch (m_iAttackIndex)
+		{
+		case 0:
+			m_pGameInstance->Play_Sound(L"Monster1_0.ogg", CHANNELID::SKILL_MONSTER, 0.5f);
+			break;
+
+		case 1:
+			m_pGameInstance->Play_Sound(L"Monster1_1.ogg", CHANNELID::SKILL_MONSTER, 1.f);
+			break;
+
+		default:
+			break;
+		}
+	}
+}
 
 CMonster_Attack* CMonster_Attack::Create(CStateMachine* pStateMachine, ENEMY_INFO* pInfo, CMonster* pMonster, _uint iNumAttackAnimation)
 {

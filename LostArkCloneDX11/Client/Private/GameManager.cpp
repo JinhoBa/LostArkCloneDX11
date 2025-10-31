@@ -16,6 +16,7 @@
 #include "Buff.h"
 #include "Effect_Manager.h"
 #include "Screen_Effect.h"
+#include "Interaction.h"
 
 IMPLEMENT_SINGLETON(CGameManager)
 
@@ -99,6 +100,12 @@ void CGameManager::Add_Effect(EFFECT eType, _uint iEffectID, const _float4x4* pW
 void	CGameManager::Start_ScreenBlur(_float fTime)
 {
 	m_pEffect_Manager->Start_ScreenBlur(fTime);
+}
+
+void CGameManager::Trigger_Interaction(_bool isActive, _uint iID, _fvector vPosition)
+{
+	dynamic_cast<CInteraction*>(
+		m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Layer_Canvars")).back())->Trigger_Interaction(isActive, iID, vPosition);
 }
 
 const vector<EFFECT_EVENT_DESC>& CGameManager::Get_EffectTrack(CHARACTER eType, _uint iTrackIndex)

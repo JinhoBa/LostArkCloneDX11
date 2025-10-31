@@ -27,6 +27,8 @@ private:
 	_uint		m_iItemID = {};
 	_uint		m_iNumItem = {};
 
+
+	CTexture*	m_pItemTextureCom = {};
 private:
 	HRESULT Add_Components();
 

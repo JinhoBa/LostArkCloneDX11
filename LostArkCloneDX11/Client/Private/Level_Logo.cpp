@@ -12,14 +12,12 @@ CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, L
 
 HRESULT CLevel_Logo::Initialize()
 {
-    m_fBGM_Volume = 0.1f;
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Background"))))
         return E_FAIL;
 
-#pragma region TEST_CODE
-    //m_pGameInstance->PlayBGM(L"vol3_05_Bern Castle.mp3", m_fBGM_Volume);
-#pragma endregion
+    m_pGameInstance->PlayBGM(L"Kamen2_BGM.ogg", 0.5f);
+
 
     SetWindowText(g_hWnd,TEXT("LEVEL_LOGO"));
 
@@ -28,10 +26,9 @@ HRESULT CLevel_Logo::Initialize()
 
 void CLevel_Logo::Update(_float fTimeDelta)
 {
-    //m_pGameInstance->SetChannelVolume(CHANNELID::BGM, m_fBGM_Volume);
-
     if (m_pGameInstance->Get_KeyDown(DIK_N))
     {
+        m_pGameInstance->StopAll();
         m_pGameInstance->Change_Level(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL::LOADING, LEVEL::TUTORIAL));
     }
     else if (m_pGameInstance->Get_KeyDown(DIK_M))

@@ -48,7 +48,7 @@ void CPlayer_Clash::Update(_float fTimeDelta)
 	switch (m_eState)
 	{
 	case Client::CPlayer_Clash::STATE::WAIT:
-		if (5.f <= m_fTimeAcc)
+		if (4.f <= m_fTimeAcc)
 		{
 			m_pPlayer->Set_Animation(7, false);
 			m_fTimeAcc = 0.f;

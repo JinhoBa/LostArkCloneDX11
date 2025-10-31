@@ -61,11 +61,6 @@ HRESULT CWeapon_Player::Initialize(void* pArg)
     m_fRimStrength = 0.f;
     m_fRimPower = 1.f;
 
-    m_fLightRange = 10.f;
-    m_vLightOffset = _float3(0.f, 0.f, 0.f);
-    m_vLightPosition = _float3(0.f, 0.f, 0.f);
-
-
     return S_OK;
 }
 
@@ -81,14 +76,11 @@ void CWeapon_Player::Update(_float fTimeDelta)
         XMStoreFloat4x4(&m_CombinedWorldMatrix,
             XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()) * XMLoadFloat4x4(m_pSocketMatrix) * XMLoadFloat4x4(&m_pParentTransformCom->Get_WorldMatrix()));
 
-        memcpy(&m_vLightPosition, &m_CombinedWorldMatrix.m[3], sizeof(_float3));
-
         _float3 vPos = {};
 
-        vPos.x = m_vLightPosition.x + m_vLightOffset.x;
-        vPos.y = m_vLightPosition.y + m_vLightOffset.y;
-        vPos.z = m_vLightPosition.z + m_vLightOffset.z;
+        memcpy(&vPos, &m_CombinedWorldMatrix.m[3], sizeof(_float3));
 
+        m_pGameInstance->Update_Light_Position(L"Skill_Light", &vPos);
     }
 
     if (m_bApplyRimLight || m_fRimStrength > 0.f)
@@ -97,10 +89,7 @@ void CWeapon_Player::Update(_float fTimeDelta)
         if (m_fRimStrength < 0.f)
             m_fRimStrength = 0.f;
     }
-    _float3 vPos = {};
-    memcpy(&vPos, m_CombinedWorldMatrix.m[3], sizeof(_float3));
-
-    m_pGameInstance->Update_Light_Position(L"Point1", &vPos);
+   
 }
 
 void CWeapon_Player::Late_Update(_float fTimeDelta)

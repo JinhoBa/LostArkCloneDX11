@@ -89,8 +89,7 @@ void CKamen::Change_Phase(PHASE ePhase)
         m_pStateMachineCom->Change_State(Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
         static_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Set_Animation(59, false, 0.2f);
 
-        m_pGameInstance->StopAll();
-        m_pGameInstance->PlayBGM(L"Kamen1_BGM.ogg", 0.1f);
+
 
         break;
 
@@ -111,7 +110,7 @@ void CKamen::Change_Phase(PHASE ePhase)
             m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(35.f, 0.1f, 60.f, 1.f));
 
             m_pGameInstance->StopAll();
-            m_pGameInstance->PlayBGM(L"Kamen2_BGM.ogg", 0.1f);
+            m_pGameInstance->PlayBGM(L"Kamen2_BGM.ogg", 0.6f);
         break;
 
     case Client::PHASE::PHASE3:
@@ -127,10 +126,6 @@ void CKamen::Change_Phase(PHASE ePhase)
             TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NavDesc)))
             return;
 
-  /*      if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DynamicLand"),
-            ENUM_TO_INT(LEVEL::BOSS), TEXT("Layer_Land"))))
-            return ;*/
-
         vCenter = _float3(0.f, 0.f, -1.0f);
         vExtend = _float3(0.7f, 0.7f, 1.f);
         m_pColliderCom->Set_ColliderDesc(vCenter, vExtend);
@@ -140,7 +135,7 @@ void CKamen::Change_Phase(PHASE ePhase)
 
         dynamic_cast<CPlayer*>(m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player")).back())->Start_Phase(3);
         m_pGameInstance->StopAll();
-        m_pGameInstance->PlayBGM(L"Kamen3_BGM.ogg", 0.1f);
+        m_pGameInstance->PlayBGM(L"Kamen3_BGM.ogg", 0.6f);
         break;
 
     case Client::PHASE::END:
@@ -217,7 +212,7 @@ HRESULT CKamen::Initialize(void* pArg)
     m_EnemyInfo.fAttack = 200.f;
     m_EnemyInfo.fAttackRange = 3.f;
     m_EnemyInfo.fDetectDistance = 5.f;
-    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 1000000.f;
+    m_EnemyInfo.fHp = m_EnemyInfo.fMaxHp = 5000000.f;
 
 
     m_pStateMachineCom->Start_State(m_States[ENUM_TO_INT(KAMENSTATE::INTRO)]);
@@ -226,7 +221,7 @@ HRESULT CKamen::Initialize(void* pArg)
     m_pTransformCom->Rotation(0.f, XMConvertToRadians(180.f), 0.f);
 
 #ifdef _DEBUG
-    //Change_Phase(PHASE::PHASE3);
+    //Change_Phase(PHASE::PHASE1);
    /* static_cast<CWeapon_Kamen*>(Find_PartObject(TEXT("Weapon_Kamen")))->Change_SocketMatrix(
         dynamic_cast<CBody_Kamen*>(Find_PartObject(TEXT("Body_Kamen")))->Get_BoneMatrixPtr("b_wp_1"));*/
 #endif // _DEBUG
@@ -245,7 +240,7 @@ void CKamen::Priority_Update(_float fTimeDelta)
 
     m_pGameInstance->Add_Collider(TEXT("Monster"), m_pColliderCom);
 
-    if (PHASE::PHASE1 == m_ePhase && 0.7f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
+    if (PHASE::PHASE1 == m_ePhase && 0.6f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
         Change_Phase(PHASE::PHASE2);
     else if (PHASE::PHASE2 == m_ePhase && 0.4f >= m_EnemyInfo.fHp / m_EnemyInfo.fMaxHp)
         Change_Phase(PHASE::PHASE3);
@@ -278,17 +273,6 @@ void CKamen::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    if (m_pGameInstance->Get_KeyDown(DIK_5))
-    {
-        //Change_Phase(PHASE::PHASE3);
-    }
-
-    if (isCollUpdate)
-        m_pGameInstance->Add_DebugComponent(m_pHitBoxCom);
-
-    if (isSphereUpdate)
-        m_pGameInstance->Add_DebugComponent(m_pHitBoxShpereCom);
-
     m_pGameInstance->Add_RenderGroup(RENDER::NONBLEND, this);
 }
 
@@ -296,45 +280,31 @@ HRESULT CKamen::Render()
 {
 #ifdef _DEBUG
 
-    const char* LerpNames[] = { "0", "1", "2", "NORMAL","SPIN", "COMBO", "CHARGE", "SWORD"};
-    int currentIndex = static_cast<int>(m_eType);
+    //const char* LerpNames[] = { "0", "1", "2", "NORMAL","SPIN", "COMBO", "CHARGE", "SWORD"};
+    //int currentIndex = static_cast<int>(m_eType);
 
-    if (ImGui::Combo("KAMENSTATE", &currentIndex, LerpNames, IM_ARRAYSIZE(LerpNames)))
-    {
-        _uint iType = (currentIndex);
-        m_eType = static_cast<KAMENSTATE>(iType);
-    }
-    if(ImGui::Button("Change"))
-    {
-        dynamic_cast<CBody_Kamen*>(Get_PartObject(L"Body_Kamen"))->Set_Trigge();
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 40.f, 1.f));
-        m_pStateMachineCom->Change_State(Get_State(static_cast<CKamen::KAMENSTATE>(m_eType)), nullptr);
-    }
-    if (ImGui::Button("Clash"))
-    {
-        dynamic_cast<CBody_Kamen*>(Get_PartObject(L"Body_Kamen"))->Set_Trigge();
-        m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 40.f, 1.f));
-        m_pStateMachineCom->Change_State(Get_State(KAMENSTATE::CLASH), nullptr);
-    }
+    //if (ImGui::Combo("KAMENSTATE", &currentIndex, LerpNames, IM_ARRAYSIZE(LerpNames)))
+    //{
+    //    _uint iType = (currentIndex);
+    //    m_eType = static_cast<KAMENSTATE>(iType);
+    //}
+    //if(ImGui::Button("Change"))
+    //{
+    //    dynamic_cast<CBody_Kamen*>(Get_PartObject(L"Body_Kamen"))->Set_Trigge();
+    //    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 40.f, 1.f));
+    //    m_pStateMachineCom->Change_State(Get_State(static_cast<CKamen::KAMENSTATE>(m_eType)), nullptr);
+    //}
+    //if (ImGui::Button("Clash"))
+    //{
+    //    dynamic_cast<CBody_Kamen*>(Get_PartObject(L"Body_Kamen"))->Set_Trigge();
+    //    m_pTransformCom->Set_State(Engine::STATE::POSITION, XMVectorSet(30.f, 0.f, 40.f, 1.f));
+    //    m_pStateMachineCom->Change_State(Get_State(KAMENSTATE::CLASH), nullptr);
+    //}
     
-
-
-    m_pGameInstance->Add_DebugComponent(m_pHitBoxCom);
     //m_pGameInstance->Add_DebugComponent(m_pHitBoxShpereCom);
    // _float dis = XMVector3Length(XMVectorSetY(m_pTransformCom->Get_Position(), 0.f) - XMVectorSetY(dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(
    //     ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_Position(), 0.f)).m128_f32[0];
 
-   //// /* TEST */
-   ImGui::Begin("Collider");
-
-   _float fDistance = XMVectorGetX(XMVector3Length(m_pPlayerTransformCom->Get_Position() - m_pTransformCom->Get_Position()));
-
-   ImGui::InputFloat("dis", &fDistance);
-   ImGui::DragFloat3("HitPos", reinterpret_cast<_float*>(&m_vHitBoxCenter), 0.1f);
-   ImGui::DragFloat3("HitExtents", reinterpret_cast<_float*>(&m_vHitBoxExtents), 0.1f);
-   ImGui::DragFloat3("Orientation", reinterpret_cast<_float*>(&m_vOrientation), 0.1f);
-   ImGui::End();
-   m_pHitBoxCom->Set_ColliderDesc(m_vHitBoxCenter, m_vHitBoxExtents, m_vOrientation);
 #endif
 
     return S_OK;
@@ -465,8 +435,13 @@ HRESULT CKamen::Reay_Component()
         Desc.eAttackType = ATTACK_TYPE::NORMAL;
         _float fDamage = Desc.fDamage = pSkill->HitBoxDescs[m_iCurHitIndex].fDamage;
 
-        if (pSkill->HitBoxDescs[m_iCurHitIndex].vExtends.y >= XMVectorGetX(XMVector3Length(m_pTransformCom->Get_Position() - m_pPlayerTransformCom->Get_Position())))
-            return;
+
+      /*  if (4 != m_iCurSkillID)
+        {
+            if (pSkill->HitBoxDescs[m_iCurHitIndex].vExtends.y >= XMVectorGetX(XMVector3Length(m_pTransformCom->Get_Position() - m_pPlayerTransformCom->Get_Position())))
+                return;
+        }*/
+        
 
         while (!Objects.empty())
         {
@@ -478,8 +453,6 @@ HRESULT CKamen::Reay_Component()
             Objects.pop_front();
         }
         });
-
-
 
 
     return S_OK;

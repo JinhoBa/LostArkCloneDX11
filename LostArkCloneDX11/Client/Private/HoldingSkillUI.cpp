@@ -51,8 +51,8 @@ HRESULT CHoldingSkillUI::Initialize(void* pArg)
 
 	__super::Set_Indices(0, 1);
 
-
 	m_isActive = false;
+	m_fTimeAcc = 0.f;
 
 	return S_OK;
 }
@@ -70,6 +70,8 @@ void CHoldingSkillUI::Late_Update(_float fTimeDelta)
 {
 	if (m_pChargeSkill_Desc->isUsing)
 	{
+		m_fTimeAcc += fTimeDelta;
+
 		m_SkillName_Font.strWord = to_wstring(m_pChargeSkill_Desc->fChargingTime).substr(0, 3) + L"ÃÊ";
 
 		m_fValue = m_pChargeSkill_Desc->fChargingTime / m_pChargeSkill_Desc->fMaxChargeTime;
@@ -78,6 +80,10 @@ void CHoldingSkillUI::Late_Update(_float fTimeDelta)
 
 		m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_SkillName_Font);
 		m_pGameInstance->Add_FontDesc(TEXT("Bold_Font"), &m_ChargeTime_Font);
+	}
+	else
+	{
+		m_fTimeAcc = 0.f;
 	}
 
 	

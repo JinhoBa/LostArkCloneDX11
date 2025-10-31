@@ -42,7 +42,7 @@ HRESULT CLevel_Boss::Initialize()
         return E_FAIL;
 
     m_pGameInstance->StopAll();
-    m_pGameInstance->PlayBGM(L"Kamen_Ready_BGM.ogg", 0.2f);
+    m_pGameInstance->PlayBGM(L"Kamen_Ready_BGM.ogg", 0.6f);
 
     return S_OK;
 }
@@ -60,6 +60,8 @@ HRESULT CLevel_Boss::Render()
 
 HRESULT CLevel_Boss::Ready_Light()
 {
+    m_pGameInstance->Delete_Light(L"Npc_Light");
+
     _float4 vDiffuse = _float4(0.65f, 0.75f, 1.f, 1.f);
     _float4 vAmbient = _float4(0.13f, 0.15f, 0.2f, 1.f);
     _float4 vSpecular = _float4(0.13f, 0.15f, 0.2f, 1.f);
@@ -90,7 +92,7 @@ HRESULT CLevel_Boss::Ready_Camera()
     m_pGameInstance->Find_Camera(TEXT("Camera_Fix"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
     m_pGameInstance->Find_Camera(TEXT("Camera_ChargeSkill"))->Set_LookDircetion(XMVectorSet(0.f, 5.f, -5.f, 0.f));
 
-   // m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
+    //m_pGameInstance->Bind_Camera(TEXT("Camera_Free"));
 
     return S_OK;
 }

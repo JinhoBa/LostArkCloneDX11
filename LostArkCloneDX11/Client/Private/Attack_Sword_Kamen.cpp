@@ -63,7 +63,9 @@ void CAttack_Sword_Kamen::Update(_float fTimeDelta)
 	Update_EffectTrack();
 
 	if (m_pKamen->isAnimationFinish())
+	{
 		m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::IDLE), nullptr);
+	}
 }
 
 void CAttack_Sword_Kamen::Exit()

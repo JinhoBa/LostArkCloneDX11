@@ -74,6 +74,8 @@ void CCamera_KamenEnter::Update(_float fTimeDelta)
          m_fTimeAcc = 0.f;*/
     else if (m_iAnimationIndex < 2)
     {
+        if (0 == m_iAnimationIndex)
+            m_pGameInstance->Play_Sound(L"Kamen_Intro.wav", CHANNELID::SKILL_BOSS0, 0.7f);
         m_fTimeAcc = 0.f;
         m_iAnimationIndex++;
     }

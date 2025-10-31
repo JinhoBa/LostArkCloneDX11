@@ -54,7 +54,8 @@ void CPlayer_NormalSkill::Enter(void* pArg)
 		dynamic_cast<CBody_Player*>(m_pPlayer->Get_PartObject(L"Body_Player"))->Toggle_RimLight();
 	if (m_pSkillInfo->bApplyRimLightWeapon)
 		dynamic_cast<CWeapon_Player*>(m_pPlayer->Get_PartObject(L"Weapon_Player"))->Toggle_RimLight();
-	
+
+	m_pGameInstance->ToggleLight(L"Skill_Light", true);
 }
 
 void CPlayer_NormalSkill::Update(_float fTimeDelta)
@@ -76,6 +77,8 @@ void CPlayer_NormalSkill::Update(_float fTimeDelta)
 
 void CPlayer_NormalSkill::Exit()
 {
+	m_pGameInstance->ToggleLight(L"Skill_Light", false);
+
 	Clear_Events();
 
 	m_pPlayer->Set_SkillID(99);

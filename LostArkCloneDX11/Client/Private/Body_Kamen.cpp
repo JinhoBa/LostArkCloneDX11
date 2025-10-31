@@ -102,7 +102,7 @@ void CBody_Kamen::Priority_Update(_float fTimeDelta)
 void CBody_Kamen::Update(_float fTimeDelta)
 {
     if(m_isDebug)
-        m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Animation(fTimeDelta);
+        m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Animation(fTimeDelta * 1.2f);
     else
         m_isAnimationFinish = m_pModelComs[m_iCurModelIndex]->Play_Debug_Animation(m_fKeyFrame);
 
@@ -164,34 +164,34 @@ void CBody_Kamen::Late_Update(_float fTimeDelta)
 HRESULT CBody_Kamen::Render()
 {
 #pragma region ANIMATION_TEST
-    ImGui::Begin("ANIM");
-    ImGui::Checkbox("Play", &m_isDebug);
-    ImGui::InputInt("EffectID", (_int*)(&m_iEffectID));
-    ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");
-    ImGui::InputFloat3("Pos", (_float*)(&m_vPos), "%.2f");
+    //ImGui::Begin("ANIM");
+    //ImGui::Checkbox("Play", &m_isDebug);
+    //ImGui::InputInt("EffectID", (_int*)(&m_iEffectID));
+    //ImGui::DragFloat("KeyFrame", &m_fKeyFrame, 0.1f, 0.f, 300.f, "%.3f");
+    //ImGui::InputFloat3("Pos", (_float*)(&m_vPos), "%.2f");
 
-  /*  ImGui::InputInt("Animation", &m_iAnimIndex);*/
-    /*_int iIndex = {};
-    for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
-    {
-        if (ImGui::Button(to_string(iIndex).c_str()))
-        {
-            m_iAnimIndex = iIndex;
-            m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
-            m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(45.f, 0.f, 45.f, 1.f));
-            m_EffectEvents.clear();
-            const vector<EFFECT_EVENT_DESC>& EffectEvents = CGameManager::GetInstance()->Get_EffectTrack(CHARACTER::BOSS, m_iEffectID);
+    //ImGui::InputInt("Animation", &m_iAnimIndex);
+    //_int iIndex = {};
+    //for (auto pName : m_pModelComs[m_iCurModelIndex]->Get_AnimationNames())
+    //{
+    //    if (ImGui::Button(to_string(iIndex).c_str()))
+    //    {
+    //        m_iAnimIndex = iIndex;
+    //        m_pModelComs[m_iCurModelIndex]->Set_AnimationIndex(m_pParentTransformCom, m_iAnimIndex, true);
+    //        m_pParentTransformCom->Set_State(STATE::POSITION, XMVectorSet(45.f, 0.f, 45.f, 1.f));
+    //        m_EffectEvents.clear();
+    //        const vector<EFFECT_EVENT_DESC>& EffectEvents = CGameManager::GetInstance()->Get_EffectTrack(CHARACTER::BOSS, m_iEffectID);
 
-            for (const auto& Track : EffectEvents)
-            {
-                m_EffectEvents.push_back(Track);
-            }
-            
-        }
-        ++iIndex;
-        ImGui::SameLine();
-        ImGui::Text(pName);
-    }*/
+    //        for (const auto& Track : EffectEvents)
+    //        {
+    //            m_EffectEvents.push_back(Track);
+    //        }
+    //        
+    //    }
+    //    ++iIndex;
+    //    ImGui::SameLine();
+    //    ImGui::Text(pName);
+    //}
 
     //ImGui::DragFloat("m_fVolume", &m_fVolume);
     //ImGui::DragFloat("m_fTestSoundKey", &m_fTestSoundKey);
@@ -221,7 +221,7 @@ HRESULT CBody_Kamen::Render()
     //    m_pGameInstance->Play_Sound(m_pGameInstance->Utf8ToWstring(m_SoundNames[m_currentIndex].c_str()).c_str(), CHANNELID::SKILL_PLAYER, m_fVolume);
     //}
 
-    ImGui::End();
+    //ImGui::End();
 #pragma endregion
     m_iPassIndex = 1;
 

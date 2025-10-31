@@ -457,6 +457,7 @@ HRESULT CData_Manager::Load_Monster_SkillData(const _char* pFilePath)
                 return E_FAIL;
 
             Skill_Info.HitBoxDescs.reserve(Skill_Info.iNumAttack);
+            Skill_Info.SoundDescs.reserve(Skill_Info.iNumAttack);
 
             for (auto* HitBox = skill->FirstChildElement("HitBox"); HitBox; HitBox = HitBox->NextSiblingElement("HitBox"))
             {
@@ -491,6 +492,21 @@ HRESULT CData_Manager::Load_Monster_SkillData(const _char* pFilePath)
 
                 Skill_Info.HitBoxDescs.push_back(HitBox_Desc);
             }
+
+            for (auto* Sound = skill->FirstChildElement("Sound"); Sound; Sound = Sound->NextSiblingElement("Sound"))
+            {
+                /*Sound */
+                MONSTER_SOUND_DESC Sound_Desc = {};
+
+                Sound->QueryFloatAttribute("volume", &Sound_Desc.fVolume);
+
+                const char* pName;
+                Sound->QueryStringAttribute("name", &pName);
+                Sound_Desc.strFileName = m_pGameInstance->Utf8ToWstring(pName);
+
+                Skill_Info.SoundDescs.push_back(Sound_Desc);
+            }
+
             MonsterSkills.push_back(Skill_Info);
         }
 

@@ -26,6 +26,9 @@ private:
 
 	MONSTER_SKILL_INFO*   m_pSkill_Info = { nullptr };
 
+private:
+	void Play_Sound();
+
 public:
 	static CMonster_Attack* Create(class CStateMachine* pStateMachine, ENEMY_INFO* pInfo, class CMonster* pMonster, _uint iNumAttackAnimation);
 	virtual void Free() override;

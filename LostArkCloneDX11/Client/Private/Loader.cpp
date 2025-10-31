@@ -31,6 +31,7 @@
 #include "BossEnterUI.h"
 #include "ClashUI.h"
 #include "DialogueUI.h"
+#include "Interaction.h"
 #pragma endregion
 
 #pragma region GAMEOBJECT
@@ -68,6 +69,7 @@
 #include "Kamen_Area.h"
 #include "Npc.h"
 #include "DynamicLand.h"
+#include "Potal.h"
 #pragma endregion
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -998,6 +1000,16 @@ HRESULT CLoader::Loading_For_Tutorial()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Dialogue/Dialogue_%d.dds"), 2))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Texture_Interaction */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Interaction"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Button/Interaction.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_BattleItem */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_BattleItem"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Item/battle_item_0.dds"), 1))))
+		return E_FAIL;
+
 
 #pragma endregion
 	m_fLoadProgress = 20.f;
@@ -1013,7 +1025,7 @@ HRESULT CLoader::Loading_For_Tutorial()
 
 	/* For.Prototype_Component_Model_Npc */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_Component_Model_Npc"),
-		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Npc/Npc.bin"))))
+		CModel::Create(m_pDevice, m_pContext, MODEL::ANIM, "../Bin/Resources/Models/Npc/Npc.bin", PreTransformMatrix))))
 		return E_FAIL;
 
 #pragma region TRISION
@@ -1159,6 +1171,11 @@ HRESULT CLoader::Loading_For_Tutorial()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_DynamicLand"),
 		CDynamicLand::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_Potal */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_Potal"),
+		CPotal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region UI_PROTOTYPE
@@ -1166,6 +1183,12 @@ HRESULT CLoader::Loading_For_Tutorial()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::TUTORIAL), TEXT("Prototype_GameObject_DialogueUI"),
 		CDialogueUI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For.Prototype_GameObject_Interaction */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_Interaction"),
+		CInteraction::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 	m_fLoadProgress = 100.f;
 

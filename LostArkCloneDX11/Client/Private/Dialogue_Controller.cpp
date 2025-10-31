@@ -46,6 +46,7 @@ void CDialogue_Controller::End_Dialogue()
 
     m_pGameInstance->Get_LayerObjects(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Layer_Dialogue")).back()->Set_Dead();
 
+    m_pGameInstance->Play_Sound(L"UI_OK.wav", CHANNELID::SYSTEM, 1.f);
     m_pGameInstance->Bind_Camera(TEXT("Camera_Fix"), false, 1.f);
 }
 

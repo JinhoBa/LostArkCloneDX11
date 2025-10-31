@@ -15,6 +15,12 @@ namespace Client
 		_float3 vOrientation;
 	}HITBOX_DESC;
 
+	typedef struct tagMonsterSoundDesc
+	{
+		_float fVolume;
+		_wstring strFileName;
+	}MONSTER_SOUND_DESC;
+
 	typedef struct tagSkill_Info
 	{
 		_bool			bCountAttack;
@@ -50,6 +56,7 @@ namespace Client
 		HIT_TYPE			eHitType;
 		_uint				iNumAttack;
 		vector<HITBOX_DESC> HitBoxDescs;
+		vector<MONSTER_SOUND_DESC> SoundDescs;
 	}MONSTER_SKILL_INFO;
 
 	typedef struct tagAttack_Desc

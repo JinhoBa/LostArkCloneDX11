@@ -118,6 +118,10 @@ void CClash_Kamen::Update(_float fTimeDelta)
 
 void CClash_Kamen::Exit()
 {
+	m_pGameInstance->StopSound(CHANNELID::SKILL_BOSS0);
+	m_pGameInstance->StopSound(CHANNELID::SKILL_BOSS1);
+	m_pGameInstance->StopSound(CHANNELID::SKILL_BOSS2);
+
 	m_EffectEvents.clear();
 }
 

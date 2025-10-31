@@ -50,14 +50,6 @@ private:
 	_float					m_fRimPower = {};
 	_float4					m_vRimColor[ENUM_TO_INT(STANCE::IDEN_END)] = {};
 
-	_float					m_fLightRange = {};
-	_float3					m_vLightOffset = {};
-	_float3					m_vLightPosition = {};
-#ifdef _DEBUG
-
-#endif // _DEBUG
-
-
 private:
 	HRESULT		Add_Components();
 

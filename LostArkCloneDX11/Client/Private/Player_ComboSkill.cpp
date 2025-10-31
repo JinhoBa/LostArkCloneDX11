@@ -42,6 +42,8 @@ void CPlayer_ComboSkill::Enter(void* pArg)
 	m_pPlayer->Set_HitBox(m_pSkillInfo->HitBoxDesc.vOffset, m_pSkillInfo->HitBoxDesc.vExtends, m_pSkillInfo->HitBoxDesc.vOrientation);
 
 	Ready_EffectTrack();
+
+	m_pGameInstance->ToggleLight(L"Skill_Light", true);
 }
 
 void CPlayer_ComboSkill::Update(_float fTimeDelta)
@@ -81,7 +83,7 @@ void CPlayer_ComboSkill::Update(_float fTimeDelta)
 
 void CPlayer_ComboSkill::Exit()
 {
-
+	m_pGameInstance->ToggleLight(L"Skill_Light", false);
 }
 
 CPlayer_ComboSkill* CPlayer_ComboSkill::Create(CStateMachine* pStateMachine, STANCE* pStance, CPlayer* pPlayer)

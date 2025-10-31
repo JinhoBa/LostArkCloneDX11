@@ -16,6 +16,7 @@ HRESULT CTurn_Kamen::Initilize(STATE_KAMEN_DESC* pDesc)
 	if (FAILED(__super::Initilize(pDesc)))
 		return E_FAIL;
 
+	m_iAttackCount = 0;
 
 	return S_OK;
 }
@@ -77,23 +78,44 @@ void CTurn_Kamen::Update(_float fTimeDelta)
 			break;
 
 		case PHASE::PHASE2:
-			if(m_pKamen->Reposition())
+			if(2 < m_iAttackCount  && m_pKamen->Reposition())
+			{
+				m_iAttackCount = 0;
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::CLASH), nullptr);
+			}
 			else if(3.f > m_fDistance)
+			{
+				++m_iAttackCount;
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
+			}
 			else
+			{
+				++m_iAttackCount;
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr);
+			}
 			break;
 
 		case PHASE::PHASE3:
-			if (2.5f >= m_fDistance)
-				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr); // 근접
-			else if (2.5f < m_fDistance && 5.f >= m_fDistance)
+			if(3 > m_iAttackCount)
+			{
+				++m_iAttackCount;
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_NORMAL), nullptr);
-			else if (5.f < m_fDistance && 8.f >= m_fDistance)
+			}
+			else if(3 == m_iAttackCount)
+			{
+				++m_iAttackCount;
+				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_SWORD), nullptr); // 근접
+			}
+			else if((4 == m_iAttackCount))
+			{
+				++m_iAttackCount;
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::ATTACK_CHARGE), nullptr);
+			}
 			else
+			{
+				m_iAttackCount = 0;
 				m_pStateMachine->Change_State(m_pKamen->Get_State(CKamen::KAMENSTATE::MOVE), nullptr);
+			}
 			
 			break;
 		}

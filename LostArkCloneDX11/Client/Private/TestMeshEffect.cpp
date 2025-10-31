@@ -319,7 +319,7 @@ HRESULT CTestMeshEffect::Render()
         Desc.strMaskTexture = m_strMaskTexture;
         Desc.strNoiseTexture = m_strNoiseTexture;
 
-        if (FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::MESH, &Desc, "../Bin/Resources/Data/Effect/Kamen_Effects.xml", m_iEffectID)))
+        if (FAILED(CGameManager::GetInstance()->Save_Effect(EFFECT::MESH, &Desc, "../Bin/Resources/Data/Effect/Player_Effects.xml", m_iEffectID)))
             MSG_BOX("저장 실패");
         else
             MSG_BOX("저장 완료");
@@ -481,6 +481,12 @@ HRESULT CTestMeshEffect::Add_Components()
     /* 19 */
     if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_KamenBack"),
         TEXT("Com_KamenBack"), reinterpret_cast<CComponent**>(&pModelCom))))
+        return E_FAIL;
+    m_EffectModels.push_back(pModelCom);
+
+    /* 20 */
+    if (FAILED(__super::Add_Component(ENUM_TO_INT(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Model_Potal"),
+        TEXT("Com_Potal"), reinterpret_cast<CComponent**>(&pModelCom))))
         return E_FAIL;
 
     m_EffectModels.push_back(pModelCom);

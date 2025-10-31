@@ -23,7 +23,7 @@ public:
 private:
 	class CGameManager*			m_pGameManager = { nullptr };
 	_bool						m_isActive = {};
-
+	_float						 m_fTimeAcc = {};
 	FONT_DESC					m_SkillName_Font = {};
 	FONT_DESC					m_ChargeTime_Font = {};
 

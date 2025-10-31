@@ -86,7 +86,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_BackBuffer"), (_uint)m_Viewport.Width, (_uint)m_Viewport.Height,
-		DXGI_FORMAT_R16G16B16A16_UNORM, _float4(0.0f, 0.f, 0.f, 0.f))))
+		DXGI_FORMAT_R8G8B8A8_UNORM, _float4(0.0f, 0.f, 1.f, 0.f))))
 		return E_FAIL;
 
 	m_fMaxDepth = m_Viewport.MaxDepth;
@@ -144,8 +144,8 @@ HRESULT CRenderer::Initialize()
 	XMStoreFloat4x4(&m_OrthographicMatrix, (XMMatrixOrthographicLH(m_Viewport.Width, m_Viewport.Height, 0.f, 1.f)));
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shade"), 50.f, 50.f, 100.f, 100.f)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Shade"), 50.f, 50.f, 100.f, 100.f)))
+	//	return E_FAIL;
 	//if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_Normal"), 150.f, 450.f, 300.f, 300.f)))
 	//	return E_FAIL;
 	/*if (FAILED(m_pGameInstance->Ready_RenderTarget_Debug(TEXT("Target_RimLight"), 75.f, 225.f, 150.f, 150.f)))
@@ -218,9 +218,9 @@ void CRenderer::Render()
 		Clear_UI();
 	}
 
-#ifdef _DEBUG
-	Render_Debug();
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	Render_Debug();
+//#endif // _DEBUG
 
 }
 
@@ -235,6 +235,12 @@ HRESULT CRenderer::Add_DebugComponent(CComponent* pDebugCom)
 
 void CRenderer::Render_Priority()
 {
+	if (m_isEnableBlur)
+	{
+		if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_BackBuffer"))))
+			return;
+	}
+
 	for (auto& pRenderObject : m_RenderObjects[ENUM_TO_INT(RENDER::PRIORITY)])
 	{
 		if (nullptr != pRenderObject)
@@ -244,6 +250,11 @@ void CRenderer::Render_Priority()
 	}
 
 	m_RenderObjects[ENUM_TO_INT(RENDER::PRIORITY)].clear();
+
+	if (m_isEnableBlur)
+	{
+		m_pGameInstance->End_MRT();
+	}
 }
 HRESULT	 CRenderer::Render_Shadow()
 {
@@ -414,7 +425,7 @@ HRESULT CRenderer::Render_Combined()
 {
 	if (m_isEnableBlur)
 	{
-		if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_BackBuffer"))))
+		if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_BackBuffer"),nullptr, false)))
 			return E_FAIL;
 	}
 
