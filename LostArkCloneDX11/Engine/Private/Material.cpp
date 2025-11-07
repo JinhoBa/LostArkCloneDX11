@@ -58,10 +58,25 @@ HRESULT CMaterials::Initialize(aiMaterial* pAiMaterial, const _char* pModelFileP
 
 	_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDir, MAX_PATH, szFileName, MAX_PATH, nullptr, 0);
 
+	string dir = szDir;
+
+	size_t pos = dir.find_last_of("/");
+
+	if (pos != std::string::npos)
+	{
+		dir = dir.substr(0, pos + 1);
+	}
+
+	strcpy_s(szDir, dir.c_str());
+
+
 	strcpy_s(szMaterialFilePath, szDrive);
 	strcat_s(szMaterialFilePath, szDir);
 	strcat_s(szMaterialFilePath, "Materials/");
 	strcat_s(szMaterialFilePath, pAiMaterial->GetName().data);
+
+	
+
 
 	string strTmp = string(szMaterialFilePath);
 
