@@ -8,8 +8,8 @@ constexpr float MAX_IDENTITY = 120.f;
 
 namespace Client
 {
-	const unsigned int g_iWinSizeX = 1280;
-	const unsigned int g_iWinSizeY = 720;
+	const unsigned int g_iWinSizeX = 1920;
+	const unsigned int g_iWinSizeY = 1080;
 
 	enum class LEVEL { STATIC, LOADING, LOGO, GAMEPLAY, TUTORIAL, BOSS, MAP_EDITOR, END};
 	enum class STANCE {FLURRY, FOCUS, IDEN_END};

@@ -22,7 +22,7 @@ HRESULT CMaterials::Initialize(const _char* pMaterialFileName, const _char* pMod
 
 	strcpy_s(szMaterialFilePath, szDrive);
 	strcat_s(szMaterialFilePath, szDir);
-	strcat_s(szMaterialFilePath, "MaterialInstance/");
+	strcat_s(szMaterialFilePath, "Materials/");
 	strcat_s(szMaterialFilePath, pMaterialFileName);
 
 	string strTmp = string(szMaterialFilePath);
@@ -60,7 +60,7 @@ HRESULT CMaterials::Initialize(aiMaterial* pAiMaterial, const _char* pModelFileP
 
 	strcpy_s(szMaterialFilePath, szDrive);
 	strcat_s(szMaterialFilePath, szDir);
-	strcat_s(szMaterialFilePath, "MaterialInstance/");
+	strcat_s(szMaterialFilePath, "Materials/");
 	strcat_s(szMaterialFilePath, pAiMaterial->GetName().data);
 
 	string strTmp = string(szMaterialFilePath);
@@ -77,7 +77,7 @@ HRESULT CMaterials::Initialize(aiMaterial* pAiMaterial, const _char* pModelFileP
 
 	strcpy_s(szTextureFilePath, szDrive);
 	strcat_s(szTextureFilePath, szDir);
-	strcat_s(szTextureFilePath, "Texture2D/");
+	strcat_s(szTextureFilePath, "Textures/");
 
 	if (FAILED(Read_MaterialFile(szMaterialFilePath, szTextureFilePath)))
 		return E_FAIL;
@@ -122,7 +122,7 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 	string strText = {};
 
 	string Value = {};
-	string Name = {};
+	string Type = {};
 
 	_uint iDataIndex = {};
 	_uint iNumParameter = {};
@@ -183,16 +183,16 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 					// name
 					iBeginIndex = (_uint)strText.find_first_of('=');
 
-					Name = strText.substr(iBeginIndex + 2);
+					Type = strText.substr(iBeginIndex + 2);
 
-					if (FAILED(Add_Scalar(Value, Name)))
-						return E_FAIL;
+					/*if (FAILED(Add_Scalar(Value, Type)))
+						return E_FAIL;*/
 					break;
 
 					/* Texture */
 				case 1:
 					// value
-					iBeginIndex = (_uint)strText.find_first_of('.');
+					iBeginIndex = (_uint)strText.find_last_of('.');
 					iEndIndex = (_uint)strText.rfind('\'');
 
 					if (128 < iBeginIndex)
@@ -204,15 +204,18 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 					strcat_s(szTextureFilePath, Value.c_str());
 
 					// name
+			
+
+					iBeginIndex = (_uint)strText.find_last_of('_');
+					iEndIndex = (_uint)strText.rfind('\'');
+
+					Type = strText.substr(iBeginIndex + 1, iEndIndex - iBeginIndex - 1);
+
+
 					getline(file, strText);
 
-					iBeginIndex = (_uint)strText.find_first_of('_');
-					iEndIndex = (_uint)strText.rfind(' ');
-
-					Name = strText.substr(iBeginIndex + 1, iEndIndex - iBeginIndex);
-
 					// Add Texture
-					if (FAILED(Add_Texture(szTextureFilePath, Name)))
+					if (FAILED(Add_Texture(szTextureFilePath, Type)))
 						return E_FAIL;
 
 					break;
@@ -220,20 +223,20 @@ HRESULT CMaterials::Read_MaterialFile(const _char* pMaterialFilePath, const _cha
 					/* Vector Value */
 				case 2:
 					// value
-					iBeginIndex = (_uint)strText.find_first_of('{');
-					iEndIndex = (_uint)strText.rfind('}');
+					//iBeginIndex = (_uint)strText.find_first_of('{');
+					//iEndIndex = (_uint)strText.rfind('}');
 
-					Value = strText.substr(iBeginIndex + 1, iEndIndex - iBeginIndex - 1);
+					//Value = strText.substr(iBeginIndex + 1, iEndIndex - iBeginIndex - 1);
 
-					// name
-					getline(file, strText);
+					//// name
+					//getline(file, strText);
 
-					iBeginIndex = (_uint)strText.find_first_of('=');
+					//iBeginIndex = (_uint)strText.find_first_of('=');
 
-					Name = strText.substr(iBeginIndex + 2);
+					//Type = strText.substr(iBeginIndex + 2);
 
-					if (FAILED(Add_VectorValue(Value, Name)))
-						return E_FAIL;
+					/*if (FAILED(Add_VectorValue(Value, Name)))
+						return E_FAIL;*/
 
 					break;
 				default:
@@ -258,28 +261,18 @@ HRESULT CMaterials::Add_Texture(const _char* pTextureFolderPath, string& FileTyp
 
 	TEXTURE eTexture = {};
 
-	if (!strcmp(FileType.c_str(), "diffuse"))
+	if (!strcmp(FileType.c_str(), "D"))
 		eTexture = TEXTURE::DIFFUSE;
-	else if (!strcmp(FileType.c_str(), "basecolor"))
-		eTexture = TEXTURE::DIFFUSE;
-	else if (!strcmp(FileType.c_str(), "normal"))
+	else if (!strcmp(FileType.c_str(), "N"))
 		eTexture = TEXTURE::NORMAL;
-	else if (!strcmp(FileType.c_str(), "specular"))
+	else if (!strcmp(FileType.c_str(), "MRO"))
 		eTexture = TEXTURE::SPECULAR;
-	else if (!strcmp(FileType.c_str(), "emissive"))
-		eTexture = TEXTURE::EMISSIVE;
-	else if (!strcmp(FileType.c_str(), "reflection"))
-		eTexture = TEXTURE::REFLECTION;
-	else if (!strcmp(FileType.c_str(), "mask_variation"))
-		eTexture = TEXTURE::MASK;
-	else if (!strcmp(FileType.c_str(), "color_fx_skin"))
-		eTexture = TEXTURE::COLOR_FX;
-	else if (!strcmp(FileType.c_str(), "cutting_mask"))
-		eTexture = TEXTURE::MASK;
-	else if (!strcmp(FileType.c_str(), "null"))
-	{
-		eTexture = TEXTURE::NONE;
-	}
+	else if (!strcmp(FileType.c_str(), "MROA'"))
+		eTexture = TEXTURE::SPECULAR;
+	else if (!strcmp(FileType.c_str(), "SRO'"))
+		eTexture = TEXTURE::SPECULAR;
+	else if (!strcmp(FileType.c_str(), "HDR'"))
+		eTexture = TEXTURE::SPECULAR;
 	else
 	{
 		if (!strcmp(FileType.c_str(), "eye_iristexture_ui"))

@@ -160,6 +160,25 @@ HRESULT CLoader::Loading_For_Logo()
 	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
 #pragma region GAEMOBJCET_TEXTURE
 
+	for (const auto& file : filesystem::directory_iterator("../Bin/Resources/Models/Map/Test"))
+	{
+		if (file.is_directory())
+			continue;
+
+		_char szFilePath[MAX_PATH] = {};
+
+		strcpy_s(szFilePath, MAX_PATH, file.path().string().c_str());
+
+		_wstring strFileName = L"Prototype_GameObject_" + file.path().stem().wstring();
+
+		/*For Prototype_Component_Model_Auro*/
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_TO_INT(LEVEL::STATIC), strFileName,
+			CModel::Create(m_pDevice, m_pContext, MODEL::NONANIM, szFilePath))))
+			return E_FAIL;
+	}
+
+	
+
 #pragma endregion
 
 #pragma region UI_TEXTURE
